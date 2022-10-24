@@ -9,15 +9,47 @@
 }
 
 body {
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--background-color);
   color: var(--font-color);
   font-family: "Oswald", sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
 }
 
 :root {
   --black-color: #000;
   --background-color: #101213; /* darker gray */
   --lighter-background-color: #1d1f20; /* dark gray */
+  --button-hover-color: #2e2f31;
   --font-color: #fff;
+
+  --rounded: 0.5rem;
+}
+
+.button-global {
+  background-color: var(--lighter-background-color);
+  color: var(--font-color);
+  border-radius: var(--rounded);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button-global.add-task {
+  width: 100%;
+  max-width: 500px;
+}
+
+.button-global:hover {
+  background-color: var(--button-hover-color);
 }
