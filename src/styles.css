@@ -14,13 +14,7 @@ body {
   color: var(--font-color);
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
-  position: relative;
-}
-
-@media (min-width: 1024px) {
-  body {
-    overflow: hidden;
-  }
+  width: 100%;
 }
 
 :root {
@@ -31,6 +25,7 @@ body {
   --font-color: #fff;
 
   --rounded: 0.5rem;
+  --task-width: 31rem;
 }
 
 .button-global {
@@ -47,7 +42,7 @@ body {
 
 .button-global.add-task {
   width: 100%;
-  max-width: 500px;
+  max-width: 31rem;
 }
 
 .button-global:hover {
