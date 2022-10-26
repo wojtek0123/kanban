@@ -1,0 +1,23 @@
+<div class="backdrop">
+  <form class="form">
+    <div class="close-button">
+      <button
+        type="button"
+        class="button-global"
+        (click)="onChangeFormVisibility()"
+        title="Close"
+      >
+        X
+      </button>
+    </div>
+    <label class="form-label" for="task-name">Task name</label>
+    <input type="text" class="form-input" id="task-name" />
+    <label class="form-label" for="task-description">Short description</label>
+    <textarea
+      class="task-description form-input"
+      id="task-description"
+    ></textarea>
+
+    <button type="submit" class="button-global submit-button">Add task</button>
+  </form>
+</div>
