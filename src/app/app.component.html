@@ -15,10 +15,16 @@
           <h2 class="logo">KanBan</h2>
         </li>
         <li>Boards:</li>
-        <li>platform launch</li>
-        <li>marketing plan</li>
-        <li>roadmap</li>
-        <li>socialmedia app</li>
+        <li *ngFor="let board of boards">
+          -
+          <button
+            type="button"
+            class="board-list-item"
+            (click)="onSelectBoard($event)"
+          >
+            {{ board.name }}
+          </button>
+        </li>
         <li>
           <button type="button" class="button-global add-task">
             Add board
@@ -28,13 +34,31 @@
     </div>
     <div class="wrapper">
       <div class="container">
-        <p class="selected-board">Currect selected board</p>
+        <p class="selected-board">{{ selectedBoard?.name }}</p>
         <div class="buttons">
           <button type="button" class="button-global">Add column</button>
         </div>
       </div>
       <div class="tasks">
-        <section class="section">
+        <section class="section" *ngFor="let column of selectedBoard?.columns">
+          <h2 class="section-title">{{ column.name }}</h2>
+          <button
+            type="button"
+            class="button-global add-task"
+            (click)="onOpenAddTaskForm()"
+          >
+            Add task
+          </button>
+          <div class="cards">
+            <div class="card" *ngFor="let task of column.tasks">
+              <h3>{{ task.title }}</h3>
+              <p>{{ task.description }}</p>
+              <!-- <p>subtask 1 of 2</p> -->
+            </div>
+          </div>
+        </section>
+
+        <!-- <section class="section">
           <h2 class="section-title">New request</h2>
           <button
             type="button"
@@ -198,7 +222,7 @@
               <p>subtask 0 of 2</p>
             </div>
           </div>
-        </section>
+        </section> -->
       </div>
     </div>
   </main>
