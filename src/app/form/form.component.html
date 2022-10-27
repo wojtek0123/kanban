@@ -1,5 +1,5 @@
 <div class="backdrop">
-  <form class="form">
+  <form class="form" #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
     <div class="close-button">
       <button
         type="button"
@@ -20,7 +20,13 @@
 
     <div class="form-wrapper" *ngIf="typeOfForm === 'board'">
       <label class="form-label" for="board-name">Name</label>
-      <input class="form-input" type="text" id="board-name" />
+      <input
+        class="form-input"
+        type="text"
+        id="board-name"
+        required
+        ngModel
+        name="boardName" />
     </div>
 
     <div class="form-wrapper" *ngIf="typeOfForm === 'column'">
