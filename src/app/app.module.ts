@@ -5,14 +5,9 @@ import { AppComponent } from './app.component';
 import { FormAddTaskComponent } from './form-add-task/form-add-task.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FormAddTaskComponent
-  ],
-  imports: [
-    BrowserModule
-  ],
+  declarations: [AppComponent, FormAddTaskComponent],
+  imports: [BrowserModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

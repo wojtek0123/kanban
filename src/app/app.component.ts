@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardsService } from './boards.service';
-import { FormAddTaskService } from './form-add-task/form-add-task.service';
+import {
+  FormAddTaskService,
+  FormType,
+} from './form-add-task/form-add-task.service';
 import { Board } from './boards.service';
 
 @Component({
@@ -22,15 +25,14 @@ export class AppComponent implements OnInit {
     this.selectedBoard = this.boards[0];
   }
 
-  onOpenAddTaskForm() {
-    this.formAddTaskService.onChangeFormVisibility();
+  onOpenForm(formType: FormType) {
+    this.formAddTaskService.onChangeFormVisibility(formType);
   }
 
   onSelectBoard(event: Event) {
     const value = (event.target as HTMLButtonElement).textContent
       ?.toLowerCase()
       .trim();
-    console.log(value);
     this.selectedBoard = this.boardsService.boards.find(
       (board) => board.name.toLowerCase() === value
     );

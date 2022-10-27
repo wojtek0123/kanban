@@ -14,7 +14,7 @@ export interface Board {
 
 @Injectable({ providedIn: 'root' })
 export class BoardsService {
-  boards = [
+  boards: Board[] = [
     {
       name: 'platform launch',
       columns: [
@@ -69,4 +69,18 @@ export class BoardsService {
       ],
     },
   ];
+
+  onAddBoard(newBoardName: string) {
+    const newBoard: Board = {
+      name: newBoardName,
+      columns: [
+        {
+          name: 'new request',
+          tasks: [],
+        },
+      ],
+    };
+
+    this.boards.push(newBoard);
+  }
 }
