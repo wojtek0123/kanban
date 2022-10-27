@@ -15,7 +15,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formTypeSub = this.formAddTaskService.typeOfForm.subscribe(
-      (formType) => {
+      formType => {
         console.log(formType);
         this.typeOfForm = formType;
       }

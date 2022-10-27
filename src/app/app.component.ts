@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
       ?.toLowerCase()
       .trim();
     this.selectedBoard = this.boardsService.boards.find(
-      (board) => board.name.toLowerCase() === value
+      board => board.name.toLowerCase() === value
     );
   }
 }
