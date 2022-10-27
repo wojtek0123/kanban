@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardsService } from './boards.service';
-import {
-  FormAddTaskService,
-  FormType,
-} from './form-add-task/form-add-task.service';
+import { FormAddTaskService, FormType } from './form/form.service';
 import { Board } from './boards.service';
 
 @Component({

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FormAddTaskService, FormType } from './form-add-task.service';
+import { FormAddTaskService, FormType } from './form.service';
 
 @Component({
-  selector: 'app-form-add-task',
-  templateUrl: './form-add-task.component.html',
-  styleUrls: ['./form-add-task.component.css'],
+  selector: 'app-form',
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.css'],
 })
-export class FormAddTaskComponent implements OnInit, OnDestroy {
+export class FormComponent implements OnInit, OnDestroy {
   typeOfForm: FormType = 'board';
   private formTypeSub: Subscription = new Subscription();
 
