@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export interface Board {
   name: string;
@@ -69,6 +70,14 @@ export class BoardsService {
       ],
     },
   ];
+  selectedBoard = new BehaviorSubject<Board>(this.boards[0]);
+
+  onChangeSelectedBoard(boardName: string) {
+    const boardFound = this.boards.find(board => board.name === boardName);
+    if (boardFound) {
+      this.selectedBoard.next(boardFound);
+    }
+  }
 
   onAddBoard(newBoardName: string) {
     const newBoard: Board = {
@@ -82,5 +91,15 @@ export class BoardsService {
     };
 
     this.boards.push(newBoard);
+  }
+
+  onAddColumn(newColumnName: string) {
+    const newColumn = {
+      name: newColumnName,
+      tasks: [],
+    };
+    this.boards
+      .find(board => board === this.selectedBoard.getValue())
+      ?.columns.push(newColumn);
   }
 }

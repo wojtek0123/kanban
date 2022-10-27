@@ -31,7 +31,13 @@
 
     <div class="form-wrapper" *ngIf="typeOfForm === 'column'">
       <label class="form-label" for="column-name">Name</label>
-      <input class="form-input" type="text" id="column-name" />
+      <input
+        class="form-input"
+        type="text"
+        id="column-name"
+        required
+        ngModel
+        name="columnName" />
     </div>
 
     <button type="submit" class="button-global submit-button">

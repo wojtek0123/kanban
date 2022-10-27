@@ -39,5 +39,11 @@ export class FormComponent implements OnInit, OnDestroy {
     if (this.typeOfForm === 'board') {
       this.boardsService.onAddBoard(form.value.boardName);
     }
+    if (this.typeOfForm === 'column') {
+      this.boardsService.onAddColumn(form.value.columnName);
+    }
+    if (this.typeOfForm === 'task') {
+    }
+    this.formAddTaskService.onChangeFormVisibility();
   }
 }
