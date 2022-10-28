@@ -246,31 +246,49 @@
 
   .boards {
     display: flex;
-    position: sticky;
-    top: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    border-top-right-radius: var(--rounded);
+    border-bottom-right-radius: var(--rounded);
+    background-color: var(--black-color);
+    width: 25rem;
+    padding: 1rem;
+    margin-right: 1rem;
   }
 
   .boards ul {
-    background-color: var(--black-color);
     list-style-type: none;
     margin-right: 1rem;
+    overflow-y: auto;
+  }
+
+  .boards ul li {
+    display: flex;
+    align-items: center;
+  }
+
+  .boards ul li button {
+    margin-left: 1rem;
+  }
+
+  .board-button {
+    bottom: 0;
+    left: 0;
     width: 25rem;
-    padding: 0 1rem;
-    border-top-right-radius: var(--rounded);
-    border-bottom-right-radius: var(--rounded);
-    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    width: 100%;
   }
 
   .logo {
     margin-bottom: 2rem;
   }
 
-  .boards li {
+  .boards ul li {
     font-size: 1.5rem;
-  }
-
-  .boards li:last-child {
-    margin-top: 2rem;
   }
 
   .container {
