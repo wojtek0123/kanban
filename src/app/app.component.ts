@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedBoardSub: Subscription = new Subscription();
   showContextMenu = false;
   showMobileNav = false;
+  selectedColumn = '';
 
   constructor(
     public formAddTaskService: FormAddTaskService,
@@ -38,16 +39,16 @@ export class AppComponent implements OnInit, OnDestroy {
     if (value) {
       this.boardsService.onChangeSelectedColumn(value);
     }
-    // console.log(
-    //   this.boards.map(board =>
-    //     board.columns.find(column => column.name === value)
-    //   )
-    // );
     this.formAddTaskService.onChangeFormVisibility(formType);
   }
 
-  onOpenMenu() {
+  onOpenMenu(event: Event) {
     this.showContextMenu = !this.showContextMenu;
+    const value = (event.target as HTMLButtonElement).parentElement
+      ?.previousSibling?.textContent;
+    console.log(value);
+    if (!value) return;
+    this.selectedColumn = value;
   }
 
   onMobileNav() {
@@ -65,5 +66,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.selectedBoardSub = this.boardsService.selectedBoard.subscribe(
       board => (this.selectedBoard = board)
     );
+  }
+
+  onChangeColumnName(event: Event) {
+    const value = (event.target as HTMLButtonElement).parentNode
+      ?.previousSibling?.previousSibling;
+    console.log(value);
+    // this.boardsService.onChangeColumnName();
+    this.showContextMenu = !this.showContextMenu;
+  }
+
+  onRemoveColumn() {
+    this.boardsService.onRemoveColumn(this.selectedColumn);
+    this.showContextMenu = !this.showContextMenu;
   }
 }

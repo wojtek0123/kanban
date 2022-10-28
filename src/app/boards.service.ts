@@ -118,4 +118,20 @@ export class BoardsService {
     }
     column.tasks.push(x);
   }
+
+  onChangeColumnName(newColumnName: string, oldColumnName: string) {
+    this.selectedBoard.getValue().columns.find(column => {
+      if (column.name === oldColumnName) {
+        column.name = newColumnName;
+      }
+    });
+  }
+
+  onRemoveColumn(columnName: string) {
+    const columnIndex = this.selectedBoard
+      .getValue()
+      .columns.findIndex(column => column.name === columnName);
+    console.log(columnIndex);
+    this.selectedBoard.getValue().columns.splice(columnIndex, 1);
+  }
 }

@@ -104,16 +104,22 @@
 .heading-section-menu {
   position: fixed;
   bottom: 0;
-  left: 0;
+  right: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
   padding: 0.5rem;
   background-color: var(--black-color);
   border-radius: var(--rounded);
-  box-shadow: 0 0 0.5rem var(--black-color);
   width: 100%;
-  display: none;
+  transform: translateY(100%);
+  transition: transform 0.3s linear;
+  z-index: 10;
+}
+
+.heading-section-menu.show {
+  transform: translateY(0);
+  box-shadow: 0 0 0.5rem var(--black-color);
 }
 
 .heading-section-menu button {
@@ -122,6 +128,7 @@
   background: none;
   color: var(--font-color);
   margin: 0.25rem 0;
+  font-size: 1.5rem;
 }
 
 .cards {
@@ -296,5 +303,21 @@
     background-color: var(--background-color);
     top: 0;
     left: 0;
+  }
+
+  .heading-section-menu {
+    position: absolute;
+    transform: translateX(-100%);
+    display: none;
+    width: max-content;
+  }
+
+  .heading-section-menu.show {
+    display: flex;
+    transform: translateX(-50%);
+  }
+
+  .heading-section-menu button {
+    font-size: 1rem;
   }
 }

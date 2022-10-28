@@ -72,12 +72,18 @@
           <button
             type="button"
             class="context-menu-button"
-            (click)="onOpenMenu()">
+            (click)="onOpenMenu($event)">
             <img src="../assets/three-dots-vertical.svg" alt="menu" />
           </button>
-          <div class="heading-section-menu" *ngIf="showContextMenu">
-            <button type="button">Remove</button>
-            <button type="button">Edit</button>
+          <div
+            class="heading-section-menu"
+            [ngClass]="{
+              show: showContextMenu && column.name === selectedColumn
+            }">
+            <button type="button" (click)="onRemoveColumn()">Remove</button>
+            <button type="button" (click)="onChangeColumnName($event)">
+              Edit
+            </button>
           </div>
         </div>
         <button
