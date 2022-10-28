@@ -11,11 +11,20 @@
     </div>
     <div class="form-wrapper" *ngIf="typeOfForm === 'task'">
       <label class="form-label" for="task-name">Task name</label>
-      <input type="text" class="form-input" id="task-name" />
+      <input
+        type="text"
+        class="form-input"
+        id="task-name"
+        required
+        ngModel
+        name="taskName" />
       <label class="form-label" for="task-description">Short description</label>
       <textarea
         class="task-description form-input"
-        id="task-description"></textarea>
+        id="task-description"
+        required
+        ngModel
+        name="taskDescription"></textarea>
     </div>
 
     <div class="form-wrapper" *ngIf="typeOfForm === 'board'">

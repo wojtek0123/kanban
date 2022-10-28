@@ -30,7 +30,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this.selectedBoardSub.unsubscribe();
   }
 
-  onOpenForm(formType: FormType) {
+  onOpenForm(formType: FormType, event: Event) {
+    const value = (event.target as HTMLButtonElement).previousSibling
+      ?.textContent;
+    if (value) {
+      this.boardsService.onChangeSelectedColumn(value);
+    }
+    // console.log(
+    //   this.boards.map(board =>
+    //     board.columns.find(column => column.name === value)
+    //   )
+    // );
     this.formAddTaskService.onChangeFormVisibility(formType);
   }
 

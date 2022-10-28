@@ -8,7 +8,7 @@ export interface Board {
     tasks: {
       title: string;
       description: string;
-      subtasks: string[];
+      // subtasks: string[];
     }[];
   }[];
 }
@@ -25,13 +25,13 @@ export class BoardsService {
             {
               title: 'Add header',
               description: 'Create h1 tag with text Welcome',
-              subtasks: [],
+              // subtasks: [],
             },
             {
               title: 'Create comment section',
               description:
                 'Comment section with user name, avatar and message. Also, add reply feature',
-              subtasks: [],
+              // subtasks: [],
             },
           ],
         },
@@ -41,13 +41,13 @@ export class BoardsService {
             {
               title: 'Add header',
               description: 'Create h1 tag with text Welcome',
-              subtasks: [],
+              // subtasks: [],
             },
             {
               title: 'Create comment section',
               description:
                 'Comment section with user name, avatar and message. Also, add reply feature',
-              subtasks: [],
+              // subtasks: [],
             },
           ],
         },
@@ -57,13 +57,13 @@ export class BoardsService {
             {
               title: 'Add header',
               description: 'Create h1 tag with text Welcome',
-              subtasks: [],
+              // subtasks: [],
             },
             {
               title: 'Create comment section',
               description:
                 'Comment section with user name, avatar and message. Also, add reply feature',
-              subtasks: [],
+              // subtasks: [],
             },
           ],
         },
@@ -71,12 +71,17 @@ export class BoardsService {
     },
   ];
   selectedBoard = new BehaviorSubject<Board>(this.boards[0]);
+  selectedColumn = '';
 
   onChangeSelectedBoard(boardName: string) {
     const boardFound = this.boards.find(board => board.name === boardName);
     if (boardFound) {
       this.selectedBoard.next(boardFound);
     }
+  }
+
+  onChangeSelectedColumn(columnName: string) {
+    this.selectedColumn = columnName;
   }
 
   onAddBoard(newBoardName: string) {
@@ -91,6 +96,7 @@ export class BoardsService {
     };
 
     this.boards.push(newBoard);
+    this.onChangeSelectedBoard(newBoardName);
   }
 
   onAddColumn(newColumnName: string) {
@@ -101,5 +107,15 @@ export class BoardsService {
     this.boards
       .find(board => board === this.selectedBoard.getValue())
       ?.columns.push(newColumn);
+  }
+
+  onAddTask(x: { title: string; description: string }) {
+    const column = this.selectedBoard
+      .getValue()
+      .columns.find(column => column.name === this.selectedColumn);
+    if (!column) {
+      return;
+    }
+    column.tasks.push(x);
   }
 }

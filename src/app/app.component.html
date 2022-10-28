@@ -28,7 +28,7 @@
           <button
             type="button"
             class="button-global add-task"
-            (click)="onOpenForm('board')">
+            (click)="onOpenForm('board', $event)">
             Add board
           </button>
         </li>
@@ -41,7 +41,7 @@
           <button
             type="button"
             class="button-global"
-            (click)="onOpenForm('column')">
+            (click)="onOpenForm('column', $event)">
             Add column
           </button>
         </div>
@@ -52,7 +52,7 @@
           <button
             type="button"
             class="button-global add-task"
-            (click)="onOpenForm('task')">
+            (click)="onOpenForm('task', $event)">
             Add task
           </button>
           <div class="cards">
