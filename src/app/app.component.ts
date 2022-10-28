@@ -13,6 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
   boards: Board[] = [];
   selectedBoard!: Board;
   selectedBoardSub: Subscription = new Subscription();
+  showContextMenu = false;
+  showMobileNav = false;
 
   constructor(
     public formAddTaskService: FormAddTaskService,
@@ -42,6 +44,14 @@ export class AppComponent implements OnInit, OnDestroy {
     //   )
     // );
     this.formAddTaskService.onChangeFormVisibility(formType);
+  }
+
+  onOpenMenu() {
+    this.showContextMenu = !this.showContextMenu;
+  }
+
+  onMobileNav() {
+    this.showMobileNav = !this.showMobileNav;
   }
 
   onSelectBoard(event: Event) {
