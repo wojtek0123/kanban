@@ -9,3 +9,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Task {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  column      Column? @relation(fields: [columnId], references: [id])
+  columnId    String?
+}
+
+model Column {
+  id      String  @id @default(uuid())
+  name    String
+  Board   Board?  @relation(fields: [boardId], references: [id])
+  boardId String?
+  tasks   Task[]
+}
+
+model Board {
+  id      String   @id @default(uuid())
+  name    String
+  columns Column[]
+}
