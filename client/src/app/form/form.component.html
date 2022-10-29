@@ -1,0 +1,56 @@
+<div class="backdrop">
+  <form class="form" #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
+    <div class="close-button">
+      <button
+        type="button"
+        class="button-global"
+        (click)="onClose()"
+        title="Close">
+        X
+      </button>
+    </div>
+    <div class="form-wrapper" *ngIf="typeOfForm === 'task'">
+      <label class="form-label" for="task-name">Task name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="task-name"
+        required
+        ngModel
+        name="taskName" />
+      <label class="form-label" for="task-description">Short description</label>
+      <textarea
+        class="task-description form-input"
+        id="task-description"
+        required
+        ngModel
+        name="taskDescription"></textarea>
+    </div>
+
+    <div class="form-wrapper" *ngIf="typeOfForm === 'board'">
+      <label class="form-label" for="board-name">Name</label>
+      <input
+        class="form-input"
+        type="text"
+        id="board-name"
+        required
+        ngModel
+        name="boardName" />
+    </div>
+
+    <div class="form-wrapper" *ngIf="typeOfForm === 'column'">
+      <label class="form-label" for="column-name">Name</label>
+      <input
+        class="form-input"
+        type="text"
+        id="column-name"
+        required
+        ngModel
+        name="columnName" />
+    </div>
+
+    <button type="submit" class="button-global submit-button">
+      Add {{ typeOfForm }}
+    </button>
+  </form>
+</div>
