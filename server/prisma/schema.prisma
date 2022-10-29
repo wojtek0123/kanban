@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,15 +11,15 @@ model Task {
   id          String  @id @default(uuid())
   title       String
   description String
-  column      Column? @relation(fields: [columnId], references: [id])
   columnId    String?
+  column      Column? @relation(fields: [columnId], references: [id])
 }
 
 model Column {
   id      String  @id @default(uuid())
   name    String
-  Board   Board?  @relation(fields: [boardId], references: [id])
   boardId String?
+  Board   Board?  @relation(fields: [boardId], references: [id])
   tasks   Task[]
 }
 

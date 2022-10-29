@@ -1,19 +1,25 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "typescript-graphql",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
   "dependencies": {
-    "apollo-server": "^3.10.3",
-    "graphql": "^16.6.0"
+    "@prisma/client": "4.5.0",
+    "apollo-server": "3.10.3",
+    "graphql": "16.5.0",
+    "graphql-scalars": "1.20.0"
   },
   "devDependencies": {
-    "prisma": "^4.5.0"
+    "@types/node": "18.11.7",
+    "@types/ws": "8.5.3",
+    "prisma": "4.5.0",
+    "ts-node": "10.9.1",
+    "ts-node-dev": "2.0.0",
+    "typescript": "4.8.4"
   }
 }
