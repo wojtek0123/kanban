@@ -21,15 +21,17 @@ export const typeDefs = gql`
   }
 
   type Query {
-    allBoards: [Board]
+    Boards: [Board]
   }
 `
 
 export const resolvers = {
   Query: {
-    allBoards: (_parent: any, _args: any, context: Context) => {
+    Boards: (_parent: any, _args: any, context: Context) => {
       return context.prisma.board.findMany({
         select: {
+          id: true,
+          name: true,
           columns: {
             select: {
               id: true,

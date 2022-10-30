@@ -3,6 +3,8 @@ import { BoardsService } from './boards.service';
 import { FormAddTaskService, FormType } from './form/form.service';
 import { Board } from './boards.service';
 import { Subscription } from 'rxjs';
+import { Apollo } from 'apollo-angular';
+import { GET_BOARDS } from './graphql/graphql.queries';
 
 @Component({
   selector: 'app-root',
@@ -19,14 +21,22 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     public formAddTaskService: FormAddTaskService,
-    private boardsService: BoardsService
+    private boardsService: BoardsService,
+    private apollo: Apollo
   ) {}
 
   ngOnInit(): void {
-    this.boards = this.boardsService.boards;
+    // this.boards = this.boardsService.boards;
     this.selectedBoardSub = this.boardsService.selectedBoard.subscribe(
       board => (this.selectedBoard = board)
     );
+    this.apollo
+      .watchQuery({ query: GET_BOARDS })
+      .valueChanges.subscribe((result: any) => {
+        console.log(result.data);
+        this.boards = result.data.Boards;
+        this.boardsService.boards = result.data.Boards;
+      });
   }
 
   ngOnDestroy(): void {
