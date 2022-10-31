@@ -221,7 +221,7 @@
 
   .wrapper {
     overflow-x: scroll;
-    max-height: 100vh;
+    height: 100vh;
   }
 
   .nav {
@@ -303,6 +303,7 @@
     background-color: var(--background-color);
     top: 0;
     left: 0;
+    z-index: 10;
   }
 
   .heading-section-menu {
