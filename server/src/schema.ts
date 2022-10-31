@@ -23,6 +23,15 @@ export const typeDefs = gql`
   type Query {
     Boards: [Board]
   }
+
+  type Mutation {
+    EditBoard(id: String, name: String): Board
+    EditColumn(id: String, name: String): Column
+    EditTask(id: String, title: String, description: String): Task
+    AddBoard(name: String): Board
+    AddColumn(boardId: String, name: String): Column
+    AddTask(columnId: String, title: String, description: String): Task
+  }
 `
 
 export const resolvers = {
@@ -39,6 +48,83 @@ export const resolvers = {
               tasks: true,
             },
           },
+        },
+      })
+    },
+  },
+  Mutation: {
+    EditBoard: (
+      _parent: any,
+      args: { id: string; name: string },
+      context: Context,
+    ) => {
+      return context.prisma.board.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          name: args.name,
+        },
+      })
+    },
+    EditColumn: (
+      _parent: any,
+      args: { id: string; name: string },
+      context: Context,
+    ) => {
+      return context.prisma.column.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          name: args.name,
+        },
+      })
+    },
+    EditTask: (
+      _parent: any,
+      args: { id: string; title: string; description: string },
+      context: Context,
+    ) => {
+      return context.prisma.task.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          title: args.title,
+          description: args.description,
+        },
+      })
+    },
+    AddBoard: (_parent: any, args: { name: string }, context: Context) => {
+      return context.prisma.board.create({
+        data: {
+          name: args.name,
+        },
+      })
+    },
+    AddColumn: (
+      _parent: any,
+      args: { boardId: string; name: string },
+      context: Context,
+    ) => {
+      return context.prisma.column.create({
+        data: {
+          name: args.name,
+          boardId: args.boardId,
+        },
+      })
+    },
+    AddTask: (
+      _parent: any,
+      args: { columnId: string; title: string; description: string },
+      context: Context,
+    ) => {
+      return context.prisma.task.create({
+        data: {
+          title: args.title,
+          description: args.description,
+          columnId: args.columnId,
         },
       })
     },
