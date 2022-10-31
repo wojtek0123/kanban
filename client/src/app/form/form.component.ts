@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BoardsService } from '../boards.service';
 import { FormAddTaskService, FormType } from './form.service';
 import { NgForm } from '@angular/forms';
+import { Apollo } from 'apollo-angular';
+import { ADD_BOARD } from '../graphql/graphql.queries';
 
 @Component({
   selector: 'app-form',
@@ -15,7 +16,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formAddTaskService: FormAddTaskService,
-    private boardsService: BoardsService
+    private apollo: Apollo
   ) {}
 
   ngOnInit(): void {
@@ -37,16 +38,23 @@ export class FormComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
     if (this.typeOfForm === 'board') {
-      this.boardsService.onAddBoard(form.value.boardName);
+      this.apollo
+        .mutate({
+          mutation: ADD_BOARD,
+          variables: {
+            name: form.value.boardName,
+          },
+        })
+        .subscribe();
     }
     if (this.typeOfForm === 'column') {
-      this.boardsService.onAddColumn(form.value.columnName);
+      // this.boardsService.onAddColumn(form.value.columnName);
     }
     if (this.typeOfForm === 'task') {
-      this.boardsService.onAddTask({
-        title: form.value.taskName,
-        description: form.value.taskDescription,
-      });
+      // this.boardsService.onAddTask({
+      // title: form.value.taskName,
+      // description: form.value.taskDescription,
+      // });
     }
     this.formAddTaskService.onChangeFormVisibility();
   }

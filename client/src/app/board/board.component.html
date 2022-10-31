@@ -1,0 +1,76 @@
+<nav class="nav">
+  <h2 class="logo">KanBan</h2>
+  <div class="hamburger">
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+  </div>
+  <div class="mobile-nav">
+    <ul>
+      <li>Boards:</li>
+      <li *ngFor="let board of boards">
+        <span>-</span>
+        <button type="button" class="board-list-item-mobile">
+          {{ board.name }}
+        </button>
+      </li>
+      <li>
+        <button type="button" class="button-global add-task mobile-nav-button">
+          Add board
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- <app-form *ngIf="formAddTaskService.isFormOpen"></app-form> -->
+<main class="main">
+  <aside class="boards">
+    <ul>
+      <li>
+        <h2 class="logo">KanBan</h2>
+      </li>
+      <li>Boards:</li>
+      <li *ngFor="let board of boards">
+        -
+        <button
+          type="button"
+          class="board-list-item"
+          (click)="onChangeSelectedBoard(board.id)">
+          {{ board.name }}
+        </button>
+      </li>
+    </ul>
+    <button type="button" class="button-global board-button">Add board</button>
+  </aside>
+  <div class="wrapper">
+    <div class="container">
+      <p class="selected-board">
+        {{ selectedBoard?.name ?? 'selected board' }}
+      </p>
+      <div class="buttons">
+        <button type="button" class="button-global">Add column</button>
+      </div>
+    </div>
+    <div class="tasks" *ngIf="selectedBoard">
+      <section class="section" *ngFor="let column of selectedBoard.columns">
+        <div class="section-heading">
+          <h2 class="section-title">{{ column.name }}</h2>
+          <button type="button" class="context-menu-button">
+            <img src="../assets/three-dots-vertical.svg" alt="menu" />
+          </button>
+          <div class="heading-section-menu">
+            <button type="button">Remove</button>
+            <button type="button">Edit</button>
+          </div>
+        </div>
+        <button type="button" class="button-global add-task">Add task</button>
+        <div class="cards">
+          <div class="card" *ngFor="let task of column.tasks">
+            <h3>{{ task.title }}</h3>
+            <p>{{ task.description }}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
