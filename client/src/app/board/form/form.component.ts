@@ -1,9 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormService, FormType } from './form.service';
-import { FormBuilder, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
-import { ADD_BOARD } from '../../graphql/graphql.queries';
+import {
+  ADD_BOARD,
+  ADD_COLUMN,
+  ADD_TASK,
+  GET_BOARDS,
+} from '../../graphql/graphql.queries';
 
 @Component({
   selector: 'app-form',
@@ -11,6 +16,8 @@ import { ADD_BOARD } from '../../graphql/graphql.queries';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit, OnDestroy {
+  @Input() selectedBoardId!: string;
+  @Input() selectedColumnId!: string;
   typeOfForm: FormType = 'board';
   private formTypeSub: Subscription = new Subscription();
 
@@ -49,25 +56,46 @@ export class FormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     console.log(this.boardForm.value);
-    // if (this.typeOfForm === 'board') {
-    //   this.apollo
-    //     .mutate({
-    //       mutation: ADD_BOARD,
-    //       variables: {
-    //         name: form.value.boardName,
-    //       },
-    //     })
-    //     .subscribe();
-    // }
-    // if (this.typeOfForm === 'column') {
-    //   // this.boardsService.onAddColumn(form.value.columnName);
-    // }
-    // if (this.typeOfForm === 'task') {
-    //   // this.boardsService.onAddTask({
-    //   // title: form.value.taskName,
-    //   // description: form.value.taskDescription,
-    //   // });
-    // }
-    // this.formAddTaskService.onChangeFormVisibility();
+    if (this.typeOfForm === 'board') {
+      this.apollo
+        .mutate({
+          mutation: ADD_BOARD,
+          variables: {
+            name: this.boardForm.value.board?.name,
+          },
+        })
+        .subscribe((result: any) => {
+          console.log(result);
+        });
+      this.apollo.watchQuery({ query: GET_BOARDS }).refetch();
+    }
+    if (this.typeOfForm === 'column') {
+      this.apollo
+        .mutate({
+          mutation: ADD_COLUMN,
+          variables: {
+            name: this.boardForm.value.column?.name,
+            boardId: this.selectedBoardId,
+          },
+        })
+        .subscribe((result: any) => {
+          console.log(result);
+        });
+    }
+    if (this.typeOfForm === 'task') {
+      this.apollo
+        .mutate({
+          mutation: ADD_TASK,
+          variables: {
+            title: this.boardForm.value.task?.title,
+            description: this.boardForm.value.task?.description,
+            columnId: this.selectedColumnId,
+          },
+        })
+        .subscribe((result: any) => {
+          console.log(result);
+        });
+    }
+    this.formService.onChangeFormVisibility();
   }
 }

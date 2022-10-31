@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
 import { GET_BOARDS } from '../graphql/graphql.queries';
+import { Subscription } from 'rxjs';
 
 export interface Board {
   id: string;
@@ -22,22 +23,35 @@ export interface Board {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   boards: Board[] = [];
+  boardsQuery!: QueryRef<any>;
+  boardsSub!: Subscription;
   selectedBoard: Board | undefined;
+  selectedColumnId: string = '';
+
   constructor(private apollo: Apollo, public formService: FormService) {}
 
   ngOnInit(): void {
-    this.apollo
-      .watchQuery<{ Boards: Board[] }>({ query: GET_BOARDS })
-      .valueChanges.subscribe(result => {
-        this.boards = result.data.Boards;
-        this.selectedBoard = result.data.Boards[0];
-      });
+    this.boardsQuery = this.apollo.watchQuery<{ Boards: Board[] }>({
+      query: GET_BOARDS,
+    });
+
+    this.boardsSub = this.boardsQuery.valueChanges.subscribe(result => {
+      this.boards = result.data.Boards;
+      this.selectedBoard = result.data.Boards[0];
+    });
   }
 
-  onForm(type: FormType) {
+  ngOnDestroy(): void {
+    this.boardsSub.unsubscribe();
+  }
+
+  onForm(type: FormType, columnId?: string) {
     this.formService.onChangeFormVisibility(type);
+    if (columnId) {
+      this.selectedColumnId = columnId;
+    }
   }
 
   onChangeSelectedBoard(boardId: string) {

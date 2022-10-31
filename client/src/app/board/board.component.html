@@ -25,7 +25,10 @@
     </ul>
   </div>
 </nav>
-<app-form *ngIf="formService.isFormOpen"></app-form>
+<app-form
+  *ngIf="formService.isFormOpen"
+  [selectedBoardId]="selectedBoard?.id ?? ''"
+  [selectedColumnId]="selectedColumnId"></app-form>
 <main class="main">
   <aside class="boards">
     <ul>
@@ -76,7 +79,7 @@
         <button
           type="button"
           class="button-global add-task"
-          (click)="onForm('task')">
+          (click)="onForm('task', column.id)">
           Add task
         </button>
         <div class="cards">

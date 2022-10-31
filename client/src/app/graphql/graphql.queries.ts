@@ -34,7 +34,7 @@ export const ADD_COLUMN = gql`
 `;
 export const ADD_TASK = gql`
   mutation AddTask($columnId: String, $title: String, $description: String) {
-    AddTask(columnId: $columnId, name: $name, description: $description) {
+    AddTask(columnId: $columnId, title: $title, description: $description) {
       id
     }
   }
