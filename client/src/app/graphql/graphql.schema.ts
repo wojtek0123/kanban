@@ -22,6 +22,7 @@ export const ADD_BOARD = gql`
   mutation AddBoard($name: String) {
     AddBoard(name: $name) {
       id
+      name
     }
   }
 `;

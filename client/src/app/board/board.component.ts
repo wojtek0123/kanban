@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { GET_BOARDS } from '../graphql/graphql.queries';
+import { GET_BOARDS } from '../graphql/graphql.schema';
 import { Subscription } from 'rxjs';
 
 export interface Board {

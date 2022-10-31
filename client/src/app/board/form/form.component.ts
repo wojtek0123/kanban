@@ -8,7 +8,8 @@ import {
   ADD_COLUMN,
   ADD_TASK,
   GET_BOARDS,
-} from '../../graphql/graphql.queries';
+} from '../../graphql/graphql.schema';
+import { Board } from '../board.component';
 
 @Component({
   selector: 'app-form',
@@ -19,7 +20,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input() selectedBoardId!: string;
   @Input() selectedColumnId!: string;
   typeOfForm: FormType = 'board';
-  private formTypeSub: Subscription = new Subscription();
+  private subscriptions: Subscription[] = [];
 
   boardForm = this.formBuilder.group({
     board: this.formBuilder.group({
@@ -41,13 +42,10 @@ export class FormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.formTypeSub = this.formService.typeOfForm.subscribe(formType => {
+    const subscription = this.formService.typeOfForm.subscribe(formType => {
       this.typeOfForm = formType;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.formTypeSub.unsubscribe();
+    this.subscriptions = [...this.subscriptions, subscription];
   }
 
   onClose() {
@@ -57,33 +55,37 @@ export class FormComponent implements OnInit, OnDestroy {
   onSubmit() {
     console.log(this.boardForm.value);
     if (this.typeOfForm === 'board') {
-      this.apollo
-        .mutate({
+      const mutationSubscription = this.apollo
+        .mutate<{ AddBoard: Board }>({
           mutation: ADD_BOARD,
           variables: {
             name: this.boardForm.value.board?.name,
           },
+          refetchQueries: [{ query: GET_BOARDS }],
         })
-        .subscribe((result: any) => {
+        .subscribe(result => {
           console.log(result);
         });
-      this.apollo.watchQuery({ query: GET_BOARDS }).refetch();
+
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (this.typeOfForm === 'column') {
-      this.apollo
+      const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_COLUMN,
           variables: {
             name: this.boardForm.value.column?.name,
             boardId: this.selectedBoardId,
           },
+          refetchQueries: [{ query: GET_BOARDS }],
         })
-        .subscribe((result: any) => {
+        .subscribe(result => {
           console.log(result);
         });
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (this.typeOfForm === 'task') {
-      this.apollo
+      const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_TASK,
           variables: {
@@ -91,11 +93,21 @@ export class FormComponent implements OnInit, OnDestroy {
             description: this.boardForm.value.task?.description,
             columnId: this.selectedColumnId,
           },
+          refetchQueries: [{ query: GET_BOARDS }],
         })
-        .subscribe((result: any) => {
+        .subscribe(result => {
           console.log(result);
         });
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     this.formService.onChangeFormVisibility();
+  }
+
+  ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub && sub.unsubscribe) {
+        sub.unsubscribe();
+      }
+    }
   }
 }
