@@ -15,14 +15,17 @@
         </button>
       </li>
       <li>
-        <button type="button" class="button-global add-task mobile-nav-button">
+        <button
+          type="button"
+          class="button-global add-task mobile-nav-button"
+          (click)="onForm('board')">
           Add board
         </button>
       </li>
     </ul>
   </div>
 </nav>
-<!-- <app-form *ngIf="formAddTaskService.isFormOpen"></app-form> -->
+<app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
   <aside class="boards">
     <ul>
@@ -40,7 +43,12 @@
         </button>
       </li>
     </ul>
-    <button type="button" class="button-global board-button">Add board</button>
+    <button
+      type="button"
+      class="button-global board-button"
+      (click)="onForm('board')">
+      Add board
+    </button>
   </aside>
   <div class="wrapper">
     <div class="container">
@@ -48,7 +56,9 @@
         {{ selectedBoard?.name ?? 'selected board' }}
       </p>
       <div class="buttons">
-        <button type="button" class="button-global">Add column</button>
+        <button type="button" class="button-global" (click)="onForm('column')">
+          Add column
+        </button>
       </div>
     </div>
     <div class="tasks" *ngIf="selectedBoard">
@@ -63,7 +73,12 @@
             <button type="button">Edit</button>
           </div>
         </div>
-        <button type="button" class="button-global add-task">Add task</button>
+        <button
+          type="button"
+          class="button-global add-task"
+          (click)="onForm('task')">
+          Add task
+        </button>
         <div class="cards">
           <div class="card" *ngFor="let task of column.tasks">
             <h3>{{ task.title }}</h3>

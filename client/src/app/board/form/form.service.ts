@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 export type FormType = 'board' | 'task' | 'column';
 
 @Injectable({ providedIn: 'root' })
-export class FormAddTaskService {
+export class FormService {
   isFormOpen = false;
   typeOfForm = new BehaviorSubject<FormType>('board');
 

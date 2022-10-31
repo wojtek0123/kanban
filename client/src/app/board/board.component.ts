@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import { FormService, FormType } from './form/form.service';
 import { GET_BOARDS } from '../graphql/graphql.queries';
 
 export interface Board {
@@ -24,7 +25,7 @@ export interface Board {
 export class BoardComponent implements OnInit {
   boards: Board[] = [];
   selectedBoard: Board | undefined;
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, public formService: FormService) {}
 
   ngOnInit(): void {
     this.apollo
@@ -33,6 +34,10 @@ export class BoardComponent implements OnInit {
         this.boards = result.data.Boards;
         this.selectedBoard = result.data.Boards[0];
       });
+  }
+
+  onForm(type: FormType) {
+    this.formService.onChangeFormVisibility(type);
   }
 
   onChangeSelectedBoard(boardId: string) {
