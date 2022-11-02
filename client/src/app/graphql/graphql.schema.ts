@@ -1,8 +1,8 @@
 import { gql } from 'apollo-angular';
 
 export const GET_BOARDS = gql`
-  query Boards {
-    Boards {
+  query boards {
+    boards {
       id
       name
       columns {
@@ -19,31 +19,31 @@ export const GET_BOARDS = gql`
 `;
 
 export const ADD_BOARD = gql`
-  mutation AddBoard($name: String) {
-    AddBoard(name: $name) {
+  mutation addBoard($name: String) {
+    addBoard(name: $name) {
       id
       name
     }
   }
 `;
 export const ADD_COLUMN = gql`
-  mutation AddColumn($boardId: String, $name: String) {
-    AddColumn(boardId: $boardId, name: $name) {
+  mutation addColumn($boardId: String, $name: String) {
+    addColumn(boardId: $boardId, name: $name) {
       id
     }
   }
 `;
 export const ADD_TASK = gql`
-  mutation AddTask($columnId: String, $title: String, $description: String) {
-    AddTask(columnId: $columnId, title: $title, description: $description) {
+  mutation addTask($columnId: String, $title: String, $description: String) {
+    addTask(columnId: $columnId, title: $title, description: $description) {
       id
     }
   }
 `;
 
 export const EDIT_BOARD = gql`
-  mutation EditBoard($id: String, $name: String) {
-    EditBoard(id: $id, name: $name) {
+  mutation editBoard($id: String, $name: String) {
+    editBoard(id: $id, name: $name) {
       id
       name
     }
@@ -51,8 +51,8 @@ export const EDIT_BOARD = gql`
 `;
 
 export const EDIT_COLUMN = gql`
-  mutation EditColumn($id: String, $name: String) {
-    EditColumn(id: $id, name: $name) {
+  mutation editColumn($id: String, $name: String) {
+    editColumn(id: $id, name: $name) {
       id
       name
     }
@@ -60,8 +60,8 @@ export const EDIT_COLUMN = gql`
 `;
 
 export const EDIT_TASK = gql`
-  mutation EditTask($id: String, $title: String, $description: String) {
-    EditTask(id: $id, title: $title, description: $description) {
+  mutation editTask($id: String, $title: String, $description: String) {
+    editTask(id: $id, title: $title, description: $description) {
       id
       title
       description

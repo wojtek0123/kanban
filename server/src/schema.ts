@@ -21,22 +21,22 @@ export const typeDefs = gql`
   }
 
   type Query {
-    Boards: [Board]
+    boards: [Board]
   }
 
   type Mutation {
-    EditBoard(id: String, name: String): Board
-    EditColumn(id: String, name: String): Column
-    EditTask(id: String, title: String, description: String): Task
-    AddBoard(name: String): Board
-    AddColumn(boardId: String, name: String): Column
-    AddTask(columnId: String, title: String, description: String): Task
+    editBoard(id: String, name: String): Board
+    editColumn(id: String, name: String): Column
+    editTask(id: String, title: String, description: String): Task
+    addBoard(name: String): Board
+    addColumn(boardId: String, name: String): Column
+    addTask(columnId: String, title: String, description: String): Task
   }
 `
 
 export const resolvers = {
   Query: {
-    Boards: (_parent: any, _args: any, context: Context) => {
+    boards: (_parent: any, _args: any, context: Context) => {
       return context.prisma.board.findMany({
         select: {
           id: true,
@@ -53,7 +53,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    EditBoard: (
+    editBoard: (
       _parent: any,
       args: { id: string; name: string },
       context: Context,
@@ -67,7 +67,7 @@ export const resolvers = {
         },
       })
     },
-    EditColumn: (
+    editColumn: (
       _parent: any,
       args: { id: string; name: string },
       context: Context,
@@ -81,7 +81,7 @@ export const resolvers = {
         },
       })
     },
-    EditTask: (
+    editTask: (
       _parent: any,
       args: { id: string; title: string; description: string },
       context: Context,
@@ -96,14 +96,14 @@ export const resolvers = {
         },
       })
     },
-    AddBoard: (_parent: any, args: { name: string }, context: Context) => {
+    addBoard: (_parent: any, args: { name: string }, context: Context) => {
       return context.prisma.board.create({
         data: {
           name: args.name,
         },
       })
     },
-    AddColumn: (
+    addColumn: (
       _parent: any,
       args: { boardId: string; name: string },
       context: Context,
@@ -115,7 +115,7 @@ export const resolvers = {
         },
       })
     },
-    AddTask: (
+    addTask: (
       _parent: any,
       args: { columnId: string; title: string; description: string },
       context: Context,

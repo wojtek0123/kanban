@@ -33,13 +33,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   constructor(private apollo: Apollo, public formService: FormService) {}
 
   ngOnInit(): void {
-    this.boardsQuery = this.apollo.watchQuery<{ Boards: Board[] }>({
+    this.boardsQuery = this.apollo.watchQuery<{ boards: Board[] }>({
       query: GET_BOARDS,
     });
 
     this.boardsSub = this.boardsQuery.valueChanges.subscribe(result => {
-      this.boards = result.data.Boards;
-      this.selectedBoard = result.data.Boards[0];
+      this.boards = result.data.boards;
+      this.selectedBoard = result.data.boards[0];
     });
   }
 
