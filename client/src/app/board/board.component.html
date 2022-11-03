@@ -33,7 +33,10 @@
   <aside class="boards">
     <h2 class="logo">KanBan</h2>
     <div class="projects">
-      <app-accordion [boards]="boards" title="Boards"></app-accordion>
+      <app-accordion
+        (boardId)="onSelectBoard($event)"
+        [boards]="boards"
+        title="Boards"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button
@@ -56,7 +59,7 @@
       </div>
     </div>
     <div class="tasks" *ngIf="selectedBoard">
-      <section class="section" *ngFor="let column of selectedBoard.columns">
+      <section class="section" *ngFor="let column of selectedBoard?.columns">
         <div class="section-heading">
           <h2 class="section-title">{{ column.name }}</h2>
           <button type="button" class="context-menu-button">

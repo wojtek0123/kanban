@@ -4,14 +4,17 @@
       [@rotateState]="!showContent ? 'default' : 'rotated'"
       src="../../../assets/arrow-down-short.svg"
       alt="" />
-    <h3>{{ title }}</h3>
+    <h3>{{ projectName }}</h3>
   </button>
   <ul
     class="accordion-body"
     [@smoothCollapse]="!showContent ? 'initial' : 'final'">
     <li *ngFor="let board of boards">
       -
-      <button type="button" class="accordion-item">
+      <button
+        type="button"
+        class="accordion-item"
+        (click)="onSelectBoard(board.id)">
         {{ board.name }}
       </button>
     </li>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Board } from '../board.component';
 import {
   animate,
@@ -38,11 +38,14 @@ import {
 export class AccordionComponent {
   @Input() title!: string;
   @Input() boards!: Board[];
+  @Output() boardId = new EventEmitter<string>();
   showContent = false;
-
-  constructor() {}
 
   toggleShowContent() {
     this.showContent = !this.showContent;
+  }
+
+  onSelectBoard(boardId: string) {
+    this.boardId.emit(boardId);
   }
 }
