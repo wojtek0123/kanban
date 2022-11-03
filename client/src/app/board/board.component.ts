@@ -29,6 +29,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   boardsSub!: Subscription;
   selectedBoard: Board | undefined;
   selectedColumnId: string = '';
+  openedAccordion: string = '';
 
   constructor(private apollo: Apollo, public formService: FormService) {}
 
@@ -57,5 +58,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   onChangeSelectedBoard(boardId: string) {
     const board = this.boards.find(board => board.id === boardId);
     this.selectedBoard = board;
+  }
+
+  onAccordion(event: Event) {
+    const buttonText = (event.target as HTMLButtonElement)?.textContent ?? '';
+    this.openedAccordion = buttonText;
   }
 }

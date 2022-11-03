@@ -31,27 +31,18 @@
   [selectedColumnId]="selectedColumnId"></app-form>
 <main class="main">
   <aside class="boards">
-    <ul>
-      <li>
-        <h2 class="logo">KanBan</h2>
-      </li>
-      <li>Boards:</li>
-      <li *ngFor="let board of boards">
-        -
-        <button
-          type="button"
-          class="board-list-item"
-          (click)="onChangeSelectedBoard(board.id)">
-          {{ board.name }}
-        </button>
-      </li>
-    </ul>
-    <button
-      type="button"
-      class="button-global board-button"
-      (click)="onForm('board')">
-      Add board
-    </button>
+    <h2 class="logo">KanBan</h2>
+    <div class="projects">
+      <app-accordion [boards]="boards" title="Boards"></app-accordion>
+    </div>
+    <div class="board-button-wrapper">
+      <button
+        type="button"
+        class="button-global board-button"
+        (click)="onForm('board')">
+        Add board
+      </button>
+    </div>
   </aside>
   <div class="wrapper">
     <div class="container">

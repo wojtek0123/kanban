@@ -254,29 +254,21 @@
   .boards {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100vh;
     border-top-right-radius: var(--rounded);
     border-bottom-right-radius: var(--rounded);
     background-color: var(--black-color);
     width: 25rem;
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
     margin-right: 1rem;
   }
 
-  .boards ul {
-    list-style-type: none;
-    margin-right: 1rem;
-    overflow-y: auto;
-  }
-
-  .boards ul li {
+  .projects {
     display: flex;
-    align-items: center;
-  }
-
-  .boards ul li button {
-    margin-left: 1rem;
+    flex-direction: column;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    height: 100%;
   }
 
   .board-button {
@@ -288,6 +280,10 @@
     justify-content: center;
     padding: 1rem;
     width: 100%;
+  }
+
+  .board-button-wrapper {
+    padding-right: 1rem;
   }
 
   .logo {
