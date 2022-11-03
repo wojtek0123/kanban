@@ -36,7 +36,7 @@ import {
   ],
 })
 export class AccordionComponent {
-  @Input() title!: string;
+  @Input() projectName!: string;
   @Input() boards!: Board[];
   @Output() boardId = new EventEmitter<string>();
   showContent = false;
