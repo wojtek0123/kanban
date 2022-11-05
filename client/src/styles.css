@@ -9,12 +9,13 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--background-color);
   color: var(--font-color);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   overflow-x: hidden;
   width: 100%;
+  position: relative;
 }
 
 :root {
@@ -47,4 +48,10 @@ body {
 
 .button-global:hover {
   background-color: var(--button-hover-color);
+}
+
+@media (min-width: 1024px) {
+  body {
+    height: 100vh;
+  }
 }

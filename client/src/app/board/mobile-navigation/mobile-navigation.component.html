@@ -1,0 +1,29 @@
+<div class="nav">
+  <div
+    class="backdrop"
+    [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'"></div>
+  <h2 class="logo">KanBan</h2>
+  <button
+    aria-label="hamburger menu"
+    type="button"
+    class="hamburger close"
+    [ngClass]="{ close: navigationService.showMenu }"
+    (click)="navigationService.onMenu()">
+    <span class="hamburger-bar"></span>
+  </button>
+</div>
+<nav
+  class="mobile-nav boards"
+  [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'">
+  <div class="projects">
+    <app-accordion [boards]="boards" projectName="Boards"></app-accordion>
+  </div>
+  <div class="board-button-wrapper">
+    <button
+      type="button"
+      class="button-global board-button"
+      (click)="onForm('board')">
+      Add board
+    </button>
+  </div>
+</nav>

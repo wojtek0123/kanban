@@ -2,6 +2,7 @@
   <button type="button" class="accordion-title" (click)="toggleShowContent()">
     <img
       [@rotateState]="!showContent ? 'default' : 'rotated'"
+      class="accordion-image"
       src="../../../assets/arrow-down-short.svg"
       alt="" />
     <h3>{{ projectName }}</h3>
@@ -10,10 +11,10 @@
     class="accordion-body"
     [@smoothCollapse]="!showContent ? 'initial' : 'final'">
     <li *ngFor="let board of boards">
-      -
       <button
         type="button"
         class="accordion-item"
+        [ngClass]="{ highlight: selectedBoardId === board.id }"
         (click)="onSelectBoard(board.id)">
         {{ board.name }}
       </button>

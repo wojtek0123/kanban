@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, DoCheck, Input } from '@angular/core';
 import { Board } from '../board.component';
 import {
   animate,
@@ -8,6 +8,7 @@ import {
   style,
 } from '@angular/animations';
 import { BoardService } from '../board.service';
+import { NavigationService } from '../mobile-navigation/navigation.service';
 
 @Component({
   selector: 'app-accordion',
@@ -36,12 +37,20 @@ import { BoardService } from '../board.service';
     ]),
   ],
 })
-export class AccordionComponent {
+export class AccordionComponent implements DoCheck {
   @Input() projectName!: string;
   @Input() boards!: Board[];
-  showContent = false;
+  showContent = true;
+  selectedBoardId = '';
 
-  constructor(private boardService: BoardService) {}
+  constructor(
+    private boardService: BoardService,
+    public navigationService: NavigationService
+  ) {}
+
+  ngDoCheck(): void {
+    this.selectedBoardId = this.boardService.selectedBoardId.getValue();
+  }
 
   toggleShowContent() {
     this.showContent = !this.showContent;
@@ -49,5 +58,6 @@ export class AccordionComponent {
 
   onSelectBoard(boardId: string) {
     this.boardService.onChangeSelectedBoard(boardId);
+    this.navigationService.onMenu();
   }
 }
