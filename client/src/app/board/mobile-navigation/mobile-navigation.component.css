@@ -1,4 +1,4 @@
-.nav {
+.navigation-bar {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -12,14 +12,14 @@
   box-shadow: 0 0 5px var(--background-color);
 }
 
-.backdrop {
+.navigation-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.mobile-nav {
+.navigation-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -30,6 +30,45 @@
   border-top-right-radius: var(--rounded);
   border-bottom-right-radius: var(--rounded);
   z-index: 15;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+  width: 75vw;
+}
+
+.board-list-item-mobile {
+  font-size: 1.5rem;
+  border: none;
+  background: none;
+  color: var(--font-color);
+  margin-left: 0.25rem;
+}
+
+.navigation-logo {
+  font-size: 2rem;
+}
+
+.navigation-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  height: 100%;
+}
+
+.navigation-button {
+  bottom: 0;
+  left: 0;
+  width: 25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.navigation-button-wrapper {
+  padding-right: 1rem;
 }
 
 .hamburger {
@@ -88,68 +127,12 @@
   background-color: transparent;
 }
 
-.board-list-item-mobile {
-  font-size: 1.5rem;
-  border: none;
-  background: none;
-  color: var(--font-color);
-  margin-left: 0.25rem;
-}
-
-.mobile-nav-button {
-  bottom: 0rem;
-  margin-top: 2rem;
-}
-
-.logo {
-  font-size: 2rem;
-}
-
-.boards {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  border-top-right-radius: var(--rounded);
-  border-bottom-right-radius: var(--rounded);
-  background-color: var(--black-color);
-  padding: 1rem 0 1rem 1rem;
-  margin-right: 1rem;
-  width: 75vw;
-}
-
-.projects {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-  height: 100%;
-}
-
-.board-button {
-  bottom: 0;
-  left: 0;
-  width: 25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  width: 100%;
-}
-
-.board-button-wrapper {
-  padding-right: 1rem;
-}
-
 @media (min-width: 1024px) {
-  .nav {
+  .navigation-bar {
     display: none;
   }
 
-  .mobile-nav {
+  .navigation-container {
     display: none;
-  }
-
-  .boards {
-    width: 25rem;
   }
 }
