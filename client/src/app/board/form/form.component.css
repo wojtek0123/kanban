@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 10;
+  z-index: 20;
 }
 
 .form {
@@ -40,7 +40,7 @@
 .task-description {
   width: 100%;
   max-width: 32rem;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1rem;
 }
 
