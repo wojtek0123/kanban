@@ -7,6 +7,7 @@ import {
   trigger,
   style,
 } from '@angular/animations';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-accordion',
@@ -38,14 +39,15 @@ import {
 export class AccordionComponent {
   @Input() projectName!: string;
   @Input() boards!: Board[];
-  @Output() boardId = new EventEmitter<string>();
   showContent = false;
+
+  constructor(private boardService: BoardService) {}
 
   toggleShowContent() {
     this.showContent = !this.showContent;
   }
 
   onSelectBoard(boardId: string) {
-    this.boardId.emit(boardId);
+    this.boardService.onChangeSelectedBoard(boardId);
   }
 }

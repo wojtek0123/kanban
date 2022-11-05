@@ -33,10 +33,7 @@
   <aside class="boards">
     <h2 class="logo">KanBan</h2>
     <div class="projects">
-      <app-accordion
-        (boardId)="onSelectBoard($event)"
-        [boards]="boards"
-        title="Boards"></app-accordion>
+      <app-accordion [boards]="boards" projectName="Boards"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button

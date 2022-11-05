@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
 import { GET_BOARDS } from '../graphql/graphql.schema';
 import { Subscription } from 'rxjs';
+import { BoardService } from './board.service';
 
 export interface Board {
   id: string;
@@ -23,7 +24,7 @@ export interface Board {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit, OnDestroy {
+export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   boards: Board[] = [];
   boardsQuery!: QueryRef<any>;
   boardsSub!: Subscription;
@@ -31,7 +32,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   selectedColumnId: string = '';
   boardId: string = '';
 
-  constructor(private apollo: Apollo, public formService: FormService) {}
+  constructor(
+    private apollo: Apollo,
+    public formService: FormService,
+    private boardService: BoardService
+  ) {}
 
   ngOnInit(): void {
     this.boardsQuery = this.apollo.watchQuery<{ boards: Board[] }>({
@@ -40,8 +45,22 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.boardsSub = this.boardsQuery.valueChanges.subscribe(result => {
       this.boards = result.data.boards;
-      this.selectedBoard = result.data.boards[0];
+      if (!this.selectedBoard) {
+        this.selectedBoard = result.data.boards[0];
+        this.boardService.onChangeSelectedBoard(this.selectedBoard?.id ?? '');
+      } else {
+        this.boardService.onChangeSelectedBoard(this.selectedBoard?.id ?? '');
+      }
     });
+  }
+
+  ngDoCheck(): void {
+    if (this.selectedBoard?.id !== this.boardService.selectedBoardId.value) {
+      this.boardService.selectedBoardId.subscribe(id => {
+        const board = this.boards.find(board => board.id === id);
+        this.selectedBoard = board;
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -53,10 +72,5 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (columnId) {
       this.selectedColumnId = columnId;
     }
-  }
-
-  onSelectBoard(boardId: string) {
-    const board = this.boards.find(board => board.id === boardId);
-    this.selectedBoard = board;
   }
 }
