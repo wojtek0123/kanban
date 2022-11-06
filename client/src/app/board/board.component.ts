@@ -1,9 +1,9 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { GET_BOARDS } from '../graphql/graphql.schema';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
+import { GET_BOARDS } from '../graphql/graphql.schema';
 
 export interface Board {
   id: string;
@@ -29,7 +29,7 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   boardsQuery!: QueryRef<any>;
   boardsSub!: Subscription;
   selectedBoard: Board | undefined;
-  selectedColumnId: string = '';
+  // selectedColumnId: string = '';
   boardId: string = '';
 
   constructor(
@@ -45,6 +45,9 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
 
     this.boardsSub = this.boardsQuery.valueChanges.subscribe(result => {
       this.boards = result.data.boards;
+      // this.boardService.onChangeSelectedColumn(
+      //   result.data.boards[0].column[0].id
+      // );
       if (!this.selectedBoard) {
         this.selectedBoard = result.data.boards[0];
         this.boardService.onChangeSelectedBoard(this.selectedBoard?.id ?? '');
@@ -70,7 +73,8 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   onForm(type: FormType, columnId?: string) {
     this.formService.onChangeFormVisibility(type);
     if (columnId) {
-      this.selectedColumnId = columnId;
+      // this.selectedColumnId = columnId;
+      this.boardService.onChangeSelectedColumn(columnId);
     }
   }
 }

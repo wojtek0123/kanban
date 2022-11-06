@@ -1,12 +1,9 @@
 <app-mobile-navigation [boards]="boards"></app-mobile-navigation>
-<app-form
-  *ngIf="formService.isFormOpen"
-  [selectedBoardId]="selectedBoard?.id ?? ''"
-  [selectedColumnId]="selectedColumnId"></app-form>
+<app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
-  <aside class="boards">
-    <h2 class="logo">KanBan</h2>
-    <div class="projects">
+  <aside class="board-sidebar">
+    <h2 class="board-logo">KanBan</h2>
+    <div class="board-wrapper">
       <app-accordion [boards]="boards" projectName="Boards"></app-accordion>
     </div>
     <div class="board-button-wrapper">
@@ -18,42 +15,7 @@
       </button>
     </div>
   </aside>
-  <div class="wrapper">
-    <div class="container">
-      <p class="selected-board">
-        {{ selectedBoard?.name ?? 'selected board' }}
-      </p>
-      <div class="buttons">
-        <button type="button" class="button-global" (click)="onForm('column')">
-          Add column
-        </button>
-      </div>
-    </div>
-    <div class="tasks" *ngIf="selectedBoard">
-      <section class="section" *ngFor="let column of selectedBoard?.columns">
-        <div class="section-heading">
-          <h2 class="section-title">{{ column.name }}</h2>
-          <button type="button" class="context-menu-button">
-            <img src="../assets/three-dots-vertical.svg" alt="menu" />
-          </button>
-          <div class="heading-section-menu">
-            <button type="button">Remove</button>
-            <button type="button">Edit</button>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="button-global add-task"
-          (click)="onForm('task', column.id)">
-          Add task
-        </button>
-        <div class="cards">
-          <div class="card" *ngFor="let task of column.tasks">
-            <h3>{{ task.title }}</h3>
-            <p>{{ task.description }}</p>
-          </div>
-        </div>
-      </section>
-    </div>
+  <div class="board-details-wrapper">
+    <app-board-details [selectedBoard]="selectedBoard"></app-board-details>
   </div>
 </main>

@@ -4,12 +4,13 @@ import { FormService, FormType } from './form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import {
+  GET_BOARDS,
   ADD_BOARD,
   ADD_COLUMN,
   ADD_TASK,
-  GET_BOARDS,
-} from '../../graphql/graphql.schema';
+} from 'src/app/graphql/graphql.schema';
 import { Board } from '../board.component';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-form',
@@ -17,8 +18,6 @@ import { Board } from '../board.component';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit, OnDestroy {
-  @Input() selectedBoardId!: string;
-  @Input() selectedColumnId!: string;
   typeOfForm: FormType = 'board';
   private subscriptions: Subscription[] = [];
 
@@ -38,7 +37,8 @@ export class FormComponent implements OnInit, OnDestroy {
   constructor(
     private formService: FormService,
     private apollo: Apollo,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private boardService: BoardService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class FormComponent implements OnInit, OnDestroy {
           mutation: ADD_COLUMN,
           variables: {
             name: this.boardForm.value.column?.name,
-            boardId: this.selectedBoardId,
+            boardId: this.boardService.selectedBoardId.value,
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })
@@ -91,7 +91,7 @@ export class FormComponent implements OnInit, OnDestroy {
           variables: {
             title: this.boardForm.value.task?.title,
             description: this.boardForm.value.task?.description,
-            columnId: this.selectedColumnId,
+            columnId: this.boardService.selectedColumnId.value,
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })

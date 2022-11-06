@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
+import { BoardDetailsComponent } from './board-details/board-details.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
     BoardComponent,
     AccordionComponent,
     MobileNavigationComponent,
+    BoardDetailsComponent,
   ],
   imports: [BrowserAnimationsModule, ReactiveFormsModule, CommonModule],
   exports: [BoardComponent],

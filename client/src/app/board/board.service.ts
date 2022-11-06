@@ -4,8 +4,13 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class BoardService {
   selectedBoardId = new BehaviorSubject<string>('');
+  selectedColumnId = new BehaviorSubject<string>('');
 
   onChangeSelectedBoard(boardId: string) {
     this.selectedBoardId.next(boardId);
+  }
+
+  onChangeSelectedColumn(columnId: string) {
+    this.selectedColumnId.next(columnId);
   }
 }
