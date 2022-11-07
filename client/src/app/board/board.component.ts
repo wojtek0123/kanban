@@ -60,8 +60,7 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   ngDoCheck(): void {
     if (this.selectedBoard?.id !== this.boardService.selectedBoardId.value) {
       this.boardService.selectedBoardId.subscribe(id => {
-        const board = this.boards.find(board => board.id === id);
-        this.selectedBoard = board;
+        this.selectedBoard = this.boards.find(board => board.id === id);
       });
     }
   }
