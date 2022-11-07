@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { BoardDetailsComponent } from './board-details/board-details.component';
+import { ContextMenuComponent } from './board-details/context-menu/context-menu.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BoardDetailsComponent } from './board-details/board-details.component';
     AccordionComponent,
     MobileNavigationComponent,
     BoardDetailsComponent,
+    ContextMenuComponent,
   ],
   imports: [BrowserAnimationsModule, ReactiveFormsModule, CommonModule],
   exports: [BoardComponent],
