@@ -1,7 +1,12 @@
 <div class="container">
-  <h2 class="board-name">
-    {{ selectedBoard?.name ?? 'selected board' }}
-  </h2>
+  <div class="board-name">
+    <h2>
+      {{ selectedBoard?.name ?? 'selected board' }}
+    </h2>
+    <app-context-menu
+      [id]="selectedBoard?.id ?? ''"
+      [type]="'board'"></app-context-menu>
+  </div>
   <div class="buttons">
     <button type="button" class="button-global" (click)="onForm('column')">
       Add column
@@ -12,7 +17,7 @@
   <section class="section" *ngFor="let column of selectedBoard?.columns">
     <div class="section-heading">
       <h2 class="section-title">{{ column.name }}</h2>
-      <app-context-menu></app-context-menu>
+      <app-context-menu [id]="column.id" [type]="'column'"></app-context-menu>
     </div>
     <button
       type="button"

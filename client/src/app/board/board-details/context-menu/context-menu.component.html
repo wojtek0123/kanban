@@ -1,14 +1,14 @@
-<link rel="stylesheet" href="context-menu.component.css" />
+<!--<link rel="stylesheet" href="context-menu.component.css" />-->
 <div class="context-menu-container">
   <button type="button" class="context-menu-button" (click)="toggleMenu()">
     <img src="../assets/three-dots-vertical.svg" alt="menu" />
   </button>
   <div class="context-menu-body" [ngClass]="{ show: showMenu }">
-    <button type="button" class="context-menu-body-button">
+    <button type="button" class="context-menu-body-button" (click)="delete()">
       Remove
       <img src="../../../../assets/trash-fill.svg" alt="" />
     </button>
-    <button type="button" class="context-menu-body-button">
+    <button type="button" class="context-menu-body-button" (click)="edit()">
       Edit
       <img src="../../../../assets/pencil-square.svg" alt="" />
     </button>

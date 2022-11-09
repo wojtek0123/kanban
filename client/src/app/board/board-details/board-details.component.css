@@ -12,6 +12,12 @@
 .board-name {
   margin-top: 1rem;
   font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.board-name h2 {
+  padding-right: 0.5rem;
 }
 
 .tasks {
