@@ -1,17 +1,16 @@
+<link rel="stylesheet" href="context-menu.component.css" />
 <div class="context-menu-container">
   <button type="button" class="context-menu-button" (click)="toggleMenu()">
     <img src="../assets/three-dots-vertical.svg" alt="menu" />
   </button>
   <div class="context-menu-body" [ngClass]="{ show: showMenu }">
-    <div>
-      <button
-        type="button"
-        class="context-menu-body-close"
-        (click)="toggleMenu()">
-        X
-      </button>
-    </div>
-    <button type="button" class="context-menu-body-button">Remove</button>
-    <button type="button" class="context-menu-body-button">Edit</button>
+    <button type="button" class="context-menu-body-button">
+      Remove
+      <img src="../../../../assets/trash-fill.svg" alt="" />
+    </button>
+    <button type="button" class="context-menu-body-button">
+      Edit
+      <img src="../../../../assets/pencil-square.svg" alt="" />
+    </button>
   </div>
 </div>
