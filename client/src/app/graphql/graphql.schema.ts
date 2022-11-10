@@ -69,25 +69,25 @@ export const EDIT_TASK = gql`
   }
 `;
 
-export const DELETE_BOARD = gql`
-  mutation deleteBoard($id: String) {
-    deleteBoard(id: $id) {
+export const REMOVE_BOARD = gql`
+  mutation removeBoard($id: String) {
+    removeBoard(id: $id) {
       id
     }
   }
 `;
 
-export const DELETE_COLUMN = gql`
-  mutation deleteColumn($id: String) {
-    deleteColumn(id: $id) {
+export const REMOVE_COLUMN = gql`
+  mutation removeColumn($id: String) {
+    removeColumn(id: $id) {
       id
     }
   }
 `;
 
-export const DELETE_TASK = gql`
-  mutation deleteTask($id: String) {
-    deleteTask(id: $id) {
+export const REMOVE_TASK = gql`
+  mutation removeTask($id: String) {
+    removeTask(id: $id) {
       id
     }
   }
