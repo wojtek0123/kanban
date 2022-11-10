@@ -5,7 +5,8 @@
     </h2>
     <app-context-menu
       [id]="selectedBoard?.id ?? ''"
-      [type]="'board'"></app-context-menu>
+      [type]="'board'"
+      [editingBoard]="selectedBoard"></app-context-menu>
   </div>
   <div class="buttons">
     <button type="button" class="button-global" (click)="onForm('column')">
@@ -20,7 +21,7 @@
       <app-context-menu
         [id]="column.id"
         [type]="'column'"
-        [editingObject]="column"></app-context-menu>
+        [editingColumn]="column"></app-context-menu>
     </div>
     <button
       type="button"

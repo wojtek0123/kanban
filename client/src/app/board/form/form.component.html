@@ -51,13 +51,47 @@
         formControlName="description"></textarea>
     </div>
 
-    <div *ngIf="isEditing" formGroupName="editColumn" class="form-wrapper">
-      <label for="edit-column">Column name</label>
+    <div
+      *ngIf="isEditing && typeOfForm === 'board'"
+      formGroupName="editBoard"
+      class="form-wrapper">
+      <label for="edit-board-name">Board name</label>
       <input
         type="text"
         class="form-input"
-        id="edit-column"
+        id="edit-board-name"
         formControlName="name" />
+    </div>
+
+    <div
+      *ngIf="isEditing && typeOfForm === 'column'"
+      formGroupName="editColumn"
+      class="form-wrapper">
+      <label for="edit-column-name">Column name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="edit-column-name"
+        formControlName="name" />
+    </div>
+
+    <div
+      *ngIf="isEditing && typeOfForm === 'task'"
+      formGroupName="editColumn"
+      class="form-wrapper">
+      <label for="edit-task-title">Column name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="edit-task-title"
+        formControlName="title" />
+      <label class="form-label" for="edit-task-description"
+        >Short description</label
+      >
+      <textarea
+        class="task-description form-input"
+        id="edit-task-description"
+        formControlName="description"></textarea>
     </div>
 
     <button type="submit" class="button-global submit-button">

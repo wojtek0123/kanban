@@ -7,7 +7,9 @@ export type FormType = 'board' | 'task' | 'column';
 export class FormService {
   isFormOpen = false;
   isEditing = false;
-  editingObject?: Task | Column | Board;
+  editingBoard?: Board;
+  editingColumn?: Column;
+  editingTask?: Task;
   typeOfForm = new BehaviorSubject<FormType>('board');
 
   onChangeFormVisibility(formType?: FormType) {
@@ -17,8 +19,18 @@ export class FormService {
     }
   }
 
-  onEditing(object: Task | Column | Board) {
+  onEditingBoard(board: Board) {
     this.isEditing = true;
-    this.editingObject = object;
+    this.editingBoard = board;
+  }
+
+  onEditingColumn(column: Column) {
+    this.isEditing = true;
+    this.editingColumn = column;
+  }
+
+  onEditingTask(task: Task) {
+    this.isEditing = true;
+    this.editingTask = task;
   }
 }

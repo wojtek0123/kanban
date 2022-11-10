@@ -10,6 +10,7 @@ import {
 import { FormType } from '../../form/form.service';
 import { Task, Column, Board } from '../../board.component';
 import { Subscription } from 'rxjs';
+import { instanceOf } from 'graphql/jsutils/instanceOf';
 
 @Component({
   selector: 'app-context-menu',
@@ -19,7 +20,9 @@ import { Subscription } from 'rxjs';
 export class ContextMenuComponent implements OnDestroy {
   @Input() id!: string;
   @Input() type!: FormType;
-  @Input() editingObject?: Task | Column | Board;
+  @Input() editingBoard?: Board;
+  @Input() editingColumn?: Column;
+  @Input() editingTask?: Task;
   showMenu = false;
   subscription: Subscription = new Subscription();
 
@@ -57,16 +60,20 @@ export class ContextMenuComponent implements OnDestroy {
 
   edit() {
     this.showMenu = false;
-    if (!this.editingObject) {
-      return;
-    }
-    this.formService.onEditing(this.editingObject);
     this.formService.onChangeFormVisibility();
-    if (this.editingObject) {
-      console.log(this.editingObject);
+
+    if (this.type === 'board' && this.editingBoard) {
+      this.formService.onEditingBoard(this.editingBoard);
+      this.formService.typeOfForm.next('board');
     }
-    //  apollo mutation updates
-    // pass the information about the editing object
+    if (this.type === 'column' && this.editingColumn) {
+      this.formService.onEditingColumn(this.editingColumn);
+      this.formService.typeOfForm.next('column');
+    }
+    if (this.type === 'task' && this.editingTask) {
+      this.formService.onEditingTask(this.editingTask);
+      this.formService.typeOfForm.next('task');
+    }
   }
 
   ngOnDestroy() {
