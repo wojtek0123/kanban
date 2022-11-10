@@ -5,8 +5,7 @@
   <div
     class="context-menu-body"
     [ngClass]="{
-      'show-left': showMenu && type !== 'board',
-      'show-right': showMenu && type === 'board'
+      show: showMenu
     }">
     <button type="button" class="context-menu-body-button" (click)="delete()">
       Remove

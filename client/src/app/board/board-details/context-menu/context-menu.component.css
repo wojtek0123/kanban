@@ -1,5 +1,5 @@
 .context-menu-container {
-  position: relative;
+  /*position: relative;*/
 }
 
 .context-menu-button {
@@ -15,26 +15,18 @@
   border-radius: var(--rounded);
   z-index: 10;
   display: none;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.context-menu-body.show-left {
+.context-menu-body.show {
   box-shadow: 0 0 0.5rem var(--black-color);
   display: flex;
-  position: absolute;
-  top: 0;
+  position: fixed;
+  bottom: 0;
   right: 0;
-  transform: translateX(-25%);
-}
-
-.context-menu-body.show-right {
-  left: 0;
-  display: flex;
-  position: absolute;
-  top: 0;
-  transform: translateX(25%);
+  width: 100%;
 }
 
 .context-menu-body-button {
@@ -80,9 +72,14 @@
 }
 
 @media (min-width: 1024px) {
+  .context-menu-container {
+    position: relative;
+  }
+
   .context-menu-body {
     display: none;
     font-size: 0.8rem;
+    align-items: flex-start;
   }
 
   .context-menu-body.show {
@@ -96,5 +93,16 @@
 
   .context-menu-body-close {
     font-size: 1.25rem;
+  }
+
+  .context-menu-body.show {
+    box-shadow: 0 0 0.5rem var(--black-color);
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: max-content;
+    height: max-content;
+    transform: translateX(-25%);
   }
 }
