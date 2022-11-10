@@ -21,7 +21,7 @@ export class ContextMenuComponent implements OnDestroy {
   @Input() type!: FormType;
   @Input() editingObject?: Task | Column | Board;
   showMenu = false;
-  subscription!: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(private formService: FormService, private apollo: Apollo) {}
 
