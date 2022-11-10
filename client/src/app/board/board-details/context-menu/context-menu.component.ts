@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormService } from '../../form/form.service';
 import { Apollo } from 'apollo-angular';
 import {
@@ -9,17 +9,19 @@ import {
 } from '../../../graphql/graphql.schema';
 import { FormType } from '../../form/form.service';
 import { Task, Column, Board } from '../../board.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-context-menu',
   templateUrl: './context-menu.component.html',
   styleUrls: ['./context-menu.component.css'],
 })
-export class ContextMenuComponent {
+export class ContextMenuComponent implements OnDestroy {
   @Input() id!: string;
   @Input() type!: FormType;
   @Input() editingObject?: Task | Column | Board;
   showMenu = false;
+  subscription!: Subscription;
 
   constructor(private formService: FormService, private apollo: Apollo) {}
 
@@ -40,13 +42,17 @@ export class ContextMenuComponent {
     if (this.type === 'task') {
       mutation = REMOVE_TASK;
     }
-    this.apollo.mutate({
-      mutation: mutation,
-      variables: {
-        id: this.id,
-      },
-      refetchQueries: [GET_BOARDS],
-    });
+    this.subscription = this.apollo
+      .mutate({
+        mutation: mutation,
+        variables: {
+          id: this.id,
+        },
+        refetchQueries: [GET_BOARDS],
+      })
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 
   edit() {
@@ -61,5 +67,9 @@ export class ContextMenuComponent {
     }
     //  apollo mutation updates
     // pass the information about the editing object
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
