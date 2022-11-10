@@ -31,6 +31,9 @@ export const typeDefs = gql`
     addBoard(name: String): Board
     addColumn(boardId: String, name: String): Column
     addTask(columnId: String, title: String, description: String): Task
+    removeBoard(id: String): Board
+    removeColumn(id: String): Column
+    removeTask(id: String): Task
   }
 `
 
@@ -127,6 +130,15 @@ export const resolvers = {
           columnId: args.columnId,
         },
       })
+    },
+    removeBoard: (_parent: any, args: { id: string }, context: Context) => {
+      return context.prisma.board.delete({ where: { id: args.id } })
+    },
+    removeColumn: (_parent: any, args: { id }, context: Context) => {
+      return context.prisma.column.delete({ where: { id: args.id } })
+    },
+    removeTask: (_parent: any, args: { id: string }, context: Context) => {
+      return context.prisma.task.delete({ where: { id: args.id } })
     },
   },
 }
