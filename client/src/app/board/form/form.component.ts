@@ -152,9 +152,12 @@ export class FormComponent implements OnInit, OnDestroy {
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })
-        .subscribe(result => console.log(result));
+        .subscribe(result => {
+          console.log(result);
+        });
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
+    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
   }
 
