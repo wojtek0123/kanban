@@ -1,9 +1,13 @@
-<!--<link rel="stylesheet" href="context-menu.component.css" />-->
 <div class="context-menu-container">
   <button type="button" class="context-menu-button" (click)="toggleMenu()">
     <img src="../assets/three-dots-vertical.svg" alt="menu" />
   </button>
-  <div class="context-menu-body" [ngClass]="{ show: showMenu }">
+  <div
+    class="context-menu-body"
+    [ngClass]="{
+      'show-left': showMenu && type !== 'board',
+      'show-right': showMenu && type === 'board'
+    }">
     <button type="button" class="context-menu-body-button" (click)="delete()">
       Remove
       <img src="../../../../assets/trash-fill.svg" alt="" />

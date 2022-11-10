@@ -9,24 +9,32 @@
 }
 
 .context-menu-body {
-  position: absolute;
-  top: 0;
-  right: 0;
   padding: 1rem;
   font-size: 0.5rem;
   background-color: var(--black-color);
   border-radius: var(--rounded);
   z-index: 10;
   display: none;
-}
-
-.context-menu-body.show {
-  box-shadow: 0 0 0.5rem var(--black-color);
-  display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
-  transform: translate(-25%, -25%);
+}
+
+.context-menu-body.show-left {
+  box-shadow: 0 0 0.5rem var(--black-color);
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(-25%);
+}
+
+.context-menu-body.show-right {
+  left: 0;
+  display: flex;
+  position: absolute;
+  top: 0;
+  transform: translateX(25%);
 }
 
 .context-menu-body-button {
@@ -83,6 +91,7 @@
 
   .context-menu-body-button {
     font-size: 1.2rem;
+    margin: 0;
   }
 
   .context-menu-body-close {

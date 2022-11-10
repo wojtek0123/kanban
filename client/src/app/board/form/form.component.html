@@ -12,7 +12,7 @@
 
     <div
       class="form-wrapper"
-      *ngIf="typeOfForm === 'board'"
+      *ngIf="typeOfForm === 'board' && !isEditing"
       formGroupName="board">
       <label class="form-label" for="board-name">Name</label>
       <input
@@ -24,7 +24,7 @@
 
     <div
       class="form-wrapper"
-      *ngIf="typeOfForm === 'column'"
+      *ngIf="typeOfForm === 'column' && !isEditing"
       formGroupName="column">
       <label class="form-label" for="column-name">Name</label>
       <input
@@ -36,7 +36,7 @@
 
     <div
       class="form-wrapper"
-      *ngIf="typeOfForm === 'task'"
+      *ngIf="typeOfForm === 'task' && !isEditing"
       formGroupName="task">
       <label class="form-label" for="task-name">Task name</label>
       <input
@@ -51,8 +51,17 @@
         formControlName="description"></textarea>
     </div>
 
+    <div *ngIf="isEditing" formGroupName="editColumn" class="form-wrapper">
+      <label for="edit-column">Column name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="edit-column"
+        formControlName="name" />
+    </div>
+
     <button type="submit" class="button-global submit-button">
-      Add {{ typeOfForm }}
+      {{ isEditing ? 'Update' : 'Add ' + typeOfForm }}
     </button>
   </form>
 </div>

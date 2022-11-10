@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormService, FormType } from './form.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import {
   GET_BOARDS,
@@ -9,8 +9,9 @@ import {
   ADD_COLUMN,
   ADD_TASK,
 } from 'src/app/graphql/graphql.schema';
-import { Board } from '../board.component';
+import { Board, Column, Task } from '../board.component';
 import { BoardService } from '../board.service';
+import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/tasks/completion';
 
 @Component({
   selector: 'app-form',
@@ -19,6 +20,7 @@ import { BoardService } from '../board.service';
 })
 export class FormComponent implements OnInit, OnDestroy {
   typeOfForm: FormType = 'board';
+  isEditing!: boolean;
   private subscriptions: Subscription[] = [];
 
   boardForm = this.formBuilder.group({
@@ -42,10 +44,8 @@ export class FormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const subscription = this.formService.typeOfForm.subscribe(formType => {
-      this.typeOfForm = formType;
-    });
-    this.subscriptions = [...this.subscriptions, subscription];
+    this.typeOfForm = this.formService.typeOfForm.value;
+    this.isEditing = this.formService.isEditing;
   }
 
   onClose() {

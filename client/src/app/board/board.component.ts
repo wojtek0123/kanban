@@ -5,18 +5,22 @@ import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_BOARDS } from '../graphql/graphql.schema';
 
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface Column {
+  id: string;
+  name: string;
+  tasks: Task[];
+}
+
 export interface Board {
   id: string;
   name: string;
-  columns: {
-    id: string;
-    name: string;
-    tasks: {
-      id: string;
-      title: string;
-      description: string;
-    }[];
-  }[];
+  columns: Column[];
 }
 
 @Component({
