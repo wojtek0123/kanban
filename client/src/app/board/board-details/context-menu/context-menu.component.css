@@ -1,8 +1,4 @@
-.context-menu-container {
-  /*position: relative;*/
-}
-
-.backdrop {
+.context-menu-backdrop {
   position: fixed;
   inset: 0;
 }
@@ -108,9 +104,9 @@
     display: flex;
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     width: max-content;
     height: max-content;
-    transform: translateX(-25%);
+    transform: translateX(25%);
   }
 }
