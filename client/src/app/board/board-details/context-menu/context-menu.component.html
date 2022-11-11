@@ -12,7 +12,8 @@
   <div
     class="context-menu-body"
     [ngClass]="{
-      show: contextMenuService.show
+      show: contextMenuService.show,
+      'show-right': contextMenuService.show && type === 'board'
     }"
     *ngIf="contextMenuService.id === id">
     <button type="button" class="context-menu-body-button" (click)="delete()">

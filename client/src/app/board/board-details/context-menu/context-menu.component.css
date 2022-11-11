@@ -104,9 +104,14 @@
     display: flex;
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: max-content;
     height: max-content;
+    transform: translateX(-25%);
+  }
+
+  .context-menu-body.show-right {
+    left: 0;
     transform: translateX(25%);
   }
 }
