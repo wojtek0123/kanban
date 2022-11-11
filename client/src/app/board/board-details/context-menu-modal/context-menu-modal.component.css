@@ -1,0 +1,41 @@
+.context-menu-modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: var(--rounded);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--black-color);
+  z-index: 11;
+}
+
+.context-menu-modal p {
+  font-size: 1.7rem;
+}
+
+.context-menu-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.context-menu-modal-buttons {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.context-menu-modal-button:first-child {
+  background-color: var(--secondary-color);
+  color: var(--black-color);
+  transition: opacity 0.3s ease-in-out;
+}
+
+.context-menu-modal-button:hover:first-child {
+  opacity: 0.7;
+}

@@ -2,6 +2,11 @@
   /*position: relative;*/
 }
 
+.backdrop {
+  position: fixed;
+  inset: 0;
+}
+
 .context-menu-button {
   background: none;
   border: none;
@@ -14,10 +19,16 @@
   background-color: var(--black-color);
   border-radius: var(--rounded);
   z-index: 10;
-  display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
 }
 
 .context-menu-body.show {
@@ -27,6 +38,7 @@
   bottom: 0;
   right: 0;
   width: 100%;
+  transform: translateY(0);
 }
 
 .context-menu-body-button {
@@ -80,10 +92,6 @@
     display: none;
     font-size: 0.8rem;
     align-items: flex-start;
-  }
-
-  .context-menu-body.show {
-    display: flex;
   }
 
   .context-menu-body-button {

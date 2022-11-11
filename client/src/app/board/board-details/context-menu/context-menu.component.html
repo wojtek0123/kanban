@@ -1,12 +1,20 @@
+<div
+  class="backdrop"
+  (click)="contextMenuService.onToggle('')"
+  *ngIf="contextMenuService.show"></div>
 <div class="context-menu-container">
-  <button type="button" class="context-menu-button" (click)="toggleMenu()">
-    <img src="../assets/three-dots-vertical.svg" alt="menu" />
+  <button
+    type="button"
+    class="context-menu-button"
+    (click)="contextMenuService.onToggle(id)">
+    <img src="../../../../assets/three-dots-vertical.svg" alt="menu" />
   </button>
   <div
     class="context-menu-body"
     [ngClass]="{
-      show: showMenu
-    }">
+      show: contextMenuService.show
+    }"
+    *ngIf="contextMenuService.id === id">
     <button type="button" class="context-menu-body-button" (click)="delete()">
       Remove
       <img src="../../../../assets/trash-fill.svg" alt="" />

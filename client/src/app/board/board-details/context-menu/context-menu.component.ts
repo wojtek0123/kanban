@@ -1,16 +1,10 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormService } from '../../form/form.service';
-import { Apollo } from 'apollo-angular';
-import {
-  REMOVE_BOARD,
-  GET_BOARDS,
-  REMOVE_COLUMN,
-  REMOVE_TASK,
-} from '../../../graphql/graphql.schema';
 import { FormType } from '../../form/form.service';
 import { Task, Column, Board } from '../../board.component';
 import { Subscription } from 'rxjs';
-import { instanceOf } from 'graphql/jsutils/instanceOf';
+import { ContextMenuService } from './context-menu.service';
+import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
 
 @Component({
   selector: 'app-context-menu',
@@ -23,43 +17,24 @@ export class ContextMenuComponent implements OnDestroy {
   @Input() editingBoard?: Board;
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
-  showMenu = false;
   subscription: Subscription = new Subscription();
 
-  constructor(private formService: FormService, private apollo: Apollo) {}
-
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
-  }
+  constructor(
+    private formService: FormService,
+    public contextMenuService: ContextMenuService,
+    private contextMenuModalService: ContextMenuModalService
+  ) {}
 
   delete() {
-    console.log(this.type);
-    this.showMenu = false;
-    let mutation: any;
-    if (this.type === 'board') {
-      mutation = REMOVE_BOARD;
-    }
-    if (this.type === 'column') {
-      mutation = REMOVE_COLUMN;
-    }
-    if (this.type === 'task') {
-      mutation = REMOVE_TASK;
-    }
-    this.subscription = this.apollo
-      .mutate({
-        mutation: mutation,
-        variables: {
-          id: this.id,
-        },
-        refetchQueries: [GET_BOARDS],
-      })
-      .subscribe(value => {
-        console.log(value);
-      });
+    this.contextMenuModalService.show.next(true);
+    this.contextMenuModalService.id = this.id;
+    this.contextMenuModalService.type = this.type;
+    this.contextMenuService.show = false;
   }
 
   edit() {
-    this.showMenu = false;
+    this.contextMenuService.show = false;
+
     this.formService.onChangeFormVisibility();
 
     if (this.type === 'board' && this.editingBoard) {
