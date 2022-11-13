@@ -19,6 +19,10 @@ export class FormService {
     }
   }
 
+  onLeaveEditingMode() {
+    this.isEditing = false;
+  }
+
   onEditingBoard(board: Board) {
     this.isEditing = true;
     this.editingBoard = board;

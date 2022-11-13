@@ -65,6 +65,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   onClose() {
     this.formService.onChangeFormVisibility();
+    this.formService.onLeaveEditingMode();
   }
 
   onSubmit() {
