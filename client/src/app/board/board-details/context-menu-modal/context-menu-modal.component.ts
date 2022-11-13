@@ -30,10 +30,6 @@ export class ContextMenuModalComponent implements OnInit {
     });
   }
 
-  onToggle() {
-    this.contextMenuModalService.show.next(!this.show);
-  }
-
   onHide() {
     this.contextMenuModalService.show.next(false);
   }

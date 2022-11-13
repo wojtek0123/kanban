@@ -1,21 +1,19 @@
 <div
   class="context-menu-backdrop"
-  (click)="contextMenuService.onToggle('')"
-  *ngIf="contextMenuService.show"></div>
+  (click)="onToggle('')"
+  *ngIf="openedContextMenuOfElementId.length !== 0"></div>
 <div class="context-menu-container">
-  <button
-    type="button"
-    class="context-menu-button"
-    (click)="contextMenuService.onToggle(id)">
+  <button type="button" class="context-menu-button" (click)="onToggle(id)">
     <img src="../../../../assets/three-dots-vertical.svg" alt="menu" />
   </button>
   <div
     class="context-menu-body"
     [ngClass]="{
-      show: contextMenuService.show,
-      'show-right': contextMenuService.show && type === 'board'
+      show: openedContextMenuOfElementId.length !== 0,
+      'show-right':
+        openedContextMenuOfElementId.length !== 0 && type === 'board'
     }"
-    *ngIf="contextMenuService.id === id">
+    *ngIf="openedContextMenuOfElementId === id">
     <button type="button" class="context-menu-body-button" (click)="delete()">
       Remove
       <img src="../../../../assets/trash-fill.svg" alt="" />

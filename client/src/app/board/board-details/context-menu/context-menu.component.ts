@@ -3,7 +3,6 @@ import { FormService } from '../../form/form.service';
 import { FormType } from '../../form/form.service';
 import { Task, Column, Board } from '../../board.component';
 import { Subscription } from 'rxjs';
-import { ContextMenuService } from './context-menu.service';
 import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
 
 @Component({
@@ -17,24 +16,27 @@ export class ContextMenuComponent implements OnDestroy {
   @Input() editingBoard?: Board;
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
+  openedContextMenuOfElementId = '';
   subscription: Subscription = new Subscription();
 
   constructor(
     private formService: FormService,
-    public contextMenuService: ContextMenuService,
     private contextMenuModalService: ContextMenuModalService
   ) {}
+
+  onToggle(id: string) {
+    this.openedContextMenuOfElementId = id;
+  }
 
   delete() {
     this.contextMenuModalService.show.next(true);
     this.contextMenuModalService.id = this.id;
     this.contextMenuModalService.type = this.type;
-    this.contextMenuService.show = false;
+    this.openedContextMenuOfElementId = '';
   }
 
   edit() {
-    this.contextMenuService.show = false;
-
+    this.openedContextMenuOfElementId = '';
     this.formService.onChangeFormVisibility();
 
     if (this.type === 'board' && this.editingBoard) {
