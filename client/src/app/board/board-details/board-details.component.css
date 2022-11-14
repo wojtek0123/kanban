@@ -67,11 +67,18 @@
 }
 
 .card {
+  position: relative;
   background-color: var(--lighter-background-color);
   padding: 1rem;
   border-radius: 0.5rem;
   width: 100%;
   max-width: var(--task-width);
+}
+
+.card-context-menu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 @media (min-width: 1024px) {

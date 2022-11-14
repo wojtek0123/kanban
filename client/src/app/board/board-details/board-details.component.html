@@ -33,6 +33,12 @@
       <div class="card" *ngFor="let task of column.tasks">
         <h3>{{ task.title }}</h3>
         <p>{{ task.description }}</p>
+        <div class="card-context-menu">
+          <app-context-menu
+            [id]="task.id"
+            [type]="'task'"
+            [editingTask]="task"></app-context-menu>
+        </div>
       </div>
     </div>
   </section>
