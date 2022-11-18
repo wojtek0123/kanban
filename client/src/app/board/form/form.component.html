@@ -49,6 +49,27 @@
         class="task-description form-input"
         id="task-description"
         formControlName="description"></textarea>
+      <div formArrayName="tags" class="form-tags-wrapper">
+        <button type="button" class="button-global" (click)="addTag('task')">
+          + Add tag</button
+        ><button
+          type="button"
+          class="button-global"
+          (click)="removeTag('task')">
+          - Remove tag
+        </button>
+        <label class="form-label">Tags</label>
+        <div
+          class="form-tag-wrapper"
+          *ngFor="let tag of tags.controls; let i = index">
+          <input
+            class="form-input form-tag-input"
+            id="alias-{{ i }}"
+            type="text"
+            aria-label="tag"
+            [formControlName]="i" />
+        </div>
+      </div>
     </div>
 
     <div
@@ -92,6 +113,30 @@
         class="task-description form-input"
         id="edit-task-description"
         formControlName="description"></textarea>
+      <div formArrayName="tags" class="form-tags-wrapper">
+        <button
+          type="button"
+          class="button-global"
+          (click)="addTag('editTask')">
+          + Add tag</button
+        ><button
+          type="button"
+          class="button-global"
+          (click)="removeTag('editTask')">
+          - Remove tag
+        </button>
+        <label class="form-label">Tags</label>
+        <div
+          class="form-tag-wrapper"
+          *ngFor="let tag of editedTags.controls; let i = index">
+          <input
+            class="form-input form-tag-input"
+            id="alias-{{ i }}"
+            type="text"
+            aria-label="tag"
+            [formControlName]="i" />
+        </div>
+      </div>
     </div>
 
     <button type="submit" class="button-global submit-button">

@@ -75,6 +75,20 @@
   max-width: var(--task-width);
 }
 
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-tags span {
+  background-color: var(--secondary-color);
+  border-radius: var(--rounded);
+  padding: 0.5rem 1rem;
+  color: var(--black-color);
+}
+
 .card-context-menu {
   position: absolute;
   top: 1rem;

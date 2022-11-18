@@ -1,7 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormService, FormType } from './form.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormArray,
+  FormControl,
+} from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import {
   GET_BOARDS,
@@ -12,7 +17,7 @@ import {
   EDIT_COLUMN,
   EDIT_TASK,
 } from 'src/app/graphql/graphql.schema';
-import { Board, Column, Task } from '../board.component';
+import { Board } from '../board.component';
 import { BoardService } from '../board.service';
 
 @Component({
@@ -35,12 +40,13 @@ export class FormComponent implements OnInit, OnDestroy {
     task: this.formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      tags: this.formBuilder.array([this.formBuilder.control('')]),
     }),
     editBoard: this.formBuilder.group({
       name: [this.formService.editingBoard?.name, Validators.required],
     }),
     editColumn: this.formBuilder.group({
-      name: [this.formService.editingColumn?.name, Validators.requiredTrue],
+      name: [this.formService.editingColumn?.name, Validators.required],
     }),
     editTask: this.formBuilder.group({
       title: [this.formService.editingTask?.title, Validators.required],
@@ -48,6 +54,9 @@ export class FormComponent implements OnInit, OnDestroy {
         this.formService.editingTask?.description,
         Validators.required,
       ],
+      tags: this.formBuilder.array([
+        this.formBuilder.control('', Validators.required),
+      ]),
     }),
   });
 
@@ -66,6 +75,23 @@ export class FormComponent implements OnInit, OnDestroy {
   onClose() {
     this.formService.onChangeFormVisibility();
     this.formService.onLeaveEditingMode();
+  }
+
+  addTag(groupName: string) {
+    const control = new FormControl('', Validators.required);
+    (<FormArray>this.boardForm.get(groupName)?.get('tags')).push(control);
+  }
+
+  removeTag(groupName: string) {
+    (<FormArray>this.boardForm.get(groupName)?.get('tags')).removeAt(-1);
+  }
+
+  get tags() {
+    return this.boardForm.get('task')?.get('tags') as FormArray;
+  }
+
+  get editedTags() {
+    return this.boardForm.get('editTask')?.get('tags') as FormArray;
   }
 
   onSubmit() {

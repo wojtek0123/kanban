@@ -17,6 +17,9 @@
   flex-direction: column;
   padding: 3rem;
   border-radius: var(--rounded);
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
 }
 
 .form-wrapper {
@@ -30,6 +33,23 @@
   font-size: 1.2rem;
   padding: 0.25rem 0.5rem;
   border-radius: var(--rounded);
+}
+
+.form-tags-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.form-tag-wrapper {
+  margin-bottom: 1rem;
+}
+
+.form-tag-input {
+  /*margin-left: 1rem;*/
+  width: min-content;
 }
 
 .form-label {
@@ -53,4 +73,10 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .form {
+    position: relative;
+  }
 }
