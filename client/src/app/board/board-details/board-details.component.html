@@ -32,9 +32,7 @@
     <div class="cards">
       <div class="card" *ngFor="let task of column.tasks">
         <div class="card-tags">
-          <span>Web</span>
-          <span>Technology</span>
-          <span>Development</span>
+          <span *ngFor="let tag of task.tags">{{ tag }}</span>
         </div>
         <h3>{{ task.title }}</h3>
         <p>{{ task.description }}</p>

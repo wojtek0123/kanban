@@ -12,6 +12,7 @@ export const GET_BOARDS = gql`
           id
           title
           description
+          tags
         }
       }
     }
@@ -34,8 +35,18 @@ export const ADD_COLUMN = gql`
   }
 `;
 export const ADD_TASK = gql`
-  mutation addTask($columnId: String, $title: String, $description: String) {
-    addTask(columnId: $columnId, title: $title, description: $description) {
+  mutation addTask(
+    $columnId: String
+    $title: String
+    $description: String
+    $tags: [String]
+  ) {
+    addTask(
+      columnId: $columnId
+      title: $title
+      description: $description
+      tags: $tags
+    ) {
       id
     }
   }
@@ -60,11 +71,17 @@ export const EDIT_COLUMN = gql`
 `;
 
 export const EDIT_TASK = gql`
-  mutation editTask($id: String, $title: String, $description: String) {
-    editTask(id: $id, title: $title, description: $description) {
+  mutation editTask(
+    $id: String
+    $title: String
+    $description: String
+    $tags: [String]
+  ) {
+    editTask(id: $id, title: $title, description: $description, tags: $tags) {
       id
       title
       description
+      tags
     }
   }
 `;
