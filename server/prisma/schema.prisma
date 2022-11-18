@@ -13,6 +13,7 @@ model Task {
   description String
   columnId    String?
   column      Column? @relation(fields: [columnId], references: [id])
+  tags        String[]
 }
 
 model Column {

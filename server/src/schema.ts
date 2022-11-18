@@ -6,6 +6,7 @@ export const typeDefs = gql`
     id: String
     title: String
     description: String
+    tags: [String]
   }
 
   type Column {
@@ -27,10 +28,20 @@ export const typeDefs = gql`
   type Mutation {
     editBoard(id: String, name: String): Board
     editColumn(id: String, name: String): Column
-    editTask(id: String, title: String, description: String): Task
+    editTask(
+      id: String
+      title: String
+      description: String
+      tags: [String]
+    ): Task
     addBoard(name: String): Board
     addColumn(boardId: String, name: String): Column
-    addTask(columnId: String, title: String, description: String): Task
+    addTask(
+      columnId: String
+      title: String
+      description: String
+      tags: [String]
+    ): Task
     removeBoard(id: String): Board
     removeColumn(id: String): Column
     removeTask(id: String): Task
@@ -86,7 +97,7 @@ export const resolvers = {
     },
     editTask: (
       _parent: any,
-      args: { id: string; title: string; description: string },
+      args: { id: string; title: string; description: string; tags: string[] },
       context: Context,
     ) => {
       return context.prisma.task.update({
@@ -96,6 +107,7 @@ export const resolvers = {
         data: {
           title: args.title,
           description: args.description,
+          tags: args.tags,
         },
       })
     },
@@ -120,13 +132,19 @@ export const resolvers = {
     },
     addTask: (
       _parent: any,
-      args: { columnId: string; title: string; description: string },
+      args: {
+        columnId: string
+        title: string
+        description: string
+        tags: string[]
+      },
       context: Context,
     ) => {
       return context.prisma.task.create({
         data: {
           title: args.title,
           description: args.description,
+          tags: args.tags,
           columnId: args.columnId,
         },
       })
