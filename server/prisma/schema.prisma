@@ -7,13 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Subtask {
+  id         String  @id @default(uuid())
+  isFinished Boolean
+  name       String
+  Task       Task?   @relation(fields: [taskId], references: [id])
+  taskId     String?
+}
+
 model Task {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String
   columnId    String?
-  column      Column? @relation(fields: [columnId], references: [id])
+  column      Column?   @relation(fields: [columnId], references: [id])
   tags        String[]
+  subtasks    Subtask[]
 }
 
 model Column {
