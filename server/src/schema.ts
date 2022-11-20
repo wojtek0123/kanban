@@ -1,12 +1,19 @@
 import { gql } from 'apollo-server'
-import { Context } from './context'
+import { context, Context } from './context'
 
 export const typeDefs = gql`
+  type Subtask {
+    id: String
+    isFinished: Boolean
+    name: String
+  }
+
   type Task {
     id: String
     title: String
     description: String
     tags: [String]
+    subtasks: [Subtask]
   }
 
   type Column {
@@ -34,6 +41,7 @@ export const typeDefs = gql`
       description: String
       tags: [String]
     ): Task
+    editSubtask(is: String, name: String, isFinished: Boolean): Subtask
     addBoard(name: String): Board
     addColumn(boardId: String, name: String): Column
     addTask(
@@ -42,9 +50,11 @@ export const typeDefs = gql`
       description: String
       tags: [String]
     ): Task
+    addSubtask(name: String, isFinished: Boolean): Subtask
     removeBoard(id: String): Board
     removeColumn(id: String): Column
     removeTask(id: String): Task
+    removeSubtask(id: String): Subtask
   }
 `
 
@@ -111,6 +121,21 @@ export const resolvers = {
         },
       })
     },
+    editSubTask: (
+      _parent: any,
+      args: { id: string; name: string; isFinished: boolean },
+      context: Context,
+    ) => {
+      return context.prisma.subtask.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          name: args.name,
+          isFinished: args.isFinished,
+        },
+      })
+    },
     addBoard: (_parent: any, args: { name: string }, context: Context) => {
       return context.prisma.board.create({
         data: {
@@ -149,6 +174,19 @@ export const resolvers = {
         },
       })
     },
+    addSubtask: (
+      _parent: any,
+      args: { name: string; isFinished: boolean; taskId: string },
+      context: Context,
+    ) => {
+      return context.prisma.subtask.create({
+        data: {
+          name: args.name,
+          isFinished: args.isFinished,
+          taskId: args.taskId,
+        },
+      })
+    },
     removeBoard: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.board.delete({ where: { id: args.id } })
     },
@@ -157,6 +195,9 @@ export const resolvers = {
     },
     removeTask: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.task.delete({ where: { id: args.id } })
+    },
+    removeSubtask: (_parent: any, args: { id: string }, context: Context) => {
+      return context.prisma.subtask.delete({ where: { id: args.id } })
     },
   },
 }
