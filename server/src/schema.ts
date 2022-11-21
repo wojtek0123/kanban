@@ -121,7 +121,7 @@ export const resolvers = {
         },
       })
     },
-    editSubTask: (
+    editSubtask: (
       _parent: any,
       args: { id: string; name: string; isFinished: boolean },
       context: Context,
