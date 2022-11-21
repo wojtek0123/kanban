@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="board-details.component.css" />
 <div class="container">
   <div class="board-name">
     <h2>
@@ -41,6 +42,15 @@
             [id]="task.id"
             [type]="'task'"
             [editingTask]="task"></app-context-menu>
+        </div>
+        <div class="card-subtask-wrapper">
+          <div class="card-subtask" *ngFor="let subtask of task.subtasks">
+            <input
+              [id]="subtask.id"
+              type="checkbox"
+              [checked]="subtask.isFinished" />
+            <label [for]="subtask.id">{{ subtask.name }}</label>
+          </div>
         </div>
       </div>
     </div>

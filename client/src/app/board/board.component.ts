@@ -5,11 +5,18 @@ import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_BOARDS } from '../graphql/graphql.schema';
 
+export interface Subtask {
+  id: string;
+  name: string;
+  isFinished: boolean;
+}
+
 export interface Task {
   id: string;
   title: string;
   description: string;
   tags: string[];
+  subtasks: Subtask[];
 }
 
 export interface Column {
