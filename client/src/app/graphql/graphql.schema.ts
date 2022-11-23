@@ -109,3 +109,31 @@ export const REMOVE_TASK = gql`
     }
   }
 `;
+
+export const REMOVE_SUBTASK = gql`
+  mutation removeSubtassk($id: String) {
+    removeSubtask(id: $id) {
+      id
+    }
+  }
+`;
+
+export const EDIT_SUBTASK = gql`
+  mutation editSubtask($id: String, name: String, isFinished: boolean) {
+    editSubtask(id: $id, name: $name, isFinished: $isFinished) {
+      id
+      name
+      isFinished
+    }
+  }
+`;
+
+export const ADD_SUBTASK = gql`
+  mutation addSubtask($name: String, $isFinished: String, $taskId: String) {
+    addSubtask(name: $name, isFinished: $isFinished, taskId: $taskId) {
+      id
+      name
+      isFinished
+    }
+  }
+`;
