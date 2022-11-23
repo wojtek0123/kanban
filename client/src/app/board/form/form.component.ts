@@ -59,9 +59,11 @@ export class FormComponent implements OnInit, OnDestroy {
         this.formService.editingTask?.description,
         Validators.required,
       ],
-      tags: this.formBuilder.array([
-        this.formBuilder.control('', Validators.required),
-      ]),
+      tags: this.formBuilder.array(
+        this.formService.editingTask?.tags.map(tag =>
+          this.formBuilder.control(tag)
+        ) ?? []
+      ),
     }),
     editSubtask: this.formBuilder.group({
       name: [this.formService.editingSubtask?.name, Validators.required],
@@ -103,7 +105,6 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // console.log(this.boardForm.value);
     if (this.typeOfForm === 'board' && !this.isEditing) {
       const mutationSubscription = this.apollo
         .mutate<{ AddBoard: Board }>({
@@ -142,6 +143,7 @@ export class FormComponent implements OnInit, OnDestroy {
             title: this.boardForm.value.task?.title,
             description: this.boardForm.value.task?.description,
             columnId: this.boardService.selectedColumnId.value,
+            tags: this.tags.value,
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })
@@ -200,6 +202,7 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingTask?.id,
             title: this.boardForm.value.editTask?.title,
             description: this.boardForm.value.editTask?.description,
+            tags: this.editedTags.value,
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })

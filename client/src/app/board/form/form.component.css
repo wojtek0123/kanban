@@ -20,6 +20,7 @@
   position: absolute;
   inset: 0;
   overflow-y: auto;
+  width: 100%;
 }
 
 .form-wrapper {
@@ -27,12 +28,15 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
 }
 
 .form-input {
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding: 0.25rem 0.5rem;
   border-radius: var(--rounded);
+  font-family: 'Oswald', sans-serif;
+  width: 100%;
 }
 
 .form-tags-wrapper {
@@ -45,11 +49,31 @@
 
 .form-tag-wrapper {
   margin-bottom: 1rem;
+  width: 100%;
+}
+
+.form-tags-buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.form-tags-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+}
+
+.form-tags-button span {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 .form-tag-input {
-  /*margin-left: 1rem;*/
-  width: min-content;
+  width: 100%;
 }
 
 .form-label {
@@ -65,7 +89,7 @@
 }
 
 .submit-button {
-  margin-top: 1rem;
+  margin-top: 2rem;
   width: 100%;
 }
 
@@ -78,5 +102,10 @@
 @media (min-width: 1024px) {
   .form {
     position: relative;
+    width: 500px;
+  }
+
+  .task-description {
+    max-width: 404px;
   }
 }

@@ -50,21 +50,27 @@
         id="task-description"
         formControlName="description"></textarea>
       <div formArrayName="tags" class="form-tags-wrapper">
-        <button type="button" class="button-global" (click)="addTag('task')">
-          + Add tag</button
-        ><button
-          type="button"
-          class="button-global"
-          (click)="removeTag('task')">
-          - Remove tag
-        </button>
+        <div class="form-tags-buttons">
+          <button
+            type="button"
+            class="button-global form-tags-button"
+            (click)="addTag('task')">
+            <span>+</span> Add tag
+          </button>
+          <button
+            type="button"
+            class="button-global form-tags-button"
+            (click)="removeTag('task')">
+            <span>-</span> Remove tag
+          </button>
+        </div>
         <label class="form-label">Tags</label>
         <div
           class="form-tag-wrapper"
           *ngFor="let tag of tags.controls; let i = index">
           <input
             class="form-input form-tag-input"
-            id="alias-{{ i }}"
+            id="tag-{{ i }}"
             type="text"
             aria-label="tag"
             [formControlName]="i" />
