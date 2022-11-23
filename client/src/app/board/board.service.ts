@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 export class BoardService {
   selectedBoardId = new BehaviorSubject<string>('');
   selectedColumnId = new BehaviorSubject<string>('');
+  selectedTaskId = new BehaviorSubject<string>('');
 
   onChangeSelectedBoard(boardId: string) {
     this.selectedBoardId.next(boardId);
@@ -12,5 +13,9 @@ export class BoardService {
 
   onChangeSelectedColumn(columnId: string) {
     this.selectedColumnId.next(columnId);
+  }
+
+  onChangeSelectedTask(taskId: string) {
+    this.selectedTaskId.next(taskId);
   }
 }

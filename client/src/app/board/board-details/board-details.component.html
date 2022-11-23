@@ -45,12 +45,25 @@
         </div>
         <div class="card-subtask-wrapper">
           <div class="card-subtask" *ngFor="let subtask of task.subtasks">
-            <input
+            <div>
+              <input
+                aria-label="subtask"
+                [id]="subtask.id"
+                type="checkbox"
+                [checked]="subtask.isFinished" />
+              <label [for]="subtask.id">{{ subtask.name }}</label>
+            </div>
+            <app-context-menu
               [id]="subtask.id"
-              type="checkbox"
-              [checked]="subtask.isFinished" />
-            <label [for]="subtask.id">{{ subtask.name }}</label>
+              [type]="'subtask'"
+              [editingSubtask]="subtask"></app-context-menu>
           </div>
+          <button
+            type="button"
+            class="button-global"
+            (click)="onForm('subtask', undefined, task.id)">
+            Add subtask
+          </button>
         </div>
       </div>
     </div>

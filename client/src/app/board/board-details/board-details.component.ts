@@ -16,10 +16,13 @@ export class BoardDetailsComponent {
     private boardService: BoardService
   ) {}
 
-  onForm(type: FormType, columnId?: string) {
+  onForm(type: FormType, columnId?: string, taskId?: string) {
     this.formService.onChangeFormVisibility(type);
     if (columnId) {
       this.boardService.onChangeSelectedColumn(columnId);
+    }
+    if (taskId) {
+      this.boardService.onChangeSelectedTask(taskId);
     }
   }
 }

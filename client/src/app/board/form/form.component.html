@@ -73,6 +73,18 @@
     </div>
 
     <div
+      class="form-wrapper"
+      *ngIf="typeOfForm === 'subtask' && !isEditing"
+      formGroupName="subtask">
+      <label for="subtask-name">Subtask name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="subtask-name"
+        formControlName="name" />
+    </div>
+
+    <div
       *ngIf="isEditing && typeOfForm === 'board'"
       formGroupName="editBoard"
       class="form-wrapper">
@@ -93,6 +105,18 @@
         type="text"
         class="form-input"
         id="edit-column-name"
+        formControlName="name" />
+    </div>
+
+    <div
+      class="form-wrapper"
+      *ngIf="typeOfForm === 'subtask' && isEditing"
+      formGroupName="editSubtask">
+      <label for="edit-subtask-name">Subtask name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="edit-subtask-name"
         formControlName="name" />
     </div>
 

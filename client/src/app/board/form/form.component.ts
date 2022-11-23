@@ -16,6 +16,8 @@ import {
   EDIT_BOARD,
   EDIT_COLUMN,
   EDIT_TASK,
+  ADD_SUBTASK,
+  EDIT_SUBTASK,
 } from 'src/app/graphql/graphql.schema';
 import { Board } from '../board.component';
 import { BoardService } from '../board.service';
@@ -42,6 +44,9 @@ export class FormComponent implements OnInit, OnDestroy {
       description: ['', Validators.required],
       tags: this.formBuilder.array([this.formBuilder.control('')]),
     }),
+    subtask: this.formBuilder.group({
+      name: ['', Validators.required],
+    }),
     editBoard: this.formBuilder.group({
       name: [this.formService.editingBoard?.name, Validators.required],
     }),
@@ -57,6 +62,9 @@ export class FormComponent implements OnInit, OnDestroy {
       tags: this.formBuilder.array([
         this.formBuilder.control('', Validators.required),
       ]),
+    }),
+    editSubtask: this.formBuilder.group({
+      name: [this.formService.editingSubtask?.name, Validators.required],
     }),
   });
 
@@ -95,7 +103,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.boardForm.value);
+    // console.log(this.boardForm.value);
     if (this.typeOfForm === 'board' && !this.isEditing) {
       const mutationSubscription = this.apollo
         .mutate<{ AddBoard: Board }>({
@@ -134,6 +142,22 @@ export class FormComponent implements OnInit, OnDestroy {
             title: this.boardForm.value.task?.title,
             description: this.boardForm.value.task?.description,
             columnId: this.boardService.selectedColumnId.value,
+          },
+          refetchQueries: [{ query: GET_BOARDS }],
+        })
+        .subscribe(result => {
+          console.log(result);
+        });
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
+    }
+    if (this.typeOfForm === 'subtask' && !this.isEditing) {
+      const mutationSubscription = this.apollo
+        .mutate({
+          mutation: ADD_SUBTASK,
+          variables: {
+            name: this.boardForm.value.subtask?.name,
+            isFinished: false,
+            taskId: this.boardService.selectedTaskId.value,
           },
           refetchQueries: [{ query: GET_BOARDS }],
         })
@@ -182,6 +206,20 @@ export class FormComponent implements OnInit, OnDestroy {
         .subscribe(result => {
           console.log(result);
         });
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
+    }
+    if (this.typeOfForm === 'subtask' && this.isEditing) {
+      const mutationSubscription = this.apollo
+        .mutate({
+          mutation: EDIT_SUBTASK,
+          variables: {
+            id: this.formService.editingSubtask?.id,
+            name: this.boardForm.value.editSubtask?.name,
+            isFinished: false,
+          },
+          refetchQueries: [{ query: GET_BOARDS }],
+        })
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     this.formService.isEditing = false;

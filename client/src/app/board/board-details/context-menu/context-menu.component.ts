@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormService } from '../../form/form.service';
 import { FormType } from '../../form/form.service';
-import { Task, Column, Board } from '../../board.component';
+import { Task, Column, Board, Subtask } from '../../board.component';
 import { Subscription } from 'rxjs';
 import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
 
@@ -16,6 +16,7 @@ export class ContextMenuComponent implements OnDestroy {
   @Input() editingBoard?: Board;
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
+  @Input() editingSubtask?: Subtask;
   openedContextMenuOfElementId = '';
   subscription: Subscription = new Subscription();
 
@@ -50,6 +51,10 @@ export class ContextMenuComponent implements OnDestroy {
     if (this.type === 'task' && this.editingTask) {
       this.formService.onEditingTask(this.editingTask);
       this.formService.typeOfForm.next('task');
+    }
+    if (this.type === 'subtask' && this.editingSubtask) {
+      this.formService.onEditingSubtask(this.editingSubtask);
+      this.formService.typeOfForm.next('subtask');
     }
   }
 

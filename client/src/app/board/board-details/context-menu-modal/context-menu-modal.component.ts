@@ -6,6 +6,7 @@ import {
   GET_BOARDS,
   REMOVE_BOARD,
   REMOVE_COLUMN,
+  REMOVE_SUBTASK,
   REMOVE_TASK,
 } from 'src/app/graphql/graphql.schema';
 
@@ -46,6 +47,9 @@ export class ContextMenuModalComponent implements OnInit {
     }
     if (this.contextMenuModalService.type === 'task') {
       mutation = REMOVE_TASK;
+    }
+    if (this.contextMenuModalService.type === 'subtask') {
+      mutation = REMOVE_SUBTASK;
     }
     this.subscription = this.apollo
       .mutate({

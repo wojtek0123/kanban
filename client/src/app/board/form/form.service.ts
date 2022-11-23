@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Task, Column, Board } from '../board.component';
-export type FormType = 'board' | 'task' | 'column';
+import { Task, Column, Board, Subtask } from '../board.component';
+export type FormType = 'board' | 'task' | 'column' | 'subtask';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
@@ -10,6 +10,7 @@ export class FormService {
   editingBoard?: Board;
   editingColumn?: Column;
   editingTask?: Task;
+  editingSubtask?: Subtask;
   typeOfForm = new BehaviorSubject<FormType>('board');
 
   onChangeFormVisibility(formType?: FormType) {
@@ -36,5 +37,10 @@ export class FormService {
   onEditingTask(task: Task) {
     this.isEditing = true;
     this.editingTask = task;
+  }
+
+  onEditingSubtask(subtask: Subtask) {
+    this.isEditing = true;
+    this.editingSubtask = subtask;
   }
 }
