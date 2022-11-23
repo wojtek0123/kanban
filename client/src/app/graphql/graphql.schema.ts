@@ -119,7 +119,7 @@ export const REMOVE_SUBTASK = gql`
 `;
 
 export const EDIT_SUBTASK = gql`
-  mutation editSubtask($id: String, name: String, isFinished: boolean) {
+  mutation editSubtask($id: String, $name: String, isFinished: boolean) {
     editSubtask(id: $id, name: $name, isFinished: $isFinished) {
       id
       name
