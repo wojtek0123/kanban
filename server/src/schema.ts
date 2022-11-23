@@ -41,7 +41,7 @@ export const typeDefs = gql`
       description: String
       tags: [String]
     ): Task
-    editSubtask(is: String, name: String, isFinished: Boolean): Subtask
+    editSubtask(id: String, name: String, isFinished: Boolean): Subtask
     addBoard(name: String): Board
     addColumn(boardId: String, name: String): Column
     addTask(
@@ -50,7 +50,7 @@ export const typeDefs = gql`
       description: String
       tags: [String]
     ): Task
-    addSubtask(name: String, isFinished: Boolean): Subtask
+    addSubtask(name: String, isFinished: Boolean, taskId: String): Subtask
     removeBoard(id: String): Board
     removeColumn(id: String): Column
     removeTask(id: String): Task
@@ -69,7 +69,22 @@ export const resolvers = {
             select: {
               id: true,
               name: true,
-              tasks: true,
+              tasks: {
+                select: {
+                  id: true,
+                  title: true,
+                  tags: true,
+                  description: true,
+                  subtasks: {
+                    select: {
+                      id: true,
+                      isFinished: true,
+                      name: true,
+                      taskId: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },

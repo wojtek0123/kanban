@@ -13,6 +13,11 @@ export const GET_BOARDS = gql`
           title
           description
           tags
+          subtasks {
+            id
+            isFinished
+            name
+          }
         }
       }
     }
@@ -119,7 +124,7 @@ export const REMOVE_SUBTASK = gql`
 `;
 
 export const EDIT_SUBTASK = gql`
-  mutation editSubtask($id: String, $name: String, isFinished: boolean) {
+  mutation editSubtask($id: String, $name: String, $isFinished: Boolean) {
     editSubtask(id: $id, name: $name, isFinished: $isFinished) {
       id
       name
