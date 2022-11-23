@@ -190,7 +190,7 @@ export const resolvers = {
     removeBoard: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.board.delete({ where: { id: args.id } })
     },
-    removeColumn: (_parent: any, args: { id }, context: Context) => {
+    removeColumn: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.column.delete({ where: { id: args.id } })
     },
     removeTask: (_parent: any, args: { id: string }, context: Context) => {
