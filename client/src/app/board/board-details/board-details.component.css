@@ -75,6 +75,10 @@
   max-width: var(--task-width);
 }
 
+.card p {
+  color: var(--font-color-grey);
+}
+
 .card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -105,6 +109,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: var(--font-color-grey);
 }
 
 .card-subtask label {
@@ -114,6 +119,25 @@
 
 .card-subtask input[type='checkbox'] {
   cursor: pointer;
+}
+
+.card-subtask-button {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 1rem;
+}
+
+.card-subtask-button span {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+}
+
+.card-subtask-line {
+  width: 100%;
+  height: 2px;
+  margin: 1rem 0;
+  background-color: var(--background-color);
 }
 
 @media (min-width: 1024px) {

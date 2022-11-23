@@ -58,11 +58,12 @@
               [type]="'subtask'"
               [editingSubtask]="subtask"></app-context-menu>
           </div>
+          <div class="card-subtask-line"></div>
           <button
             type="button"
-            class="button-global"
+            class="button-global card-subtask-button"
             (click)="onForm('subtask', undefined, task.id)">
-            Add subtask
+            <span>+</span> Add subtask
           </button>
         </div>
       </div>

@@ -24,6 +24,7 @@ body {
   --lighter-background-color: #1d1f20; /* dark gray */
   --button-hover-color: #2e2f31;
   --font-color: #fff;
+  --font-color-grey: #aaa;
   --secondary-color: #e8fe93;
 
   --rounded: 0.5rem;
