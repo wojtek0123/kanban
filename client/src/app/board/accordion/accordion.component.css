@@ -11,18 +11,3 @@
   background-color: var(--lighter-background-color);
   border-radius: var(--rounded);
 }
-
-@media (min-width: 1024px) {
-  .accordion-item {
-    font-size: 1rem;
-  }
-
-  .accordion-title {
-    font-size: 1.35rem;
-    margin: 0;
-  }
-
-  .accordion-image {
-    width: 1.5rem;
-  }
-}
