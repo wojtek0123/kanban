@@ -62,17 +62,21 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
 
     this.boardsSub = this.projectsQuery.valueChanges.subscribe(result => {
       this.projects = result.data.projects;
-      console.log(result.data);
-      // if (!this.selectedBoard) {
-      //   this.selectedProject = result.data.projects[0];
-      //   this.boardService.onChangeSelectedProject(
-      //     this.selectedProject?.id ?? ''
-      //   );
-      // } else {
-      //   this.boardService.onChangeSelectedProject(
-      //     this.selectedProject?.id ?? ''
-      //   );
-      // }
+
+      if (!this.selectedBoard) {
+        this.selectedProject = result.data.projects[0];
+        this.boardService.onChangeSelectedProject(
+          this.selectedProject?.id ?? ''
+        );
+
+        this.boardService.onChangeSelectedBoard(
+          this.selectedProject?.boards[0].id ?? ''
+        );
+      } else {
+        this.boardService.onChangeSelectedProject(
+          this.selectedProject?.id ?? ''
+        );
+      }
     });
   }
 

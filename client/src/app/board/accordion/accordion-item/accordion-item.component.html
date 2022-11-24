@@ -1,0 +1,19 @@
+<app-collapse-button
+  [project]="project"
+  (toggleMenu)="toggleShowContent($event)"></app-collapse-button>
+<ul class="accordion-list" [ngClass]="{ show: showContent }">
+  <li *ngFor="let board of project.boards">
+    <button
+      type="button"
+      class="accordion-item"
+      [ngClass]="{ highlight: selectedBoardId === board.id }"
+      (click)="onSelectBoard(board.id)">
+      {{ board.name }}
+    </button>
+  </li>
+  <p
+    class="accordion-item accordion-item-paragraph"
+    *ngIf="project.boards.length === 0 && showContent">
+    No boards
+  </p>
+</ul>

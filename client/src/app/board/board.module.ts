@@ -9,6 +9,8 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
 import { BoardDetailsComponent } from './board-details/board-details.component';
 import { ContextMenuComponent } from './board-details/context-menu/context-menu.component';
 import { ContextMenuModalComponent } from './board-details/context-menu-modal/context-menu-modal.component';
+import { CollapseButtonComponent } from './accordion/collapse-button/collapse-button.component';
+import { AccordionItemComponent } from './accordion/accordion-item/accordion-item.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { ContextMenuModalComponent } from './board-details/context-menu-modal/co
     BoardDetailsComponent,
     ContextMenuComponent,
     ContextMenuModalComponent,
+    CollapseButtonComponent,
+    AccordionItemComponent,
   ],
   imports: [BrowserAnimationsModule, ReactiveFormsModule, CommonModule],
   exports: [BoardComponent],

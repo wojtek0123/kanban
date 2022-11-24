@@ -1,0 +1,31 @@
+.accordion-list {
+  display: none;
+  height: 100%;
+}
+
+.accordion-list.show {
+  display: block;
+}
+
+.accordion-item {
+  border: none;
+  background: none;
+  color: var(--font-color);
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 0.25rem 1rem;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accordion-item-paragraph {
+  cursor: default;
+}
+
+@media (min-width: 1024px) {
+  .accordion-item {
+    font-size: 1rem;
+  }
+}

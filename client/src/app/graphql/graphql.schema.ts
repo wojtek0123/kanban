@@ -29,8 +29,8 @@ export const GET_PROJECTS = gql`
 `;
 
 export const ADD_BOARD = gql`
-  mutation addBoard($name: String) {
-    addBoard(name: $name) {
+  mutation addBoard($name: String, $projectId: String) {
+    addBoard(name: $name, projectId: $projectId) {
       id
       name
     }
