@@ -127,6 +127,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     if (this.typeOfForm === 'board' && !this.isEditing) {
+      console.log(this.boardService.selectedProjectId.value);
       const mutationSubscription = this.apollo
         .mutate<{ AddBoard: Board }>({
           mutation: ADD_BOARD,

@@ -26,6 +26,21 @@
   cursor: default;
 }
 
+.highlight {
+  background-color: var(--secondary-color);
+  color: var(--black-color);
+  border-radius: var(--rounded);
+}
+
+.accordion-item-button {
+  padding: 0.25rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.accordion-item-button span {
+  font-size: 1.5rem;
+}
+
 @media (min-width: 1024px) {
   .accordion-item {
     font-size: 1.2rem;

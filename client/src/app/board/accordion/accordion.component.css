@@ -6,8 +6,3 @@
 .accordion-wrapper {
   height: 100%;
 }
-
-.highlight {
-  background-color: var(--lighter-background-color);
-  border-radius: var(--rounded);
-}

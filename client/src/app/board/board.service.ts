@@ -26,15 +26,21 @@ export class BoardService {
     );
   }
 
+  onChangeSelectedProjectId(projectId: string) {
+    this.selectedProjectId.next(projectId);
+  }
+
   onChangeSelectedBoard(boardId: string) {
     this.selectedBoardId.next(boardId);
-    this.selectedBoard.next(
-      this.selectedProject?.boards.find(board => board.id === boardId) ?? {
-        id: '',
-        name: ' ',
-        columns: [],
-      }
+
+    const boards = this.projects.value.map(project =>
+      project.boards.find(board => board.id === boardId)
     );
+
+    const board = boards.find(board => board?.id === boardId);
+    if (board) {
+      this.selectedBoard.next(board);
+    }
   }
 
   onChangeSelectedColumn(columnId: string) {
