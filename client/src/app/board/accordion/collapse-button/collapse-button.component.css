@@ -1,3 +1,8 @@
+.collapse-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .collapse-button {
   border: none;
   background: none;
@@ -30,5 +35,10 @@
 
   .collapse-button-title {
     font-size: 1.5rem;
+  }
+
+  .collapse-wrapper {
+    padding-right: 1rem;
+    justify-content: space-between;
   }
 }

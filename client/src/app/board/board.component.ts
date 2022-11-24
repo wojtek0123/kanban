@@ -42,12 +42,10 @@ export interface Project {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit, OnDestroy, DoCheck {
-  projects: Project[] = [];
+export class BoardComponent implements OnInit, OnDestroy {
+  // projects: Project[] = [];
   projectsQuery!: QueryRef<any>;
   boardsSub!: Subscription;
-  selectedBoard: Board | undefined;
-  selectedProject: Project | undefined;
 
   constructor(
     private apollo: Apollo,
@@ -60,38 +58,16 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
       query: GET_PROJECTS,
     });
 
-    this.boardsSub = this.projectsQuery.valueChanges.subscribe(result => {
-      this.projects = result.data.projects;
-
-      if (!this.selectedBoard) {
-        this.selectedProject = result.data.projects[0];
-        this.boardService.onChangeSelectedProject(
-          this.selectedProject?.id ?? ''
-        );
-
-        this.boardService.onChangeSelectedBoard(
-          this.selectedProject?.boards[0].id ?? ''
-        );
-      } else {
-        this.boardService.onChangeSelectedProject(
-          this.selectedProject?.id ?? ''
-        );
-      }
-    });
+    this.boardsSub = this.projectsQuery.valueChanges.subscribe(result =>
+      this.boardService.onSetProjects(result.data.projects)
+    );
   }
 
-  ngDoCheck(): void {
-    if (
-      this.selectedBoard?.id !== this.boardService.selectedBoardId.value &&
-      this.projects.length !== 0
-    ) {
-      this.boardService.selectedBoardId.subscribe(id => {
-        this.selectedBoard = this.projects[0].boards.find(
-          board => board.id === id
-        );
-      });
-    }
-  }
+  // ngDoCheck(): void {
+  //   this.boardService.onChangeSelectedBoard(
+  //     this.boardService.selectedBoardId.value
+  //   );
+  // }
 
   ngOnDestroy(): void {
     this.boardsSub.unsubscribe();

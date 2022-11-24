@@ -27,7 +27,6 @@ export class AccordionItemComponent implements DoCheck {
   }
 
   onSelectBoard(boardId: string) {
-    this.boardService.onChangeSelectedProject(this.project.id);
     this.boardService.onChangeSelectedBoard(boardId);
     this.navigationService.onMenu();
   }

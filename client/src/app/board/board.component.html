@@ -1,21 +1,21 @@
-<app-mobile-navigation [projects]="projects"></app-mobile-navigation>
+<app-mobile-navigation></app-mobile-navigation>
 <app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion [projects]="projects" projectName="Boards"></app-accordion>
+      <app-accordion projectName="Boards"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button
         type="button"
         class="button-global board-button"
-        (click)="onForm('board')">
-        Add board
+        (click)="onForm('project')">
+        Add project
       </button>
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details [selectedBoard]="selectedBoard"></app-board-details>
+    <app-board-details></app-board-details>
   </div>
 </main>

@@ -1,5 +1,6 @@
-import { Component, DoCheck, Input } from '@angular/core';
-import { Board, Project } from '../board.component';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Project } from '../board.component';
 import { BoardService } from '../board.service';
 import { NavigationService } from '../mobile-navigation/navigation.service';
 
@@ -8,9 +9,9 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.css'],
 })
-export class AccordionComponent implements DoCheck {
-  @Input() projectName!: string;
-  @Input() projects!: Project[];
+export class AccordionComponent implements OnInit, OnDestroy {
+  projects!: Project[];
+  subscription = new Subscription();
 
   showContent = true;
   selectedBoardId = '';
@@ -21,8 +22,13 @@ export class AccordionComponent implements DoCheck {
     public navigationService: NavigationService
   ) {}
 
-  ngDoCheck(): void {
-    this.selectedProjectId = this.boardService.selectedProjectId.getValue();
-    this.selectedBoardId = this.boardService.selectedBoardId.getValue();
+  ngOnInit(): void {
+    this.subscription = this.boardService.projects.subscribe(
+      result => (this.projects = result)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

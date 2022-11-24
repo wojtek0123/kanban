@@ -33,9 +33,6 @@ import { NavigationService } from './navigation.service';
   ],
 })
 export class MobileNavigationComponent {
-  @Input() projects!: Project[];
-  // @Input() boards!: Board[];
-
   constructor(
     private formService: FormService,
     public navigationService: NavigationService

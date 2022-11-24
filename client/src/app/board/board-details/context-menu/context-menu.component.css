@@ -13,7 +13,7 @@
 .context-menu-body {
   padding: 1rem;
   font-size: 0.5rem;
-  background-color: var(--black-color);
+  background-color: var(--button-hover-color);
   border-radius: var(--rounded);
   z-index: 22;
   align-items: center;
@@ -29,7 +29,7 @@
 }
 
 .context-menu-body.show {
-  box-shadow: 0 0 0.5rem var(--black-color);
+  box-shadow: 0 0 0.5rem var(--font-color-grey);
   display: flex;
   position: fixed;
   bottom: 0;

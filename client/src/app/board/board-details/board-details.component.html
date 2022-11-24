@@ -2,10 +2,10 @@
 <div class="container">
   <div class="board-name">
     <h2>
-      {{ selectedBoard?.name ?? 'selected board' }}
+      {{ selectedBoard.name }}
     </h2>
     <app-context-menu
-      [id]="selectedBoard?.id ?? ''"
+      [id]="selectedBoard.id"
       [type]="'board'"
       [editingBoard]="selectedBoard"></app-context-menu>
   </div>
@@ -16,6 +16,7 @@
   </div>
 </div>
 <div class="tasks" *ngIf="selectedBoard">
+  <p *ngIf="selectedBoard.columns.length === 0">No columns to display</p>
   <section class="section" *ngFor="let column of selectedBoard?.columns">
     <div class="section-heading">
       <h2 class="section-title">{{ column.name }}</h2>

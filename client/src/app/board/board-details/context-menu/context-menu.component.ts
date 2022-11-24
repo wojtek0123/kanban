@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormService } from '../../form/form.service';
 import { FormType } from '../../form/form.service';
-import { Task, Column, Board, Subtask } from '../../board.component';
+import { Task, Column, Board, Subtask, Project } from '../../board.component';
 import { Subscription } from 'rxjs';
 import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
 
@@ -13,6 +13,7 @@ import { ContextMenuModalService } from '../context-menu-modal/context-menu-moda
 export class ContextMenuComponent implements OnDestroy {
   @Input() id!: string;
   @Input() type!: FormType;
+  @Input() editingProject?: Project;
   @Input() editingBoard?: Board;
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
@@ -42,19 +43,24 @@ export class ContextMenuComponent implements OnDestroy {
 
     if (this.type === 'board' && this.editingBoard) {
       this.formService.onEditingBoard(this.editingBoard);
-      this.formService.typeOfForm.next('board');
+      this.formService.onChangeTypeOfForm('board');
     }
     if (this.type === 'column' && this.editingColumn) {
       this.formService.onEditingColumn(this.editingColumn);
       this.formService.typeOfForm.next('column');
+      this.formService.onChangeTypeOfForm('column');
     }
     if (this.type === 'task' && this.editingTask) {
       this.formService.onEditingTask(this.editingTask);
-      this.formService.typeOfForm.next('task');
+      this.formService.onChangeTypeOfForm('task');
     }
     if (this.type === 'subtask' && this.editingSubtask) {
       this.formService.onEditingSubtask(this.editingSubtask);
-      this.formService.typeOfForm.next('subtask');
+      this.formService.onChangeTypeOfForm('subtask');
+    }
+    if (this.type === 'project' && this.editingProject) {
+      this.formService.onEditingProject(this.editingProject);
+      this.formService.onChangeTypeOfForm('project');
     }
   }
 

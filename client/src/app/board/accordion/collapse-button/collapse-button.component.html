@@ -1,8 +1,17 @@
-<button type="button" class="collapse-button" (click)="toggleShowContent()">
-  <img
-    [@rotateState]="!showContent ? 'default' : 'rotated'"
-    class="collapse-button-image"
-    src="../../../assets/arrow-down-short.svg"
-    alt="" />
-  <h3 class="collapse-button-title">{{ project.name }}</h3>
-</button>
+<div class="collapse-wrapper">
+  <button
+    type="button"
+    class="collapse-button"
+    (click)="toggleShowContent(project.id)">
+    <img
+      [@rotateState]="!showContent ? 'default' : 'rotated'"
+      class="collapse-button-image"
+      src="../../../assets/arrow-down-short.svg"
+      alt="" />
+    <h3 class="collapse-button-title">{{ project.name }}</h3>
+  </button>
+  <app-context-menu
+    [id]="project.id"
+    [type]="'project'"
+    [editingProject]="project"></app-context-menu>
+</div>

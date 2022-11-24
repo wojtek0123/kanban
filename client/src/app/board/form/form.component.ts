@@ -18,6 +18,8 @@ import {
   EDIT_TASK,
   ADD_SUBTASK,
   EDIT_SUBTASK,
+  ADD_PROJECT,
+  EDIT_PROJECT,
 } from 'src/app/graphql/graphql.schema';
 import { Board } from '../board.component';
 import { BoardService } from '../board.service';
@@ -33,6 +35,9 @@ export class FormComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   boardForm = this.formBuilder.group({
+    project: this.formBuilder.group({
+      name: ['', Validators.required],
+    }),
     board: this.formBuilder.group({
       name: ['', Validators.required],
     }),
@@ -46,6 +51,9 @@ export class FormComponent implements OnInit, OnDestroy {
     }),
     subtask: this.formBuilder.group({
       name: ['', Validators.required],
+    }),
+    editProject: this.formBuilder.group({
+      name: [this.formService.editingProject?.name, Validators.required],
     }),
     editBoard: this.formBuilder.group({
       name: [this.formService.editingBoard?.name, Validators.required],
@@ -105,6 +113,19 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    if (this.typeOfForm === 'project' && !this.isEditing) {
+      const mutationSubscription = this.apollo
+        .mutate({
+          mutation: ADD_PROJECT,
+          variables: {
+            name: this.boardForm.value.project?.name,
+          },
+          refetchQueries: [{ query: GET_PROJECTS }],
+        })
+        .subscribe();
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
+    }
+
     if (this.typeOfForm === 'board' && !this.isEditing) {
       const mutationSubscription = this.apollo
         .mutate<{ AddBoard: Board }>({
@@ -167,6 +188,20 @@ export class FormComponent implements OnInit, OnDestroy {
         .subscribe(result => {
           console.log(result);
         });
+      this.subscriptions = [...this.subscriptions, mutationSubscription];
+    }
+
+    if (this.typeOfForm === 'project' && this.isEditing) {
+      const mutationSubscription = this.apollo
+        .mutate({
+          mutation: EDIT_PROJECT,
+          variables: {
+            id: this.formService.editingProject?.id,
+            name: this.boardForm.value.editProject?.name,
+          },
+          refetchQueries: [{ query: GET_PROJECTS }],
+        })
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (this.typeOfForm === 'board' && this.isEditing) {

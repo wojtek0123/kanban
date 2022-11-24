@@ -28,6 +28,24 @@ export const GET_PROJECTS = gql`
   }
 `;
 
+export const ADD_PROJECT = gql`
+  mutation addProject($name: String) {
+    addProject(name: $name) {
+      id
+      name
+    }
+  }
+`;
+
+export const EDIT_PROJECT = gql`
+  mutation editProject($id: String, $name: String) {
+    editProject(id: $id, name: $name) {
+      id
+      name
+    }
+  }
+`;
+
 export const ADD_BOARD = gql`
   mutation addBoard($name: String, $projectId: String) {
     addBoard(name: $name, projectId: $projectId) {

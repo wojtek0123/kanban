@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Task, Column, Board, Subtask } from '../board.component';
-export type FormType = 'board' | 'task' | 'column' | 'subtask';
+import { Task, Column, Board, Subtask, Project } from '../board.component';
+export type FormType = 'project' | 'board' | 'task' | 'column' | 'subtask';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
   isFormOpen = false;
   isEditing = false;
+  editingProject?: Project;
   editingBoard?: Board;
   editingColumn?: Column;
   editingTask?: Task;
@@ -22,6 +23,11 @@ export class FormService {
 
   onLeaveEditingMode() {
     this.isEditing = false;
+  }
+
+  onEditingProject(project: Project) {
+    this.isEditing = true;
+    this.editingProject = project;
   }
 
   onEditingBoard(board: Board) {
@@ -42,5 +48,9 @@ export class FormService {
   onEditingSubtask(subtask: Subtask) {
     this.isEditing = true;
     this.editingSubtask = subtask;
+  }
+
+  onChangeTypeOfForm(type: FormType) {
+    this.typeOfForm.next(type);
   }
 }

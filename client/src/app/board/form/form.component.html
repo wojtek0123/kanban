@@ -12,9 +12,21 @@
 
     <div
       class="form-wrapper"
+      *ngIf="typeOfForm === 'project' && !isEditing"
+      formGroupName="project">
+      <label class="form-label" for="project-name">Project Name</label>
+      <input
+        class="form-input"
+        type="text"
+        id="project-name"
+        formControlName="name" />
+    </div>
+
+    <div
+      class="form-wrapper"
       *ngIf="typeOfForm === 'board' && !isEditing"
       formGroupName="board">
-      <label class="form-label" for="board-name">Name</label>
+      <label class="form-label" for="board-name">Board Name</label>
       <input
         class="form-input"
         type="text"
@@ -26,7 +38,7 @@
       class="form-wrapper"
       *ngIf="typeOfForm === 'column' && !isEditing"
       formGroupName="column">
-      <label class="form-label" for="column-name">Name</label>
+      <label class="form-label" for="column-name">Column Name</label>
       <input
         class="form-input"
         type="text"
@@ -87,6 +99,18 @@
         type="text"
         class="form-input"
         id="subtask-name"
+        formControlName="name" />
+    </div>
+
+    <div
+      *ngIf="isEditing && typeOfForm === 'project'"
+      formGroupName="editProject"
+      class="form-wrapper">
+      <label for="edit-project-name">Project name</label>
+      <input
+        type="text"
+        class="form-input"
+        id="edit-project-name"
         formControlName="name" />
     </div>
 
