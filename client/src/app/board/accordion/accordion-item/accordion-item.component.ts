@@ -12,7 +12,7 @@ import { NavigationService } from '../../mobile-navigation/navigation.service';
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {
   @Input() project!: Project;
-  showContent = false;
+  showContent = true;
   selectedBoardId = '';
   subscription = new Subscription();
 
@@ -38,7 +38,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   }
 
   onSelectBoard(boardId: string) {
-    this.boardService.onChangeSelectedBoard(boardId);
+    this.boardService.onChangeSelectedBoardId(boardId);
     this.navigationService.onMenu();
   }
 

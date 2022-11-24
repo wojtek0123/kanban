@@ -1,7 +1,7 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
 
@@ -42,10 +42,12 @@ export interface Project {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit, OnDestroy {
-  // projects: Project[] = [];
+export class BoardComponent implements OnInit, OnDestroy, DoCheck {
+  projects: Project[] = [];
+  selectedBoard: Board | undefined;
+  selectedProject: Project | undefined;
   projectsQuery!: QueryRef<any>;
-  boardsSub!: Subscription;
+  subscription!: Subscription;
 
   constructor(
     private apollo: Apollo,
@@ -58,25 +60,34 @@ export class BoardComponent implements OnInit, OnDestroy {
       query: GET_PROJECTS,
     });
 
-    this.boardsSub = this.projectsQuery.valueChanges.subscribe(result =>
-      this.boardService.onSetProjects(result.data.projects)
-    );
+    this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
+      this.projects = result.data.projects;
+    });
   }
 
-  // ngDoCheck(): void {
-  //   this.boardService.onChangeSelectedBoard(
-  //     this.boardService.selectedBoardId.value
-  //   );
-  // }
+  ngDoCheck(): void {
+    const boards = this.projects.map(project =>
+      project.boards.find(
+        board => board.id === this.boardService.selectedBoardId.value
+      )
+    );
+
+    const board = boards.find(
+      board => board?.id === this.boardService.selectedBoardId.value
+    );
+    if (board) {
+      this.selectedBoard = board;
+    }
+  }
 
   ngOnDestroy(): void {
-    this.boardsSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   onForm(type: FormType, columnId?: string) {
     this.formService.onChangeFormVisibility(type);
     if (columnId) {
-      this.boardService.onChangeSelectedColumn(columnId);
+      this.boardService.onChangeSelectedColumnId(columnId);
     }
   }
 }

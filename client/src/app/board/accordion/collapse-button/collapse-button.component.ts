@@ -24,14 +24,14 @@ import { BoardService } from '../../board.service';
 export class CollapseButtonComponent {
   @Input() project!: Project;
   @Output() toggleMenu = new EventEmitter<boolean>();
-  showContent = false;
+  showContent = true;
 
   constructor(private boardService: BoardService) {}
 
   toggleShowContent(projectId: string) {
     this.showContent = !this.showContent;
     this.toggleMenu.emit(this.showContent);
-    this.boardService.onChangeSelectedProject(this.project.id);
-    this.boardService.onChangeSelectedProject(this.project.id);
+    this.boardService.onChangeSelectedProjectId(this.project.id);
+    this.boardService.onChangeSelectedProjectId(this.project.id);
   }
 }
