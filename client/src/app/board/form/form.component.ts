@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import {
-  GET_BOARDS,
+  GET_PROJECTS,
   ADD_BOARD,
   ADD_COLUMN,
   ADD_TASK,
@@ -111,8 +111,9 @@ export class FormComponent implements OnInit, OnDestroy {
           mutation: ADD_BOARD,
           variables: {
             name: this.boardForm.value.board?.name,
+            projectId: this.boardService.selectedProjectId.value,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => {
           console.log(result);
@@ -128,7 +129,7 @@ export class FormComponent implements OnInit, OnDestroy {
             name: this.boardForm.value.column?.name,
             boardId: this.boardService.selectedBoardId.value,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => {
           console.log(result);
@@ -145,7 +146,7 @@ export class FormComponent implements OnInit, OnDestroy {
             columnId: this.boardService.selectedColumnId.value,
             tags: this.tags.value,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => {
           console.log(result);
@@ -161,7 +162,7 @@ export class FormComponent implements OnInit, OnDestroy {
             isFinished: false,
             taskId: this.boardService.selectedTaskId.value,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => {
           console.log(result);
@@ -176,7 +177,7 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingBoard?.id,
             name: this.boardForm.value.editBoard?.name,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => console.log(result));
       this.subscriptions = [...this.subscriptions, mutationSubscription];
@@ -189,7 +190,7 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingColumn?.id,
             name: this.boardForm.value.editColumn?.name,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => console.log(result));
       this.subscriptions = [...this.subscriptions, mutationSubscription];
@@ -204,7 +205,7 @@ export class FormComponent implements OnInit, OnDestroy {
             description: this.boardForm.value.editTask?.description,
             tags: this.editedTags.value,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe(result => {
           console.log(result);
@@ -220,7 +221,7 @@ export class FormComponent implements OnInit, OnDestroy {
             name: this.boardForm.value.editSubtask?.name,
             isFinished: false,
           },
-          refetchQueries: [{ query: GET_BOARDS }],
+          refetchQueries: [{ query: GET_PROJECTS }],
         })
         .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];

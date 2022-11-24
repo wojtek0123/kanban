@@ -1,22 +1,26 @@
 import { gql } from 'apollo-angular';
 
-export const GET_BOARDS = gql`
-  query boards {
-    boards {
+export const GET_PROJECTS = gql`
+  query projects {
+    projects {
       id
       name
-      columns {
+      boards {
         id
         name
-        tasks {
+        columns {
           id
-          title
-          description
-          tags
-          subtasks {
+          name
+          tasks {
             id
-            isFinished
-            name
+            title
+            description
+            tags
+            subtasks {
+              id
+              isFinished
+              name
+            }
           }
         }
       }

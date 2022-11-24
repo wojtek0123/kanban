@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Board } from '../board.component';
+import { Board, Project } from '../board.component';
 import { FormService, FormType } from '../form/form.service';
 import {
   animate,
@@ -33,7 +33,8 @@ import { NavigationService } from './navigation.service';
   ],
 })
 export class MobileNavigationComponent {
-  @Input() boards!: Board[];
+  @Input() projects!: Project[];
+  // @Input() boards!: Board[];
 
   constructor(
     private formService: FormService,

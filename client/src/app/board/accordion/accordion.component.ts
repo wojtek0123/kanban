@@ -1,5 +1,5 @@
 import { Component, DoCheck, Input } from '@angular/core';
-import { Board } from '../board.component';
+import { Board, Project } from '../board.component';
 import {
   animate,
   state,
@@ -39,9 +39,11 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
 })
 export class AccordionComponent implements DoCheck {
   @Input() projectName!: string;
-  @Input() boards!: Board[];
+  @Input() projects!: Project[];
+  // @Input() boards!: Board[];
   showContent = true;
   selectedBoardId = '';
+  selectedProjectId = '';
 
   constructor(
     private boardService: BoardService,
@@ -49,6 +51,7 @@ export class AccordionComponent implements DoCheck {
   ) {}
 
   ngDoCheck(): void {
+    this.selectedProjectId = this.boardService.selectedProjectId.getValue();
     this.selectedBoardId = this.boardService.selectedBoardId.getValue();
   }
 

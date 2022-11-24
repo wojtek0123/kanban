@@ -3,7 +3,7 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
-import { GET_BOARDS } from '../graphql/graphql.schema';
+import { GET_PROJECTS } from '../graphql/graphql.schema';
 
 export interface Subtask {
   id: string;
@@ -31,16 +31,23 @@ export interface Board {
   columns: Column[];
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  boards: Board[];
+}
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
 export class BoardComponent implements OnInit, OnDestroy, DoCheck {
-  boards: Board[] = [];
-  boardsQuery!: QueryRef<any>;
+  projects: Project[] = [];
+  projectsQuery!: QueryRef<any>;
   boardsSub!: Subscription;
   selectedBoard: Board | undefined;
+  selectedProject: Project | undefined;
 
   constructor(
     private apollo: Apollo,
@@ -49,25 +56,35 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   ) {}
 
   ngOnInit(): void {
-    this.boardsQuery = this.apollo.watchQuery<{ boards: Board[] }>({
-      query: GET_BOARDS,
+    this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
+      query: GET_PROJECTS,
     });
 
-    this.boardsSub = this.boardsQuery.valueChanges.subscribe(result => {
-      this.boards = result.data.boards;
-      if (!this.selectedBoard) {
-        this.selectedBoard = result.data.boards[0];
-        this.boardService.onChangeSelectedBoard(this.selectedBoard?.id ?? '');
-      } else {
-        this.boardService.onChangeSelectedBoard(this.selectedBoard?.id ?? '');
-      }
+    this.boardsSub = this.projectsQuery.valueChanges.subscribe(result => {
+      this.projects = result.data.projects;
+      console.log(result.data);
+      // if (!this.selectedBoard) {
+      //   this.selectedProject = result.data.projects[0];
+      //   this.boardService.onChangeSelectedProject(
+      //     this.selectedProject?.id ?? ''
+      //   );
+      // } else {
+      //   this.boardService.onChangeSelectedProject(
+      //     this.selectedProject?.id ?? ''
+      //   );
+      // }
     });
   }
 
   ngDoCheck(): void {
-    if (this.selectedBoard?.id !== this.boardService.selectedBoardId.value) {
+    if (
+      this.selectedBoard?.id !== this.boardService.selectedBoardId.value &&
+      this.projects.length !== 0
+    ) {
       this.boardService.selectedBoardId.subscribe(id => {
-        this.selectedBoard = this.boards.find(board => board.id === id);
+        this.selectedBoard = this.projects[0].boards.find(
+          board => board.id === id
+        );
       });
     }
   }

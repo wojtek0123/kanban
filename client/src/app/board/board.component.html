@@ -1,10 +1,10 @@
-<app-mobile-navigation [boards]="boards"></app-mobile-navigation>
+<app-mobile-navigation [projects]="projects"></app-mobile-navigation>
 <app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion [boards]="boards" projectName="Boards"></app-accordion>
+      <app-accordion [projects]="projects" projectName="Boards"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button

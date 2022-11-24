@@ -3,7 +3,7 @@ import { ContextMenuModalService } from './context-menu-modal.service';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import {
-  GET_BOARDS,
+  GET_PROJECTS,
   REMOVE_BOARD,
   REMOVE_COLUMN,
   REMOVE_SUBTASK,
@@ -57,7 +57,7 @@ export class ContextMenuModalComponent implements OnInit {
         variables: {
           id: this.contextMenuModalService.id,
         },
-        refetchQueries: [GET_BOARDS],
+        refetchQueries: [GET_PROJECTS],
       })
       .subscribe(value => {
         console.log(value);
