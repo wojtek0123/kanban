@@ -28,11 +28,28 @@ export const typeDefs = gql`
     columns: [Column]
   }
 
-  type Query {
+  type Project {
+    id: String
+    name: String
     boards: [Board]
   }
 
+  type Query {
+    projects: [Project]
+  }
+
   type Mutation {
+    addProject(name: String): Project
+    addBoard(name: String, projectId: String): Board
+    addColumn(boardId: String, name: String): Column
+    addTask(
+      columnId: String
+      title: String
+      description: String
+      tags: [String]
+    ): Task
+    addSubtask(name: String, isFinished: Boolean, taskId: String): Subtask
+    editProject(id: String, name: String): Project
     editBoard(id: String, name: String): Board
     editColumn(id: String, name: String): Column
     editTask(
@@ -42,15 +59,7 @@ export const typeDefs = gql`
       tags: [String]
     ): Task
     editSubtask(id: String, name: String, isFinished: Boolean): Subtask
-    addBoard(name: String): Board
-    addColumn(boardId: String, name: String): Column
-    addTask(
-      columnId: String
-      title: String
-      description: String
-      tags: [String]
-    ): Task
-    addSubtask(name: String, isFinished: Boolean, taskId: String): Subtask
+    removeProject(id: String): Project
     removeBoard(id: String): Board
     removeColumn(id: String): Column
     removeTask(id: String): Task
@@ -60,27 +69,33 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    boards: (_parent: any, _args: any, context: Context) => {
-      return context.prisma.board.findMany({
+    projects: (_parent: any, _args: any, context: Context) => {
+      return context.prisma.project.findMany({
         select: {
           id: true,
           name: true,
-          columns: {
+          boards: {
             select: {
               id: true,
               name: true,
-              tasks: {
+              columns: {
                 select: {
                   id: true,
-                  title: true,
-                  tags: true,
-                  description: true,
-                  subtasks: {
+                  name: true,
+                  tasks: {
                     select: {
                       id: true,
-                      isFinished: true,
-                      name: true,
-                      taskId: true,
+                      title: true,
+                      tags: true,
+                      description: true,
+                      subtasks: {
+                        select: {
+                          id: true,
+                          isFinished: true,
+                          name: true,
+                          taskId: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -92,6 +107,20 @@ export const resolvers = {
     },
   },
   Mutation: {
+    editProject: (
+      _parent: any,
+      args: { id: string; name: string },
+      context: Context,
+    ) => {
+      return context.prisma.project.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          name: args.name,
+        },
+      })
+    },
     editBoard: (
       _parent: any,
       args: { id: string; name: string },
@@ -151,10 +180,22 @@ export const resolvers = {
         },
       })
     },
-    addBoard: (_parent: any, args: { name: string }, context: Context) => {
+    addProject: (_parent: any, args: { name: string }, context: Context) => {
+      return context.prisma.project.create({
+        data: {
+          name: args.name,
+        },
+      })
+    },
+    addBoard: (
+      _parent: any,
+      args: { name: string; projectId: string },
+      context: Context,
+    ) => {
       return context.prisma.board.create({
         data: {
           name: args.name,
+          projectId: args.projectId,
         },
       })
     },
@@ -201,6 +242,9 @@ export const resolvers = {
           taskId: args.taskId,
         },
       })
+    },
+    removeProject: (_parent: any, args: { id: string }, context: Context) => {
+      return context.prisma.project.delete({ where: { id: args.id } })
     },
     removeBoard: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.board.delete({ where: { id: args.id } })
