@@ -5,10 +5,17 @@ import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BoardModule } from './board/board.module';
 import { BoardComponent } from './board/board.component';
+import { HomeModule } from './home/home.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, GraphQLModule, HttpClientModule, BoardModule],
+  imports: [
+    BrowserModule,
+    GraphQLModule,
+    HttpClientModule,
+    BoardModule,
+    HomeModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

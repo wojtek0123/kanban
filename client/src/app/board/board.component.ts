@@ -1,7 +1,7 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
 
