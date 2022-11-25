@@ -113,6 +113,14 @@ export const EDIT_TASK = gql`
   }
 `;
 
+export const REMOVE_PROJECT = gql`
+  mutation removeProject($id: String) {
+    removeProject(id: $id) {
+      id
+    }
+  }
+`;
+
 export const REMOVE_BOARD = gql`
   mutation removeBoard($id: String) {
     removeBoard(id: $id) {

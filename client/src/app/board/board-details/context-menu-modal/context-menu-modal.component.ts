@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ContextMenuModalService } from './context-menu-modal.service';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
@@ -6,6 +6,7 @@ import {
   GET_PROJECTS,
   REMOVE_BOARD,
   REMOVE_COLUMN,
+  REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
 } from 'src/app/graphql/graphql.schema';
@@ -15,7 +16,7 @@ import {
   templateUrl: './context-menu-modal.component.html',
   styleUrls: ['./context-menu-modal.component.css'],
 })
-export class ContextMenuModalComponent implements OnInit {
+export class ContextMenuModalComponent implements OnInit, OnDestroy {
   show = false;
   subscription: Subscription = new Subscription();
 
@@ -39,6 +40,9 @@ export class ContextMenuModalComponent implements OnInit {
     this.contextMenuModalService.show.next(false);
 
     let mutation: any;
+    if (this.contextMenuModalService.type === 'project') {
+      mutation = REMOVE_PROJECT;
+    }
     if (this.contextMenuModalService.type === 'board') {
       mutation = REMOVE_BOARD;
     }
@@ -62,5 +66,9 @@ export class ContextMenuModalComponent implements OnInit {
       .subscribe(value => {
         console.log(value);
       });
+  }
+
+  ngOnDestroy(): void {
+    this, this.subscription.unsubscribe();
   }
 }
