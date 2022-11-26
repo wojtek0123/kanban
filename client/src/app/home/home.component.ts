@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
+  login = '';
+  password = '';
+
   constructor() {}
+
+  onSubmit() {
+    console.log(this.login + ' ' + this.password);
+  }
 }

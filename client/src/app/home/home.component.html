@@ -1,1 +1,22 @@
-<p>home works!</p>
+<header class="header">
+  <h1>Manage the tasks the simple and easy way with kanban app</h1>
+  <form #form="ngForm" (ngSubmit)="onSubmit()" class="form">
+    <label class="form-label" for="email">Login</label>
+    <input
+      class="form-input"
+      type="text"
+      id="email"
+      name="login"
+      #name="ngModel"
+      [(ngModel)]="login" />
+    <label class="form-label" for="password">Password</label>
+    <input
+      class="form-input"
+      type="password"
+      id="password"
+      name="password"
+      #name="ngModel"
+      [(ngModel)]="password" />
+    <button type="submit" class="button-global form-button">Login</button>
+  </form>
+</header>
