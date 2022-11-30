@@ -60,6 +60,10 @@
 }
 
 @media (min-width: 1280px) {
+  .header {
+    min-height: 50vh;
+  }
+
   .header h1 {
     font-size: 4rem;
     margin-right: 10rem;
