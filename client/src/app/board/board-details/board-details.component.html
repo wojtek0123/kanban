@@ -2,14 +2,14 @@
 <div class="container">
   <div class="board-name">
     <h2>
-      {{ selectedBoard?.name ?? 'Please select board' }}
+      {{ selectedBoard?.name ?? 'Please select a board' }}
     </h2>
     <app-context-menu
       [id]="selectedBoard?.id ?? ''"
       [type]="'board'"
       [editingBoard]="selectedBoard"></app-context-menu>
   </div>
-  <div class="buttons">
+  <div class="buttons" *ngIf="selectedBoard">
     <button type="button" class="button-global" (click)="onForm('column')">
       Add column
     </button>
@@ -32,6 +32,7 @@
       Add task
     </button>
     <div class="cards">
+      <p *ngIf="column.tasks.length === 0">No tasks to display</p>
       <div class="card" *ngFor="let task of column.tasks">
         <div class="card-tags">
           <span *ngFor="let tag of task.tags">{{ tag }}</span>

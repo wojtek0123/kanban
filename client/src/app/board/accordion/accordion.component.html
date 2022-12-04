@@ -1,3 +1,7 @@
+<div *ngIf="projects.length === 0">
+  <p>No projects to display</p>
+  <p>Createa project</p>
+</div>
 <div class="accordion-wrapper">
   <div class="accordion-item-wrapper" *ngFor="let project of projects">
     <app-accordion-item [project]="project"></app-accordion-item>
