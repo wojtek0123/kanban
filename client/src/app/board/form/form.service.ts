@@ -12,12 +12,12 @@ export class FormService {
   editingColumn?: Column;
   editingTask?: Task;
   editingSubtask?: Subtask;
-  typeOfForm = new BehaviorSubject<FormType>('board');
+  typeOfForm: FormType = 'project';
 
   onChangeFormVisibility(formType?: FormType) {
     this.isFormOpen = !this.isFormOpen;
     if (formType) {
-      this.typeOfForm.next(formType);
+      this.typeOfForm = formType;
     }
   }
 
@@ -51,6 +51,6 @@ export class FormService {
   }
 
   onChangeTypeOfForm(type: FormType) {
-    this.typeOfForm.next(type);
+    this.typeOfForm = type;
   }
 }

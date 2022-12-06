@@ -30,7 +30,7 @@ import { BoardService } from '../board.service';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit, OnDestroy {
-  typeOfForm: FormType = 'board';
+  typeOfForm!: FormType;
   isEditing!: boolean;
   private subscriptions: Subscription[] = [];
 
@@ -86,7 +86,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.typeOfForm = this.formService.typeOfForm.value;
+    this.typeOfForm = this.formService.typeOfForm;
     this.isEditing = this.formService.isEditing;
   }
 
