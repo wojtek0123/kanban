@@ -31,7 +31,7 @@ export class ContextMenuComponent implements OnDestroy {
   }
 
   delete() {
-    this.contextMenuModalService.show.next(true);
+    this.contextMenuModalService.onShow();
     this.contextMenuModalService.id = this.id;
     this.contextMenuModalService.type = this.type;
     this.openedContextMenuOfElementId = '';
@@ -47,7 +47,6 @@ export class ContextMenuComponent implements OnDestroy {
     }
     if (this.type === 'column' && this.editingColumn) {
       this.formService.onEditingColumn(this.editingColumn);
-      this.formService.typeOfForm.next('column');
       this.formService.onChangeTypeOfForm('column');
     }
     if (this.type === 'task' && this.editingTask) {

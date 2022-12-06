@@ -30,16 +30,15 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.contextMenuModalService.show.subscribe(value => {
       this.show = value;
-      console.log(value);
     });
   }
 
   onHide() {
-    this.contextMenuModalService.show.next(false);
+    this.contextMenuModalService.onHide();
   }
 
   onDelete() {
-    this.contextMenuModalService.show.next(false);
+    this.contextMenuModalService.onHide();
 
     let mutation: any;
     if (this.contextMenuModalService.type === 'project') {
@@ -70,7 +69,6 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
           this.boardService.onChangeSelectedBoardId('');
           this.boardService.onChangeSelectedBoard(undefined);
         }
-        console.log(value);
       });
   }
 

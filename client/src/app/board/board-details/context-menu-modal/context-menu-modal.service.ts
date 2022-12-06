@@ -8,7 +8,11 @@ export class ContextMenuModalService {
   id = '';
   type!: FormType;
 
-  onToggle() {
-    this.show.next(!this.show);
+  onShow() {
+    this.show.next(true);
+  }
+
+  onHide() {
+    this.show.next(false);
   }
 }
