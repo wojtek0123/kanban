@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { Board } from './board.component';
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {
@@ -7,6 +8,11 @@ export class BoardService {
   selectedBoardId = new BehaviorSubject<string>('');
   selectedColumnId = new BehaviorSubject<string>('');
   selectedTaskId = new BehaviorSubject<string>('');
+  selectedBoard = new BehaviorSubject<Board | undefined>(undefined);
+
+  onChangeSelectedBoard(board: Board | undefined) {
+    this.selectedBoard.next(board);
+  }
 
   onChangeSelectedProjectId(projectId: string) {
     this.selectedProjectId.next(projectId);

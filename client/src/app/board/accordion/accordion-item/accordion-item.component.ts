@@ -23,9 +23,10 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.boardService.selectedBoardId.subscribe(
-      id => (this.selectedBoardId = id)
-    );
+    this.subscription = this.boardService.selectedBoardId.subscribe(id => {
+      this.selectedBoardId = id;
+      console.log(id);
+    });
   }
 
   onForm(type: FormType, projectId: string) {

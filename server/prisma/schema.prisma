@@ -11,7 +11,7 @@ model Subtask {
   id         String  @id @default(uuid())
   isFinished Boolean
   name       String
-  Task       Task    @relation(fields: [taskId], references: [id])
+  Task       Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId     String
 }
 
@@ -20,7 +20,7 @@ model Task {
   title       String
   description String
   columnId    String
-  column      Column    @relation(fields: [columnId], references: [id])
+  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
   tags        String[]
   subtasks    Subtask[]
 }
@@ -29,7 +29,7 @@ model Column {
   id      String @id @default(uuid())
   name    String
   boardId String
-  Board   Board  @relation(fields: [boardId], references: [id])
+  Board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
   tasks   Task[]
 }
 
@@ -37,7 +37,7 @@ model Board {
   id        String   @id @default(uuid())
   name      String
   columns   Column[]
-  Project   Project  @relation(fields: [projectId], references: [id])
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
 }
 

@@ -1,7 +1,7 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
 
@@ -44,8 +44,6 @@ export interface Project {
 })
 export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   projects: Project[] = [];
-  selectedBoard: Board | undefined;
-  selectedProject: Project | undefined;
   projectsQuery!: QueryRef<any>;
   subscription!: Subscription;
 
@@ -60,9 +58,21 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
       query: GET_PROJECTS,
     });
 
-    this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
-      this.projects = result.data.projects;
-    });
+    this.subscription = this.projectsQuery.valueChanges
+      .pipe(
+        tap(x => {
+          console.log(x);
+        })
+      )
+      .subscribe(result => {
+        this.projects = result.data.projects;
+        this.boardService.onChangeSelectedBoard(
+          result.data.projects[0].boards[0]
+        );
+        this.boardService.selectedBoardId.next(
+          result.data.projects[0].boards[0].id
+        );
+      });
   }
 
   ngDoCheck(): void {
@@ -76,7 +86,7 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
       board => board?.id === this.boardService.selectedBoardId.value
     );
     if (board) {
-      this.selectedBoard = board;
+      this.boardService.onChangeSelectedBoard(board);
     }
   }
 

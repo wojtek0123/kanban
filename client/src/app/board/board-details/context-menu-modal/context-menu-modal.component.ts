@@ -10,6 +10,7 @@ import {
   REMOVE_SUBTASK,
   REMOVE_TASK,
 } from 'src/app/graphql/graphql.schema';
+import { BoardService } from '../../board.service';
 
 @Component({
   selector: 'app-context-menu-modal',
@@ -22,7 +23,8 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private contextMenuModalService: ContextMenuModalService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private boardService: BoardService
   ) {}
 
   ngOnInit() {
@@ -64,6 +66,10 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
         refetchQueries: [GET_PROJECTS],
       })
       .subscribe(value => {
+        if (mutation === REMOVE_PROJECT) {
+          this.boardService.onChangeSelectedBoardId('');
+          this.boardService.onChangeSelectedBoard(undefined);
+        }
         console.log(value);
       });
   }
