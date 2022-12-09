@@ -99,11 +99,11 @@
 }
 
 .text-danger {
-  color: red;
+  color: var(--error-color);
 }
 
 .text-warning {
-  color: red;
+  color: var(--error-color);
   margin-top: 1rem;
 }
 

@@ -26,6 +26,7 @@ body {
   --font-color: #fff;
   --font-color-grey: #aaa;
   --secondary-color: #e8fe93;
+  --error-color: #dc3545;
 
   --rounded: 0.5rem;
   --task-width: 31rem;
