@@ -48,7 +48,6 @@
 }
 
 .form-tag-wrapper {
-  margin-bottom: 1rem;
   width: 100%;
 }
 
@@ -101,6 +100,11 @@
 
 .text-danger {
   color: red;
+}
+
+.text-warning {
+  color: red;
+  margin-top: 1rem;
 }
 
 @media (min-width: 1024px) {

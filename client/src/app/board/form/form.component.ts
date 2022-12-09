@@ -32,6 +32,7 @@ import { BoardService } from '../board.service';
 export class FormComponent implements OnInit, OnDestroy {
   typeOfForm!: FormType;
   isEditing!: boolean;
+  isSubmitted = false;
   private subscriptions: Subscription[] = [];
 
   boardForm = this.formBuilder.group({
@@ -119,6 +120,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.isSubmitted = true;
     console.log(this.boardForm);
     let validCounter = 0;
     for (const controlName of Object.keys(this.boardForm.controls)) {

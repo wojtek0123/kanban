@@ -297,7 +297,7 @@
         </div>
       </div>
     </div>
-
+    <p *ngIf="isSubmitted" class="text-warning">Fill input or inputs</p>
     <button type="submit" class="button-global submit-button">
       {{ isEditing ? 'Update' : 'Add ' + typeOfForm }}
     </button>
