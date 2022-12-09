@@ -99,6 +99,10 @@
   justify-content: flex-end;
 }
 
+.text-danger {
+  color: red;
+}
+
 @media (min-width: 1024px) {
   .form {
     position: relative;

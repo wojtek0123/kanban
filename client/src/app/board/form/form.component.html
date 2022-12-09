@@ -20,6 +20,13 @@
         type="text"
         id="project-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.project.touched && getControls.project.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.project.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -32,6 +39,13 @@
         type="text"
         id="board-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.board.touched && getControls.board.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.board.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -44,6 +58,13 @@
         type="text"
         id="column-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.column.touched && getControls.column.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.column.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -56,11 +77,25 @@
         class="form-input"
         id="task-name"
         formControlName="title" />
+      <div
+        *ngIf="getControls.task.touched && getControls.task.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.task.controls.title.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
       <label class="form-label" for="task-description">Short description</label>
       <textarea
         class="task-description form-input"
         id="task-description"
         formControlName="description"></textarea>
+      <div
+        *ngIf="getControls.task.touched && getControls.task.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.task.controls.description.errors?.['required']">
+          Description is required.
+        </div>
+      </div>
       <div formArrayName="tags" class="form-tags-wrapper">
         <div class="form-tags-buttons">
           <button
@@ -86,6 +121,14 @@
             type="text"
             aria-label="tag"
             [formControlName]="i" />
+          <div
+            *ngIf="getControls.task.touched && getControls.task.invalid"
+            class="text-danger">
+            <div
+              *ngIf="getControls.task.controls.tags.controls[i].errors?.['required']">
+              Tag name is required.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -100,6 +143,13 @@
         class="form-input"
         id="subtask-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.subtask.touched && getControls.subtask.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.subtask.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -112,6 +162,15 @@
         class="form-input"
         id="edit-project-name"
         formControlName="name" />
+      <div
+        *ngIf="
+          getControls.editProject.touched && getControls.editProject.invalid
+        "
+        class="text-danger">
+        <div *ngIf="getControls.editProject.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -124,6 +183,13 @@
         class="form-input"
         id="edit-board-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.editBoard.touched && getControls.editBoard.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.editBoard.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -136,6 +202,13 @@
         class="form-input"
         id="edit-column-name"
         formControlName="name" />
+      <div
+        *ngIf="getControls.editColumn.touched && getControls.editColumn.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.editColumn.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -148,6 +221,15 @@
         class="form-input"
         id="edit-subtask-name"
         formControlName="name" />
+      <div
+        *ngIf="
+          getControls.editSubtask.touched && getControls.editSubtask.invalid
+        "
+        class="text-danger">
+        <div *ngIf="getControls.editSubtask.controls.name.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
     </div>
 
     <div
@@ -160,6 +242,13 @@
         class="form-input"
         id="edit-task-title"
         formControlName="title" />
+      <div
+        *ngIf="getControls.editTask.touched && getControls.editTask.invalid"
+        class="text-danger">
+        <div *ngIf="getControls.editTask.controls.title.errors?.['required']">
+          Name is required.
+        </div>
+      </div>
       <label class="form-label" for="edit-task-description"
         >Short description</label
       >
@@ -167,6 +256,14 @@
         class="task-description form-input"
         id="edit-task-description"
         formControlName="description"></textarea>
+      <div
+        *ngIf="getControls.editTask.touched && getControls.editTask.invalid"
+        class="text-danger">
+        <div
+          *ngIf="getControls.editTask.controls.description.errors?.['required']">
+          Description is required.
+        </div>
+      </div>
       <div formArrayName="tags" class="form-tags-wrapper">
         <button
           type="button"
@@ -189,6 +286,14 @@
             type="text"
             aria-label="tag"
             [formControlName]="i" />
+          <div
+            *ngIf="getControls.editTask.touched && getControls.editTask.invalid"
+            class="text-danger">
+            <div
+              *ngIf="getControls.editTask.controls.tags.controls[i].errors?.['required']">
+              Tag name is required.
+            </div>
+          </div>
         </div>
       </div>
     </div>
