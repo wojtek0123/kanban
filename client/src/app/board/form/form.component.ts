@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { FormService, FormType } from './form.service';
 import {
   FormBuilder,
@@ -36,36 +36,38 @@ export class FormComponent implements OnInit, OnDestroy {
 
   boardForm = this.formBuilder.group({
     project: this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
     }),
     board: this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
     }),
     column: this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
     }),
     task: this.formBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      tags: this.formBuilder.array([this.formBuilder.control('')]),
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      tags: this.formBuilder.array([
+        this.formBuilder.control('', [Validators.required]),
+      ]),
     }),
     subtask: this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
     }),
     editProject: this.formBuilder.group({
-      name: [this.formService.editingProject?.name, Validators.required],
+      name: [this.formService.editingProject?.name, [Validators.required]],
     }),
     editBoard: this.formBuilder.group({
-      name: [this.formService.editingBoard?.name, Validators.required],
+      name: [this.formService.editingBoard?.name, [Validators.required]],
     }),
     editColumn: this.formBuilder.group({
-      name: [this.formService.editingColumn?.name, Validators.required],
+      name: [this.formService.editingColumn?.name, [Validators.required]],
     }),
     editTask: this.formBuilder.group({
-      title: [this.formService.editingTask?.title, Validators.required],
+      title: [this.formService.editingTask?.title, [Validators.required]],
       description: [
         this.formService.editingTask?.description,
-        Validators.required,
+        [Validators.required],
       ],
       tags: this.formBuilder.array(
         this.formService.editingTask?.tags.map(tag =>
@@ -74,7 +76,7 @@ export class FormComponent implements OnInit, OnDestroy {
       ),
     }),
     editSubtask: this.formBuilder.group({
-      name: [this.formService.editingSubtask?.name, Validators.required],
+      name: [this.formService.editingSubtask?.name, [Validators.required]],
     }),
   });
 
@@ -112,8 +114,29 @@ export class FormComponent implements OnInit, OnDestroy {
     return this.boardForm.get('editTask')?.get('tags') as FormArray;
   }
 
+  get getControls() {
+    return this.boardForm.controls;
+  }
+
   onSubmit() {
-    if (this.typeOfForm === 'project' && !this.isEditing) {
+    console.log(this.boardForm);
+    let validCounter = 0;
+    for (const controlName of Object.keys(this.boardForm.controls)) {
+      // @ts-ignore
+      const control = this.boardForm.controls[controlName].valid;
+      if (control) {
+        validCounter++;
+      }
+      console.log(control);
+    }
+    if (validCounter === 0) {
+      return;
+    }
+    if (
+      this.typeOfForm === 'project' &&
+      !this.isEditing &&
+      this.boardForm.controls.project.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_PROJECT,
@@ -126,8 +149,11 @@ export class FormComponent implements OnInit, OnDestroy {
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
 
-    if (this.typeOfForm === 'board' && !this.isEditing) {
-      console.log(this.boardService.selectedProjectId.value);
+    if (
+      this.typeOfForm === 'board' &&
+      !this.isEditing &&
+      this.boardForm.controls.board.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate<{ AddBoard: Board }>({
           mutation: ADD_BOARD,
@@ -143,7 +169,11 @@ export class FormComponent implements OnInit, OnDestroy {
 
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'column' && !this.isEditing) {
+    if (
+      this.typeOfForm === 'column' &&
+      !this.isEditing &&
+      this.boardForm.controls.column.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_COLUMN,
@@ -158,7 +188,11 @@ export class FormComponent implements OnInit, OnDestroy {
         });
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'task' && !this.isEditing) {
+    if (
+      this.typeOfForm === 'task' &&
+      !this.isEditing &&
+      this.boardForm.controls.task.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_TASK,
@@ -175,7 +209,11 @@ export class FormComponent implements OnInit, OnDestroy {
         });
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'subtask' && !this.isEditing) {
+    if (
+      this.typeOfForm === 'subtask' &&
+      !this.isEditing &&
+      this.boardForm.controls.subtask.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: ADD_SUBTASK,
@@ -192,7 +230,11 @@ export class FormComponent implements OnInit, OnDestroy {
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
 
-    if (this.typeOfForm === 'project' && this.isEditing) {
+    if (
+      this.typeOfForm === 'project' &&
+      this.isEditing &&
+      this.boardForm.controls.editProject.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: EDIT_PROJECT,
@@ -205,7 +247,11 @@ export class FormComponent implements OnInit, OnDestroy {
         .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'board' && this.isEditing) {
+    if (
+      this.typeOfForm === 'board' &&
+      this.isEditing &&
+      this.boardForm.controls.editBoard.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: EDIT_BOARD,
@@ -218,7 +264,11 @@ export class FormComponent implements OnInit, OnDestroy {
         .subscribe(result => console.log(result));
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'column' && this.isEditing) {
+    if (
+      this.typeOfForm === 'column' &&
+      this.isEditing &&
+      this.boardForm.controls.editColumn.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: EDIT_COLUMN,
@@ -231,7 +281,11 @@ export class FormComponent implements OnInit, OnDestroy {
         .subscribe(result => console.log(result));
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'task' && this.isEditing) {
+    if (
+      this.typeOfForm === 'task' &&
+      this.isEditing &&
+      this.boardForm.controls.editTask.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: EDIT_TASK,
@@ -248,7 +302,11 @@ export class FormComponent implements OnInit, OnDestroy {
         });
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
-    if (this.typeOfForm === 'subtask' && this.isEditing) {
+    if (
+      this.typeOfForm === 'subtask' &&
+      this.isEditing &&
+      this.boardForm.controls.subtask.valid
+    ) {
       const mutationSubscription = this.apollo
         .mutate({
           mutation: EDIT_SUBTASK,
