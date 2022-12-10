@@ -60,6 +60,9 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
 
     this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
       this.projects = result.data.projects;
+      if (result.data.projects.length === 0) {
+        return;
+      }
       this.boardService.onChangeSelectedBoard(
         result.data.projects[0].boards[0]
       );
