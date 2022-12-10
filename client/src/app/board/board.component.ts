@@ -1,9 +1,10 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
-import { first, Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
+import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 
 export interface Subtask {
   id: string;
@@ -46,14 +47,18 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   projects: Project[] = [];
   projectsQuery!: QueryRef<any>;
   subscription!: Subscription;
+  userId!: string;
 
   constructor(
     private apollo: Apollo,
     public formService: FormService,
-    private boardService: BoardService
+    private boardService: BoardService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => this.userId = params['id'])
+
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,
     });
