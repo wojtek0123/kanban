@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { BoardModule } from './board/board.module';
 import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PageNotFoundComponent],
   imports: [
     BrowserModule,
     GraphQLModule,

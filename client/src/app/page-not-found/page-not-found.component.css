@@ -1,0 +1,31 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container a {
+  padding: 0.25rem 1rem;
+  background-color: var(--secondary-color);
+  color: var(--black-color);
+  text-decoration: none;
+  border-radius: var(--rounded);
+  transition: opacity .3s ease-in-out;
+}
+
+.container a:hover {
+  opacity: 0.7;
+}
+
+.container a:active {
+  color: var(--black-color);
+}
+
+.container a:visited {
+  color: var(--black-color);
+}
+
+

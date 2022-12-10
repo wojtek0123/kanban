@@ -4,7 +4,7 @@ import { FormService, FormType } from './form/form.service';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 export interface Subtask {
   id: string;
@@ -57,7 +57,7 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => this.userId = params['id'])
+    this.route.queryParams.subscribe(params => (this.userId = params['id']));
 
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,
