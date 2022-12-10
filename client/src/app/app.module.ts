@@ -4,8 +4,8 @@ import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BoardModule } from './board/board.module';
-import { BoardComponent } from './board/board.component';
 import { HomeModule } from './home/home.module';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +15,7 @@ import { HomeModule } from './home/home.module';
     HttpClientModule,
     BoardModule,
     HomeModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
