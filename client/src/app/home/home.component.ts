@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SupabaseService } from '../supabase.service';
 
 @Component({
   selector: 'app-home',
@@ -12,14 +13,65 @@ export class HomeComponent {
     email: '',
     password: '',
   };
+  isRegister = true;
+  status: 'loading' | 'error' | 'ok' = 'ok';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private readonly supabase: SupabaseService
+  ) {}
 
-  onSubmit(x: NgForm) {
-    console.log(x);
-    console.log(this.user.email + ' ' + this.user.password);
+  toggle() {
+    this.isRegister = !this.isRegister;
+  }
 
+  async onSubmit(x: NgForm) {
     const randomNumber = Math.random();
-    this.router.navigate([randomNumber]).then(error => console.log(error));
+    if (this.isRegister) {
+      this.status = 'loading';
+      try {
+        const { data, error } = await this.supabase.signIn(
+          this.user.email,
+          this.user.password
+        );
+        if (!error) {
+          console.log(data);
+          this.status = 'ok';
+          this.router
+            .navigate([data.user?.id])
+            .then(error => console.log(error));
+        } else {
+          this.status = 'error';
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        }
+        this.status = 'error';
+      }
+    }
+    if (!this.isRegister) {
+      try {
+        this.status = 'loading';
+        const { data, error } = await this.supabase.singUp(
+          this.user.email,
+          this.user.password
+        );
+        if (!error) {
+          this.status = 'ok';
+          this.router
+            .navigate([data.user?.id])
+            .then(error => console.log(error));
+        } else {
+          this.status = 'error';
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+          this.status = 'error';
+        }
+      }
+      // this.router.navigate([randomNumber]).then(error => console.log(error));
+    }
   }
 }

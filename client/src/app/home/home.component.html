@@ -26,11 +26,19 @@
     <p *ngIf="password.invalid && password.touched">
       Password should have at least 8 characters
     </p>
+    <div class="form-change">
+      <p>{{ isRegister ? "Don't have account?" : 'Have an account?' }}</p>
+      <button class="form-change-button" type="button" (click)="toggle()">
+        {{ isRegister ? 'Sign Up' : 'Sign In' }}
+      </button>
+    </div>
+    <p *ngIf="status === 'loading'">Loading...</p>
+    <p *ngIf="status === 'error' && isRegister">Incorrect email or password</p>
     <button
       [disabled]="form.invalid"
       type="submit"
       class="button-global form-button">
-      Login
+      {{ isRegister ? 'Login' : 'Register' }}
     </button>
   </form>
 </header>
