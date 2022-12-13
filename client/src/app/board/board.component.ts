@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { SupabaseService } from '../supabase.service';
 
 export interface Subtask {
   id: string;
@@ -47,17 +48,18 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   projects: Project[] = [];
   projectsQuery!: QueryRef<any>;
   subscription!: Subscription;
-  userId!: string;
+  userId: string | null = null;
 
   constructor(
     private apollo: Apollo,
     public formService: FormService,
     private boardService: BoardService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private supabase: SupabaseService
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => (this.userId = params['id']));
+    this.userId = this.route.snapshot.paramMap.get('id');
 
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,
