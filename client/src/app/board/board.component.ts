@@ -58,8 +58,15 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
     private supabase: SupabaseService
   ) {}
 
-  ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get('id');
+  async ngOnInit(): Promise<void> {
+    const { data, error } = await this.supabase.getSession();
+
+    if (error) {
+      console.error('ERROR');
+      return;
+    }
+
+    this.userId = data.session?.user.id ?? '';
 
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,

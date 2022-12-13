@@ -35,11 +35,12 @@ export class HomeComponent {
           this.user.password
         );
         if (!error) {
-          console.log(data);
           this.status = 'ok';
-          this.router
-            .navigate([data.user?.id])
-            .then(error => console.log(error));
+          const { data: sessionData, error: sessionError } =
+            await this.supabase.getSession();
+
+          this.supabase.session = sessionData.session;
+          this.router.navigate(['']).then(error => console.log(error));
         } else {
           this.status = 'error';
         }
