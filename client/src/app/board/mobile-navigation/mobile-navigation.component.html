@@ -15,6 +15,7 @@
 <nav
   class="navigation-container"
   [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'">
+  <button class="button-global" (click)="onLogout()">Logout</button>
   <div class="navigation-wrapper">
     <app-accordion [projects]="projects"></app-accordion>
   </div>
@@ -22,8 +23,8 @@
     <button
       type="button"
       class="button-global navigation-button"
-      (click)="onForm('board')">
-      Add board
+      (click)="onForm('project')">
+      Add project
     </button>
   </div>
 </nav>

@@ -9,6 +9,8 @@ import {
   style,
 } from '@angular/animations';
 import { NavigationService } from './navigation.service';
+import { SupabaseService } from 'src/app/supabase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -37,10 +39,26 @@ export class MobileNavigationComponent {
 
   constructor(
     private formService: FormService,
-    public navigationService: NavigationService
+    public navigationService: NavigationService,
+    private supabase: SupabaseService,
+    private router: Router
   ) {}
 
   onForm(type: FormType) {
     this.formService.onChangeFormVisibility(type);
+  }
+
+  async onLogout() {
+    try {
+      const { error } = await this.supabase.signOut();
+      if (error) {
+        throw new Error(error.message);
+      }
+      this.router.navigate(['/home']);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
   }
 }
