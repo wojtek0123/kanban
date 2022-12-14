@@ -32,14 +32,15 @@ export const typeDefs = gql`
     id: String
     name: String
     boards: [Board]
+    userId: String
   }
 
   type Query {
-    projects: [Project]
+    projects(userId: String): [Project]
   }
 
   type Mutation {
-    addProject(name: String): Project
+    addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String): Column
     addTask(
@@ -69,7 +70,7 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    projects: (_parent: any, _args: any, context: Context) => {
+    projects: (_parent: any, args: { userId: string }, context: Context) => {
       return context.prisma.project.findMany({
         select: {
           id: true,
@@ -102,6 +103,9 @@ export const resolvers = {
               },
             },
           },
+        },
+        where: {
+          userId: args.userId,
         },
       })
     },
@@ -180,10 +184,15 @@ export const resolvers = {
         },
       })
     },
-    addProject: (_parent: any, args: { name: string }, context: Context) => {
+    addProject: (
+      _parent: any,
+      args: { name: string; userId: string },
+      context: Context,
+    ) => {
       return context.prisma.project.create({
         data: {
           name: args.name,
+          userId: args.userId,
         },
       })
     },

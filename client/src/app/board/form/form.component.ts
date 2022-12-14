@@ -23,6 +23,7 @@ import {
 } from 'src/app/graphql/graphql.schema';
 import { Board } from '../board.component';
 import { BoardService } from '../board.service';
+import { SupabaseService } from 'src/app/supabase.service';
 
 @Component({
   selector: 'app-form',
@@ -85,7 +86,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private apollo: Apollo,
     private formBuilder: FormBuilder,
-    private boardService: BoardService
+    private boardService: BoardService,
+    private supabase: SupabaseService
   ) {}
 
   ngOnInit(): void {
@@ -121,7 +123,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.isSubmitted = true;
-    console.log(this.boardForm);
     let validCounter = 0;
     for (const controlName of Object.keys(this.boardForm.controls)) {
       // @ts-ignore
@@ -129,11 +130,11 @@ export class FormComponent implements OnInit, OnDestroy {
       if (control) {
         validCounter++;
       }
-      console.log(control);
     }
     if (validCounter === 0) {
       return;
     }
+
     if (
       this.typeOfForm === 'project' &&
       !this.isEditing &&
@@ -143,9 +144,17 @@ export class FormComponent implements OnInit, OnDestroy {
         .mutate({
           mutation: ADD_PROJECT,
           variables: {
-            name: this.boardForm.value.project?.name,
+            name: this.boardForm.value.project?.name ?? '',
+            userId: this.supabase.getUserId,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
         .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
@@ -163,11 +172,16 @@ export class FormComponent implements OnInit, OnDestroy {
             name: this.boardForm.value.board?.name,
             projectId: this.boardService.selectedProjectId.value,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => {
-          console.log(result);
-        });
+        .subscribe();
 
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
@@ -183,11 +197,16 @@ export class FormComponent implements OnInit, OnDestroy {
             name: this.boardForm.value.column?.name,
             boardId: this.boardService.selectedBoardId.value,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => {
-          console.log(result);
-        });
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (
@@ -204,11 +223,16 @@ export class FormComponent implements OnInit, OnDestroy {
             columnId: this.boardService.selectedColumnId.value,
             tags: this.tags.value,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => {
-          console.log(result);
-        });
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (
@@ -224,11 +248,16 @@ export class FormComponent implements OnInit, OnDestroy {
             isFinished: false,
             taskId: this.boardService.selectedTaskId.value,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => {
-          console.log(result);
-        });
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
 
@@ -244,7 +273,14 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingProject?.id,
             name: this.boardForm.value.editProject?.name,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
         .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
@@ -261,9 +297,16 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingBoard?.id,
             name: this.boardForm.value.editBoard?.name,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => console.log(result));
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (
@@ -278,9 +321,16 @@ export class FormComponent implements OnInit, OnDestroy {
             id: this.formService.editingColumn?.id,
             name: this.boardForm.value.editColumn?.name,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => console.log(result));
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (
@@ -297,11 +347,16 @@ export class FormComponent implements OnInit, OnDestroy {
             description: this.boardForm.value.editTask?.description,
             tags: this.editedTags.value,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
-        .subscribe(result => {
-          console.log(result);
-        });
+        .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];
     }
     if (
@@ -317,7 +372,14 @@ export class FormComponent implements OnInit, OnDestroy {
             name: this.boardForm.value.editSubtask?.name,
             isFinished: false,
           },
-          refetchQueries: [{ query: GET_PROJECTS }],
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId: this.supabase.getUserId,
+              },
+            },
+          ],
         })
         .subscribe();
       this.subscriptions = [...this.subscriptions, mutationSubscription];

@@ -25,6 +25,15 @@ export class SupabaseService {
     this.session = session;
   }
 
+  async refreshSession() {
+    const { data } = await this.supabase.auth.getSession();
+    this.session = data.session;
+  }
+
+  get getUserId() {
+    return this.session?.user.id ?? '';
+  }
+
   getSession() {
     return this.supabase.auth.getSession();
   }

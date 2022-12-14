@@ -1,8 +1,8 @@
 import { gql } from 'apollo-angular';
 
 export const GET_PROJECTS = gql`
-  query projects {
-    projects {
+  query projects($userId: String) {
+    projects(userId: $userId) {
       id
       name
       boards {
@@ -29,8 +29,8 @@ export const GET_PROJECTS = gql`
 `;
 
 export const ADD_PROJECT = gql`
-  mutation addProject($name: String) {
-    addProject(name: $name) {
+  mutation addProject($name: String, $userId: String) {
+    addProject(name: $name, userId: $userId) {
       id
       name
     }

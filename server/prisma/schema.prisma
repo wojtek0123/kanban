@@ -45,4 +45,5 @@ model Project {
   id     String  @id @default(uuid())
   name   String
   boards Board[]
+  userId String
 }

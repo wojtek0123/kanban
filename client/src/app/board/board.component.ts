@@ -4,7 +4,6 @@ import { FormService, FormType } from './form/form.service';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql/graphql.schema';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 
 export interface Subtask {
@@ -48,13 +47,12 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
   projects: Project[] = [];
   projectsQuery!: QueryRef<any>;
   subscription!: Subscription;
-  userId: string | null = null;
+  userId: string = '';
 
   constructor(
     private apollo: Apollo,
     public formService: FormService,
     private boardService: BoardService,
-    private route: ActivatedRoute,
     private supabase: SupabaseService
   ) {}
 
@@ -67,9 +65,12 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     this.userId = data.session?.user.id ?? '';
-
+    console.log(this.userId);
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,
+      variables: {
+        userId: this.userId,
+      },
     });
 
     this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
