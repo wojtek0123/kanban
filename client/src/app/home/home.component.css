@@ -7,6 +7,7 @@
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+  min-height: 100vh;
 }
 
 .header h1 {
@@ -77,6 +78,50 @@
   margin-top: 1rem;
 }
 
+.form-toast {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  transform: translateY(100%);
+  background-color: var(--secondary-color);
+  color: var(--black-color);
+  padding: 1rem 3rem;
+  border-radius: var(--rounded);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s linear;
+}
+
+.form-toast.show {
+  transform: translateY(0);
+}
+
+.form-toast-message {
+  font-size: 1.1rem;
+}
+
+.form-toast-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  /* background-color: var(--black-color); */
+  /* color: var(--font-color); */
+  color: var(--black-color);
+  padding: 0.25rem;
+  border-radius: var(--rounded);
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-left: 2rem;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.form-toast-button:hover {
+  background-color: var(--black-color);
+  color: var(--font-color);
+}
+
 @media (min-width: 768px) {
   .header {
     flex-direction: row;
@@ -86,6 +131,13 @@
   .header h1 {
     margin-right: 5rem;
     font-size: 2rem;
+  }
+
+  .form-toast {
+    width: max-content;
+    bottom: 1rem;
+    right: 1rem;
+    transform: translateY(calc(100% + 2rem));
   }
 }
 

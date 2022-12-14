@@ -16,6 +16,20 @@
     <p class="form-invalid-message" *ngIf="email.invalid && email.touched">
       Please provide valid email.
     </p>
+    <label *ngIf="!isRegister" class="form-label" for="nick">Nick</label>
+    <input
+      *ngIf="!isRegister"
+      class="form-input"
+      type="text"
+      id="nick"
+      name="nick"
+      #nick="ngModel"
+      [ngClass]="{
+        error: nick.invalid && nick.touched
+      }"
+      [(ngModel)]="user.nick"
+      placeholder="norman"
+      required />
     <label class="form-label" for="password">Password</label>
     <input
       class="form-input"
@@ -53,3 +67,11 @@
     </div>
   </form>
 </header>
+<div class="form-toast" [ngClass]="{ show: showToast }">
+  <p class="form-toast-message">
+    Check your mailbox. We send you a email to verify!
+  </p>
+  <button class="form-toast-button" type="button" (click)="closeToast()">
+    X
+  </button>
+</div>

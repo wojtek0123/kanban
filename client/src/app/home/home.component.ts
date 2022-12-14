@@ -12,8 +12,10 @@ export class HomeComponent {
   user = {
     email: '',
     password: '',
+    nick: '',
   };
   isRegister = true;
+  showToast = false;
   status: 'loading' | 'error' | 'ok' = 'ok';
 
   constructor(
@@ -23,6 +25,10 @@ export class HomeComponent {
 
   toggle() {
     this.isRegister = !this.isRegister;
+  }
+
+  closeToast() {
+    this.showToast = false;
   }
 
   async onSubmit(x: NgForm) {
@@ -36,10 +42,7 @@ export class HomeComponent {
         );
         if (!error) {
           this.status = 'ok';
-          const { data: sessionData, error: sessionError } =
-            await this.supabase.getSession();
-
-          this.supabase.setSession(sessionData.session);
+          this.supabase.setSession(data.session);
           this.router.navigate(['']).then(error => console.log(error));
         } else {
           this.status = 'error';
@@ -56,21 +59,22 @@ export class HomeComponent {
         this.status = 'loading';
         const { data, error } = await this.supabase.singUp(
           this.user.email,
-          this.user.password
+          this.user.password,
+          this.user.nick
         );
         if (!error) {
+          this.showToast = true;
           this.status = 'ok';
-          this.router
-            .navigate([data.user?.id])
-            .then(error => console.log(error));
-        } else {
-          this.status = 'error';
         }
       } catch (error) {
         if (error instanceof Error) {
           alert(error.message);
           this.status = 'error';
         }
+      } finally {
+        setTimeout(() => {
+          this.showToast = false;
+        }, 5000);
       }
     }
   }

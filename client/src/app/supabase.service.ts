@@ -36,10 +36,15 @@ export class SupabaseService {
     });
   }
 
-  singUp(email: string, password: string) {
+  singUp(email: string, password: string, nick: string) {
     return this.supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          nick,
+        },
+      },
     });
   }
 
