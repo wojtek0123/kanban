@@ -3,7 +3,6 @@ import {
   SupabaseClient,
   createClient,
   AuthSession,
-  AuthChangeEvent,
   Session,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment';
@@ -13,7 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  session: AuthSession | null = null;
+  private session: AuthSession | null = null;
 
   constructor() {
     this.supabase = createClient(
@@ -22,26 +21,12 @@ export class SupabaseService {
     );
   }
 
-  // get getSession() {
-  //   this.supabase.auth
-  //     .getSession()
-  //     .then(({ data }) => (this.session = data.session));
-  //   return this.session;
-  // }
-
-  authChanges(
-    callback: (event: AuthChangeEvent, session: Session | null) => void
-  ) {
-    return this.supabase.auth.onAuthStateChange(callback);
+  setSession(session: Session | null) {
+    this.session = session;
   }
 
   getSession() {
     return this.supabase.auth.getSession();
-  }
-
-  async refresh() {
-    const { data, error } = await this.supabase.auth.getSession();
-    this.session = data.session;
   }
 
   signIn(email: string, password: string) {
@@ -58,7 +43,7 @@ export class SupabaseService {
     });
   }
 
-  async signOut() {
-    const { error } = await this.supabase.auth.signOut();
+  signOut() {
+    return this.supabase.auth.signOut();
   }
 }

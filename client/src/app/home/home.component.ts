@@ -39,7 +39,7 @@ export class HomeComponent {
           const { data: sessionData, error: sessionError } =
             await this.supabase.getSession();
 
-          this.supabase.session = sessionData.session;
+          this.supabase.setSession(sessionData.session);
           this.router.navigate(['']).then(error => console.log(error));
         } else {
           this.status = 'error';
@@ -72,7 +72,6 @@ export class HomeComponent {
           this.status = 'error';
         }
       }
-      // this.router.navigate([randomNumber]).then(error => console.log(error));
     }
   }
 }
