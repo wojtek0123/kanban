@@ -7,7 +7,6 @@
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  margin-top: 5rem;
 }
 
 .header h1 {
@@ -26,9 +25,10 @@
 }
 
 .form-button {
-  margin-top: 1rem;
+  margin-top: 2rem;
   background-color: var(--black-color);
   transition: opacity 0.3s;
+  width: 100%;
 }
 
 .form-button:hover {
@@ -62,6 +62,19 @@
   color: var(--secondary-color);
   font-weight: 700;
   letter-spacing: 0.5px;
+}
+
+.error {
+  border: 3px solid var(--error-color);
+  color: var(--error-color);
+}
+
+.form-invalid-message {
+  color: var(--error-color);
+}
+
+.form-error-message {
+  margin-top: 1rem;
 }
 
 @media (min-width: 768px) {

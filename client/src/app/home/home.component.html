@@ -1,44 +1,55 @@
 <header class="header">
   <h1>Manage the tasks the simple and easy way with kanban app</h1>
   <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="form">
-    <label class="form-label" for="email">Login</label>
+    <label class="form-label" for="email">Email</label>
     <input
       class="form-input"
       type="email"
       id="email"
       name="email"
+      [ngClass]="{ error: email.invalid && email.touched }"
       [(ngModel)]="user.email"
       #email="ngModel"
       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
       placeholder="email@xyz.abc"
       required />
-    <p *ngIf="email.invalid && email.touched">Please provide valid email.</p>
+    <p class="form-invalid-message" *ngIf="email.invalid && email.touched">
+      Please provide valid email.
+    </p>
     <label class="form-label" for="password">Password</label>
     <input
       class="form-input"
       type="password"
+      placeholder="•••••••••"
       id="password"
       name="password"
       #password="ngModel"
       pattern="[/\w|d/]{8,}"
       [(ngModel)]="user.password"
+      [ngClass]="{ error: password.invalid && password.touched }"
       required />
-    <p *ngIf="password.invalid && password.touched">
+    <p
+      class="form-invalid-message"
+      *ngIf="password.invalid && password.touched">
       Password should have at least 8 characters
     </p>
+    <p class="form-error-message" *ngIf="status === 'error' && isRegister">
+      Incorrect email or password
+    </p>
+    <button
+      [disabled]="form.invalid"
+      type="submit"
+      class="button-global form-button">
+      <p *ngIf="status !== 'loading'">
+        {{ isRegister ? 'Login' : 'Register' }}
+      </p>
+      <p *ngIf="status === 'loading'">Loading...</p>
+    </button>
     <div class="form-change">
       <p>{{ isRegister ? "Don't have account?" : 'Have an account?' }}</p>
       <button class="form-change-button" type="button" (click)="toggle()">
         {{ isRegister ? 'Sign Up' : 'Sign In' }}
       </button>
     </div>
-    <p *ngIf="status === 'loading'">Loading...</p>
-    <p *ngIf="status === 'error' && isRegister">Incorrect email or password</p>
-    <button
-      [disabled]="form.invalid"
-      type="submit"
-      class="button-global form-button">
-      {{ isRegister ? 'Login' : 'Register' }}
-    </button>
   </form>
 </header>
