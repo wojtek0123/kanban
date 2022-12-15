@@ -15,7 +15,7 @@
 
 }
 
-.form {
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,116 +28,36 @@
   grid-column: 1 / 2;
 }
 
-.form-wrapper {
+.home {
   width: 100%;
   max-width: 800px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
 }
 
-.form-heading {
+.home-heading {
   margin-bottom: 2rem;
 }
 
-.form-heading h2 {
+.home-heading h2 {
   font-size: 2rem;
 }
 
-.form-button {
-  margin-top: 2rem;
-  background-color: var(--black-color);
-  transition: opacity 0.3s;
-  width: 100%;
-}
-
-.form-button:hover {
-  opacity: 0.7;
-}
-
-.form-label {
-  font-size: 1.1rem;
-  margin: 0.5rem 0;
-}
-
-.form-input {
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--rounded);
-  font-size: 1.1rem;
-  width: 100%;
-}
-
-.form-change {
+.home-change {
   display: flex;
   align-items: center;
   margin-top: 1rem;
 }
 
-.form-change-button {
+.home-change-button {
   border: none;
   background: none;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
   color: var(--secondary-color);
   font-weight: 700;
-}
-
-.error {
-  border: 3px solid var(--error-color);
-  color: var(--error-color);
-}
-
-.form-invalid-message {
-  color: var(--error-color);
-}
-
-.form-error-message {
-  margin-top: 1rem;
-}
-
-.form-toast {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  transform: translateY(100%);
-  background-color: var(--secondary-color);
-  color: var(--black-color);
-  padding: 1rem 3rem;
-  border-radius: var(--rounded);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s linear;
-}
-
-.form-toast.show {
-  transform: translateY(0);
-}
-
-.form-toast-message {
-  font-size: 1.1rem;
-}
-
-.form-toast-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  /* background-color: var(--black-color); */
-  /* color: var(--font-color); */
-  color: var(--black-color);
-  padding: 0.25rem;
-  border-radius: var(--rounded);
-  font-weight: bold;
-  font-size: 1.3rem;
-  margin-left: 2rem;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-.form-toast-button:hover {
-  background-color: var(--black-color);
-  color: var(--font-color);
 }
 
 @media (min-width: 768px) {
@@ -149,13 +69,6 @@
   .header h1 {
     margin-right: 5rem;
     font-size: 2rem;
-  }
-
-  .form-toast {
-    width: max-content;
-    bottom: 1rem;
-    right: 1rem;
-    transform: translateY(calc(100% + 2rem));
   }
 }
 
@@ -173,7 +86,7 @@
     padding: 0 5rem;
   }
 
-  .form {
+  .container {
     position: relative;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
@@ -188,7 +101,7 @@
     place-items: center;
   }
 
-  .form-wrapper {
+  .home {
     max-width: 400px;
   }
 

@@ -1,0 +1,77 @@
+<form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <label class="form-label" for="email">Email</label>
+  <input
+    class="form-input"
+    type="email"
+    id="email"
+    name="email"
+    [ngClass]="{
+      error: formControls.email.invalid && formControls.email.touched
+    }"
+    placeholder="email@xyz.abc"
+    formControlName="email"
+    required />
+  <p
+    class="form-invalid-message"
+    *ngIf="formControls.email.invalid && formControls.email.touched">
+    Please provide valid email.
+  </p>
+  <label class="form-label" for="nick">Nick</label>
+  <input
+    class="form-input"
+    type="text"
+    id="nick"
+    formControlName="nickname"
+    [ngClass]="{
+      error: formControls.nickname.invalid && formControls.nickname.touched
+    }"
+    placeholder="john"
+    required />
+  <p
+    class="form-invalid-message"
+    *ngIf="nicknameLength === 0 && formControls.nickname.touched">
+    Nickname is required.
+  </p>
+  <p
+    class="form-invalid-message"
+    *ngIf="
+      formControls.nickname.invalid &&
+      nicknameLength !== 0 &&
+      formControls.nickname.touched
+    ">
+    Nickname has max 25 characters.
+  </p>
+  <label class="form-label" for="password">Password</label>
+  <input
+    class="form-input"
+    type="password"
+    placeholder="•••••••••"
+    id="password"
+    formControlName="password"
+    [ngClass]="{
+      error: formControls.password.invalid && formControls.password.touched
+    }"
+    required />
+  <p
+    class="form-invalid-message"
+    *ngIf="formControls.password.invalid && formControls.password.touched">
+    Password should have at least 8 characters
+  </p>
+  <p class="form-error-message" *ngIf="status === 'error'">
+    {{ errorMessage }}
+  </p>
+  <button type="submit" class="button-global form-button">
+    <p *ngIf="status !== 'loading'">Register</p>
+    <p *ngIf="status === 'loading'">Loading...</p>
+  </button>
+</form>
+
+<div class="toast" [ngClass]="{ show: showToast }">
+  <p class="toast-message" *ngIf="status === 'ok'">
+    Check your mailbox. We send you a email to verify!
+  </p>
+  <p class="toast-message" *ngIf="status === 'error'">
+    {{ errorMessage }}
+  </p>
+  <button class="toast-button" type="button" (click)="closeToast()">X</button>
+</div>

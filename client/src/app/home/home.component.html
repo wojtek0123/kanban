@@ -2,88 +2,26 @@
   <div class="header-heading">
     <h1>Manage the tasks the simple and easy way with kanban app</h1>
   </div>
-  <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="form">
-    <div class="form-wrapper">
-      <div *ngIf="isRegister" class="form-heading">
+  <div class="container">
+    <div class="home">
+      <div *ngIf="isRegister" class="home-heading">
         <h2>Welcome back!</h2>
         <p>Sign in to your account</p>
       </div>
-      <div *ngIf="!isRegister" class="form-heading">
+      <div *ngIf="!isRegister" class="home-heading">
         <h2>Get started!</h2>
         <p>Create a new account</p>
       </div>
-      <label class="form-label" for="email">Email</label>
-      <input
-        class="form-input"
-        type="email"
-        id="email"
-        name="email"
-        [ngClass]="{ error: email.invalid && email.touched }"
-        [(ngModel)]="user.email"
-        #email="ngModel"
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-        placeholder="email@xyz.abc"
-        required />
-      <p class="form-invalid-message" *ngIf="email.invalid && email.touched">
-        Please provide valid email.
-      </p>
-      <label *ngIf="!isRegister" class="form-label" for="nick">Nick</label>
-      <input
-        *ngIf="!isRegister"
-        class="form-input"
-        type="text"
-        id="nick"
-        name="nick"
-        #nick="ngModel"
-        [ngClass]="{
-          error: nick.invalid && nick.touched
-        }"
-        [(ngModel)]="user.nick"
-        placeholder="norman"
-        required />
-      <label class="form-label" for="password">Password</label>
-      <input
-        class="form-input"
-        type="password"
-        placeholder="•••••••••"
-        id="password"
-        name="password"
-        #password="ngModel"
-        pattern="[/\w|d/]{8,}"
-        [(ngModel)]="user.password"
-        [ngClass]="{ error: password.invalid && password.touched }"
-        required />
-      <p
-        class="form-invalid-message"
-        *ngIf="password.invalid && password.touched">
-        Password should have at least 8 characters
-      </p>
-      <p class="form-error-message" *ngIf="status === 'error' && isRegister">
-        Incorrect email or password
-      </p>
-      <button
-        [disabled]="form.invalid"
-        type="submit"
-        class="button-global form-button">
-        <p *ngIf="status !== 'loading'">
-          {{ isRegister ? 'Login' : 'Register' }}
-        </p>
-        <p *ngIf="status === 'loading'">Loading...</p>
-      </button>
-      <div class="form-change">
+
+      <app-login *ngIf="isRegister"></app-login>
+      <app-register *ngIf="!isRegister"></app-register>
+
+      <div class="home-change">
         <p>{{ isRegister ? "Don't have account?" : 'Have an account?' }}</p>
-        <button class="form-change-button" type="button" (click)="toggle()">
+        <button class="home-change-button" type="button" (click)="toggle()">
           {{ isRegister ? 'Sign Up' : 'Sign In' }}
         </button>
       </div>
     </div>
-  </form>
+  </div>
 </header>
-<div class="form-toast" [ngClass]="{ show: showToast }">
-  <p class="form-toast-message">
-    Check your mailbox. We send you a email to verify!
-  </p>
-  <button class="form-toast-button" type="button" (click)="closeToast()">
-    X
-  </button>
-</div>
