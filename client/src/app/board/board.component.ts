@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
 import { Subscription } from 'rxjs';
@@ -43,7 +43,7 @@ export interface Project {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit, OnDestroy, DoCheck {
+export class BoardComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
   projectsQuery!: QueryRef<any>;
   subscription!: Subscription;
@@ -65,7 +65,6 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     this.userId = data.session?.user.id ?? '';
-    console.log(this.userId);
     this.projectsQuery = this.apollo.watchQuery<{ projects: Project[] }>({
       query: GET_PROJECTS,
       variables: {
@@ -74,35 +73,23 @@ export class BoardComponent implements OnInit, OnDestroy, DoCheck {
     });
 
     this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
-      this.projects = result.data.projects;
-      if (
-        result.data.projects.length === 0 ||
-        this.boardService.selectedBoardId.value
-      ) {
+      if (result.data.projects.length === 0) {
         return;
       }
-      this.boardService.onChangeSelectedBoard(
-        result.data.projects[0].boards[0]
+
+      this.projects = result.data.projects;
+
+      if (this.boardService.selectedBoard.value) {
+        return;
+      }
+
+      const projectsWithBoards: Project[] = result.data.projects.filter(
+        (project: Project) => project.boards[0]
       );
-      this.boardService.selectedBoardId.next(
-        result.data.projects[0].boards[0]?.id
-      );
+      if (projectsWithBoards.length === 0) return;
+
+      this.boardService.onChangeSelectedBoard(projectsWithBoards[0].boards[0]);
     });
-  }
-
-  ngDoCheck(): void {
-    const boards = this.projects.map(project =>
-      project.boards.find(
-        board => board.id === this.boardService.selectedBoardId.value
-      )
-    );
-
-    const board = boards.find(
-      board => board?.id === this.boardService.selectedBoardId.value
-    );
-    if (board) {
-      this.boardService.onChangeSelectedBoard(board);
-    }
   }
 
   ngOnDestroy(): void {

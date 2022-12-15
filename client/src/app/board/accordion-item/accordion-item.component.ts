@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Project } from '../board.component';
+import { Project, Board } from '../board.component';
 import { BoardService } from '../board.service';
 import { FormService, FormType } from '../form/form.service';
 import { NavigationService } from '../mobile-navigation/navigation.service';
@@ -23,9 +23,8 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.boardService.selectedBoardId.subscribe(id => {
-      this.selectedBoardId = id;
-      console.log(id);
+    this.subscription = this.boardService.selectedBoard.subscribe(data => {
+      this.selectedBoardId = data?.id ?? '';
     });
   }
 
@@ -38,8 +37,8 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
     this.showContent = state;
   }
 
-  onSelectBoard(boardId: string) {
-    this.boardService.onChangeSelectedBoardId(boardId);
+  onSelectBoard(board: Board) {
+    this.boardService.onChangeSelectedBoard(board);
     this.navigationService.onMenu();
   }
 

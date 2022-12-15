@@ -42,7 +42,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     try {
       const { error } = await this.supabase.signOut();
       if (error) {
-        throw new Error(error.message);
+        console.error(error.message);
       }
       this.router.navigate(['/home']);
     } catch (error) {

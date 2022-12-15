@@ -195,7 +195,7 @@ export class FormComponent implements OnInit, OnDestroy {
           mutation: ADD_COLUMN,
           variables: {
             name: this.boardForm.value.column?.name,
-            boardId: this.boardService.selectedBoardId.value,
+            boardId: this.boardService.selectedBoard.value?.id ?? '',
           },
           refetchQueries: [
             {

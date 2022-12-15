@@ -66,7 +66,6 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
       })
       .subscribe(value => {
         if (mutation === REMOVE_PROJECT) {
-          this.boardService.onChangeSelectedBoardId('');
           this.boardService.onChangeSelectedBoard(undefined);
         }
       });
