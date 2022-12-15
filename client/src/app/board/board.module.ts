@@ -7,10 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { BoardDetailsComponent } from './board-details/board-details.component';
-import { ContextMenuComponent } from './board-details/context-menu/context-menu.component';
-import { ContextMenuModalComponent } from './board-details/context-menu-modal/context-menu-modal.component';
-import { CollapseButtonComponent } from './accordion/collapse-button/collapse-button.component';
-import { AccordionItemComponent } from './accordion/accordion-item/accordion-item.component';
+import { ContextMenuComponent } from './context-menu/context-menu.component';
+import { ContextMenuModalComponent } from './context-menu-modal/context-menu-modal.component';
+import { CollapseButtonComponent } from './collapse-button/collapse-button.component';
+import { AccordionItemComponent } from './accordion-item/accordion-item.component';
 
 @NgModule({
   declarations: [

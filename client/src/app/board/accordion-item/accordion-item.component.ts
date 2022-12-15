@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Project } from '../../board.component';
-import { BoardService } from '../../board.service';
-import { FormService, FormType } from '../../form/form.service';
-import { NavigationService } from '../../mobile-navigation/navigation.service';
+import { Project } from '../board.component';
+import { BoardService } from '../board.service';
+import { FormService, FormType } from '../form/form.service';
+import { NavigationService } from '../mobile-navigation/navigation.service';
 
 @Component({
   selector: 'app-accordion-item',

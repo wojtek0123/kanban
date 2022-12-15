@@ -20,7 +20,7 @@ import {
   EDIT_SUBTASK,
   ADD_PROJECT,
   EDIT_PROJECT,
-} from 'src/app/graphql/graphql.schema';
+} from 'src/app/graphql.schema';
 import { Board } from '../board.component';
 import { BoardService } from '../board.service';
 import { SupabaseService } from 'src/app/supabase.service';

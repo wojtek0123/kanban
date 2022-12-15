@@ -9,8 +9,8 @@ import {
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
-} from 'src/app/graphql/graphql.schema';
-import { BoardService } from '../../board.service';
+} from 'src/app/graphql.schema';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-context-menu-modal',

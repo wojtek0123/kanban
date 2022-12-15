@@ -3,7 +3,7 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { FormService, FormType } from './form/form.service';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
-import { GET_PROJECTS } from '../graphql/graphql.schema';
+import { GET_PROJECTS } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 
 export interface Subtask {
