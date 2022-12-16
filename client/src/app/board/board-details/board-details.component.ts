@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Board } from '../board.component';
 import { BoardService } from '../board.service';
 import { FormService, FormType } from '../form/form.service';
@@ -23,9 +23,9 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscription = this.boardService.selectedBoard.subscribe(
-      board => (this.selectedBoard = board)
-    );
+    this.subscription = this.boardService.selectedBoard.subscribe(board => {
+      this.selectedBoard = board;
+    });
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {

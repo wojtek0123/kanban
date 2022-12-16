@@ -73,13 +73,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
 
     this.subscription = this.projectsQuery.valueChanges.subscribe(result => {
-      if (result.data.projects.length === 0) {
-        return;
-      }
-
       this.projects = result.data.projects;
 
       if (this.boardService.selectedBoard.value) {
+        this.updateSelectedBoard();
         return;
       }
 
@@ -87,13 +84,22 @@ export class BoardComponent implements OnInit, OnDestroy {
         (project: Project) => project.boards[0]
       );
       if (projectsWithBoards.length === 0) return;
-
       this.boardService.onChangeSelectedBoard(projectsWithBoards[0].boards[0]);
     });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  updateSelectedBoard() {
+    const boardId = this.boardService.selectedBoard.value?.id ?? '';
+
+    const boards = this.projects.map(project =>
+      project.boards.filter(board => board.id === boardId)
+    );
+    const board = boards.filter(board => board.length !== 0);
+    this.boardService.selectedBoard.next(board[0][0]);
   }
 
   onForm(type: FormType, columnId?: string) {
