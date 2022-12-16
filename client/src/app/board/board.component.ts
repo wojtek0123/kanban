@@ -1,42 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { FormService, FormType } from './form/form.service';
+import { FormService } from './form/form.service';
 import { Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { GET_PROJECTS } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
-
-export interface Subtask {
-  id: string;
-  name: string;
-  isFinished: boolean;
-}
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  subtasks: Subtask[];
-}
-
-export interface Column {
-  id: string;
-  name: string;
-  tasks: Task[];
-}
-
-export interface Board {
-  id: string;
-  name: string;
-  columns: Column[];
-}
-
-export interface Project {
-  id: string;
-  name: string;
-  boards: Board[];
-}
+import { Project, FormType } from '../types';
 
 @Component({
   selector: 'app-board',

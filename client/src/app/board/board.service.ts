@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Board } from './board.component';
+import { Board } from '../types';
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {

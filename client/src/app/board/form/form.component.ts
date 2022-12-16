@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FormService, FormType } from './form.service';
+import { FormService } from './form.service';
 import {
   FormBuilder,
   Validators,
@@ -21,7 +21,7 @@ import {
   ADD_PROJECT,
   EDIT_PROJECT,
 } from 'src/app/graphql.schema';
-import { Board } from '../board.component';
+import { Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
 import { SupabaseService } from 'src/app/supabase.service';
 
@@ -72,7 +72,7 @@ export class FormComponent implements OnInit, OnDestroy {
         [Validators.required],
       ],
       tags: this.formBuilder.array(
-        this.formService.editingTask?.tags.map(tag =>
+        this.formService.editingTask?.tags.map((tag: string) =>
           this.formBuilder.control(tag)
         ) ?? []
       ),

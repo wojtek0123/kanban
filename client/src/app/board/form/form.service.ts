@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Task, Column, Board, Subtask, Project } from '../board.component';
-export type FormType = 'project' | 'board' | 'task' | 'column' | 'subtask';
+import { Task, Column, Board, Subtask, Project, FormType } from '../../types';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {

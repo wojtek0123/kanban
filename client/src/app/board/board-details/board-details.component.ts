@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Board } from '../board.component';
+import { Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
-import { FormService, FormType } from '../form/form.service';
+import { FormService } from '../form/form.service';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';

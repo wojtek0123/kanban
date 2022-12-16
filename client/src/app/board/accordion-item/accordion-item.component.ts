@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Project, Board } from '../board.component';
+import { Project, Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
-import { FormService, FormType } from '../form/form.service';
+import { FormService } from '../form/form.service';
 import { NavigationService } from '../mobile-navigation/navigation.service';
 
 @Component({

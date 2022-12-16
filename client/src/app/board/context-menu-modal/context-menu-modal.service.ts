@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FormType } from '../form/form.service';
+import { FormType } from '../../types';
 
 @Injectable({ providedIn: 'root' })
 export class ContextMenuModalService {

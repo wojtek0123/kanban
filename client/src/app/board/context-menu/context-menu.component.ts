@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
-import { FormType } from '../form/form.service';
-import { Task, Column, Board, Subtask, Project } from '../board.component';
+import { Task, Column, Board, Subtask, Project, FormType } from '../../types';
 import { Subscription } from 'rxjs';
 import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
 

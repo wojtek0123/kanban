@@ -6,7 +6,7 @@ import {
   animate,
 } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Project } from '../board.component';
+import { Project } from '../../types';
 import { BoardService } from '../board.service';
 
 @Component({

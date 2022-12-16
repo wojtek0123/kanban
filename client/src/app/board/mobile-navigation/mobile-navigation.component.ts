@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Project } from '../board.component';
-import { FormService, FormType } from '../form/form.service';
+import { Project, FormType } from '../../types';
+import { FormService } from '../form/form.service';
 import {
   animate,
   state,
@@ -52,7 +52,7 @@ export class MobileNavigationComponent {
     try {
       const { error } = await this.supabase.signOut();
       if (error) {
-        throw new Error(error.message);
+        console.error(error.message);
       }
       this.router.navigate(['/home']);
     } catch (error) {

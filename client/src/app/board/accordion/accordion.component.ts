@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Project } from '../board.component';
+import { Project } from '../../types';
 import { BoardService } from '../board.service';
 import { NavigationService } from '../mobile-navigation/navigation.service';
 
