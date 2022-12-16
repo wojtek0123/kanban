@@ -24,7 +24,9 @@
   </div>
 </div>
 <div class="tasks" *ngIf="selectedBoard">
-  <p *ngIf="selectedBoard.columns?.length === 0">No columns to display</p>
+  <p class="warning-message" *ngIf="selectedBoard.columns?.length === 0">
+    No columns to display
+  </p>
   <section class="section" *ngFor="let column of selectedBoard?.columns">
     <div class="section-heading">
       <h2 class="section-title">{{ column.name }}</h2>
@@ -40,7 +42,9 @@
       Add task
     </button>
     <div class="cards">
-      <p *ngIf="column.tasks.length === 0">No tasks to display</p>
+      <p class="warning-message" *ngIf="column.tasks.length === 0">
+        No tasks to display
+      </p>
       <div class="card" *ngFor="let task of column.tasks">
         <div class="card-tags">
           <span *ngFor="let tag of task.tags">{{ tag }}</span>

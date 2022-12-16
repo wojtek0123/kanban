@@ -24,6 +24,7 @@
 
 .accordion-item-paragraph {
   cursor: default;
+  color: var(--error-color);
 }
 
 .highlight {
