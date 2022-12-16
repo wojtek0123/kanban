@@ -38,6 +38,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   }
 
   onSelectBoard(board: Board) {
+    this.boardService.onChangeSelectedProjectId(this.project.id);
     this.boardService.onChangeSelectedBoard(board);
     this.navigationService.onMenu();
   }

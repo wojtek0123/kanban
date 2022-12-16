@@ -9,7 +9,7 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
   styleUrls: ['./accordion.component.css'],
 })
 export class AccordionComponent {
-  @Input() projects!: Project[];
+  @Input() projects: Project[] | undefined = undefined;
 
   showContent = true;
   selectedBoardId = '';

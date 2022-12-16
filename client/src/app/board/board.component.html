@@ -1,10 +1,11 @@
-<app-mobile-navigation [projects]="projects"></app-mobile-navigation>
+<app-mobile-navigation
+  [projects]="(data | async)?.projects"></app-mobile-navigation>
 <app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion [projects]="projects"></app-accordion>
+      <app-accordion [projects]="(data | async)?.projects"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button

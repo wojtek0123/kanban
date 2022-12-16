@@ -35,7 +35,7 @@ import { Router } from '@angular/router';
   ],
 })
 export class MobileNavigationComponent {
-  @Input() projects!: Project[];
+  @Input() projects: Project[] | undefined = undefined;
 
   constructor(
     private formService: FormService,

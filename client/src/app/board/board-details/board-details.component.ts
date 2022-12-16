@@ -5,6 +5,7 @@ import { FormService } from '../form/form.service';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
+import { ApolloService } from '../apollo.service';
 
 @Component({
   selector: 'app-board-details',
