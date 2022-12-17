@@ -1,6 +1,7 @@
 <app-collapse-button
   [project]="project"
-  (toggleMenu)="toggleShowContent($event)"></app-collapse-button>
+  (toggleMenu)="toggleShowContent($event)"
+  [showContent]="showContent"></app-collapse-button>
 <ul class="accordion-list" [ngClass]="{ show: showContent }">
   <li *ngFor="let board of project.boards">
     <button

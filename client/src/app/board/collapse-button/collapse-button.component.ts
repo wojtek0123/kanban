@@ -24,7 +24,7 @@ import { BoardService } from '../board.service';
 export class CollapseButtonComponent {
   @Input() project!: Project;
   @Output() toggleMenu = new EventEmitter<boolean>();
-  showContent = true;
+  @Input() showContent!: boolean;
 
   constructor(private boardService: BoardService) {}
 

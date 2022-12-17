@@ -12,7 +12,7 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {
   @Input() project!: Project;
-  showContent = true;
+  showContent = false;
   selectedBoardId = '';
   subscription = new Subscription();
 
@@ -25,6 +25,14 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.boardService.selectedBoard.subscribe(data => {
       this.selectedBoardId = data?.id ?? '';
+
+      if (
+        this.project.boards.find(
+          (board: Board) => board.id === this.selectedBoardId
+        )
+      ) {
+        this.showContent = true;
+      }
     });
   }
 
