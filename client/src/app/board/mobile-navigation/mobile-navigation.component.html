@@ -15,7 +15,9 @@
 <nav
   class="navigation-container"
   [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'">
-  <button class="button-global" (click)="onLogout()">Logout</button>
+  <button class="button-global navigation-logout-button" (click)="onLogout()">
+    Logout
+  </button>
   <div class="navigation-wrapper">
     <app-accordion [projects]="projects"></app-accordion>
   </div>
