@@ -12,10 +12,15 @@ import {
   EDIT_SUBTASK,
   EDIT_TASK,
   GET_PROJECTS,
+  REMOVE_BOARD,
+  REMOVE_COLUMN,
+  REMOVE_PROJECT,
+  REMOVE_SUBTASK,
+  REMOVE_TASK,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
-import { Board, Project } from '../types';
+import { Board, FormType, Project } from '../types';
 import { BoardService } from './board.service';
 
 @Injectable({
@@ -193,6 +198,42 @@ export class ApolloService {
     }>({
       mutation: EDIT_SUBTASK,
       variables: { id, name, isFinished },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  remove(id: string, type: FormType) {
+    let mutation: any;
+    switch (type) {
+      case 'project':
+        mutation = REMOVE_PROJECT;
+        break;
+      case 'board':
+        mutation = REMOVE_BOARD;
+        break;
+      case 'column':
+        mutation = REMOVE_COLUMN;
+        break;
+      case 'task':
+        mutation = REMOVE_TASK;
+        break;
+      case 'subtask':
+        mutation = REMOVE_SUBTASK;
+        break;
+    }
+
+    return this.apollo.mutate({
+      mutation,
+      variables: {
+        id,
+      },
       refetchQueries: [
         {
           query: GET_PROJECTS,
