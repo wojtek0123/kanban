@@ -1,8 +1,5 @@
 <div class="collapse-wrapper">
-  <button
-    type="button"
-    class="collapse-button"
-    (click)="toggleShowContent(project.id)">
+  <button type="button" class="collapse-button" (click)="toggleShowContent()">
     <img
       [@rotateState]="!showContent ? 'default' : 'rotated'"
       class="collapse-button-image"

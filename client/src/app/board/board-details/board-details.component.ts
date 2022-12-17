@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
-import { ApolloService } from '../apollo.service';
 
 @Component({
   selector: 'app-board-details',
