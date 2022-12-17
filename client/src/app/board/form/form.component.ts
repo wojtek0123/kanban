@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from './form.service';
 import {
   FormBuilder,
@@ -7,34 +6,19 @@ import {
   FormArray,
   FormControl,
 } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
-import {
-  GET_PROJECTS,
-  ADD_BOARD,
-  ADD_COLUMN,
-  ADD_TASK,
-  EDIT_BOARD,
-  EDIT_COLUMN,
-  EDIT_TASK,
-  ADD_SUBTASK,
-  EDIT_SUBTASK,
-  ADD_PROJECT,
-  EDIT_PROJECT,
-} from 'src/app/graphql.schema';
-import { Board, FormType } from '../../types';
-import { BoardService } from '../board.service';
-import { SupabaseService } from 'src/app/supabase.service';
+import { FormType } from '../../types';
+import { ApolloService } from '../apollo.service';
+import { tap, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class FormComponent implements OnInit {
   typeOfForm!: FormType;
   isEditing!: boolean;
   isSubmitted = false;
-  private subscriptions: Subscription[] = [];
 
   boardForm = this.formBuilder.group({
     project: this.formBuilder.group({
@@ -84,10 +68,8 @@ export class FormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formService: FormService,
-    private apollo: Apollo,
-    private formBuilder: FormBuilder,
-    private boardService: BoardService,
-    private supabase: SupabaseService
+    private apollo: ApolloService,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -135,264 +117,99 @@ export class FormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (
-      this.typeOfForm === 'project' &&
-      !this.isEditing &&
-      this.boardForm.controls.project.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: ADD_PROJECT,
-          variables: {
-            name: this.boardForm.value.project?.name ?? '',
-            userId: this.supabase.getUserId,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
+    if (this.isEditing) {
+      if (
+        this.typeOfForm === 'project' &&
+        this.boardForm.controls.editProject.valid
+      ) {
+        const projectId = this.formService.editingProject?.id ?? '';
+        const projectName = this.boardForm.value.editProject?.name ?? '';
 
-    if (
-      this.typeOfForm === 'board' &&
-      !this.isEditing &&
-      this.boardForm.controls.board.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate<{ AddBoard: Board }>({
-          mutation: ADD_BOARD,
-          variables: {
-            name: this.boardForm.value.board?.name,
-            projectId: this.boardService.selectedProjectId.value,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
+        this.apollo.editProject(projectId, projectName).subscribe();
+      }
+      if (
+        this.typeOfForm === 'board' &&
+        this.boardForm.controls.editBoard.valid
+      ) {
+        const boardId = this.formService.editingBoard?.id ?? '';
+        const boardName = this.boardForm.value.editBoard?.name ?? '';
 
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'column' &&
-      !this.isEditing &&
-      this.boardForm.controls.column.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: ADD_COLUMN,
-          variables: {
-            name: this.boardForm.value.column?.name,
-            boardId: this.boardService.selectedBoard.value?.id ?? '',
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'task' &&
-      !this.isEditing &&
-      this.boardForm.controls.task.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: ADD_TASK,
-          variables: {
-            title: this.boardForm.value.task?.title,
-            description: this.boardForm.value.task?.description,
-            columnId: this.boardService.selectedColumnId.value,
-            tags: this.tags.value,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'subtask' &&
-      !this.isEditing &&
-      this.boardForm.controls.subtask.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: ADD_SUBTASK,
-          variables: {
-            name: this.boardForm.value.subtask?.name,
-            isFinished: false,
-            taskId: this.boardService.selectedTaskId.value,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
+        this.apollo.editBoard(boardId, boardName).subscribe();
+      }
+      if (
+        this.typeOfForm === 'column' &&
+        this.boardForm.controls.editColumn.valid
+      ) {
+        const columnId = this.formService.editingColumn?.id ?? '';
+        const columnName = this.boardForm.value.editColumn?.name ?? '';
 
-    if (
-      this.typeOfForm === 'project' &&
-      this.isEditing &&
-      this.boardForm.controls.editProject.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: EDIT_PROJECT,
-          variables: {
-            id: this.formService.editingProject?.id,
-            name: this.boardForm.value.editProject?.name,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'board' &&
-      this.isEditing &&
-      this.boardForm.controls.editBoard.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: EDIT_BOARD,
-          variables: {
-            id: this.formService.editingBoard?.id,
-            name: this.boardForm.value.editBoard?.name,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'column' &&
-      this.isEditing &&
-      this.boardForm.controls.editColumn.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: EDIT_COLUMN,
-          variables: {
-            id: this.formService.editingColumn?.id,
-            name: this.boardForm.value.editColumn?.name,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'task' &&
-      this.isEditing &&
-      this.boardForm.controls.editTask.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: EDIT_TASK,
-          variables: {
-            id: this.formService.editingTask?.id,
-            title: this.boardForm.value.editTask?.title,
-            description: this.boardForm.value.editTask?.description,
-            tags: this.editedTags.value,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    if (
-      this.typeOfForm === 'subtask' &&
-      this.isEditing &&
-      this.boardForm.controls.subtask.valid
-    ) {
-      const mutationSubscription = this.apollo
-        .mutate({
-          mutation: EDIT_SUBTASK,
-          variables: {
-            id: this.formService.editingSubtask?.id,
-            name: this.boardForm.value.editSubtask?.name,
-            isFinished: false,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId: this.supabase.getUserId,
-              },
-            },
-          ],
-        })
-        .subscribe();
-      this.subscriptions = [...this.subscriptions, mutationSubscription];
-    }
-    this.formService.isEditing = false;
-    this.formService.onChangeFormVisibility();
-  }
+        this.apollo.editColumn(columnId, columnName).subscribe();
+      }
+      if (
+        this.typeOfForm === 'task' &&
+        this.boardForm.controls.editTask.valid
+      ) {
+        const taskId = this.formService.editingTask?.id ?? '';
+        const taskTitle = this.boardForm.value.editTask?.title ?? '';
+        const taskDescription =
+          this.boardForm.value.editTask?.description ?? '';
+        const taskTags = this.tags.value ?? [];
 
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub && sub.unsubscribe) {
-        sub.unsubscribe();
+        this.apollo
+          .editTask(taskId, taskTitle, taskDescription, taskTags)
+          .subscribe();
+      }
+      if (
+        this.typeOfForm === 'subtask' &&
+        this.boardForm.controls.editSubtask.valid
+      ) {
+        const subtaskId = this.formService.editingSubtask?.id ?? '';
+        const subtaskName = this.boardForm.value.subtask?.name ?? '';
+
+        this.apollo.editSubtask(subtaskId, subtaskName, false).subscribe();
+      }
+    } else {
+      if (this.typeOfForm === 'board' && this.boardForm.controls.board.valid) {
+        const boardName = this.boardForm.value.board?.name ?? '';
+        this.apollo.addBoard(boardName).subscribe();
+      }
+
+      if (
+        this.typeOfForm === 'column' &&
+        this.boardForm.controls.column.valid
+      ) {
+        const columnName = this.boardForm.value.column?.name ?? '';
+        this.apollo.addColumn(columnName).subscribe();
+      }
+
+      if (this.typeOfForm === 'task' && this.boardForm.controls.task.valid) {
+        const taskTitle = this.boardForm.value.task?.title ?? '';
+        const taskDescription = this.boardForm.value.task?.description ?? '';
+        const taskTags = this.tags.value;
+
+        this.apollo.addTask(taskTitle, taskDescription, taskTags).subscribe();
+      }
+
+      if (
+        this.typeOfForm === 'subtask' &&
+        this.boardForm.controls.subtask.valid
+      ) {
+        const subtaskName = this.boardForm.value.subtask?.name ?? '';
+
+        this.apollo.addSubtask(subtaskName, false).subscribe();
       }
     }
+
+    if (
+      this.typeOfForm === 'project' &&
+      this.boardForm.controls.project.valid
+    ) {
+      this.apollo
+        .addProject(this.boardForm.value.project?.name ?? '')
+        .subscribe();
+    }
+
+    this.formService.isEditing = false;
+    this.formService.onChangeFormVisibility();
   }
 }

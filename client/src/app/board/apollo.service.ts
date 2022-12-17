@@ -1,26 +1,200 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_PROJECTS } from '../graphql.schema';
+import {
+  ADD_BOARD,
+  ADD_COLUMN,
+  ADD_PROJECT,
+  ADD_TASK,
+  EDIT_BOARD,
+  EDIT_COLUMN,
+  EDIT_PROJECT,
+  EDIT_SUBTASK,
+  EDIT_TASK,
+  GET_PROJECTS,
+} from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
 import { Project } from '../types';
+import { BoardService } from './board.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApolloService {
-  constructor(private apollo: Apollo, private supabase: SupabaseService) {}
+  private readonly userId!: string;
+
+  constructor(
+    private apollo: Apollo,
+    private supabase: SupabaseService,
+    private board: BoardService
+  ) {
+    this.userId = this.supabase.getUserId;
+  }
 
   getProjects(): Observable<{ projects: Project[] }> {
-    const userId = this.supabase.getUserId;
+    // const userId = this.supabase.getUserId;
 
     // if (error) return undefined;
 
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
-        variables: { userId },
+        variables: { userId: this.userId },
       })
       .valueChanges.pipe(map(({ data }) => data));
+  }
+
+  addProject(name: string) {
+    return this.apollo.mutate({
+      mutation: ADD_PROJECT,
+      variables: { name, userId: this.userId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  addBoard(name: string) {
+    const projectId = this.board.selectedProjectId.value;
+    return this.apollo.mutate({
+      mutation: ADD_BOARD,
+      variables: { name, projectId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  addColumn(name: string) {
+    const boardId = this.board.selectedBoard.value?.id ?? '';
+
+    return this.apollo.mutate({
+      mutation: ADD_COLUMN,
+      variables: { name, boardId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  addTask(title: string, description: string, tags: string[]) {
+    const columnId = this.board.selectedColumnId.value;
+
+    return this.apollo.mutate({
+      mutation: ADD_TASK,
+      variables: { title, description, columnId, tags },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  addSubtask(name: string, isFinished: boolean) {
+    const taskId = this.board.selectedTaskId.value;
+
+    return this.apollo.mutate({
+      mutation: ADD_TASK,
+      variables: { name, isFinished, taskId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  editProject(id: string, name: string) {
+    return this.apollo.mutate({
+      mutation: EDIT_PROJECT,
+      variables: { id, name },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+  editBoard(id: string, name: string) {
+    return this.apollo.mutate({
+      mutation: EDIT_BOARD,
+      variables: { id, name },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+  editColumn(id: string, name: string) {
+    return this.apollo.mutate({
+      mutation: EDIT_COLUMN,
+      variables: { id, name },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+  editTask(id: string, title: string, description: string, tags: string[]) {
+    return this.apollo.mutate({
+      mutation: EDIT_TASK,
+      variables: { id, title, description, tags },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  editSubtask(id: string, name: string, isFinished: boolean) {
+    return this.apollo.mutate({
+      mutation: EDIT_SUBTASK,
+      variables: { id, name, isFinished },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
   }
 }
