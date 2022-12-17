@@ -4,6 +4,7 @@ import {
   ADD_BOARD,
   ADD_COLUMN,
   ADD_PROJECT,
+  ADD_SUBTASK,
   ADD_TASK,
   EDIT_BOARD,
   EDIT_COLUMN,
@@ -32,10 +33,6 @@ export class ApolloService {
   }
 
   getProjects(): Observable<{ projects: Project[] }> {
-    // const userId = this.supabase.getUserId;
-
-    // if (error) return undefined;
-
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
@@ -45,7 +42,7 @@ export class ApolloService {
   }
 
   addProject(name: string) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ addProject: { id: string; name: string } }>({
       mutation: ADD_PROJECT,
       variables: { name, userId: this.userId },
       refetchQueries: [
@@ -61,7 +58,7 @@ export class ApolloService {
 
   addBoard(name: string) {
     const projectId = this.board.selectedProjectId.value;
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ addBoard: { id: string; name: string } }>({
       mutation: ADD_BOARD,
       variables: { name, projectId },
       refetchQueries: [
@@ -78,7 +75,7 @@ export class ApolloService {
   addColumn(name: string) {
     const boardId = this.board.selectedBoard.value?.id ?? '';
 
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
       mutation: ADD_COLUMN,
       variables: { name, boardId },
       refetchQueries: [
@@ -95,7 +92,7 @@ export class ApolloService {
   addTask(title: string, description: string, tags: string[]) {
     const columnId = this.board.selectedColumnId.value;
 
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ addTask: { id: string } }>({
       mutation: ADD_TASK,
       variables: { title, description, columnId, tags },
       refetchQueries: [
@@ -112,8 +109,8 @@ export class ApolloService {
   addSubtask(name: string, isFinished: boolean) {
     const taskId = this.board.selectedTaskId.value;
 
-    return this.apollo.mutate({
-      mutation: ADD_TASK,
+    return this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
+      mutation: ADD_SUBTASK,
       variables: { name, isFinished, taskId },
       refetchQueries: [
         {
@@ -127,7 +124,7 @@ export class ApolloService {
   }
 
   editProject(id: string, name: string) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ editProject: { id: string; name: string } }>({
       mutation: EDIT_PROJECT,
       variables: { id, name },
       refetchQueries: [
@@ -141,7 +138,7 @@ export class ApolloService {
     });
   }
   editBoard(id: string, name: string) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ editBoard: { id: string; name: string } }>({
       mutation: EDIT_BOARD,
       variables: { id, name },
       refetchQueries: [
@@ -155,7 +152,7 @@ export class ApolloService {
     });
   }
   editColumn(id: string, name: string) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
       mutation: EDIT_COLUMN,
       variables: { id, name },
       refetchQueries: [
@@ -169,7 +166,14 @@ export class ApolloService {
     });
   }
   editTask(id: string, title: string, description: string, tags: string[]) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{
+      editTask: {
+        id: string;
+        title: string;
+        description: string;
+        tags: string[];
+      };
+    }>({
       mutation: EDIT_TASK,
       variables: { id, title, description, tags },
       refetchQueries: [
@@ -184,7 +188,9 @@ export class ApolloService {
   }
 
   editSubtask(id: string, name: string, isFinished: boolean) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{
+      editSubtask: { id: string; name: string; isFinished: boolean };
+    }>({
       mutation: EDIT_SUBTASK,
       variables: { id, name, isFinished },
       refetchQueries: [

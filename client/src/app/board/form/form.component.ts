@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { FormType } from '../../types';
 import { ApolloService } from '../apollo.service';
-import { tap, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form',
@@ -169,6 +168,15 @@ export class FormComponent implements OnInit {
         this.apollo.editSubtask(subtaskId, subtaskName, false).subscribe();
       }
     } else {
+      if (
+        this.typeOfForm === 'project' &&
+        this.boardForm.controls.project.valid
+      ) {
+        this.apollo
+          .addProject(this.boardForm.value.project?.name ?? '')
+          .subscribe();
+      }
+
       if (this.typeOfForm === 'board' && this.boardForm.controls.board.valid) {
         const boardName = this.boardForm.value.board?.name ?? '';
         this.apollo.addBoard(boardName).subscribe();
@@ -198,15 +206,6 @@ export class FormComponent implements OnInit {
 
         this.apollo.addSubtask(subtaskName, false).subscribe();
       }
-    }
-
-    if (
-      this.typeOfForm === 'project' &&
-      this.boardForm.controls.project.valid
-    ) {
-      this.apollo
-        .addProject(this.boardForm.value.project?.name ?? '')
-        .subscribe();
     }
 
     this.formService.isEditing = false;

@@ -79,6 +79,16 @@ export const ADD_TASK = gql`
   }
 `;
 
+export const ADD_SUBTASK = gql`
+  mutation addSubtask($name: String, $isFinished: Boolean, $taskId: String) {
+    addSubtask(name: $name, isFinished: $isFinished, taskId: $taskId) {
+      id
+      name
+      isFinished
+    }
+  }
+`;
+
 export const EDIT_BOARD = gql`
   mutation editBoard($id: String, $name: String) {
     editBoard(id: $id, name: $name) {
@@ -146,7 +156,7 @@ export const REMOVE_TASK = gql`
 `;
 
 export const REMOVE_SUBTASK = gql`
-  mutation removeSubtassk($id: String) {
+  mutation removeSubtask($id: String) {
     removeSubtask(id: $id) {
       id
     }
@@ -156,16 +166,6 @@ export const REMOVE_SUBTASK = gql`
 export const EDIT_SUBTASK = gql`
   mutation editSubtask($id: String, $name: String, $isFinished: Boolean) {
     editSubtask(id: $id, name: $name, isFinished: $isFinished) {
-      id
-      name
-      isFinished
-    }
-  }
-`;
-
-export const ADD_SUBTASK = gql`
-  mutation addSubtask($name: String, $isFinished: Boolean, $taskId: String) {
-    addSubtask(name: $name, isFinished: $isFinished, taskId: $taskId) {
       id
       name
       isFinished
