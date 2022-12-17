@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { FormType } from '../../types';
 import { ApolloService } from '../apollo.service';
+import { tap } from 'rxjs';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-form',
@@ -68,7 +70,8 @@ export class FormComponent implements OnInit {
   constructor(
     private formService: FormService,
     private apollo: ApolloService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private board: BoardService
   ) {}
 
   ngOnInit(): void {
@@ -179,7 +182,16 @@ export class FormComponent implements OnInit {
 
       if (this.typeOfForm === 'board' && this.boardForm.controls.board.valid) {
         const boardName = this.boardForm.value.board?.name ?? '';
-        this.apollo.addBoard(boardName).subscribe();
+        this.apollo
+          .addBoard(boardName)
+          .pipe(
+            tap(data => {
+              if (data.data?.addBoard) {
+                this.board.onChangeSelectedBoard(data.data.addBoard);
+              }
+            })
+          )
+          .subscribe();
       }
 
       if (

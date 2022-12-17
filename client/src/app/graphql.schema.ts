@@ -51,6 +51,21 @@ export const ADD_BOARD = gql`
     addBoard(name: $name, projectId: $projectId) {
       id
       name
+      columns {
+        id
+        name
+        tasks {
+          id
+          tags
+          description
+          title
+          subtasks {
+            id
+            name
+            isFinished
+          }
+        }
+      }
     }
   }
 `;

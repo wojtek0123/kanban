@@ -15,7 +15,7 @@ import {
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
-import { Project } from '../types';
+import { Board, Project } from '../types';
 import { BoardService } from './board.service';
 
 @Injectable({
@@ -58,7 +58,7 @@ export class ApolloService {
 
   addBoard(name: string) {
     const projectId = this.board.selectedProjectId.value;
-    return this.apollo.mutate<{ addBoard: { id: string; name: string } }>({
+    return this.apollo.mutate<{ addBoard: Board }>({
       mutation: ADD_BOARD,
       variables: { name, projectId },
       refetchQueries: [
