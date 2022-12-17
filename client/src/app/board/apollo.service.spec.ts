@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApolloService } from './project-items.service';
+import { ApolloService } from './apollo.service';
 
 describe('ProjectItemsService', () => {
   let service: ApolloService;

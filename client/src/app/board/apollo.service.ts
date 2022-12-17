@@ -11,15 +11,15 @@ import { Project } from '../types';
 export class ApolloService {
   constructor(private apollo: Apollo, private supabase: SupabaseService) {}
 
-  async getProjects(): Promise<Observable<{ projects: Project[] }>> {
-    const { data } = await this.supabase.getSession();
+  getProjects(): Observable<{ projects: Project[] }> {
+    const userId = this.supabase.getUserId;
 
     // if (error) return undefined;
 
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
-        variables: { userId: data.session?.user.id },
+        variables: { userId },
       })
       .valueChanges.pipe(map(({ data }) => data));
   }

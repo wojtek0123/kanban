@@ -22,8 +22,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private apollo: ApolloService
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    this.data = await this.apollo.getProjects();
+  ngOnInit(): void {
+    this.data = this.apollo.getProjects();
 
     this.subscription = this.data
       .pipe(

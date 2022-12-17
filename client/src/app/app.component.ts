@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   constructor(private supabase: SupabaseService) {}
 
-  ngOnInit(): void {
-    this.supabase.refreshSession();
+  async ngOnInit(): Promise<void> {
+    await this.supabase.refreshSession();
   }
 }
