@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Project, Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
@@ -23,17 +24,16 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.boardService.selectedBoard.subscribe(data => {
-      this.selectedBoardId = data?.id ?? '';
-
-      if (
-        this.project.boards.find(
-          (board: Board) => board.id === this.selectedBoardId
+    this.subscription = this.boardService.selectedBoard
+      .pipe(
+        filter(data =>
+          this.project.boards.some((board: Board) => board.id === data?.id)
         )
-      ) {
+      )
+      .subscribe(data => {
         this.showContent = true;
-      }
-    });
+        this.selectedBoardId = data?.id ?? '';
+      });
   }
 
   onForm(type: FormType, projectId: string) {
