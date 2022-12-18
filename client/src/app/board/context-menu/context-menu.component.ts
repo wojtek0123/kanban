@@ -40,25 +40,20 @@ export class ContextMenuComponent implements OnDestroy {
     this.openedContextMenuOfElementId = '';
     this.formService.onChangeFormVisibility();
 
+    if (this.type === 'project' && this.editingProject) {
+      this.formService.onEditing('project', this.editingProject);
+    }
     if (this.type === 'board' && this.editingBoard) {
-      this.formService.onEditingBoard(this.editingBoard);
-      this.formService.onChangeTypeOfForm('board');
+      this.formService.onEditing('board', this.editingBoard);
     }
     if (this.type === 'column' && this.editingColumn) {
-      this.formService.onEditingColumn(this.editingColumn);
-      this.formService.onChangeTypeOfForm('column');
+      this.formService.onEditing('column', this.editingColumn);
     }
     if (this.type === 'task' && this.editingTask) {
-      this.formService.onEditingTask(this.editingTask);
-      this.formService.onChangeTypeOfForm('task');
+      this.formService.onEditing('task', this.editingTask);
     }
     if (this.type === 'subtask' && this.editingSubtask) {
-      this.formService.onEditingSubtask(this.editingSubtask);
-      this.formService.onChangeTypeOfForm('subtask');
-    }
-    if (this.type === 'project' && this.editingProject) {
-      this.formService.onEditingProject(this.editingProject);
-      this.formService.onChangeTypeOfForm('project');
+      this.formService.onEditing('subtask', this.editingSubtask);
     }
   }
 

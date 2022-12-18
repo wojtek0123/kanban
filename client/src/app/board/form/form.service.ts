@@ -23,32 +23,28 @@ export class FormService {
     this.isEditing = false;
   }
 
-  onEditingProject(project: Project) {
+  onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {
     this.isEditing = true;
-    this.editingProject = project;
-  }
-
-  onEditingBoard(board: Board) {
-    this.isEditing = true;
-    this.editingBoard = board;
-  }
-
-  onEditingColumn(column: Column) {
-    this.isEditing = true;
-    this.editingColumn = column;
-  }
-
-  onEditingTask(task: Task) {
-    this.isEditing = true;
-    this.editingTask = task;
-  }
-
-  onEditingSubtask(subtask: Subtask) {
-    this.isEditing = true;
-    this.editingSubtask = subtask;
-  }
-
-  onChangeTypeOfForm(type: FormType) {
     this.typeOfForm = type;
+
+    switch (type) {
+      case 'project':
+        this.editingProject = object as Project;
+        break;
+      case 'board':
+        this.editingBoard = object as Board;
+        break;
+      case 'column':
+        this.editingColumn = object as Column;
+        break;
+      case 'task':
+        this.editingTask = object as Task;
+        break;
+      case 'subtask':
+        this.editingSubtask = object as Subtask;
+        break;
+      default:
+        break;
+    }
   }
 }
