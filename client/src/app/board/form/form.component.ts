@@ -155,7 +155,7 @@ export class FormComponent implements OnInit {
         const taskTitle = this.boardForm.value.editTask?.title ?? '';
         const taskDescription =
           this.boardForm.value.editTask?.description ?? '';
-        const taskTags = this.tags.value ?? [];
+        const taskTags = this.editedTags.value ?? [];
 
         this.apollo
           .editTask(taskId, taskTitle, taskDescription, taskTags)
@@ -166,7 +166,7 @@ export class FormComponent implements OnInit {
         this.boardForm.controls.editSubtask.valid
       ) {
         const subtaskId = this.formService.editingSubtask?.id ?? '';
-        const subtaskName = this.boardForm.value.subtask?.name ?? '';
+        const subtaskName = this.boardForm.value.editSubtask?.name ?? '';
 
         this.apollo.editSubtask(subtaskId, subtaskName, false).subscribe();
       }
