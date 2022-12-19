@@ -58,7 +58,7 @@ export class FormComponent implements OnInit {
       ],
       tags: this.formBuilder.array(
         this.formService.editingTask?.tags.map((tag: string) =>
-          this.formBuilder.control(tag)
+          this.formBuilder.control(tag, [Validators.required])
         ) ?? []
       ),
     }),
