@@ -1,22 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Project } from '../../types';
 import { BoardService } from '../board.service';
-import { NavigationService } from '../mobile-navigation/navigation.service';
 
 @Component({
   selector: 'app-accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.css'],
 })
-export class AccordionComponent {
+export class AccordionComponent implements OnInit {
   @Input() projects: Project[] | undefined = undefined;
-
-  showContent = true;
   selectedBoardId = '';
-  selectedProjectId = '';
 
-  constructor(
-    private boardService: BoardService,
-    public navigationService: NavigationService
-  ) {}
+  constructor(private boardService: BoardService) {}
+
+  ngOnInit(): void {
+    this.boardService.selectedBoard.subscribe(board => {
+      this.selectedBoardId = board?.id ?? '';
+    });
+  }
 }

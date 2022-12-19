@@ -1,6 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Component, Input, OnInit } from '@angular/core';
 import { Project, Board, FormType } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
@@ -11,11 +9,10 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
   templateUrl: './accordion-item.component.html',
   styleUrls: ['./accordion-item.component.css'],
 })
-export class AccordionItemComponent implements OnInit, OnDestroy {
+export class AccordionItemComponent implements OnInit {
   @Input() project!: Project;
+  @Input() selectedBoardId!: string;
   showContent = false;
-  selectedBoardId = '';
-  subscription = new Subscription();
 
   constructor(
     private boardService: BoardService,
@@ -24,16 +21,11 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.boardService.selectedBoard
-      .pipe(
-        filter(data =>
-          this.project.boards.some((board: Board) => board.id === data?.id)
-        )
-      )
-      .subscribe(data => {
-        this.showContent = true;
-        this.selectedBoardId = data?.id ?? '';
-      });
+    if (
+      this.project.boards.filter(board => board.id === this.selectedBoardId)
+        .length !== 0
+    )
+      this.showContent = true;
   }
 
   onForm(type: FormType, projectId: string) {
@@ -49,9 +41,5 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
     this.boardService.onChangeSelectedProjectId(this.project.id);
     this.boardService.onChangeSelectedBoard(board);
     this.navigationService.onMenu();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }
