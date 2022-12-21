@@ -6,6 +6,7 @@ import {
   ADD_PROJECT,
   ADD_SUBTASK,
   ADD_TASK,
+  CHANGE_COMPLETION_STATE,
   EDIT_BOARD,
   EDIT_COLUMN,
   EDIT_PROJECT,
@@ -234,6 +235,21 @@ export class ApolloService {
       variables: {
         id,
       },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  updateCompletionStateOfSubtask(id: string, state: boolean) {
+    return this.apollo.mutate({
+      mutation: CHANGE_COMPLETION_STATE,
+      variables: { id, state },
       refetchQueries: [
         {
           query: GET_PROJECTS,

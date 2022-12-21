@@ -138,6 +138,16 @@ export const EDIT_TASK = gql`
   }
 `;
 
+export const CHANGE_COMPLETION_STATE = gql`
+  mutation changeCompletionState($id: String, $state: Boolean) {
+    changeCompletionState(id: $id, state: $state) {
+      id
+      name
+      isFinished
+    }
+  }
+`;
+
 export const REMOVE_PROJECT = gql`
   mutation removeProject($id: String) {
     removeProject(id: $id) {

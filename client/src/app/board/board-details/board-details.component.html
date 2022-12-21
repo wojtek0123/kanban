@@ -64,7 +64,8 @@
                 aria-label="subtask"
                 [id]="subtask.id"
                 type="checkbox"
-                [checked]="subtask.isFinished" />
+                [checked]="subtask.isFinished"
+                (change)="onUpdateCompletionStateOfSubtask($event)" />
               <label [for]="subtask.id">{{ subtask.name }}</label>
             </div>
             <app-context-menu

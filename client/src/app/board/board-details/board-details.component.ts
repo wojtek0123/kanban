@@ -5,6 +5,7 @@ import { FormService } from '../form/form.service';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
+import { ApolloService } from '../apollo.service';
 
 @Component({
   selector: 'app-board-details',
@@ -19,7 +20,8 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private boardService: BoardService,
     private supabase: SupabaseService,
-    private router: Router
+    private router: Router,
+    private apollo: ApolloService
   ) {}
 
   ngOnInit() {
@@ -36,6 +38,14 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     if (taskId) {
       this.boardService.onChangeSelectedTaskId(taskId);
     }
+  }
+
+  onUpdateCompletionStateOfSubtask(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    this.apollo
+      .updateCompletionStateOfSubtask(target.id, target.checked)
+      .subscribe();
   }
 
   async onLogout() {
