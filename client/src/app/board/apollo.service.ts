@@ -143,6 +143,7 @@ export class ApolloService {
       ],
     });
   }
+
   editBoard(id: string, name: string) {
     return this.apollo.mutate<{ editBoard: { id: string; name: string } }>({
       mutation: EDIT_BOARD,
@@ -157,6 +158,7 @@ export class ApolloService {
       ],
     });
   }
+
   editColumn(id: string, name: string) {
     return this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
       mutation: EDIT_COLUMN,
@@ -171,6 +173,7 @@ export class ApolloService {
       ],
     });
   }
+
   editTask(id: string, title: string, description: string, tags: string[]) {
     return this.apollo.mutate<{
       editTask: {
@@ -193,12 +196,12 @@ export class ApolloService {
     });
   }
 
-  editSubtask(id: string, name: string, isFinished: boolean) {
+  editSubtask(id: string, name: string) {
     return this.apollo.mutate<{
-      editSubtask: { id: string; name: string; isFinished: boolean };
+      editSubtask: { id: string; name: string };
     }>({
       mutation: EDIT_SUBTASK,
-      variables: { id, name, isFinished },
+      variables: { id, name },
       refetchQueries: [
         {
           query: GET_PROJECTS,

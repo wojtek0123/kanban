@@ -191,7 +191,6 @@ export const resolvers = {
         },
         data: {
           name: args.name,
-          isFinished: args.isFinished,
         },
       })
     },

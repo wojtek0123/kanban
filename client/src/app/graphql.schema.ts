@@ -138,6 +138,16 @@ export const EDIT_TASK = gql`
   }
 `;
 
+export const EDIT_SUBTASK = gql`
+  mutation editSubtask($id: String, $name: String) {
+    editSubtask(id: $id, name: $name) {
+      id
+      name
+      isFinished
+    }
+  }
+`;
+
 export const CHANGE_COMPLETION_STATE = gql`
   mutation changeCompletionState($id: String, $state: Boolean) {
     changeCompletionState(id: $id, state: $state) {
@@ -184,16 +194,6 @@ export const REMOVE_SUBTASK = gql`
   mutation removeSubtask($id: String) {
     removeSubtask(id: $id) {
       id
-    }
-  }
-`;
-
-export const EDIT_SUBTASK = gql`
-  mutation editSubtask($id: String, $name: String, $isFinished: Boolean) {
-    editSubtask(id: $id, name: $name, isFinished: $isFinished) {
-      id
-      name
-      isFinished
     }
   }
 `;
