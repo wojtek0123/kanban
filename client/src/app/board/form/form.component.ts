@@ -168,7 +168,7 @@ export class FormComponent implements OnInit {
         const subtaskId = this.formService.editingSubtask?.id ?? '';
         const subtaskName = this.boardForm.value.editSubtask?.name ?? '';
 
-        this.apollo.editSubtask(subtaskId, subtaskName, false).subscribe();
+        this.apollo.editSubtask(subtaskId, subtaskName).subscribe();
       }
     } else {
       if (
