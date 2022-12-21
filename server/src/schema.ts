@@ -65,6 +65,7 @@ export const typeDefs = gql`
     removeColumn(id: String): Column
     removeTask(id: String): Task
     removeSubtask(id: String): Subtask
+    changeCompletionState(id: String, state: Boolean): Subtask
   }
 `
 
@@ -111,6 +112,16 @@ export const resolvers = {
     },
   },
   Mutation: {
+    changeCompletionState: (
+      _parent: any,
+      args: { id: string; state: boolean },
+      context: Context,
+    ) => {
+      return context.prisma.subtask.update({
+        where: { id: args.id },
+        data: { isFinished: args.state },
+      })
+    },
     editProject: (
       _parent: any,
       args: { id: string; name: string },
