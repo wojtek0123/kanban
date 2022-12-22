@@ -43,15 +43,15 @@
     </button>
 
     <div class="cards">
-      <p class="warning-message" *ngIf="column.tasks.length === 0">
-        No tasks to display
-      </p>
       <div
         class="card-wrapper"
         cdkDropList
         [cdkDropListData]="column.tasks"
         [id]="column.id"
         (cdkDropListDropped)="drop($any($event))">
+        <p class="warning-message card" *ngIf="column.tasks.length === 0">
+          No tasks to display
+        </p>
         <div
           cdkDrag
           class="card"

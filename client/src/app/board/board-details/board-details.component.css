@@ -40,6 +40,7 @@
 
 .warning-message {
   color: var(--error-color);
+  text-align: center;
 }
 
 .section {
@@ -89,7 +90,7 @@
   background-color: var(--lighter-background-color);
   padding: 1rem;
   border-radius: 0.5rem;
-  /* width: 10vw; */
+  width: 100%;
   max-width: var(--task-width);
   margin-bottom: 1rem;
 }
