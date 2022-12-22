@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server'
-import { context, Context } from './context'
+import { Context } from './context'
+import { Task } from '@prisma/client'
 
 export const typeDefs = gql`
   type Subtask {
@@ -40,6 +41,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
+    changeColumn(columnId: String, taskId: String): Column
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String): Column
@@ -112,6 +114,18 @@ export const resolvers = {
     },
   },
   Mutation: {
+    changeColumn: (
+      _parent: any,
+      args: { columnId: string; taskId: string },
+      context: Context,
+    ) => {
+      return context.prisma.task.update({
+        where: { id: args.taskId },
+        data: {
+          columnId: args.columnId,
+        },
+      })
+    },
     changeCompletionState: (
       _parent: any,
       args: { id: string; state: boolean },

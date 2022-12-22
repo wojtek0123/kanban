@@ -28,6 +28,26 @@ export const GET_PROJECTS = gql`
   }
 `;
 
+export const CHANGE_COLUMN = gql`
+  mutation changeColumn($columnId: String, $taskId: String) {
+    changeColumn(columnId: $columnId, taskId: $taskId) {
+      id
+      name
+      tasks {
+        id
+        title
+        description
+        tags
+        subtasks {
+          id
+          isFinished
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const ADD_PROJECT = gql`
   mutation addProject($name: String, $userId: String) {
     addProject(name: $name, userId: $userId) {

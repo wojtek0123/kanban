@@ -7,6 +7,7 @@ import {
   ADD_SUBTASK,
   ADD_TASK,
   CHANGE_COMPLETION_STATE,
+  CHANGE_COLUMN,
   EDIT_BOARD,
   EDIT_COLUMN,
   EDIT_PROJECT,
@@ -21,7 +22,7 @@ import {
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
-import { Board, FormType, Project } from '../types';
+import { Board, FormType, Project, Task } from '../types';
 import { BoardService } from './board.service';
 
 @Injectable({
@@ -253,6 +254,21 @@ export class ApolloService {
     return this.apollo.mutate({
       mutation: CHANGE_COMPLETION_STATE,
       variables: { id, state },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  changeColumn(columnId: string, taskId: string) {
+    return this.apollo.mutate({
+      mutation: CHANGE_COLUMN,
+      variables: { columnId, taskId },
       refetchQueries: [
         {
           query: GET_PROJECTS,

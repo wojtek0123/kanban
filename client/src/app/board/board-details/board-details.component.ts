@@ -1,11 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Board, FormType } from '../../types';
+import { Board, Column, FormType, Subtask, Task } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-board-details',
@@ -43,8 +48,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   onUpdateCompletionStateOfSubtask(event: Event) {
     const target = event.target as HTMLInputElement;
 
+    const id = target.id;
+
     this.apollo
-      .updateCompletionStateOfSubtask(target.id, target.checked)
+      .updateCompletionStateOfSubtask(id ?? '', target.checked)
       .subscribe();
   }
 
@@ -59,6 +66,35 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
       if (error instanceof Error) {
         throw new Error(error.message);
       }
+    }
+  }
+
+  drop(event: CdkDragDrop<Task[]>) {
+    const prevArray = [...event.previousContainer.data];
+    const currArray = [...event.container.data];
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(currArray, event.previousIndex, event.currentIndex);
+      console.log(currArray);
+    } else {
+      transferArrayItem(
+        prevArray,
+        currArray,
+        event.previousIndex,
+        event.currentIndex
+      );
+
+      const currColumn = this.selectedBoard?.columns.filter(
+        column => column.id === event.container.id
+      );
+
+      const id = event.item.element.nativeElement.id;
+
+      if (!currColumn) {
+        return;
+      }
+
+      this.apollo.changeColumn(currColumn.at(0)?.id ?? '', id).subscribe();
     }
   }
 
