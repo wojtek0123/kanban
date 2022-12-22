@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormService } from './form/form.service';
 import { Observable, Subscription } from 'rxjs';
 import { BoardService } from './board.service';
-import { Project, FormType, Board } from '../types';
+import { Project, FormType } from '../types';
 import { ApolloService } from './apollo.service';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',

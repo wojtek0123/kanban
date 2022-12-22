@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Board, Column, FormType, Subtask, Task } from '../../types';
+import { Board, FormType, Task } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
