@@ -114,21 +114,27 @@
         <label class="form-label">Tags</label>
         <div
           class="form-tag-wrapper"
-          *ngFor="let tag of tags.controls; let i = index">
-          <input
-            class="form-input form-tag-input"
-            id="tag-{{ i }}"
-            type="text"
-            aria-label="tag"
-            [formControlName]="i" />
-          <div
-            *ngIf="getControls.task.touched && getControls.task.invalid"
-            class="text-danger">
+          *ngFor="let _ of tags.controls; let i = index">
+          <ng-container [formGroupName]="i">
+            <input
+              class="form-input form-tag-input"
+              type="text"
+              aria-label="tag"
+              formControlName="name" />
+            <input type="color" formControlName="fontColor" name="font" />
+            <input
+              type="color"
+              formControlName="backgroundColor"
+              name="background" />
             <div
-              *ngIf="getControls.task.controls.tags.controls[i].errors?.['required']">
-              Tag name is required.
+              *ngIf="getControls.task.touched && getControls.task.invalid"
+              class="text-danger">
+              <div
+                *ngIf="getControls.task.controls.tags.controls[i].errors?.['required']">
+                Tag name is required.
+              </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </div>
     </div>

@@ -58,7 +58,12 @@
           [id]="task.id"
           *ngFor="let task of column.tasks">
           <div class="card-tags">
-            <span *ngFor="let tag of task.tags">{{ tag }}</span>
+            <span
+              *ngFor="let tag of task.tagNames; let i = index"
+              [style.background-color]="task.tagBackgroundColors[i]"
+              [style.color]="task.tagFontColors[i]"
+              >{{ tag }}</span
+            >
           </div>
           <h3>{{ task.title }}</h3>
           <p>{{ task.description }}</p>

@@ -5,6 +5,7 @@ import {
   Validators,
   FormArray,
   FormControl,
+  FormGroup,
 } from '@angular/forms';
 import { FormType } from '../../types';
 import { ApolloService } from '../apollo.service';
@@ -35,7 +36,11 @@ export class FormComponent implements OnInit {
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       tags: this.formBuilder.array([
-        this.formBuilder.control('', [Validators.required]),
+        this.formBuilder.group({
+          name: this.formBuilder.control('', [Validators.required]),
+          fontColor: this.formBuilder.control('#000000'),
+          backgroundColor: this.formBuilder.control('#e8fe93'),
+        }),
       ]),
     }),
     subtask: this.formBuilder.group({
@@ -57,7 +62,7 @@ export class FormComponent implements OnInit {
         [Validators.required],
       ],
       tags: this.formBuilder.array(
-        this.formService.editingTask?.tags.map((tag: string) =>
+        this.formService.editingTask?.tagNames.map((tag: string) =>
           this.formBuilder.control(tag, [Validators.required])
         ) ?? []
       ),
@@ -85,7 +90,11 @@ export class FormComponent implements OnInit {
   }
 
   addTag(groupName: string) {
-    const control = new FormControl('', Validators.required);
+    const control = new FormGroup({
+      name: this.formBuilder.control('', [Validators.required]),
+      fontColor: this.formBuilder.control('#000000'),
+      backgroundColor: this.formBuilder.control('#e8fe93'),
+    });
     (<FormArray>this.boardForm.get(groupName)?.get('tags')).push(control);
   }
 
@@ -157,6 +166,8 @@ export class FormComponent implements OnInit {
           this.boardForm.value.editTask?.description ?? '';
         const taskTags = this.editedTags.value ?? [];
 
+        console.log(this.tags.value);
+
         this.apollo
           .editTask(taskId, taskTitle, taskDescription, taskTags)
           .subscribe();
@@ -205,9 +216,30 @@ export class FormComponent implements OnInit {
       if (this.typeOfForm === 'task' && this.boardForm.controls.task.valid) {
         const taskTitle = this.boardForm.value.task?.title ?? '';
         const taskDescription = this.boardForm.value.task?.description ?? '';
-        const taskTags = this.tags.value;
+        type Tag = {
+          name: string;
+          fontColor: string;
+          backgroundColor: string;
+        };
+        const taskTagNames = this.tags.value.map((tag: Tag) => tag.name);
 
-        this.apollo.addTask(taskTitle, taskDescription, taskTags).subscribe();
+        const taskTagFontColors = this.tags.value.map(
+          (tag: Tag) => tag.fontColor
+        );
+
+        const taskTagBackgronudColors = this.tags.value.map(
+          (tag: Tag) => tag.backgroundColor
+        );
+
+        this.apollo
+          .addTask(
+            taskTitle,
+            taskDescription,
+            taskTagNames,
+            taskTagFontColors,
+            taskTagBackgronudColors
+          )
+          .subscribe();
       }
 
       if (

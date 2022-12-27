@@ -15,7 +15,9 @@ export const GET_PROJECTS = gql`
             id
             title
             description
-            tags
+            tagNames
+            tagFontColors
+            tagBackgroundColors
             subtasks {
               id
               isFinished
@@ -97,17 +99,21 @@ export const ADD_COLUMN = gql`
   }
 `;
 export const ADD_TASK = gql`
-  mutation addTask(
+  mutation AddTask(
     $columnId: String
     $title: String
     $description: String
-    $tags: [String]
+    $tagNames: [String]
+    $tagFontColors: [String]
+    $tagBackgroundColors: [String]
   ) {
     addTask(
       columnId: $columnId
       title: $title
       description: $description
-      tags: $tags
+      tagNames: $tagNames
+      tagFontColors: $tagFontColors
+      tagBackgroundColors: $tagBackgroundColors
     ) {
       id
     }
@@ -147,13 +153,18 @@ export const EDIT_TASK = gql`
     $id: String
     $title: String
     $description: String
-    $tags: [String]
+    $tagNames: [String]
   ) {
-    editTask(id: $id, title: $title, description: $description, tags: $tags) {
+    editTask(
+      id: $id
+      title: $title
+      description: $description
+      tagNames: $tagNames
+    ) {
       id
       title
       description
-      tags
+      tagNames
     }
   }
 `;

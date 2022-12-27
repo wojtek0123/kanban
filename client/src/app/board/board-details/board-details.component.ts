@@ -32,6 +32,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.boardService.selectedBoard.subscribe(board => {
       this.selectedBoard = board;
+      console.log(this.selectedBoard);
     });
   }
 

@@ -16,13 +16,15 @@ model Subtask {
 }
 
 model Task {
-  id          String    @id @default(uuid())
-  title       String
-  description String
-  columnId    String
-  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
-  tags        String[]
-  subtasks    Subtask[]
+  id                  String    @id @default(uuid())
+  title               String
+  description         String
+  columnId            String
+  column              Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  tagNames            String[]
+  tagFontColors       String[]
+  tagBackgroundColors String[]
+  subtasks            Subtask[]
 }
 
 model Column {

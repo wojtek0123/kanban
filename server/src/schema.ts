@@ -13,7 +13,9 @@ export const typeDefs = gql`
     id: String
     title: String
     description: String
-    tags: [String]
+    tagNames: [String]
+    tagFontColors: [String]
+    tagBackgroundColors: [String]
     subtasks: [Subtask]
   }
 
@@ -49,7 +51,9 @@ export const typeDefs = gql`
       columnId: String
       title: String
       description: String
-      tags: [String]
+      tagNames: [String]
+      tagFontColors: [String]
+      tagBackgroundColors: [String]
     ): Task
     addSubtask(name: String, isFinished: Boolean, taskId: String): Subtask
     editProject(id: String, name: String): Project
@@ -90,7 +94,9 @@ export const resolvers = {
                     select: {
                       id: true,
                       title: true,
-                      tags: true,
+                      tagNames: true,
+                      tagFontColors: true,
+                      tagBackgroundColors: true,
                       description: true,
                       subtasks: {
                         select: {
@@ -180,7 +186,12 @@ export const resolvers = {
     },
     editTask: (
       _parent: any,
-      args: { id: string; title: string; description: string; tags: string[] },
+      args: {
+        id: string
+        title: string
+        description: string
+        tagNames: string[]
+      },
       context: Context,
     ) => {
       return context.prisma.task.update({
@@ -190,7 +201,7 @@ export const resolvers = {
         data: {
           title: args.title,
           description: args.description,
-          tags: args.tags,
+          tagNames: args.tagNames,
         },
       })
     },
@@ -250,7 +261,9 @@ export const resolvers = {
         columnId: string
         title: string
         description: string
-        tags: string[]
+        tagNames: string[]
+        tagFontColors: string[]
+        tagBackgroundColors: string[]
       },
       context: Context,
     ) => {
@@ -258,7 +271,9 @@ export const resolvers = {
         data: {
           title: args.title,
           description: args.description,
-          tags: args.tags,
+          tagNames: args.tagNames,
+          tagFontColors: args.tagFontColors,
+          tagBackgroundColors: args.tagBackgroundColors,
           columnId: args.columnId,
         },
       })

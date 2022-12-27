@@ -96,12 +96,25 @@ export class ApolloService {
     });
   }
 
-  addTask(title: string, description: string, tags: string[]) {
+  addTask(
+    title: string,
+    description: string,
+    tagNames: string[],
+    tagFontColors: string[],
+    tagBackgroundColors: string[]
+  ) {
     const columnId = this.board.selectedColumnId.value;
 
     return this.apollo.mutate<{ addTask: { id: string } }>({
       mutation: ADD_TASK,
-      variables: { title, description, columnId, tags },
+      variables: {
+        title,
+        description,
+        columnId,
+        tagNames,
+        tagFontColors,
+        tagBackgroundColors,
+      },
       refetchQueries: [
         {
           query: GET_PROJECTS,
