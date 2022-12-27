@@ -271,6 +271,47 @@
         </div>
       </div>
       <div formArrayName="tags" class="form-tags-wrapper">
+        <div class="form-tags-buttons">
+          <button
+            type="button"
+            class="button-global form-tags-button"
+            (click)="addTag('editTask')">
+            <span>+</span> Add tag
+          </button>
+          <button
+            type="button"
+            class="button-global form-tags-button"
+            (click)="removeTag('editTask')">
+            <span>-</span> Remove tag
+          </button>
+        </div>
+        <label class="form-label">Tags</label>
+        <div
+          class="form-tag-wrapper"
+          *ngFor="let _ of editTags.controls; let i = index">
+          <ng-container [formGroupName]="i">
+            <input
+              class="form-input form-tag-input"
+              type="text"
+              aria-label="tag"
+              formControlName="name" />
+            <input type="color" formControlName="fontColor" name="font" />
+            <input
+              type="color"
+              formControlName="backgroundColor"
+              name="background" />
+            <div
+              *ngIf="getControls.task.touched && getControls.task.invalid"
+              class="text-danger">
+              <div
+                *ngIf="getControls.task.controls.tags.controls[i].errors?.['required']">
+                Tag name is required.
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <!-- <div formArrayName="tagNames" class="form-tags-wrapper">
         <button
           type="button"
           class="button-global"
@@ -285,23 +326,34 @@
         <label class="form-label">Tags</label>
         <div
           class="form-tag-wrapper"
-          *ngFor="let tag of editedTags.controls; let i = index">
+          *ngFor="let tag of editedTagNames.controls; let i = index">
           <input
             class="form-input form-tag-input"
             id="alias-{{ i }}"
             type="text"
             aria-label="tag"
             [formControlName]="i" />
+
           <div
             *ngIf="getControls.editTask.touched && getControls.editTask.invalid"
             class="text-danger">
             <div
-              *ngIf="getControls.editTask.controls.tags.controls[i].errors?.['required']">
+              *ngIf="getControls.editTask.controls.tagNames.controls[i].errors?.['required']">
               Tag name is required.
             </div>
           </div>
         </div>
       </div>
+      <ng-container
+        formArrayName="tagFontColors"
+        *ngFor="let color of editedTagFontColors.controls; let i = index">
+        <input type="color" name="font" [formControlName]="i" />
+      </ng-container>
+      <ng-container
+        formArrayName="tagBackgroundColors"
+        *ngFor="let color of editedTagBackgroundColors.controls; let i = index">
+        <input type="color" name="background" [formControlName]="i" />
+      </ng-container> -->
     </div>
     <p *ngIf="isSubmitted" class="text-warning">Fill input or inputs</p>
     <button type="submit" class="button-global submit-button">

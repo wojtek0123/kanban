@@ -63,7 +63,9 @@ export const typeDefs = gql`
       id: String
       title: String
       description: String
-      tags: [String]
+      tagNames: [String]
+      tagFontColors: [String]
+      tagBackgroundColors: [String]
     ): Task
     editSubtask(id: String, name: String, isFinished: Boolean): Subtask
     removeProject(id: String): Project
@@ -191,6 +193,8 @@ export const resolvers = {
         title: string
         description: string
         tagNames: string[]
+        tagFontColors: string[]
+        tagBackgroundColors: string[]
       },
       context: Context,
     ) => {
@@ -202,6 +206,8 @@ export const resolvers = {
           title: args.title,
           description: args.description,
           tagNames: args.tagNames,
+          tagFontColors: args.tagFontColors,
+          tagBackgroundColors: args.tagBackgroundColors,
         },
       })
     },

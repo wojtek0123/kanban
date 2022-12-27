@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from './form.service';
-import {
-  FormBuilder,
-  Validators,
-  FormArray,
-  FormControl,
-  FormGroup,
-} from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 import { FormType } from '../../types';
 import { ApolloService } from '../apollo.service';
 import { tap } from 'rxjs';
 import { BoardService } from '../board.service';
+
+type Tag = {
+  name: string;
+  fontColor: string;
+  backgroundColor: string;
+};
 
 @Component({
   selector: 'app-form',
@@ -61,11 +61,7 @@ export class FormComponent implements OnInit {
         this.formService.editingTask?.description,
         [Validators.required],
       ],
-      tags: this.formBuilder.array(
-        this.formService.editingTask?.tagNames.map((tag: string) =>
-          this.formBuilder.control(tag, [Validators.required])
-        ) ?? []
-      ),
+      tags: this.formBuilder.array(this.fillEditTags() ?? []),
     }),
     editSubtask: this.formBuilder.group({
       name: [this.formService.editingSubtask?.name, [Validators.required]],
@@ -82,6 +78,29 @@ export class FormComponent implements OnInit {
   ngOnInit(): void {
     this.typeOfForm = this.formService.typeOfForm;
     this.isEditing = this.formService.isEditing;
+  }
+
+  fillEditTags() {
+    const names = this.formService.editingTask?.tagNames;
+    const fontColors = this.formService.editingTask?.tagFontColors;
+    const backgroundColors = this.formService.editingTask?.tagBackgroundColors;
+
+    const result = [];
+
+    if (!names || !fontColors || !backgroundColors) {
+      return;
+    }
+
+    for (let i = 0; i < names.length; i++) {
+      const group = new FormGroup({
+        name: this.formBuilder.control(names[i], [Validators.required]),
+        fontColor: this.formBuilder.control(fontColors[i]),
+        backgroundColor: this.formBuilder.control(backgroundColors[i]),
+      });
+      result.push(group);
+    }
+
+    return result;
   }
 
   onClose() {
@@ -106,7 +125,7 @@ export class FormComponent implements OnInit {
     return this.boardForm.get('task')?.get('tags') as FormArray;
   }
 
-  get editedTags() {
+  get editTags() {
     return this.boardForm.get('editTask')?.get('tags') as FormArray;
   }
 
@@ -164,12 +183,28 @@ export class FormComponent implements OnInit {
         const taskTitle = this.boardForm.value.editTask?.title ?? '';
         const taskDescription =
           this.boardForm.value.editTask?.description ?? '';
-        const taskTags = this.editedTags.value ?? [];
 
-        console.log(this.tags.value);
+        const taskTagNames = this.editTags.value.map((tag: Tag) => tag.name);
+
+        const taskTagFontColors = this.editTags.value.map(
+          (tag: Tag) => tag.fontColor
+        );
+
+        const taskTagBackgronudColors = this.editTags.value.map(
+          (tag: Tag) => tag.backgroundColor
+        );
+
+        console.log(this.boardForm.get('editTask')?.get('tags') as FormArray);
 
         this.apollo
-          .editTask(taskId, taskTitle, taskDescription, taskTags)
+          .editTask(
+            taskId,
+            taskTitle,
+            taskDescription,
+            taskTagNames,
+            taskTagFontColors,
+            taskTagBackgronudColors
+          )
           .subscribe();
       }
       if (
@@ -216,11 +251,7 @@ export class FormComponent implements OnInit {
       if (this.typeOfForm === 'task' && this.boardForm.controls.task.valid) {
         const taskTitle = this.boardForm.value.task?.title ?? '';
         const taskDescription = this.boardForm.value.task?.description ?? '';
-        type Tag = {
-          name: string;
-          fontColor: string;
-          backgroundColor: string;
-        };
+
         const taskTagNames = this.tags.value.map((tag: Tag) => tag.name);
 
         const taskTagFontColors = this.tags.value.map(

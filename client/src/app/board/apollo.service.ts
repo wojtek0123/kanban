@@ -188,17 +188,33 @@ export class ApolloService {
     });
   }
 
-  editTask(id: string, title: string, description: string, tags: string[]) {
+  editTask(
+    id: string,
+    title: string,
+    description: string,
+    tagNames: string[],
+    tagFontColors: string[],
+    tagBackgroundColors: string[]
+  ) {
     return this.apollo.mutate<{
       editTask: {
         id: string;
         title: string;
         description: string;
-        tags: string[];
+        tagNames: string[];
+        tagFontColors: string[];
+        tagBackgroundColors: string[];
       };
     }>({
       mutation: EDIT_TASK,
-      variables: { id, title, description, tags },
+      variables: {
+        id,
+        title,
+        description,
+        tagNames,
+        tagFontColors,
+        tagBackgroundColors,
+      },
       refetchQueries: [
         {
           query: GET_PROJECTS,
