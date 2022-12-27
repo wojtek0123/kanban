@@ -39,7 +39,9 @@ export const CHANGE_COLUMN = gql`
         id
         title
         description
-        tags
+        tagNames
+        tagFontColors
+        tagBackgroundColors
         subtasks {
           id
           isFinished
@@ -78,7 +80,9 @@ export const ADD_BOARD = gql`
         name
         tasks {
           id
-          tags
+          tagNames
+          tagFontColors
+          tagBackgroundColors
           description
           title
           subtasks {
