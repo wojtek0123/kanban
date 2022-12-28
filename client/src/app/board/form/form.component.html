@@ -14,43 +14,7 @@
 
     <app-board-form *ngIf="typeOfForm === 'board'"></app-board-form>
 
-    <!-- <div
-      class="form-wrapper"
-      *ngIf="typeOfForm === 'board' && !isEditing"
-      formGroupName="board">
-      <label class="form-label" for="board-name">Board Name</label>
-      <input
-        class="form-input"
-        type="text"
-        id="board-name"
-        formControlName="name" />
-      <div
-        *ngIf="getControls.board.touched && getControls.board.invalid"
-        class="text-danger">
-        <div *ngIf="getControls.board.controls.name.errors?.['required']">
-          Name is required.
-        </div>
-      </div>
-    </div> -->
-
-    <div
-      class="form-wrapper"
-      *ngIf="typeOfForm === 'column' && !isEditing"
-      formGroupName="column">
-      <label class="form-label" for="column-name">Column Name</label>
-      <input
-        class="form-input"
-        type="text"
-        id="column-name"
-        formControlName="name" />
-      <div
-        *ngIf="getControls.column.touched && getControls.column.invalid"
-        class="text-danger">
-        <div *ngIf="getControls.column.controls.name.errors?.['required']">
-          Name is required.
-        </div>
-      </div>
-    </div>
+    <app-column-form *ngIf="typeOfForm === 'column'"></app-column-form>
 
     <div
       class="form-wrapper"
@@ -138,44 +102,6 @@
         *ngIf="getControls.subtask.touched && getControls.subtask.invalid"
         class="text-danger">
         <div *ngIf="getControls.subtask.controls.name.errors?.['required']">
-          Name is required.
-        </div>
-      </div>
-    </div>
-
-    <!-- <div
-      *ngIf="isEditing && typeOfForm === 'board'"
-      formGroupName="editBoard"
-      class="form-wrapper">
-      <label for="edit-board-name">Board name</label>
-      <input
-        type="text"
-        class="form-input"
-        id="edit-board-name"
-        formControlName="name" />
-      <div
-        *ngIf="getControls.editBoard.touched && getControls.editBoard.invalid"
-        class="text-danger">
-        <div *ngIf="getControls.editBoard.controls.name.errors?.['required']">
-          Name is required.
-        </div>
-      </div>
-    </div> -->
-
-    <div
-      *ngIf="isEditing && typeOfForm === 'column'"
-      formGroupName="editColumn"
-      class="form-wrapper">
-      <label for="edit-column-name">Column name</label>
-      <input
-        type="text"
-        class="form-input"
-        id="edit-column-name"
-        formControlName="name" />
-      <div
-        *ngIf="getControls.editColumn.touched && getControls.editColumn.invalid"
-        class="text-danger">
-        <div *ngIf="getControls.editColumn.controls.name.errors?.['required']">
           Name is required.
         </div>
       </div>
@@ -275,49 +201,6 @@
           </ng-container>
         </div>
       </div>
-      <!-- <div formArrayName="tagNames" class="form-tags-wrapper">
-        <button
-          type="button"
-          class="button-global"
-          (click)="addTag('editTask')">
-          + Add tag</button
-        ><button
-          type="button"
-          class="button-global"
-          (click)="removeTag('editTask')">
-          - Remove tag
-        </button>
-        <label class="form-label">Tags</label>
-        <div
-          class="form-tag-wrapper"
-          *ngFor="let tag of editedTagNames.controls; let i = index">
-          <input
-            class="form-input form-tag-input"
-            id="alias-{{ i }}"
-            type="text"
-            aria-label="tag"
-            [formControlName]="i" />
-
-          <div
-            *ngIf="getControls.editTask.touched && getControls.editTask.invalid"
-            class="text-danger">
-            <div
-              *ngIf="getControls.editTask.controls.tagNames.controls[i].errors?.['required']">
-              Tag name is required.
-            </div>
-          </div>
-        </div>
-      </div>
-      <ng-container
-        formArrayName="tagFontColors"
-        *ngFor="let color of editedTagFontColors.controls; let i = index">
-        <input type="color" name="font" [formControlName]="i" />
-      </ng-container>
-      <ng-container
-        formArrayName="tagBackgroundColors"
-        *ngFor="let color of editedTagBackgroundColors.controls; let i = index">
-        <input type="color" name="background" [formControlName]="i" />
-      </ng-container> -->
     </div>
     <!-- <p *ngIf="isSubmitted" class="text-warning">Fill input or inputs</p>
     <button type="submit" class="button-global submit-button">

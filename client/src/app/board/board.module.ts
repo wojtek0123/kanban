@@ -14,6 +14,7 @@ import { AccordionItemComponent } from './accordion-item/accordion-item.componen
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectFormComponent } from './project-form/project-form.component';
 import { BoardFormComponent } from './board-form/board-form.component';
+import { ColumnFormComponent } from './column-form/column-form.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BoardFormComponent } from './board-form/board-form.component';
     AccordionItemComponent,
     ProjectFormComponent,
     BoardFormComponent,
+    ColumnFormComponent,
   ],
   imports: [
     BrowserAnimationsModule,
