@@ -28,21 +28,28 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.subscription = this.data
       .pipe(
         map(data => {
+          if (data.projects.length === 0) {
+            return;
+          }
           if (!this.boardService.selectedBoard.value) {
-            const project = data.projects.filter(board => board.boards[0]);
-            this.boardService.onChangeSelectedProjectId(project[0].id);
+            const project = data.projects.filter(board => board.boards.at(0));
+            this.boardService.onChangeSelectedProjectId(
+              project?.at(0)?.id ?? ''
+            );
 
-            return project[0].boards[0];
+            return project?.at(0)?.boards.at(0);
           } else {
             const project = data.projects.filter(
               project =>
                 project.id === this.boardService.selectedProjectId.value
             );
 
-            return project[0].boards.find(
-              board =>
-                board.id === this.boardService.selectedBoard.value?.id ?? ''
-            );
+            return project
+              ?.at(0)
+              ?.boards.find(
+                board =>
+                  board.id === this.boardService.selectedBoard.value?.id ?? ''
+              );
           }
         })
       )
