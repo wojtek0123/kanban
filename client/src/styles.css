@@ -53,9 +53,53 @@ body {
   background-color: var(--button-hover-color);
 }
 
+.form-global {
+  width: 20rem;
+}
+
+.form-label-global {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.form-wrapper-global {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-input-global {
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--rounded);
+  font-family: 'Oswald', sans-serif;
+  width: 100%;
+}
+
+.submit-button-global {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.text-danger-global {
+  color: var(--error-color);
+}
+
+.text-warning-global {
+  color: var(--error-color);
+  margin-top: 1rem;
+}
+
 @media (min-width: 1024px) {
   body {
     height: 100vh;
     width: 100vw;
+  }
+
+  .form-global {
+    position: relative;
+    max-width: 500px;
   }
 }

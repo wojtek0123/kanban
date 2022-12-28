@@ -12,7 +12,9 @@
 
     <app-project-form *ngIf="typeOfForm === 'project'"></app-project-form>
 
-    <div
+    <app-board-form *ngIf="typeOfForm === 'board'"></app-board-form>
+
+    <!-- <div
       class="form-wrapper"
       *ngIf="typeOfForm === 'board' && !isEditing"
       formGroupName="board">
@@ -29,7 +31,7 @@
           Name is required.
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div
       class="form-wrapper"
@@ -141,7 +143,7 @@
       </div>
     </div>
 
-    <div
+    <!-- <div
       *ngIf="isEditing && typeOfForm === 'board'"
       formGroupName="editBoard"
       class="form-wrapper">
@@ -158,7 +160,7 @@
           Name is required.
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div
       *ngIf="isEditing && typeOfForm === 'column'"

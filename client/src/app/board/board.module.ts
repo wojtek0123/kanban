@@ -13,6 +13,7 @@ import { CollapseButtonComponent } from './collapse-button/collapse-button.compo
 import { AccordionItemComponent } from './accordion-item/accordion-item.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectFormComponent } from './project-form/project-form.component';
+import { BoardFormComponent } from './board-form/board-form.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ProjectFormComponent } from './project-form/project-form.component';
     CollapseButtonComponent,
     AccordionItemComponent,
     ProjectFormComponent,
+    BoardFormComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -159,24 +159,6 @@ export class FormComponent implements OnInit {
 
     if (this.isEditing) {
       if (
-        this.typeOfForm === 'project' &&
-        this.boardForm.controls.editProject.valid
-      ) {
-        const projectId = this.formService.editingProject?.id ?? '';
-        const projectName = this.boardForm.value.editProject?.name ?? '';
-
-        this.apollo.editProject(projectId, projectName).subscribe();
-      }
-      if (
-        this.typeOfForm === 'board' &&
-        this.boardForm.controls.editBoard.valid
-      ) {
-        const boardId = this.formService.editingBoard?.id ?? '';
-        const boardName = this.boardForm.value.editBoard?.name ?? '';
-
-        this.apollo.editBoard(boardId, boardName).subscribe();
-      }
-      if (
         this.typeOfForm === 'column' &&
         this.boardForm.controls.editColumn.valid
       ) {
@@ -227,29 +209,6 @@ export class FormComponent implements OnInit {
         this.apollo.editSubtask(subtaskId, subtaskName).subscribe();
       }
     } else {
-      if (
-        this.typeOfForm === 'project' &&
-        this.boardForm.controls.project.valid
-      ) {
-        this.apollo
-          .addProject(this.boardForm.value.project?.name ?? '')
-          .subscribe();
-      }
-
-      if (this.typeOfForm === 'board' && this.boardForm.controls.board.valid) {
-        const boardName = this.boardForm.value.board?.name ?? '';
-        this.apollo
-          .addBoard(boardName)
-          .pipe(
-            tap(data => {
-              if (data.data?.addBoard) {
-                this.board.onChangeSelectedBoard(data.data.addBoard);
-              }
-            })
-          )
-          .subscribe();
-      }
-
       if (
         this.typeOfForm === 'column' &&
         this.boardForm.controls.column.valid
