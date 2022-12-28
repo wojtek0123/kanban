@@ -16,7 +16,9 @@
 
     <app-column-form *ngIf="typeOfForm === 'column'"></app-column-form>
 
-    <div
+    <app-task-form *ngIf="typeOfForm === 'task'"></app-task-form>
+
+    <!-- <div
       class="form-wrapper"
       *ngIf="typeOfForm === 'task' && !isEditing"
       formGroupName="task">
@@ -86,7 +88,7 @@
           </ng-container>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div
       class="form-wrapper"
@@ -128,7 +130,7 @@
       </div>
     </div>
 
-    <div
+    <!-- <div
       *ngIf="isEditing && typeOfForm === 'task'"
       formGroupName="editTask"
       class="form-wrapper">
@@ -201,7 +203,7 @@
           </ng-container>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <p *ngIf="isSubmitted" class="text-warning">Fill input or inputs</p>
     <button type="submit" class="button-global submit-button">
       {{ isEditing ? 'Update' : 'Add ' + typeOfForm }}

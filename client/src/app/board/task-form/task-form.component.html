@@ -1,0 +1,166 @@
+<form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-wrapper-global" *ngIf="!isEditing" formGroupName="add">
+    <label class="form-label-global" for="task-name">Task name</label>
+    <input
+      type="text"
+      class="form-input-global"
+      id="task-name"
+      formControlName="title" />
+    <div
+      *ngIf="getAddControls.title.touched && getAddControls.title.invalid"
+      class="text-danger-global">
+      <div *ngIf="getAddControls.title.errors?.['required']">
+        Name is required.
+      </div>
+    </div>
+    <label class="form-label-global" for="task-description"
+      >Short description</label
+    >
+    <textarea
+      class="task-description form-input-global"
+      id="task-description"
+      formControlName="description"></textarea>
+    <div
+      *ngIf="
+        getAddControls.description.touched && getAddControls.description.invalid
+      "
+      class="text-danger-global">
+      <div *ngIf="getAddControls.description.errors?.['required']">
+        Description is required.
+      </div>
+    </div>
+    <div formArrayName="tags" class="form-tags-wrapper">
+      <div class="form-tags-buttons">
+        <button
+          type="button"
+          class="button-global form-tags-button"
+          (click)="addTag('add')">
+          <span>+</span> Add tag
+        </button>
+        <button
+          type="button"
+          class="button-global form-tags-button"
+          (click)="removeTag('add')">
+          <span>-</span> Remove tag
+        </button>
+      </div>
+      <label class="form-label-global">Tags</label>
+      <div
+        class="form-tag-wrapper"
+        *ngFor="let _ of addTags.controls; let i = index">
+        <ng-container [formGroupName]="i">
+          <input type="color" formControlName="fontColor" name="font" />
+          <input
+            type="color"
+            formControlName="backgroundColor"
+            name="background" />
+          <input
+            class="form-input-global form-tag-input"
+            type="text"
+            aria-label="tag"
+            formControlName="name" />
+
+          <div
+            *ngIf="
+              getAddControls.tags.controls[i].controls.name.touched &&
+              getAddControls.tags.controls[i].controls.name.invalid
+            "
+            class="text-danger-global">
+            <div
+              *ngIf="getAddControls.tags.controls[i].controls.name.errors?.['required']">
+              Tag name is required.
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isEditing" formGroupName="edit" class="form-wrapper">
+    <label class="form-label-global" for="edit-task-title">Task title</label>
+    <input
+      type="text"
+      class="form-input-global"
+      id="edit-task-title"
+      formControlName="title" />
+    <div
+      *ngIf="getEditControls.title.touched && getEditControls.title.invalid"
+      class="text-danger-global">
+      <div *ngIf="getEditControls.title.errors?.['required']">
+        Name is required.
+      </div>
+    </div>
+    <label class="form-label-global" for="edit-task-description"
+      >Short description</label
+    >
+    <textarea
+      class="task-description form-input-global"
+      id="edit-task-description"
+      formControlName="description"></textarea>
+    <div
+      *ngIf="
+        getEditControls.description.touched &&
+        getEditControls.description.invalid
+      "
+      class="text-danger-global">
+      <div *ngIf="getEditControls.description.errors?.['required']">
+        Description is required.
+      </div>
+    </div>
+    <div formArrayName="tags" class="form-tags-wrapper">
+      <div class="form-tags-buttons">
+        <button
+          type="button"
+          class="button-global form-tags-button"
+          (click)="addTag('edit')">
+          <span>+</span> Add tag
+        </button>
+        <button
+          type="button"
+          class="button-global form-tags-button"
+          (click)="removeTag('edit')">
+          <span>-</span> Remove tag
+        </button>
+      </div>
+      <label class="form-label-global">Tags</label>
+      <div
+        class="form-tag-wrapper"
+        *ngFor="let _ of editTags.controls; let i = index">
+        <ng-container [formGroupName]="i">
+          <label class="form-label-global">Name</label>
+          <input
+            class="form-input-global form-tag-input"
+            type="text"
+            aria-label="tag"
+            formControlName="name" />
+          <div class="form-tag-color-wrapper">
+            <label class="form-tag-label">Font color</label>
+            <input type="color" formControlName="fontColor" name="font" />
+
+            <label class="form-tag-label">Background color</label>
+            <input
+              type="color"
+              formControlName="backgroundColor"
+              name="background" />
+          </div>
+
+          <div
+            *ngIf="
+              getEditControls.tags.controls[i].controls.name.touched &&
+              getEditControls.tags.controls[i].controls.name.invalid
+            "
+            class="text-danger-global">
+            <div
+              *ngIf="getEditControls.tags.controls[i].controls.name.errors?.['required']">
+              Tag name is required.
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="button-global submit-button-global">
+    {{ isEditing ? 'Update' : 'Add ' + 'task' }}
+  </button>
+</form>

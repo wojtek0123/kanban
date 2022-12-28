@@ -15,6 +15,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectFormComponent } from './project-form/project-form.component';
 import { BoardFormComponent } from './board-form/board-form.component';
 import { ColumnFormComponent } from './column-form/column-form.component';
+import { TaskFormComponent } from './task-form/task-form.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ColumnFormComponent } from './column-form/column-form.component';
     ProjectFormComponent,
     BoardFormComponent,
     ColumnFormComponent,
+    TaskFormComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -40,52 +40,9 @@
   width: 100%;
 }
 
-.form-tags-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 1rem;
-}
-
-.form-tag-wrapper {
-  width: 100%;
-}
-
-.form-tags-buttons {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-top: 0.5rem;
-}
-
-.form-tags-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-}
-
-.form-tags-button span {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-}
-
-.form-tag-input {
-  width: 100%;
-}
-
 .form-label {
   margin-top: 0.5rem;
   font-size: 1.2rem;
-}
-
-.task-description {
-  width: 100%;
-  max-width: 32rem;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
 }
 
 .submit-button {

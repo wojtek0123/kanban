@@ -3,14 +3,7 @@ import { FormService } from './form.service';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 import { FormType } from '../../types';
 import { ApolloService } from '../apollo.service';
-import { tap } from 'rxjs';
 import { BoardService } from '../board.service';
-
-type Tag = {
-  name: string;
-  fontColor: string;
-  backgroundColor: string;
-};
 
 @Component({
   selector: 'app-form',
@@ -159,47 +152,6 @@ export class FormComponent implements OnInit {
 
     if (this.isEditing) {
       if (
-        this.typeOfForm === 'column' &&
-        this.boardForm.controls.editColumn.valid
-      ) {
-        const columnId = this.formService.editingColumn?.id ?? '';
-        const columnName = this.boardForm.value.editColumn?.name ?? '';
-
-        this.apollo.editColumn(columnId, columnName).subscribe();
-      }
-      if (
-        this.typeOfForm === 'task' &&
-        this.boardForm.controls.editTask.valid
-      ) {
-        const taskId = this.formService.editingTask?.id ?? '';
-        const taskTitle = this.boardForm.value.editTask?.title ?? '';
-        const taskDescription =
-          this.boardForm.value.editTask?.description ?? '';
-
-        const taskTagNames = this.editTags.value.map((tag: Tag) => tag.name);
-
-        const taskTagFontColors = this.editTags.value.map(
-          (tag: Tag) => tag.fontColor
-        );
-
-        const taskTagBackgronudColors = this.editTags.value.map(
-          (tag: Tag) => tag.backgroundColor
-        );
-
-        console.log(this.boardForm.get('editTask')?.get('tags') as FormArray);
-
-        this.apollo
-          .editTask(
-            taskId,
-            taskTitle,
-            taskDescription,
-            taskTagNames,
-            taskTagFontColors,
-            taskTagBackgronudColors
-          )
-          .subscribe();
-      }
-      if (
         this.typeOfForm === 'subtask' &&
         this.boardForm.controls.editSubtask.valid
       ) {
@@ -209,39 +161,6 @@ export class FormComponent implements OnInit {
         this.apollo.editSubtask(subtaskId, subtaskName).subscribe();
       }
     } else {
-      if (
-        this.typeOfForm === 'column' &&
-        this.boardForm.controls.column.valid
-      ) {
-        const columnName = this.boardForm.value.column?.name ?? '';
-        this.apollo.addColumn(columnName).subscribe();
-      }
-
-      if (this.typeOfForm === 'task' && this.boardForm.controls.task.valid) {
-        const taskTitle = this.boardForm.value.task?.title ?? '';
-        const taskDescription = this.boardForm.value.task?.description ?? '';
-
-        const taskTagNames = this.tags.value.map((tag: Tag) => tag.name);
-
-        const taskTagFontColors = this.tags.value.map(
-          (tag: Tag) => tag.fontColor
-        );
-
-        const taskTagBackgronudColors = this.tags.value.map(
-          (tag: Tag) => tag.backgroundColor
-        );
-
-        this.apollo
-          .addTask(
-            taskTitle,
-            taskDescription,
-            taskTagNames,
-            taskTagFontColors,
-            taskTagBackgronudColors
-          )
-          .subscribe();
-      }
-
       if (
         this.typeOfForm === 'subtask' &&
         this.boardForm.controls.subtask.valid
