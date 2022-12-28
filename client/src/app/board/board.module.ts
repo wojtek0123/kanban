@@ -16,6 +16,7 @@ import { ProjectFormComponent } from './project-form/project-form.component';
 import { BoardFormComponent } from './board-form/board-form.component';
 import { ColumnFormComponent } from './column-form/column-form.component';
 import { TaskFormComponent } from './task-form/task-form.component';
+import { SubtaskFormComponent } from './subtask-form/subtask-form.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { TaskFormComponent } from './task-form/task-form.component';
     BoardFormComponent,
     ColumnFormComponent,
     TaskFormComponent,
+    SubtaskFormComponent,
   ],
   imports: [
     BrowserAnimationsModule,
