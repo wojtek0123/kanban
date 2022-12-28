@@ -80,6 +80,16 @@ export class FormComponent implements OnInit {
     this.isEditing = this.formService.isEditing;
   }
 
+  close(event: Event) {
+    const target = event.target as HTMLDivElement;
+
+    if (!target.classList.contains('backdrop')) {
+      return;
+    }
+
+    this.formService.onChangeFormVisibility();
+  }
+
   fillEditTags() {
     const names = this.formService.editingTask?.tagNames;
     const fontColors = this.formService.editingTask?.tagFontColors;

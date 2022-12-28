@@ -12,6 +12,7 @@ import { ContextMenuModalComponent } from './context-menu-modal/context-menu-mod
 import { CollapseButtonComponent } from './collapse-button/collapse-button.component';
 import { AccordionItemComponent } from './accordion-item/accordion-item.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectFormComponent } from './project-form/project-form.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ContextMenuModalComponent,
     CollapseButtonComponent,
     AccordionItemComponent,
+    ProjectFormComponent,
   ],
   imports: [
     BrowserAnimationsModule,
