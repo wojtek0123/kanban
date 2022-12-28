@@ -77,10 +77,21 @@
   padding: 0 1rem;
 }
 
+.section-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .section-title {
-  text-align: center;
   font-size: 1.5rem;
   margin: 1rem 0;
+}
+
+.section-title-circle {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 100%;
 }
 
 .cards {

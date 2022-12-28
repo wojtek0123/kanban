@@ -29,7 +29,14 @@
   </p>
   <section class="section" *ngFor="let column of selectedBoard?.columns">
     <div class="section-heading">
-      <h2 class="section-title">{{ column.name }}</h2>
+      <div class="section-title-wrapper">
+        <span
+          [style.background-color]="column.backgroundColor"
+          class="section-title-circle"></span>
+        <h2 class="section-title">
+          {{ column.name }}
+        </h2>
+      </div>
       <app-context-menu
         [id]="column.id"
         [type]="'column'"

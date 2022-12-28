@@ -14,11 +14,15 @@ export class ColumnFormComponent implements OnInit {
   form = this.formBuilder.group({
     add: this.formBuilder.group({
       name: this.formBuilder.control('', [Validators.required]),
+      dotColor: this.formBuilder.control('#ffffff'),
     }),
     edit: this.formBuilder.group({
       name: this.formBuilder.control(this.formService.editingColumn?.name, [
         Validators.required,
       ]),
+      dotColor: this.formBuilder.control(
+        this.formService.editingColumn?.backgroundColor
+      ),
     }),
   });
 

@@ -11,6 +11,8 @@
       class="text-danger-global">
       <p *ngIf="getAddControls.name.errors?.['required']">Name is required.</p>
     </div>
+    <label class="form-label-global">Dot color</label>
+    <input type="color" formControlName="dotColor" />
   </div>
 
   <div *ngIf="isEditing" formGroupName="edit" class="form-wrapper-global">
@@ -25,6 +27,8 @@
       class="text-danger-global">
       <p *ngIf="getEditControls.name.errors?.['required']">Name is required.</p>
     </div>
+    <label class="form-label-global">Dot color</label>
+    <input type="color" formControlName="dotColor" />
   </div>
 
   <button type="submit" class="button-global submit-button-global">
