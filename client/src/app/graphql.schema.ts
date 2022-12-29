@@ -5,13 +5,19 @@ export const GET_PROJECTS = gql`
     projects(userId: $userId) {
       id
       name
+      createdAt
+      updatedAt
       boards {
         id
         name
+        createdAt
+        updatedAt
         columns {
           id
           name
           dotColor
+          createdAt
+          updatedAt
           tasks {
             id
             title
@@ -19,10 +25,14 @@ export const GET_PROJECTS = gql`
             tagNames
             tagFontColors
             tagBackgroundColors
+            createdAt
+            updatedAt
             subtasks {
               id
               isFinished
               name
+              createdAt
+              updatedAt
             }
           }
         }

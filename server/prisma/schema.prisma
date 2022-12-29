@@ -8,11 +8,13 @@ datasource db {
 }
 
 model Subtask {
-  id         String  @id @default(uuid())
+  id         String    @id @default(uuid())
   isFinished Boolean
   name       String
-  Task       Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  Task       Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model Task {
@@ -25,28 +27,36 @@ model Task {
   tagFontColors       String[]
   tagBackgroundColors String[]
   subtasks            Subtask[]
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime? @updatedAt
 }
 
 model Column {
-  id       String @id @default(uuid())
-  name     String
-  dotColor String
-  boardId  String
-  Board    Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  tasks    Task[]
+  id        String    @id @default(uuid())
+  name      String
+  dotColor  String
+  boardId   String
+  Board     Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks     Task[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Board {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
   columns   Column[]
-  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Project {
-  id     String  @id @default(uuid())
-  name   String
-  boards Board[]
-  userId String
+  id        String    @id @default(uuid())
+  name      String
+  boards    Board[]
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

@@ -1,11 +1,36 @@
 import { gql } from 'apollo-server'
 import { Context } from './context'
 
+import { GraphQLScalarType, Kind } from 'graphql'
+
+export const dateScalar = new GraphQLScalarType({
+  name: 'Date',
+  description: 'Date custom scalar type',
+  serialize(value: any) {
+    // return value.getTime(); // Convert outgoing Date to integer for JSON
+    const date = new Date(value)
+    return date.toISOString()
+  },
+  parseValue(value: any) {
+    return new Date(value) // Convert incoming integer to Date
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.INT) {
+      return new Date(parseInt(ast.value, 10)) // Convert hard-coded AST string to integer and then to Date
+    }
+    return null // Invalid hard-coded value (not an integer)
+  },
+})
+
 export const typeDefs = gql`
+  scalar Date
+
   type Subtask {
     id: String
     isFinished: Boolean
     name: String
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Task {
@@ -16,6 +41,8 @@ export const typeDefs = gql`
     tagFontColors: [String]
     tagBackgroundColors: [String]
     subtasks: [Subtask]
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Column {
@@ -23,12 +50,16 @@ export const typeDefs = gql`
     name: String
     dotColor: String
     tasks: [Task]
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Board {
     id: String
     name: String
     columns: [Column]
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Project {
@@ -36,6 +67,8 @@ export const typeDefs = gql`
     name: String
     boards: [Board]
     userId: String
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Query {
@@ -84,18 +117,26 @@ export const resolvers = {
         select: {
           id: true,
           name: true,
+          createdAt: true,
+          updatedAt: true,
           boards: {
             select: {
               id: true,
               name: true,
+              createdAt: true,
+              updatedAt: true,
               columns: {
                 select: {
                   id: true,
+                  createdAt: true,
+                  updatedAt: true,
                   name: true,
                   dotColor: true,
                   tasks: {
                     select: {
                       id: true,
+                      createdAt: true,
+                      updatedAt: true,
                       title: true,
                       tagNames: true,
                       tagFontColors: true,
@@ -103,6 +144,8 @@ export const resolvers = {
                       description: true,
                       subtasks: {
                         select: {
+                          createdAt: true,
+                          updatedAt: true,
                           id: true,
                           isFinished: true,
                           name: true,
