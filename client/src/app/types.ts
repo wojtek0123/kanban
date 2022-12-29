@@ -17,7 +17,7 @@ export interface Task {
 export interface Column {
   id: string;
   name: string;
-  backgroundColor: string;
+  dotColor: string;
   tasks: Task[];
 }
 

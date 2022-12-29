@@ -79,12 +79,12 @@ export class ApolloService {
     });
   }
 
-  addColumn(name: string) {
+  addColumn(name: string, dotColor: string) {
     const boardId = this.board.selectedBoard.value?.id ?? '';
 
     return this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
       mutation: ADD_COLUMN,
-      variables: { name, boardId },
+      variables: { name, boardId, dotColor },
       refetchQueries: [
         {
           query: GET_PROJECTS,
@@ -173,10 +173,10 @@ export class ApolloService {
     });
   }
 
-  editColumn(id: string, name: string) {
+  editColumn(id: string, name: string, dotColor: string) {
     return this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
       mutation: EDIT_COLUMN,
-      variables: { id, name },
+      variables: { id, name, dotColor },
       refetchQueries: [
         {
           query: GET_PROJECTS,

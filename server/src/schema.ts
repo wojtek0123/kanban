@@ -1,6 +1,5 @@
 import { gql } from 'apollo-server'
 import { Context } from './context'
-import { Task } from '@prisma/client'
 
 export const typeDefs = gql`
   type Subtask {
@@ -22,6 +21,7 @@ export const typeDefs = gql`
   type Column {
     id: String
     name: String
+    dotColor: String
     tasks: [Task]
   }
 
@@ -46,7 +46,7 @@ export const typeDefs = gql`
     changeColumn(columnId: String, taskId: String): Column
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
-    addColumn(boardId: String, name: String): Column
+    addColumn(boardId: String, name: String, dotColor: String): Column
     addTask(
       columnId: String
       title: String
@@ -58,7 +58,7 @@ export const typeDefs = gql`
     addSubtask(name: String, isFinished: Boolean, taskId: String): Subtask
     editProject(id: String, name: String): Project
     editBoard(id: String, name: String): Board
-    editColumn(id: String, name: String): Column
+    editColumn(id: String, name: String, dotColor: String): Column
     editTask(
       id: String
       title: String
@@ -92,6 +92,7 @@ export const resolvers = {
                 select: {
                   id: true,
                   name: true,
+                  dotColor: true,
                   tasks: {
                     select: {
                       id: true,
@@ -174,7 +175,7 @@ export const resolvers = {
     },
     editColumn: (
       _parent: any,
-      args: { id: string; name: string },
+      args: { id: string; name: string; dotColor: string },
       context: Context,
     ) => {
       return context.prisma.column.update({
@@ -183,6 +184,7 @@ export const resolvers = {
         },
         data: {
           name: args.name,
+          dotColor: args.dotColor,
         },
       })
     },
@@ -251,13 +253,14 @@ export const resolvers = {
     },
     addColumn: (
       _parent: any,
-      args: { boardId: string; name: string },
+      args: { boardId: string; name: string; dotColor: string },
       context: Context,
     ) => {
       return context.prisma.column.create({
         data: {
           name: args.name,
           boardId: args.boardId,
+          dotColor: args.dotColor,
         },
       })
     },

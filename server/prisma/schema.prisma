@@ -28,11 +28,12 @@ model Task {
 }
 
 model Column {
-  id      String @id @default(uuid())
-  name    String
-  boardId String
-  Board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  tasks   Task[]
+  id       String @id @default(uuid())
+  name     String
+  dotColor String
+  boardId  String
+  Board    Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks    Task[]
 }
 
 model Board {

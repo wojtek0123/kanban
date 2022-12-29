@@ -11,6 +11,7 @@ export const GET_PROJECTS = gql`
         columns {
           id
           name
+          dotColor
           tasks {
             id
             title
@@ -96,8 +97,8 @@ export const ADD_BOARD = gql`
   }
 `;
 export const ADD_COLUMN = gql`
-  mutation addColumn($boardId: String, $name: String) {
-    addColumn(boardId: $boardId, name: $name) {
+  mutation addColumn($boardId: String, $name: String, $dotColor: String) {
+    addColumn(boardId: $boardId, name: $name, dotColor: $dotColor) {
       id
     }
   }
@@ -144,8 +145,8 @@ export const EDIT_BOARD = gql`
 `;
 
 export const EDIT_COLUMN = gql`
-  mutation editColumn($id: String, $name: String) {
-    editColumn(id: $id, name: $name) {
+  mutation editColumn($id: String, $name: String, $dotColor: String) {
+    editColumn(id: $id, name: $name, dotColor: $dotColor) {
       id
       name
     }

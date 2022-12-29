@@ -21,7 +21,7 @@ export class ColumnFormComponent implements OnInit {
         Validators.required,
       ]),
       dotColor: this.formBuilder.control(
-        this.formService.editingColumn?.backgroundColor
+        this.formService.editingColumn?.dotColor
       ),
     }),
   });
@@ -52,13 +52,15 @@ export class ColumnFormComponent implements OnInit {
     if (this.isEditing) {
       const id = this.formService.editingColumn?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
+      const dotColor = this.form.value.edit?.dotColor ?? '';
 
-      this.apollo.editColumn(id, name).subscribe();
+      this.apollo.editColumn(id, name, dotColor).subscribe();
     }
     if (!this.isEditing) {
       const name = this.form.value.add?.name ?? '';
+      const dotColor = this.form.value.add?.dotColor ?? '';
 
-      this.apollo.addColumn(name).subscribe();
+      this.apollo.addColumn(name, dotColor).subscribe();
     }
 
     this.formService.isEditing = false;
