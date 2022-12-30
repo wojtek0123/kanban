@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
 export class BoardComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
   data: Observable<{ projects: Project[] }> | undefined = undefined;
-  userId: string = '';
+  isLoading = true;
 
   constructor(
     public formService: FormService,
@@ -55,6 +55,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
       .subscribe(board => {
         this.boardService.onChangeSelectedBoard(board);
+        this.isLoading = false;
       });
   }
 

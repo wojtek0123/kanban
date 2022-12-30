@@ -17,6 +17,10 @@
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details></app-board-details>
+    <app-board-details *ngIf="!isLoading"></app-board-details>
+    <div class="loading-wrapper" *ngIf="isLoading">
+      <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
+      <p>Loading...</p>
+    </div>
   </div>
 </main>
