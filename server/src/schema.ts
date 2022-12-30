@@ -151,13 +151,28 @@ export const resolvers = {
                           name: true,
                           taskId: true,
                         },
+                        orderBy: {
+                          createdAt: 'asc',
+                        },
                       },
+                    },
+                    orderBy: {
+                      createdAt: 'desc',
                     },
                   },
                 },
+                orderBy: {
+                  createdAt: 'asc',
+                },
               },
             },
+            orderBy: {
+              createdAt: 'asc',
+            },
           },
+        },
+        orderBy: {
+          createdAt: 'asc',
         },
         where: {
           userId: args.userId,
