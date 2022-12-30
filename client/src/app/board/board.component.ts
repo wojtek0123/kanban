@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormService } from './form/form.service';
 import { Observable, Subscription } from 'rxjs';
 import { BoardService } from './board.service';
-import { Project, FormType } from '../types';
+import { Project, FormType, Status } from '../types';
 import { ApolloService } from './apollo.service';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { ApolloQueryResult } from '@apollo/client/core/types';
 
 @Component({
   selector: 'app-board',
@@ -13,8 +14,9 @@ import { map } from 'rxjs/operators';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
-  data: Observable<{ projects: Project[] }> | undefined = undefined;
-  isLoading = true;
+  data: Observable<ApolloQueryResult<{ projects: Project[] }>> | undefined =
+    undefined;
+  status: Status = 'loading';
 
   constructor(
     public formService: FormService,
@@ -28,34 +30,47 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.subscription = this.data
       .pipe(
         map(data => {
-          if (data.projects.length === 0) {
+          if (data.data.projects.length === 0) {
             return;
           }
           if (!this.boardService.selectedBoard.value) {
-            const project = data.projects.filter(board => board.boards.at(0));
+            const project = data.data.projects.filter(board =>
+              board.boards.at(0)
+            );
             this.boardService.onChangeSelectedProjectId(
               project?.at(0)?.id ?? ''
             );
 
-            return project?.at(0)?.boards.at(0);
+            return { project: project?.at(0)?.boards.at(0), error: data.error };
           } else {
-            const project = data.projects.filter(
+            const project = data.data.projects.filter(
               project =>
                 project.id === this.boardService.selectedProjectId.value
             );
 
-            return project
-              ?.at(0)
-              ?.boards.find(
-                board =>
-                  board.id === this.boardService.selectedBoard.value?.id ?? ''
-              );
+            return {
+              project: project
+                ?.at(0)
+                ?.boards.find(
+                  board =>
+                    board.id === this.boardService.selectedBoard.value?.id ?? ''
+                ),
+              error: data.error,
+            };
+          }
+        }),
+        catchError(async error => {
+          this.status = 'error';
+          if (error instanceof Error) {
+            throw new Error(error.message);
+          } else {
+            throw new Error('Something went wrong!');
           }
         })
       )
       .subscribe(board => {
-        this.boardService.onChangeSelectedBoard(board);
-        this.isLoading = false;
+        this.boardService.onChangeSelectedBoard(board?.project);
+        this.status = 'ok';
       });
   }
 

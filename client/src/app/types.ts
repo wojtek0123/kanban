@@ -44,3 +44,5 @@ export interface Project {
 }
 
 export type FormType = 'project' | 'board' | 'task' | 'column' | 'subtask';
+
+export type Status = 'loading' | 'error' | 'ok';

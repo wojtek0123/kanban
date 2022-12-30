@@ -1,11 +1,12 @@
 <app-mobile-navigation
-  [projects]="(data | async)?.projects"></app-mobile-navigation>
+  [projects]="(data | async)?.data?.projects"></app-mobile-navigation>
 <app-form *ngIf="formService.isFormOpen"></app-form>
 <main class="main">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion [projects]="(data | async)?.projects"></app-accordion>
+      <app-accordion
+        [projects]="(data | async)?.data?.projects"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button
@@ -17,10 +18,13 @@
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details *ngIf="!isLoading"></app-board-details>
-    <div class="loading-wrapper" *ngIf="isLoading">
+    <app-board-details *ngIf="status === 'ok'"></app-board-details>
+    <div class="loading-wrapper" *ngIf="status === 'loading'">
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
       <p>Loading...</p>
+    </div>
+    <div class="loading-wrapper" *ngIf="status === 'error'">
+      <h2>Something went wrong! Try later!</h2>
     </div>
   </div>
 </main>

@@ -22,8 +22,9 @@ import {
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
-import { Board, FormType, Project, Task } from '../types';
+import { Board, FormType, Project } from '../types';
 import { BoardService } from './board.service';
+import { ApolloQueryResult } from '@apollo/client/core/types';
 
 @Injectable({
   providedIn: 'root',
@@ -39,13 +40,13 @@ export class ApolloService {
     this.userId = this.supabase.getUserId;
   }
 
-  getProjects(): Observable<{ projects: Project[] }> {
+  getProjects(): Observable<ApolloQueryResult<{ projects: Project[] }>> {
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
         variables: { userId: this.userId },
       })
-      .valueChanges.pipe(map(({ data }) => data));
+      .valueChanges.pipe(map(data => data));
   }
 
   addProject(name: string) {
