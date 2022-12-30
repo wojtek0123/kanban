@@ -18,7 +18,10 @@
     </button>
   </div>
   <div class="buttons" *ngIf="selectedBoard">
-    <button type="button" class="button-global" (click)="onForm('column')">
+    <button
+      type="button"
+      class="button-global button"
+      (click)="onForm('column')">
       Add column
     </button>
   </div>
@@ -35,6 +38,9 @@
           class="section-title-circle"></span>
         <h2 class="section-title">
           {{ column.name }}
+          <span class="section-title-task-counter"
+            >({{ column.tasks.length }})</span
+          >
         </h2>
       </div>
       <app-context-menu

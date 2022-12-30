@@ -105,6 +105,10 @@
 
 .card-wrapper {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .card {
@@ -182,6 +186,18 @@
   background-color: var(--background-color);
 }
 
+.container {
+  width: var(--task-width);
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.section-title-task-counter {
+  color: var(--font-color-grey);
+  margin-left: 0.25rem;
+}
+
 @media (min-width: 1024px) {
   .container {
     position: sticky;
@@ -189,6 +205,8 @@
     top: 0;
     left: 0;
     z-index: 10;
+    margin: 0;
+    width: 100%;
   }
 
   .tasks {
