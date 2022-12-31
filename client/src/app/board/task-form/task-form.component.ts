@@ -60,7 +60,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.formService.isEditing.subscribe(state => (this.isEditing = state));
+    this.subscription = this.formService.isEditing.subscribe(
+      state => (this.isEditing = state)
+    );
   }
 
   ngOnDestroy(): void {
@@ -179,6 +181,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
         .subscribe();
     }
 
+    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }

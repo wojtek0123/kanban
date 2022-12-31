@@ -79,6 +79,7 @@ export class BoardFormComponent implements OnInit, OnDestroy {
         .subscribe();
     }
 
+    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }

@@ -71,6 +71,7 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       this.apollo.addColumn(name, dotColor).subscribe();
     }
 
+    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }

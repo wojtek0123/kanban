@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from './form.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FormType } from '../../types';
 import { Subscription } from 'rxjs';
 
@@ -10,15 +9,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit, OnDestroy {
-  typeOfForm!: FormType;
+  typeOfForm!: FormType | undefined;
   show!: boolean;
   showSubscription!: Subscription;
   typeSubscription!: Subscription;
 
-  constructor(
-    private formService: FormService,
-    private formBuilder: FormBuilder
-  ) {}
+  constructor(private formService: FormService) {}
 
   ngOnInit(): void {
     this.typeSubscription = this.formService.typeOfForm.subscribe(
@@ -42,29 +38,6 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     this.formService.onChangeFormVisibility();
-  }
-
-  fillEditTags() {
-    const names = this.formService.editingTask?.tagNames;
-    const fontColors = this.formService.editingTask?.tagFontColors;
-    const backgroundColors = this.formService.editingTask?.tagBackgroundColors;
-
-    const result = [];
-
-    if (!names || !fontColors || !backgroundColors) {
-      return;
-    }
-
-    for (let i = 0; i < names.length; i++) {
-      const group = new FormGroup({
-        name: this.formBuilder.control(names[i], [Validators.required]),
-        fontColor: this.formBuilder.control(fontColors[i]),
-        backgroundColor: this.formBuilder.control(backgroundColors[i]),
-      });
-      result.push(group);
-    }
-
-    return result;
   }
 
   onClose() {

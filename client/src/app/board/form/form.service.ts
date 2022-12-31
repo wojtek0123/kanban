@@ -11,15 +11,12 @@ export class FormService {
   editingColumn?: Column;
   editingTask?: Task;
   editingSubtask?: Subtask;
-  typeOfForm = new BehaviorSubject<FormType>('project');
+  typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
 
   onChangeFormVisibility(formType?: FormType) {
     this.isFormOpen.next(!this.isFormOpen.value);
     this.isEditing.next(false);
-    console.log(formType);
-    if (formType) {
-      this.typeOfForm.next(formType);
-    }
+    this.typeOfForm.next(formType);
   }
 
   onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {

@@ -65,6 +65,7 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
       this.apollo.addSubtask(name, false).subscribe();
     }
 
+    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }
