@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Task, Column, Board, Subtask, Project, FormType } from '../../types';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
-  isFormOpen = false;
-  isEditing = false;
+  isFormOpen = new BehaviorSubject(false);
+  isEditing = new BehaviorSubject(false);
   editingProject?: Project;
   editingBoard?: Board;
   editingColumn?: Column;
   editingTask?: Task;
   editingSubtask?: Subtask;
-  typeOfForm: FormType = 'project';
+  typeOfForm = new BehaviorSubject<FormType>('project');
 
   onChangeFormVisibility(formType?: FormType) {
-    this.isFormOpen = !this.isFormOpen;
+    this.isFormOpen.next(!this.isFormOpen.value);
     if (formType) {
-      this.typeOfForm = formType;
+      this.typeOfForm.next(formType);
+      this.isEditing.next(false);
     }
   }
 
-  onLeaveEditingMode() {
-    this.isEditing = false;
-  }
-
   onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {
-    this.isEditing = true;
-    this.typeOfForm = type;
+    this.isEditing.next(true);
+    this.typeOfForm.next(type);
 
     switch (type) {
       case 'project':

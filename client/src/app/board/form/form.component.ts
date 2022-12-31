@@ -1,76 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from './form.service';
-import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FormType } from '../../types';
-import { ApolloService } from '../apollo.service';
-import { BoardService } from '../board.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
   typeOfForm!: FormType;
-  isEditing!: boolean;
-  isSubmitted = false;
-
-  boardForm = this.formBuilder.group({
-    project: this.formBuilder.group({
-      name: ['', [Validators.required]],
-    }),
-    board: this.formBuilder.group({
-      name: ['', [Validators.required]],
-    }),
-    column: this.formBuilder.group({
-      name: ['', [Validators.required]],
-    }),
-    task: this.formBuilder.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      tags: this.formBuilder.array([
-        this.formBuilder.group({
-          name: this.formBuilder.control('', [Validators.required]),
-          fontColor: this.formBuilder.control('#000000'),
-          backgroundColor: this.formBuilder.control('#e8fe93'),
-        }),
-      ]),
-    }),
-    subtask: this.formBuilder.group({
-      name: ['', [Validators.required]],
-    }),
-    editProject: this.formBuilder.group({
-      name: [this.formService.editingProject?.name, [Validators.required]],
-    }),
-    editBoard: this.formBuilder.group({
-      name: [this.formService.editingBoard?.name, [Validators.required]],
-    }),
-    editColumn: this.formBuilder.group({
-      name: [this.formService.editingColumn?.name, [Validators.required]],
-    }),
-    editTask: this.formBuilder.group({
-      title: [this.formService.editingTask?.title, [Validators.required]],
-      description: [
-        this.formService.editingTask?.description,
-        [Validators.required],
-      ],
-      tags: this.formBuilder.array(this.fillEditTags() ?? []),
-    }),
-    editSubtask: this.formBuilder.group({
-      name: [this.formService.editingSubtask?.name, [Validators.required]],
-    }),
-  });
+  show!: boolean;
+  showSubscription!: Subscription;
+  typeSubscription!: Subscription;
 
   constructor(
     private formService: FormService,
-    private apollo: ApolloService,
-    private formBuilder: FormBuilder,
-    private board: BoardService
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.typeOfForm = this.formService.typeOfForm;
-    this.isEditing = this.formService.isEditing;
+    this.typeSubscription = this.formService.typeOfForm.subscribe(
+      type => (this.typeOfForm = type)
+    );
+    this.showSubscription = this.formService.isFormOpen.subscribe(
+      state => (this.show = state)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.showSubscription.unsubscribe();
+    this.typeSubscription.unsubscribe();
   }
 
   close(event: Event) {
@@ -107,71 +68,6 @@ export class FormComponent implements OnInit {
   }
 
   onClose() {
-    this.formService.onChangeFormVisibility();
-    this.formService.onLeaveEditingMode();
-  }
-
-  addTag(groupName: string) {
-    const control = new FormGroup({
-      name: this.formBuilder.control('', [Validators.required]),
-      fontColor: this.formBuilder.control('#000000'),
-      backgroundColor: this.formBuilder.control('#e8fe93'),
-    });
-    (<FormArray>this.boardForm.get(groupName)?.get('tags')).push(control);
-  }
-
-  removeTag(groupName: string) {
-    (<FormArray>this.boardForm.get(groupName)?.get('tags')).removeAt(-1);
-  }
-
-  get tags() {
-    return this.boardForm.get('task')?.get('tags') as FormArray;
-  }
-
-  get editTags() {
-    return this.boardForm.get('editTask')?.get('tags') as FormArray;
-  }
-
-  get getControls() {
-    return this.boardForm.controls;
-  }
-
-  onSubmit() {
-    this.isSubmitted = true;
-    let validCounter = 0;
-    for (const controlName of Object.keys(this.boardForm.controls)) {
-      // @ts-ignore
-      const control = this.boardForm.controls[controlName].valid;
-      if (control) {
-        validCounter++;
-      }
-    }
-    if (validCounter === 0) {
-      return;
-    }
-
-    if (this.isEditing) {
-      if (
-        this.typeOfForm === 'subtask' &&
-        this.boardForm.controls.editSubtask.valid
-      ) {
-        const subtaskId = this.formService.editingSubtask?.id ?? '';
-        const subtaskName = this.boardForm.value.editSubtask?.name ?? '';
-
-        this.apollo.editSubtask(subtaskId, subtaskName).subscribe();
-      }
-    } else {
-      if (
-        this.typeOfForm === 'subtask' &&
-        this.boardForm.controls.subtask.valid
-      ) {
-        const subtaskName = this.boardForm.value.subtask?.name ?? '';
-
-        this.apollo.addSubtask(subtaskName, false).subscribe();
-      }
-    }
-
-    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
   }
 }

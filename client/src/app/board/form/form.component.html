@@ -1,23 +1,21 @@
-<div class="backdrop" (click)="close($event)">
-  <div class="form" [formGroup]="boardForm">
-    <div class="close-button">
-      <button
-        type="button"
-        class="button-global"
-        (click)="onClose()"
-        title="Close">
-        X
-      </button>
+<div class="backdrop" [ngClass]="{ 'show-form': show }" (click)="close($event)">
+  <div class="forms">
+    <div class="form-wrapper">
+      <div class="close-button">
+        <button
+          type="button"
+          class="button-global"
+          (click)="onClose()"
+          title="Close">
+          X
+        </button>
+      </div>
+
+      <app-project-form *ngIf="typeOfForm === 'project'"></app-project-form>
+      <app-board-form *ngIf="typeOfForm === 'board'"></app-board-form>
+      <app-column-form *ngIf="typeOfForm === 'column'"></app-column-form>
+      <app-task-form *ngIf="typeOfForm === 'task'"></app-task-form>
+      <app-subtask-form *ngIf="typeOfForm === 'subtask'"></app-subtask-form>
     </div>
-
-    <app-project-form *ngIf="typeOfForm === 'project'"></app-project-form>
-
-    <app-board-form *ngIf="typeOfForm === 'board'"></app-board-form>
-
-    <app-column-form *ngIf="typeOfForm === 'column'"></app-column-form>
-
-    <app-task-form *ngIf="typeOfForm === 'task'"></app-task-form>
-
-    <app-subtask-form *ngIf="typeOfForm === 'subtask'"></app-subtask-form>
   </div>
 </div>

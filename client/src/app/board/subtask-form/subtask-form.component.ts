@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-subtask-form',
   templateUrl: './subtask-form.component.html',
   styleUrls: [],
 })
-export class SubtaskFormComponent implements OnInit {
+export class SubtaskFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
+  subscription!: Subscription;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -39,8 +41,15 @@ export class SubtaskFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEditing = this.formService.isEditing;
-    console.log(this.formService.editingSubtask);
+    this.subscription = this.formService.isEditing.subscribe(
+      state => (this.isEditing = state)
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onSubmit() {
@@ -56,7 +65,6 @@ export class SubtaskFormComponent implements OnInit {
       this.apollo.addSubtask(name, false).subscribe();
     }
 
-    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
   }
 }

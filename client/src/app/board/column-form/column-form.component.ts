@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-column-form',
   templateUrl: './column-form.component.html',
   styleUrls: [],
 })
-export class ColumnFormComponent implements OnInit {
+export class ColumnFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
+  subscription!: Subscription;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -33,7 +35,13 @@ export class ColumnFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEditing = this.formService.isEditing;
+    this.formService.isEditing.subscribe(state => (this.isEditing = state));
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   get getAddControls() {
@@ -63,7 +71,6 @@ export class ColumnFormComponent implements OnInit {
       this.apollo.addColumn(name, dotColor).subscribe();
     }
 
-    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
   }
 }

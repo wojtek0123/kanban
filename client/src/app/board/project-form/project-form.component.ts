@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../apollo.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: [],
 })
-export class ProjectFormComponent implements OnInit {
+export class ProjectFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
+  subscription!: Subscription;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -39,7 +41,15 @@ export class ProjectFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEditing = this.formService.isEditing;
+    this.subscription = this.formService.isEditing.subscribe(
+      state => (this.isEditing = state)
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onSubmit() {
@@ -54,7 +64,7 @@ export class ProjectFormComponent implements OnInit {
       this.apollo.addProject(name).subscribe();
     }
 
-    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
+    this.form.reset();
   }
 }

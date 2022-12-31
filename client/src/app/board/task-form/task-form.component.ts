@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 type Tag = {
   name: string;
@@ -22,8 +22,9 @@ type Tag = {
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css'],
 })
-export class TaskFormComponent implements OnInit {
+export class TaskFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
+  subscription!: Subscription;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -59,7 +60,13 @@ export class TaskFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEditing = this.formService.isEditing;
+    this.formService.isEditing.subscribe(state => (this.isEditing = state));
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   maxLength(max: number): ValidatorFn | any {
@@ -126,7 +133,6 @@ export class TaskFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form);
     if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingTask?.id ?? '';
       const title = this.form.value.edit?.title ?? '';
@@ -173,7 +179,6 @@ export class TaskFormComponent implements OnInit {
         .subscribe();
     }
 
-    this.formService.isEditing = false;
     this.formService.onChangeFormVisibility();
   }
 }
