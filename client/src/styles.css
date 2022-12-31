@@ -29,7 +29,7 @@ body {
   --error-color: #dc3545;
 
   --rounded: 0.5rem;
-  --task-width: 31rem;
+  --task-width: 30rem;
 }
 
 .button-global {
@@ -46,7 +46,7 @@ body {
 
 .button-global.add-task {
   width: 100%;
-  max-width: 31rem;
+  max-width: var(--task-width);
 }
 
 .button-global:hover {

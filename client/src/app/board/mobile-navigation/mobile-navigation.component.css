@@ -10,6 +10,7 @@
   right: 0;
   background-color: var(--lighter-background-color);
   box-shadow: 0 0 5px var(--background-color);
+  z-index: 15;
 }
 
 .navigation-backdrop {

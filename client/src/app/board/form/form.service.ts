@@ -15,9 +15,10 @@ export class FormService {
 
   onChangeFormVisibility(formType?: FormType) {
     this.isFormOpen.next(!this.isFormOpen.value);
+    this.isEditing.next(false);
+    console.log(formType);
     if (formType) {
       this.typeOfForm.next(formType);
-      this.isEditing.next(false);
     }
   }
 

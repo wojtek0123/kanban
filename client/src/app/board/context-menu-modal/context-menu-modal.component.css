@@ -10,6 +10,7 @@
   transform: translate(-50%, -50%);
   background-color: var(--black-color);
   z-index: 11;
+  box-shadow: 0 0 15px var(--black-color);
 }
 
 .context-menu-modal p {
@@ -20,7 +21,7 @@
   position: fixed;
   inset: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: transparent;
 }
 
 .context-menu-modal-buttons {
