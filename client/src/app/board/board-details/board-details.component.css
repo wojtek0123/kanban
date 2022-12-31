@@ -198,7 +198,22 @@
   margin-left: 0.25rem;
 }
 
+.card-arrow-move {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.card-arrow-move img {
+  width: 1.75rem;
+  cursor: grabbing;
+}
+
 @media (min-width: 1024px) {
+  .card-arrow-move img {
+    width: 1.25rem;
+  }
+
   .container {
     position: sticky;
     background-color: var(--background-color);

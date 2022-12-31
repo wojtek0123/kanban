@@ -69,6 +69,12 @@
           class="card"
           [id]="task.id"
           *ngFor="let task of column.tasks">
+          <div class="card-arrow-move">
+            <img
+              src="../../../assets/arrows-move.svg"
+              alt="arrows move"
+              cdkDragHandle />
+          </div>
           <div class="card-tags">
             <span
               *ngFor="let tag of task.tagNames; let i = index"
