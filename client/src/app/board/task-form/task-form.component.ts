@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 type Tag = {
   name: string;
@@ -21,13 +29,16 @@ export class TaskFormComponent implements OnInit {
     add: this.formBuilder.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      tags: this.formBuilder.array([
-        this.formBuilder.group({
-          name: this.formBuilder.control('', [Validators.required]),
-          fontColor: this.formBuilder.control('#000000'),
-          backgroundColor: this.formBuilder.control('#e8fe93'),
-        }),
-      ]),
+      tags: this.formBuilder.array(
+        [
+          this.formBuilder.group({
+            name: this.formBuilder.control('', [Validators.required]),
+            fontColor: this.formBuilder.control('#000000'),
+            backgroundColor: this.formBuilder.control('#e8fe93'),
+          }),
+        ],
+        [this.maxLength(3)]
+      ),
     }),
     edit: this.formBuilder.group({
       title: [this.formService.editingTask?.title, [Validators.required]],
@@ -35,7 +46,9 @@ export class TaskFormComponent implements OnInit {
         this.formService.editingTask?.description,
         [Validators.required],
       ],
-      tags: this.formBuilder.array(this.fillEditTags() ?? []),
+      tags: this.formBuilder.array(this.fillEditTags() ?? [], [
+        this.maxLength(3),
+      ]),
     }),
   });
 
@@ -47,6 +60,13 @@ export class TaskFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.isEditing = this.formService.isEditing;
+  }
+
+  maxLength(max: number): ValidatorFn | any {
+    return (control: AbstractControl[]) => {
+      if (!(control instanceof FormArray)) return;
+      return control.length > max ? { maxLength: true } : null;
+    };
   }
 
   get getAddControls() {
@@ -106,6 +126,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.form);
     if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingTask?.id ?? '';
       const title = this.form.value.edit?.title ?? '';

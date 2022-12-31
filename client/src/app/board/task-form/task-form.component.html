@@ -1,4 +1,4 @@
-<form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="form-global form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-wrapper-global" *ngIf="!isEditing" formGroupName="add">
     <label class="form-label-global" for="task-name">Task name</label>
     <input
@@ -73,6 +73,11 @@
           </div>
         </ng-container>
       </div>
+      <p
+        class="text-danger-global"
+        *ngIf="getAddControls.tags.invalid && getAddControls.tags.touched">
+        Max 3 tags
+      </p>
     </div>
   </div>
 
@@ -157,10 +162,18 @@
           </div>
         </ng-container>
       </div>
+      <p
+        class="text-danger-global"
+        *ngIf="getEditControls.tags.invalid && getEditControls.tags.touched">
+        Max 3 tags
+      </p>
     </div>
   </div>
 
-  <button type="submit" class="button-global submit-button-global">
+  <button
+    type="submit"
+    class="button-global submit-button-global"
+    [disabled]="getFormControls.add.invalid && getFormControls.add.invalid">
     {{ isEditing ? 'Update' : 'Add ' + 'task' }}
   </button>
 </form>
