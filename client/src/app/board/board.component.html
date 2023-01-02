@@ -1,5 +1,3 @@
-<app-mobile-navigation
-  [projects]="(data | async)?.data?.projects"></app-mobile-navigation>
 <app-form></app-form>
 <main class="main">
   <aside class="board-sidebar">
@@ -18,7 +16,10 @@
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details *ngIf="status === 'ok'"></app-board-details>
+    <app-board-details *ngIf="status === 'ok'">
+      <app-mobile-navigation
+        [projects]="(data | async)?.data?.projects"></app-mobile-navigation>
+    </app-board-details>
     <div class="loading-wrapper" *ngIf="status === 'loading'">
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
       <p>Loading...</p>

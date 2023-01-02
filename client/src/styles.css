@@ -30,6 +30,7 @@ body {
 
   --rounded: 0.5rem;
   --task-width: 30rem;
+  --task-width-mobile: 20rem;
 }
 
 .button-global {

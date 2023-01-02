@@ -54,6 +54,11 @@
   }
 }
 
+.board-details-wrapper {
+  overflow-x: scroll;
+  height: 100vh;
+}
+
 @media (min-width: 1024px) {
   .main {
     align-items: start;

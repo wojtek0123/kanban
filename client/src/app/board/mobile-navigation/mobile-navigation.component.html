@@ -1,7 +1,8 @@
 <div class="navigation-bar">
   <div
     class="navigation-backdrop"
-    [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'"></div>
+    [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'"
+    (click)="navigationService.onMenu()"></div>
   <h2 class="navigation-logo">KanBan</h2>
   <button
     aria-label="hamburger menu"
