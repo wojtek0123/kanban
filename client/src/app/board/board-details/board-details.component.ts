@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Board, FormType, Task } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription } from 'rxjs';
+import { Subscription, async, catchError } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
@@ -46,6 +46,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getColumns(columnId: string) {
+    return this.selectedBoard?.columns.filter(column => column.id !== columnId);
+  }
+
   onUpdateCompletionStateOfSubtask(event: Event) {
     const target = event.target as HTMLInputElement;
 
@@ -68,6 +72,22 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
         throw new Error(error.message);
       }
     }
+  }
+
+  changeColumn(event: Event) {
+    const target = event.target as HTMLSelectElement;
+
+    const columnId = target.value;
+    const taskId = target.parentElement?.id ?? '';
+
+    if (!columnId) {
+      return;
+    }
+
+    this.apollo
+      .changeColumn(columnId, taskId)
+      .pipe(catchError(async error => console.error(error)))
+      .subscribe();
   }
 
   drop(event: CdkDragDrop<Task[]>) {

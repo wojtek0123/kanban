@@ -70,6 +70,14 @@
           class="card"
           [id]="task.id"
           *ngFor="let task of column.tasks">
+          <select class="card-select" (change)="changeColumn($event)">
+            <option [value]="undefined">Choose column</option>
+            <option
+              [value]="column.id"
+              *ngFor="let col of getColumns(column.id)">
+              {{ col.name }}
+            </option>
+          </select>
           <div class="card-arrow-move">
             <img
               src="../../../assets/arrows-move.svg"

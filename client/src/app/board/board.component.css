@@ -44,18 +44,8 @@
   animation: rotate infinite 1s;
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .board-details-wrapper {
-  overflow-x: scroll;
+  overflow-x: auto;
   height: 100vh;
 }
 
@@ -66,11 +56,6 @@
     flex-direction: row;
     height: 100%;
     width: 100%;
-  }
-
-  .board-details-wrapper {
-    overflow-x: scroll;
-    height: 100vh;
   }
 
   .board-sidebar {
@@ -109,5 +94,15 @@
 
   .board-logo {
     margin-bottom: 2rem;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

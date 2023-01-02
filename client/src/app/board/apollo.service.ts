@@ -45,6 +45,7 @@ export class ApolloService {
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
         variables: { userId: this.userId },
+        errorPolicy: 'all',
       })
       .valueChanges.pipe(map(data => data));
   }
