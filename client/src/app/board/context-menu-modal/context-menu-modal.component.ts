@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ContextMenuModalService } from './context-menu-modal.service';
 import { Subscription } from 'rxjs';
 import { ApolloService } from '../apollo.service';
+import { catchError } from 'rxjs/operators';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-context-menu-modal',
@@ -14,7 +16,8 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private contextMenuModalService: ContextMenuModalService,
-    private apollo: ApolloService
+    private apollo: ApolloService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -33,7 +36,10 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
     const id = this.contextMenuModalService.id;
     const type = this.contextMenuModalService.type;
 
-    this.apollo.remove(id, type).subscribe();
+    this.apollo
+      .remove(id, type)
+      .pipe(catchError(async () => this.toastService.showToast('delete', type)))
+      .subscribe();
   }
 
   ngOnDestroy(): void {

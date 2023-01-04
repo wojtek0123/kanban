@@ -10,6 +10,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ToastService } from '../toast/toast.service';
 
 type Tag = {
   name: string;
@@ -56,7 +58,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   constructor(
     private formService: FormService,
     private apollo: ApolloService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -157,6 +160,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagFontColors,
           tagBackgroundColors
         )
+        .pipe(
+          catchError(async () => this.toastService.showToast('update', 'task'))
+        )
         .subscribe();
     }
 
@@ -177,6 +183,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagNames,
           tagFontColors,
           tagBackgroundColors
+        )
+        .pipe(
+          catchError(async () => this.toastService.showToast('add', 'task'))
         )
         .subscribe();
     }

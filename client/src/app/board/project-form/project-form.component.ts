@@ -3,6 +3,8 @@ import { FormService } from '../form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../apollo.service';
 import { Subscription } from 'rxjs';
+import { ToastService } from '../toast/toast.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -25,7 +27,8 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
   constructor(
     private formService: FormService,
     private formBuilder: FormBuilder,
-    private apollo: ApolloService
+    private apollo: ApolloService,
+    private toastService: ToastService
   ) {}
 
   get getAddControls() {
@@ -57,11 +60,21 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       const projectId = this.formService.editingProject?.id ?? '';
       const projectName = this.form.value.edit?.name ?? '';
 
-      this.apollo.editProject(projectId, projectName).subscribe();
+      this.apollo
+        .editProject(projectId, projectName)
+        .pipe(
+          catchError(async () => this.toastService.showToast('update', 'board'))
+        )
+        .subscribe();
     } else if (!this.isEditing && this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.apollo.addProject(name).subscribe();
+      this.apollo
+        .addProject(name)
+        .pipe(
+          catchError(async () => this.toastService.showToast('add', 'board'))
+        )
+        .subscribe();
     }
 
     this.formService.onChangeFormVisibility();

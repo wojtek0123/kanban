@@ -3,6 +3,8 @@ import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-subtask-form',
@@ -25,7 +27,8 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
   constructor(
     private formService: FormService,
     private apollo: ApolloService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastService: ToastService
   ) {}
 
   get getAddControls() {
@@ -57,12 +60,24 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
       const id = this.formService.editingSubtask?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
-      this.apollo.editSubtask(id, name).subscribe();
+      this.apollo
+        .editSubtask(id, name)
+        .pipe(
+          catchError(async () =>
+            this.toastService.showToast('update', 'subtask')
+          )
+        )
+        .subscribe();
     }
     if (!this.isEditing) {
       const name = this.form.value.add?.name ?? '';
 
-      this.apollo.addSubtask(name, false).subscribe();
+      this.apollo
+        .addSubtask(name, false)
+        .pipe(
+          catchError(async () => this.toastService.showToast('add', 'subtask'))
+        )
+        .subscribe();
     }
 
     this.form.reset();

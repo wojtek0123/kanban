@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { FormType } from 'src/app/types';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,10 @@ export class ToastService {
 
   constructor() {}
 
-  showToast(message: string) {
+  showToast(operation: 'add' | 'delete' | 'update', name: FormType) {
+    const message = `Error! Couldn't ${operation} ${
+      operation === 'add' ? 'a new' : 'this'
+    } ${name}`;
     this.message.next(message);
     this.show.next(true);
 

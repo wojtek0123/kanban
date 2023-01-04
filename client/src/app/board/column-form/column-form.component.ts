@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
 import { Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-column-form',
@@ -31,7 +33,8 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private formService: FormService,
-    private apollo: ApolloService
+    private apollo: ApolloService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -62,13 +65,25 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       const name = this.form.value.edit?.name ?? '';
       const dotColor = this.form.value.edit?.dotColor ?? '';
 
-      this.apollo.editColumn(id, name, dotColor).subscribe();
+      this.apollo
+        .editColumn(id, name, dotColor)
+        .pipe(
+          catchError(async () =>
+            this.toastService.showToast('update', 'column')
+          )
+        )
+        .subscribe();
     }
     if (!this.isEditing) {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
-      this.apollo.addColumn(name, dotColor).subscribe();
+      this.apollo
+        .addColumn(name, dotColor)
+        .pipe(
+          catchError(async () => this.toastService.showToast('add', 'column'))
+        )
+        .subscribe();
     }
 
     this.form.reset();

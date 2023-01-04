@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../apollo.service';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { BoardService } from '../board.service';
 import { Subscription } from 'rxjs';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-board-form',
@@ -30,7 +31,8 @@ export class BoardFormComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private formBuilder: FormBuilder,
     private apollo: ApolloService,
-    private board: BoardService
+    private boardService: BoardService,
+    private toastService: ToastService
   ) {}
 
   get getAddControls() {
@@ -62,7 +64,12 @@ export class BoardFormComponent implements OnInit, OnDestroy {
       const id = this.formService.editingBoard?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
-      this.apollo.editBoard(id, name).subscribe();
+      this.apollo
+        .editBoard(id, name)
+        .pipe(
+          catchError(async () => this.toastService.showToast('update', 'board'))
+        )
+        .subscribe();
     }
     if (!this.isEditing) {
       const name = this.form.value.add?.name ?? '';
@@ -72,9 +79,10 @@ export class BoardFormComponent implements OnInit, OnDestroy {
         .pipe(
           tap(data => {
             if (data.data?.addBoard) {
-              this.board.onChangeSelectedBoard(data.data.addBoard);
+              this.boardService.onChangeSelectedBoard(data.data.addBoard);
             }
-          })
+          }),
+          catchError(async () => this.toastService.showToast('add', 'board'))
         )
         .subscribe();
     }
