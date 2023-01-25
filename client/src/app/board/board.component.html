@@ -9,6 +9,7 @@
     </div>
     <div class="board-button-wrapper">
       <button
+        *ngIf="status === 'ok'"
         type="button"
         class="button-global board-button"
         (click)="onForm('project')">
