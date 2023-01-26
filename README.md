@@ -29,11 +29,14 @@ cd kanban
 cd client
 npm install
 npm run serve
-cd ..
+```
+create new terminal and go to kanban folder
+```bash
 cd server
 npm install
 npm run dev
 ```
-After starting dev server:
+Client and dev server must go simultaneously.
+Dev servers:
 - app is available on localhost:4200
 - server is available on localhost:4000
