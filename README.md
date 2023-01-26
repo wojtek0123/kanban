@@ -5,7 +5,10 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - drag and drop task between columns
 - change color of dots next to column name and tag background
 
+
 ## Live demo: [angular-kanban-app.netlify.app](https://angular-kanban-app.netlify.app/)
+##### Warning! First load an app after login can lasts couple of minutes.
+###### This is couse of render.com node js app hosting. This problem isn't appear on localhost.
 
 ## Built with:
 - angular
@@ -19,7 +22,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - [ ] implement websocker (subscription)
 - [ ] add more person to one board
 
-I am thinking about change graphql, apollo and prisma backend to supabase. I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it.
+I am thinking about change graphql, apollo and prisma backend to supabase. I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it. Another trouble is an node js hosting on render.com. First load an app can lasts couple of minutes which is unacceptable. Still, this is the best free node js hosting for my backend.
 Now I think how to implement subscription in graphql, apollo server and prisma.
 
 ## How to start on local machine:
