@@ -15,6 +15,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - nodejs
 - supabase
 - graphql
+- prisma
 - apollo server
 
 ## To do:
