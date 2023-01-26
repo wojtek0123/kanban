@@ -1,28 +1,39 @@
 # KanbanAngular
-This is my first angular app.
+Kanban is an app to manage tasks in a team. For now owner of project / board cannot add more person to board but I am thinking how to implement this and websocket to everyone has up-to-date version of board. So far, user can:
+- register / login
+- add, remove and update project, board, column, task and subtask
+- drag and drop task between columns
+- change color of dots next to column name and tag background
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.3.
+## Live demo: [angular-kanban-app.netlify.app](https://angular-kanban-app.netlify.app/)
 
-## Development server
+## Built with:
+- angular
+- nodejs
+- supabase
+- graphql
+- apollo server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## To do:
+- [ ] implement the ability to change the order of columns
+- [ ] implement websocker (subscription)
+- [ ] add more person to one board
 
-## Code scaffolding
+I am thinking about change graphql, apollo and prisma backend to supabase. I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it.
+Now I think how to implement subscription in graphql, apollo server and prisma.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## How to start on local machine:
+```bash
+git clone https://github.com/wojtek0123/kanban.git
+cd kanban
+cd client
+npm install
+npm run serve
+cd ..
+cd server
+npm install
+npm run dev
+```
+After starting dev server:
+- app is available on localhost:4200
+- server is available on localhost:4000
