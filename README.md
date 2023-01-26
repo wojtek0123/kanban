@@ -23,7 +23,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - [ ] implement websocker (subscription)
 - [ ] add more person to one board
 
-I am thinking about change graphql, apollo and prisma backend to supabase. I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it. Another trouble is an node js hosting on render.com. First load an app can lasts couple of minutes which is unacceptable. Still, this is the best free node js hosting for my backend.
+I am thinking about change graphql, apollo and prisma backend to supabase (supabase handles sign in and up). I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it. Another trouble is an node js hosting on render.com. First load an app can lasts couple of minutes which is unacceptable. Still, this is the best free node js hosting for my backend.
 Now I think how to implement subscription in graphql, apollo server and prisma.
 
 ## How to start on local machine:
