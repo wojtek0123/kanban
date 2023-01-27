@@ -71,12 +71,23 @@ export const typeDefs = gql`
     updatedAt: Date
   }
 
+  type User {
+    id: String
+    name: String
+    email: String
+    userId: String
+    createdAt: Date
+    updatedAt: Date
+  }
+
   type Query {
     projects(userId: String): [Project]
+    users: [User]
   }
 
   type Mutation {
     changeColumn(columnId: String, taskId: String): Column
+    addUser(name: String, email: String, userId: String): User
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String, dotColor: String): Column
@@ -181,6 +192,19 @@ export const resolvers = {
     },
   },
   Mutation: {
+    addUser: (
+      _parent: any,
+      args: { name: string; email: string; userId: string },
+      context: Context,
+    ) => {
+      return context.prisma.user.create({
+        data: {
+          name: args.name,
+          email: args.email,
+          userId: args.userId,
+        },
+      })
+    },
     changeColumn: (
       _parent: any,
       args: { columnId: string; taskId: string },

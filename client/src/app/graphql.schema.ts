@@ -41,6 +41,17 @@ export const GET_PROJECTS = gql`
   }
 `;
 
+export const GET_USERS = gql`
+  query users {
+    id
+    name
+    email
+    userId
+    createdAt
+    updatedAt
+  }
+`;
+
 export const CHANGE_COLUMN = gql`
   mutation changeColumn($columnId: String, $taskId: String) {
     changeColumn(columnId: $columnId, taskId: $taskId) {
@@ -59,6 +70,17 @@ export const CHANGE_COLUMN = gql`
           name
         }
       }
+    }
+  }
+`;
+
+export const ADD_USER = gql`
+  mutation addUser($name: String, $email: String, $userId: String) {
+    addUser(name: $name, email: $email, userId: $userId) {
+      id
+      name
+      email
+      userId
     }
   }
 `;

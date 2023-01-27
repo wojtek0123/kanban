@@ -57,11 +57,4 @@ export class SupabaseService {
   signOut() {
     return this.supabase.auth.signOut();
   }
-
-  createUser(email: string, name: string) {
-    return this.supabase.from('User').insert({
-      email,
-      name,
-    });
-  }
 }

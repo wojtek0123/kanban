@@ -19,6 +19,7 @@ import {
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
+  ADD_USER,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
@@ -145,6 +146,13 @@ export class ApolloService {
           },
         },
       ],
+    });
+  }
+
+  addUser(name: string, email: string, userId: string) {
+    return this.apollo.mutate({
+      mutation: ADD_USER,
+      variables: { name, email, userId },
     });
   }
 
