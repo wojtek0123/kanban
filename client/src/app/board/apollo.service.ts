@@ -30,17 +30,20 @@ import { ApolloQueryResult } from '@apollo/client/core/types';
   providedIn: 'root',
 })
 export class ApolloService {
-  private readonly userId!: string;
+  private userId!: string;
 
   constructor(
     private apollo: Apollo,
     private supabase: SupabaseService,
     private board: BoardService
   ) {
-    this.userId = this.supabase.getUserId;
+    this.supabase.session.subscribe(session => {
+      this.userId = session?.user.id ?? '';
+    });
   }
 
   getProjects(): Observable<ApolloQueryResult<{ projects: Project[] }>> {
+    console.log(this.userId);
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,

@@ -6,13 +6,14 @@ import {
   Session,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  private session: AuthSession | null = null;
+  session = new Subject<AuthSession | null>();
 
   constructor() {
     this.supabase = createClient(
@@ -22,16 +23,12 @@ export class SupabaseService {
   }
 
   setSession(session: Session | null) {
-    this.session = session;
+    this.session.next(session);
   }
 
   async refreshSession() {
     const { data } = await this.supabase.auth.getSession();
-    this.session = data.session;
-  }
-
-  get getUserId() {
-    return this.session?.user.id ?? '';
+    this.session.next(data.session);
   }
 
   getSession() {
@@ -59,5 +56,12 @@ export class SupabaseService {
 
   signOut() {
     return this.supabase.auth.signOut();
+  }
+
+  createUser(email: string, name: string) {
+    return this.supabase.from('User').insert({
+      email,
+      name,
+    });
   }
 }
