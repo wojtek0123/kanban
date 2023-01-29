@@ -10,8 +10,6 @@ import { Subscription } from 'rxjs';
 })
 export class FormComponent implements OnInit, OnDestroy {
   typeOfForm!: FormType | undefined;
-  show!: boolean;
-  showSubscription!: Subscription;
   typeSubscription!: Subscription;
 
   constructor(private formService: FormService) {}
@@ -20,24 +18,10 @@ export class FormComponent implements OnInit, OnDestroy {
     this.typeSubscription = this.formService.typeOfForm.subscribe(
       type => (this.typeOfForm = type)
     );
-    this.showSubscription = this.formService.isFormOpen.subscribe(
-      state => (this.show = state)
-    );
   }
 
   ngOnDestroy(): void {
-    this.showSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-  }
-
-  close(event: Event) {
-    const target = event.target as HTMLDivElement;
-
-    if (!target.classList.contains('backdrop')) {
-      return;
-    }
-
-    this.formService.onChangeFormVisibility();
   }
 
   onClose() {

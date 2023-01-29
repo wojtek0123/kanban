@@ -1,4 +1,4 @@
-<div class="backdrop" [ngClass]="{ 'show-form': show }" (click)="close($event)">
+<app-form-wrapper>
   <div class="forms">
     <div class="form-wrapper">
       <div class="close-button">
@@ -18,4 +18,4 @@
       <app-subtask-form *ngIf="typeOfForm === 'subtask'"></app-subtask-form>
     </div>
   </div>
-</div>
+</app-form-wrapper>
