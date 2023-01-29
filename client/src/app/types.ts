@@ -43,6 +43,12 @@ export interface Project {
   updatedAt: Date;
 }
 
-export type FormType = 'project' | 'board' | 'task' | 'column' | 'subtask';
+export type FormType =
+  | 'project'
+  | 'board'
+  | 'task'
+  | 'column'
+  | 'subtask'
+  | 'user';
 
 export type Status = 'loading' | 'error' | 'ok';

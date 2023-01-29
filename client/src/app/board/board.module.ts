@@ -18,6 +18,8 @@ import { ColumnFormComponent } from './column-form/column-form.component';
 import { TaskFormComponent } from './task-form/task-form.component';
 import { SubtaskFormComponent } from './subtask-form/subtask-form.component';
 import { ToastComponent } from './toast/toast.component';
+import { UsersComponent } from './users/users.component';
+import { FormWrapperComponent } from './form-wrapper/form-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { ToastComponent } from './toast/toast.component';
     TaskFormComponent,
     SubtaskFormComponent,
     ToastComponent,
+    UsersComponent,
+    FormWrapperComponent,
   ],
   imports: [
     BrowserAnimationsModule,

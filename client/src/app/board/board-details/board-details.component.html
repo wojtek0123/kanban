@@ -10,12 +10,20 @@
         [type]="'board'"
         [editingBoard]="selectedBoard"></app-context-menu>
     </div>
-    <button
-      type="button"
-      class="button-global board-logout-button"
-      (click)="onLogout()">
-      Logout
-    </button>
+    <div class="button-container">
+      <button
+        type="button"
+        class="button-global button"
+        (click)="onForm('user')">
+        Add people
+      </button>
+      <button
+        type="button"
+        class="button-global board-logout-button"
+        (click)="onLogout()">
+        Logout
+      </button>
+    </div>
   </div>
   <div class="buttons" *ngIf="selectedBoard">
     <button
@@ -23,6 +31,12 @@
       class="button-global button"
       (click)="onForm('column')">
       Add column
+    </button>
+    <button
+      type="button"
+      class="button-global button add-people-button-mobile"
+      (click)="onForm('user')">
+      Add people
     </button>
   </div>
 </div>

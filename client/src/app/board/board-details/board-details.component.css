@@ -18,6 +18,8 @@
   display: flex;
   column-gap: 2rem;
   margin: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .board-name-wrapper {
@@ -28,7 +30,7 @@
   margin-right: 1rem;
 }
 
-.board-logout-button {
+.button-container {
   display: none;
 }
 
@@ -93,6 +95,17 @@
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 100%;
+}
+
+.button-container {
+  /* display: flex; */
+  /* align-items: center; */
+  /* gap: 1rem; */
+  display: none;
+}
+
+.button {
+  margin: 0;
 }
 
 .cards {
@@ -242,6 +255,16 @@
 }
 
 @media (min-width: 1024px) {
+  .add-people-button-mobile {
+    display: none;
+  }
+
+  .button-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .card-arrow-move img {
     width: 1.25rem;
     margin-top: 0;
@@ -290,8 +313,7 @@
 
   .board-logout-button {
     display: block;
-    margin-bottom: 0;
-    margin-top: 1rem;
+    margin: 0;
     background-color: var(--secondary-color);
     color: var(--black-color);
     transition: opacity 0.3s ease-in-out;

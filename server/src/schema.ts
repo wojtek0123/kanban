@@ -83,6 +83,7 @@ export const typeDefs = gql`
   type Query {
     projects(userId: String): [Project]
     users: [User]
+    filteredUsers(text: String): [User]
   }
 
   type Mutation {
@@ -187,6 +188,27 @@ export const resolvers = {
         },
         where: {
           userId: args.userId,
+        },
+      })
+    },
+    users: (_parent: any, _args: any, context: Context) => {
+      return context.prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          userId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      })
+    },
+    filteredUsers: (_parent: any, args: { text: string }, context: Context) => {
+      return context.prisma.user.findMany({
+        where: {
+          email: {
+            contains: args.text,
+          },
         },
       })
     },

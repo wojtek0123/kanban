@@ -20,12 +20,16 @@ import {
   REMOVE_SUBTASK,
   REMOVE_TASK,
   ADD_USER,
+  GET_USERS,
+  GET_FILTERED_USERS,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
 import { Board, FormType, Project } from '../types';
 import { BoardService } from './board.service';
 import { ApolloQueryResult } from '@apollo/client/core/types';
+import { User } from './users/users.component';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root',
@@ -44,12 +48,30 @@ export class ApolloService {
   }
 
   getProjects(): Observable<ApolloQueryResult<{ projects: Project[] }>> {
-    console.log(this.userId);
     return this.apollo
       .watchQuery<{ projects: Project[] }>({
         query: GET_PROJECTS,
         variables: { userId: this.userId },
         errorPolicy: 'all',
+      })
+      .valueChanges.pipe(map(data => data));
+  }
+
+  getUsers(): Observable<ApolloQueryResult<{ users: User[] }>> {
+    return this.apollo
+      .watchQuery<{ users: User[] }>({ query: GET_USERS })
+      .valueChanges.pipe(map(data => data));
+  }
+
+  getFilteredUsers(
+    text: string
+  ): Observable<ApolloQueryResult<{ filteredUsers: User[] }>> {
+    return this.apollo
+      .watchQuery<{ filteredUsers: User[] }>({
+        query: GET_FILTERED_USERS,
+        variables: {
+          text,
+        },
       })
       .valueChanges.pipe(map(data => data));
   }

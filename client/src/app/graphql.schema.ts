@@ -43,12 +43,27 @@ export const GET_PROJECTS = gql`
 
 export const GET_USERS = gql`
   query users {
-    id
-    name
-    email
-    userId
-    createdAt
-    updatedAt
+    users {
+      id
+      name
+      email
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_FILTERED_USERS = gql`
+  query filteredUsers($text: String) {
+    filteredUsers(text: $text) {
+      id
+      name
+      email
+      userId
+      createdAt
+      updatedAt
+    }
   }
 `;
 

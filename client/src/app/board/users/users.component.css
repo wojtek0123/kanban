@@ -1,0 +1,27 @@
+.users-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.user {
+  border-radius: var(--rounded);
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--lighter-background-color);
+  box-shadow: 0 0 0.1rem var(--lighter-background-color);
+}
+
+.user-button {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.form-message {
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}

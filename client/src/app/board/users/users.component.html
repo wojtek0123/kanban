@@ -1,0 +1,30 @@
+<form class="form-global form" (ngSubmit)="onSubmit()" [formGroup]="form">
+  <p class="form-message">Find user by his email</p>
+  <label class="form-label-global" for="email">Text</label>
+  <input
+    type="email"
+    class="form-input-global"
+    id="email"
+    formControlName="email" />
+  <div
+    *ngIf="
+      (form.controls.email.touched && form.controls.email.invalid) ||
+      (isSubmitted && form.controls.email.invalid)
+    "
+    class="text-danger-global">
+    <div *ngIf="form.controls.email.errors?.['required']">
+      Input cannot be empty.
+    </div>
+  </div>
+  <button class="button-global submit-button-global" type="submit">
+    Search
+  </button>
+</form>
+<div class="users-wrapper">
+  <div class="user" *ngFor="let user of users | async">
+    <p>{{ user.email }}</p>
+    <div>
+      <button type="button" class="button-global user-button">Add</button>
+    </div>
+  </div>
+</div>
