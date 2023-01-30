@@ -27,6 +27,7 @@ type Tag = {
 export class TaskFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
   subscription!: Subscription;
+  submitted = false;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -138,6 +139,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.submitted = true;
+    console.log(this.form);
     if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingTask?.id ?? '';
       const title = this.form.value.edit?.title ?? '';
@@ -164,9 +167,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('update', 'task'))
         )
         .subscribe();
-    }
-
-    if (!this.isEditing && this.getFormControls.add.valid) {
+    } else if (!this.isEditing && this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
@@ -188,6 +189,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('add', 'task'))
         )
         .subscribe();
+    } else {
+      return;
     }
 
     this.form.reset();

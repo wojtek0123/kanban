@@ -14,6 +14,7 @@ import { catchError } from 'rxjs/operators';
 export class ProjectFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
   subscription!: Subscription;
+  submitted = false;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -56,6 +57,8 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.submitted = true;
+
     if (this.isEditing && this.getFormControls.edit.valid) {
       const projectId = this.formService.editingProject?.id ?? '';
       const projectName = this.form.value.edit?.name ?? '';
@@ -75,6 +78,8 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('add', 'board'))
         )
         .subscribe();
+    } else {
+      return;
     }
 
     this.formService.onChangeFormVisibility();

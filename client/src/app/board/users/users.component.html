@@ -6,16 +6,11 @@
     class="form-input-global"
     id="email"
     formControlName="email" />
-  <div
-    *ngIf="
-      (form.controls.email.touched && form.controls.email.invalid) ||
-      (isSubmitted && form.controls.email.invalid)
-    "
-    class="text-danger-global">
-    <div *ngIf="form.controls.email.errors?.['required']">
-      Input cannot be empty.
-    </div>
-  </div>
+  <p
+    class="text-danger-global"
+    *ngIf="(form.controls.email.touched || submitted) && form.controls.email.errors?.['required']">
+    Name is required
+  </p>
   <button class="button-global submit-button-global" type="submit">
     Search
   </button>

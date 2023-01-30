@@ -6,11 +6,11 @@
       type="text"
       id="project-name"
       formControlName="name" />
-    <div
-      *ngIf="getAddControls.name.touched && getAddControls.name.invalid"
-      class="text-danger-global">
-      <p *ngIf="getAddControls.name.errors?.['required']">Name is required.</p>
-    </div>
+    <p
+      class="text-danger-global"
+      *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
+      Name is required
+    </p>
   </div>
 
   <div *ngIf="isEditing" formGroupName="edit" class="form-wrapper-global">
@@ -20,11 +20,11 @@
       class="form-input-global"
       id="edit-project-name"
       formControlName="name" />
-    <div
-      *ngIf="getEditControls.name.touched && getEditControls.name.invalid"
-      class="text-danger-global">
-      <p *ngIf="getEditControls.name.errors?.['required']">Name is required.</p>
-    </div>
+    <p
+      class="text-danger-global"
+      *ngIf="(getEditControls.name.touched || submitted) && getEditControls.name.errors?.['required']">
+      Name is required
+    </p>
   </div>
 
   <button type="submit" class="button-global submit-button-global">

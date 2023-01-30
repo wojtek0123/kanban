@@ -15,6 +15,7 @@ import { ToastService } from '../toast/toast.service';
 export class BoardFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
   subscription!: Subscription;
+  submitted = false;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -60,7 +61,9 @@ export class BoardFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.isEditing) {
+    this.submitted = true;
+
+    if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingBoard?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
@@ -70,8 +73,7 @@ export class BoardFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('update', 'board'))
         )
         .subscribe();
-    }
-    if (!this.isEditing) {
+    } else if (!this.isEditing && this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
       this.apollo
@@ -85,6 +87,8 @@ export class BoardFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('add', 'board'))
         )
         .subscribe();
+    } else {
+      return;
     }
 
     this.form.reset();

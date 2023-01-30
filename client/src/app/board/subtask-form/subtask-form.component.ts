@@ -14,6 +14,7 @@ import { ToastService } from '../toast/toast.service';
 export class SubtaskFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
   subscription!: Subscription;
+  submitted = false;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -56,7 +57,9 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.isEditing) {
+    this.submitted = true;
+
+    if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingSubtask?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
@@ -68,8 +71,7 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe();
-    }
-    if (!this.isEditing) {
+    } else if (!this.isEditing && this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
       this.apollo
@@ -78,6 +80,8 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('add', 'subtask'))
         )
         .subscribe();
+    } else {
+      return;
     }
 
     this.form.reset();

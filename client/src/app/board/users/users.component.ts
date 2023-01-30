@@ -21,7 +21,7 @@ export class UsersComponent {
   users: Observable<User[]> | null = null;
   // userId$: Observable<string> | null = null;
   show!: Observable<boolean>;
-  isSubmitted = false;
+  submitted = false;
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -34,7 +34,7 @@ export class UsersComponent {
   ) {}
 
   onSubmit() {
-    this.isSubmitted = true;
+    this.submitted = true;
 
     const searchedEmail = this.form.controls.email.value;
 
@@ -65,7 +65,6 @@ export class UsersComponent {
       map(([userId, users]) => users.filter(user => user.id !== userId))
     );
 
-    this.isSubmitted = false;
     this.form.reset();
   }
 }

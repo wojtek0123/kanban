@@ -14,6 +14,7 @@ import { ToastService } from '../toast/toast.service';
 export class ColumnFormComponent implements OnInit, OnDestroy {
   isEditing!: boolean;
   subscription!: Subscription;
+  submitted = false;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -60,7 +61,9 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.isEditing) {
+    this.submitted = true;
+
+    if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingColumn?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
       const dotColor = this.form.value.edit?.dotColor ?? '';
@@ -73,8 +76,7 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe();
-    }
-    if (!this.isEditing) {
+    } else if (!this.isEditing && this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
@@ -84,6 +86,8 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
           catchError(async () => this.toastService.showToast('add', 'column'))
         )
         .subscribe();
+    } else {
+      return;
     }
 
     this.form.reset();

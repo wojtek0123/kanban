@@ -6,13 +6,11 @@
       class="form-input-global"
       id="task-name"
       formControlName="title" />
-    <div
-      *ngIf="getAddControls.title.touched && getAddControls.title.invalid"
-      class="text-danger-global">
-      <div *ngIf="getAddControls.title.errors?.['required']">
-        Name is required.
-      </div>
-    </div>
+    <p
+      class="text-danger-global"
+      *ngIf="(getAddControls.title.touched || submitted) && getAddControls.title.errors?.['required']">
+      Name is required
+    </p>
     <label class="form-label-global" for="task-description"
       >Short description</label
     >
@@ -20,15 +18,13 @@
       class="task-description form-input-global"
       id="task-description"
       formControlName="description"></textarea>
-    <div
+    <p
       *ngIf="
-        getAddControls.description.touched && getAddControls.description.invalid
+        (getAddControls.description.touched || submitted) && getAddControls.description.errors?.['required']
       "
       class="text-danger-global">
-      <div *ngIf="getAddControls.description.errors?.['required']">
-        Description is required.
-      </div>
-    </div>
+      Description is required.
+    </p>
     <div formArrayName="tags" class="form-tags-wrapper">
       <div class="form-tags-buttons">
         <button
@@ -60,22 +56,22 @@
             aria-label="tag"
             formControlName="name" />
 
-          <div
+          <p
             *ngIf="
-              getAddControls.tags.controls[i].controls.name.touched &&
-              getAddControls.tags.controls[i].controls.name.invalid
+              (getAddControls.tags.controls[i].controls.name.touched || submitted) &&
+              getAddControls.tags.controls[i].controls.name.errors?.['required']
             "
             class="text-danger-global">
-            <div
-              *ngIf="getAddControls.tags.controls[i].controls.name.errors?.['required']">
-              Tag name is required.
-            </div>
-          </div>
+            Tag name is required.
+          </p>
         </ng-container>
       </div>
       <p
         class="text-danger-global"
-        *ngIf="getAddControls.tags.invalid && getAddControls.tags.touched">
+        *ngIf="
+          getAddControls.tags.length > 3 &&
+          (getAddControls.tags.touched || submitted)
+        ">
         Max 3 tags
       </p>
     </div>
@@ -88,13 +84,11 @@
       class="form-input-global"
       id="edit-task-title"
       formControlName="title" />
-    <div
-      *ngIf="getEditControls.title.touched && getEditControls.title.invalid"
-      class="text-danger-global">
-      <div *ngIf="getEditControls.title.errors?.['required']">
-        Name is required.
-      </div>
-    </div>
+    <p
+      class="text-danger-global"
+      *ngIf="(getEditControls.title.touched || submitted) && getEditControls.title.errors?.['required']">
+      Name is required
+    </p>
     <label class="form-label-global" for="edit-task-description"
       >Short description</label
     >
@@ -102,16 +96,14 @@
       class="task-description form-input-global"
       id="edit-task-description"
       formControlName="description"></textarea>
-    <div
+    <p
       *ngIf="
-        getEditControls.description.touched &&
-        getEditControls.description.invalid
+        (getEditControls.description.touched || submitted) &&
+        getEditControls.description.errors?.['required']
       "
       class="text-danger-global">
-      <div *ngIf="getEditControls.description.errors?.['required']">
-        Description is required.
-      </div>
-    </div>
+      Description is required.
+    </p>
     <div formArrayName="tags" class="form-tags-wrapper">
       <div class="form-tags-buttons">
         <button
@@ -149,31 +141,28 @@
               name="background" />
           </div>
 
-          <div
+          <p
             *ngIf="
-              getEditControls.tags.controls[i].controls.name.touched &&
-              getEditControls.tags.controls[i].controls.name.invalid
+              (getEditControls.tags.controls[i].controls.name.touched || submitted) &&
+              getEditControls.tags.controls[i].controls.name.errors?.['required']
             "
             class="text-danger-global">
-            <div
-              *ngIf="getEditControls.tags.controls[i].controls.name.errors?.['required']">
-              Tag name is required.
-            </div>
-          </div>
+            Tag name is required.
+          </p>
         </ng-container>
       </div>
       <p
         class="text-danger-global"
-        *ngIf="getEditControls.tags.invalid && getEditControls.tags.touched">
+        *ngIf="
+          getEditControls.tags.length > 3 &&
+          (getEditControls.tags.touched || submitted)
+        ">
         Max 3 tags
       </p>
     </div>
   </div>
 
-  <button
-    type="submit"
-    class="button-global submit-button-global"
-    [disabled]="getFormControls.add.invalid && getFormControls.add.invalid">
+  <button type="submit" class="button-global submit-button-global">
     {{ isEditing ? 'Update' : 'Add ' + 'task' }}
   </button>
 </form>
