@@ -6,14 +6,14 @@ import {
   Session,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  session = new Subject<AuthSession | null>();
+  session = new BehaviorSubject<AuthSession | null>(null);
 
   constructor() {
     this.supabase = createClient(

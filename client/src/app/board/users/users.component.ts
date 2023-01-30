@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ApolloService } from '../apollo.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/supabase.service';
@@ -19,9 +19,8 @@ export interface User {
 })
 export class UsersComponent {
   users: Observable<User[]> | null = null;
-  // userId$: Observable<string> | null = null;
-  show!: Observable<boolean>;
   submitted = false;
+  tabName: 'add' | 'peek' = 'add';
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -32,6 +31,16 @@ export class UsersComponent {
     private fb: FormBuilder,
     private supabase: SupabaseService
   ) {}
+
+  changeTabName() {
+    if (this.tabName === 'add') {
+      this.tabName = 'peek';
+    } else {
+      this.tabName = 'add';
+    }
+
+    this.form.reset();
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -46,11 +55,9 @@ export class UsersComponent {
       return;
     }
 
-    const userId$ = this.supabase.session.pipe(
-      map(data => data?.user.id ?? '')
-    );
+    const userId = this.supabase.session.value?.user.id;
 
-    const filteredUsers$ = this.apollo.getFilteredUsers(searchedEmail).pipe(
+    this.users = this.apollo.getFilteredUsers(searchedEmail).pipe(
       catchError(async error => {
         if (error instanceof Error) {
           throw new Error(error.message);
@@ -58,13 +65,10 @@ export class UsersComponent {
           throw new Error('Something went wrong!');
         }
       }),
-      map(data => data.data.filteredUsers)
+      map(data => data.data.filteredUsers.filter(user => user.id !== userId))
     );
 
-    this.users = combineLatest([userId$, filteredUsers$]).pipe(
-      map(([userId, users]) => users.filter(user => user.id !== userId))
-    );
-
+    this.submitted = false;
     this.form.reset();
   }
 }

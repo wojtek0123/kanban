@@ -1,4 +1,25 @@
-<form class="form-global form" (ngSubmit)="onSubmit()" [formGroup]="form">
+<div class="button-wrapper">
+  <button
+    type="button"
+    class="button-global"
+    [ngClass]="{ active: tabName === 'add' }"
+    (click)="changeTabName()">
+    Add more
+  </button>
+  <button
+    type="button"
+    class="button-global"
+    [ngClass]="{ active: tabName === 'peek' }"
+    (click)="changeTabName()">
+    All user in project
+  </button>
+</div>
+
+<form
+  class="form-global form"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+  *ngIf="tabName === 'add'; else peek">
   <p class="form-message">Find user by his email</p>
   <label class="form-label-global" for="email">Text</label>
   <input
@@ -15,7 +36,7 @@
     Search
   </button>
 </form>
-<div class="users-wrapper">
+<div class="users-wrapper" *ngIf="tabName === 'add'">
   <div class="user" *ngFor="let user of users | async">
     <p>{{ user.email }}</p>
     <div>
@@ -23,3 +44,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #peek>
+  <p>Here will be list of users which are in this project</p>
+</ng-template>
