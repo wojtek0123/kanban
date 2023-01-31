@@ -40,7 +40,12 @@
   <div class="user" *ngFor="let user of users | async">
     <p>{{ user.email }}</p>
     <div>
-      <button type="button" class="button-global user-button">Add</button>
+      <button
+        type="button"
+        class="button-global user-button"
+        (click)="onAddUser(user.userId)">
+        Add
+      </button>
     </div>
   </div>
 </div>

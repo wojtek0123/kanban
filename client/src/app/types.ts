@@ -38,9 +38,18 @@ export interface Board {
 export interface Project {
   id: string;
   name: string;
+  users: string[];
+  userId: string;
   boards: Board[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  userId: string;
 }
 
 export type FormType =

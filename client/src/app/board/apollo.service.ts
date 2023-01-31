@@ -22,14 +22,14 @@ import {
   ADD_USER,
   GET_USERS,
   GET_FILTERED_USERS,
+  ADD_USER_TO_PROJECT,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
 import { Board, FormType, Project } from '../types';
 import { BoardService } from './board.service';
 import { ApolloQueryResult } from '@apollo/client/core/types';
-import { User } from './users/users.component';
-import { query } from '@angular/animations';
+import { User } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -74,6 +74,26 @@ export class ApolloService {
         },
       })
       .valueChanges.pipe(map(data => data));
+  }
+
+  addUserToProject(projectId: string, userId: string) {
+    return this.apollo.mutate<{
+      addUserToProject: Project;
+    }>({
+      mutation: ADD_USER_TO_PROJECT,
+      variables: {
+        projectId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
   }
 
   addProject(name: string) {

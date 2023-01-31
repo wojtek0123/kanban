@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { ApolloService } from '../apollo.service';
-import { Observable, combineLatest, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, catchError, tap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/supabase.service';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  userId: string;
-}
+import { BoardService } from '../board.service';
+import { User } from 'src/app/types';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-users',
@@ -29,7 +25,9 @@ export class UsersComponent {
   constructor(
     private apollo: ApolloService,
     private fb: FormBuilder,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private boardService: BoardService,
+    private toastService: ToastService
   ) {}
 
   changeTabName() {
@@ -70,5 +68,24 @@ export class UsersComponent {
 
     this.submitted = false;
     this.form.reset();
+  }
+
+  onAddUser(userId: string) {
+    const projectId = this.boardService.selectedProjectId.value;
+
+    if (projectId === '') {
+      return;
+    }
+
+    this.apollo
+      .addUserToProject(projectId, userId)
+      .pipe(
+        catchError(async () => {
+          this.toastService.showToast('add', 'user');
+          throw new Error('Something went wrong!');
+        }),
+        tap(() => this.toastService.showConfirmToast('add', 'user'))
+      )
+      .subscribe();
   }
 }

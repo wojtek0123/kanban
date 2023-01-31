@@ -5,6 +5,8 @@ export const GET_PROJECTS = gql`
     projects(userId: $userId) {
       id
       name
+      userId
+      users
       createdAt
       updatedAt
       boards {
@@ -50,6 +52,19 @@ export const GET_USERS = gql`
       userId
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const ADD_USER_TO_PROJECT = gql`
+  mutation AddUserToProject($projectId: String, $userId: String) {
+    addUserToProject(projectId: $projectId, userId: $userId) {
+      id
+      users
+      userId
+      updatedAt
+      name
+      createdAt
     }
   }
 `;
