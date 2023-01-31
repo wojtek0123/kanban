@@ -2,6 +2,7 @@ import { gql } from 'apollo-server'
 import { Context } from './context'
 
 import { GraphQLScalarType, Kind } from 'graphql'
+import { User } from '@prisma/client'
 
 export const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -85,6 +86,7 @@ export const typeDefs = gql`
     projects(userId: String): [Project]
     users: [User]
     filteredUsers(text: String): [User]
+    usersFromProject(userIds: [String]): [User]
   }
 
   type Mutation {
@@ -214,6 +216,19 @@ export const resolvers = {
         where: {
           email: {
             contains: args.text,
+          },
+        },
+      })
+    },
+    usersFromProject: (
+      _parent: unknown,
+      args: { userIds: string[] },
+      context: Context,
+    ) => {
+      return context.prisma.user.findMany({
+        where: {
+          userId: {
+            in: args.userIds,
           },
         },
       })
