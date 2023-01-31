@@ -67,6 +67,7 @@ export const typeDefs = gql`
     name: String
     boards: [Board]
     userId: String
+    users: [String]
     createdAt: Date
     updatedAt: Date
   }
@@ -89,6 +90,7 @@ export const typeDefs = gql`
   type Mutation {
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, userId: String): User
+    addUserToProject(projectId: String, userId: String): Project
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String, dotColor: String): Column
@@ -129,6 +131,8 @@ export const resolvers = {
         select: {
           id: true,
           name: true,
+          userId: true,
+          users: true,
           createdAt: true,
           updatedAt: true,
           boards: {
@@ -187,7 +191,9 @@ export const resolvers = {
           createdAt: 'asc',
         },
         where: {
-          userId: args.userId,
+          users: {
+            has: args.userId,
+          },
         },
       })
     },
@@ -214,6 +220,32 @@ export const resolvers = {
     },
   },
   Mutation: {
+    addUserToProject: async (
+      _parent: unknown,
+      args: { projectId: string; userId: string },
+      context: Context,
+    ) => {
+      const response = await context.prisma.project.findUnique({
+        where: {
+          id: args.projectId,
+        },
+      })
+
+      if (response?.users === undefined) {
+        return
+      }
+
+      return context.prisma.project.update({
+        where: {
+          id: args.projectId,
+        },
+        data: {
+          users: {
+            set: [...response.users, args.userId],
+          },
+        },
+      })
+    },
     addUser: (
       _parent: any,
       args: { name: string; email: string; userId: string },
@@ -340,6 +372,9 @@ export const resolvers = {
         data: {
           name: args.name,
           userId: args.userId,
+          users: {
+            set: [args.userId],
+          },
         },
       })
     },
