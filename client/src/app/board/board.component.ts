@@ -33,33 +33,20 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (!data.data.projects) {
             return;
           }
-          if (!this.boardService.selectedBoard.value) {
+          if (this.boardService.selectedBoard.value) {
+            const project = data.data.projects.filter(project =>
+              project.boards.some(
+                board => board.id === this.boardService.selectedBoard.value?.id
+              )
+            );
+
+            return { project: project?.at(0), error: data.error };
+          } else {
             const project = data.data.projects.filter(board =>
               board.boards.at(0)
             );
-            this.boardService.onChangeSelectedProjectId(
-              project?.at(0)?.id ?? ''
-            );
-            this.boardService.onChangeSelectedProject(
-              project?.at(0) ?? ({} as Project)
-            );
 
-            return { project: project?.at(0)?.boards.at(0), error: data.error };
-          } else {
-            const project = data.data.projects.filter(
-              project =>
-                project.id === this.boardService.selectedProjectId.value
-            );
-
-            return {
-              project: project
-                ?.at(0)
-                ?.boards.find(
-                  board =>
-                    board.id === this.boardService.selectedBoard.value?.id ?? ''
-                ),
-              error: data.error,
-            };
+            return { project: project?.at(0), error: data.error };
           }
         }),
         catchError(async error => {
@@ -71,8 +58,12 @@ export class BoardComponent implements OnInit, OnDestroy {
           }
         })
       )
-      .subscribe(board => {
-        this.boardService.onChangeSelectedBoard(board?.project);
+      .subscribe(project => {
+        this.boardService.onChangeSelectedProjectId(project?.project?.id ?? '');
+        this.boardService.onChangeSelectedProject(
+          project?.project ?? ({} as Project)
+        );
+        this.boardService.onChangeSelectedBoard(project?.project?.boards.at(0));
         this.status = 'ok';
       });
   }
