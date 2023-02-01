@@ -37,22 +37,30 @@
   </button>
 </form>
 <div class="users-wrapper" *ngIf="tabName === 'add'">
-  <div class="user" *ngFor="let user of users | async">
+  <p class="user-message" *ngIf="(searchedFilteredUsers$ | async) !== null">
+    Only users which aren't added to this project are displayed
+  </p>
+  <p *ngIf="(searchedFilteredUsers$ | async) === null && submitted">
+    loading...
+  </p>
+  <div class="user" *ngFor="let user of searchedFilteredUsers$ | async">
     <p>{{ user.email }}</p>
-    <div>
-      <button
-        type="button"
-        class="button-global user-button"
-        (click)="onAddUser(user.userId)">
-        Add
-      </button>
-    </div>
+    <button
+      type="button"
+      class="button-global user-button"
+      title="Add"
+      (click)="onAddUser(user.userId)">
+      <img src="../../../assets/plus-solid.svg" alt="add" />
+    </button>
   </div>
 </div>
 
 <ng-template #peek>
-  <p>Here will be list of users which are in this project</p>
-  <div *ngFor="let user of projectUsers$ | async">
-    {{ user.email }}
+  <p *ngIf="(projectUsers$ | async) === null">loading...</p>
+  <div class="user" *ngFor="let user of projectUsers$ | async">
+    <p>{{ user.email }}</p>
+    <button type="button" class="button-global user-button" title="Remove">
+      <img src="../../../assets/minus-solid.svg" alt="minus" />
+    </button>
   </div>
 </ng-template>

@@ -17,6 +17,12 @@
   box-shadow: 0 0 0.1rem var(--lighter-background-color);
 }
 
+.user-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .user-button {
   margin: 0;
   padding: 0.5rem;
@@ -36,4 +42,8 @@
 .active {
   background-color: var(--secondary-color);
   color: var(--black-color);
+}
+
+.user-message {
+  margin-bottom: 1rem;
 }
