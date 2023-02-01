@@ -115,7 +115,7 @@ export class UsersComponent implements OnInit {
         }),
         tap(() => this.toastService.showConfirmToast('add', 'user'))
       )
-      .subscribe(() => this.boardService.onChangeSelectedBoard(undefined));
+      .subscribe();
 
     if (!this.searchedFilteredUsers$) {
       return;
