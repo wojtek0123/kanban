@@ -39,6 +39,7 @@ export class AccordionItemComponent implements OnInit {
 
   onSelectBoard(board: Board) {
     this.boardService.onChangeSelectedProjectId(this.project.id);
+    this.boardService.onChangeSelectedProject(this.project);
     this.boardService.onChangeSelectedBoard(board);
     this.navigationService.onMenu();
   }

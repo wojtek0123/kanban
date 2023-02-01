@@ -1,22 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApolloService } from '../apollo.service';
-import { Observable } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/supabase.service';
 import { BoardService } from '../board.service';
 import { User } from 'src/app/types';
 import { ToastService } from '../toast/toast.service';
+import { ApolloQueryResult } from '@apollo/client/core/types';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   users: Observable<User[]> | null = null;
   submitted = false;
   tabName: 'add' | 'peek' = 'add';
+  // projectUsers$: Observable<string[] | undefined> | null = null;
+  projectUsers$: Observable<User[]> | null = null;
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -29,6 +32,16 @@ export class UsersComponent {
     private boardService: BoardService,
     private toastService: ToastService
   ) {}
+
+  ngOnInit(): void {
+    this.projectUsers$ = this.boardService.selectedProject.pipe(
+      switchMap(project =>
+        this.apollo
+          .getUsersFromProject(project?.users ?? [])
+          .pipe(map(data => data.data.usersFromProject))
+      )
+    );
+  }
 
   changeTabName() {
     if (this.tabName === 'add') {

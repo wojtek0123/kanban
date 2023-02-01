@@ -69,6 +69,19 @@ export const ADD_USER_TO_PROJECT = gql`
   }
 `;
 
+export const GET_USERS_FROM_PROJECT = gql`
+  query UsersFromProject($userIds: [String]) {
+    usersFromProject(userIds: $userIds) {
+      id
+      email
+      name
+      userId
+      updatedAt
+      createdAt
+    }
+  }
+`;
+
 export const GET_FILTERED_USERS = gql`
   query filteredUsers($text: String) {
     filteredUsers(text: $text) {

@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { BoardService } from './board.service';
 import { Project, FormType, Status } from '../types';
 import { ApolloService } from './apollo.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ApolloQueryResult } from '@apollo/client/core/types';
 
 @Component({
@@ -30,7 +30,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.subscription = this.data
       .pipe(
         map(data => {
-          if (data.data.projects.length === 0) {
+          if (!data.data.projects) {
             return;
           }
           if (!this.boardService.selectedBoard.value) {
@@ -39,6 +39,9 @@ export class BoardComponent implements OnInit, OnDestroy {
             );
             this.boardService.onChangeSelectedProjectId(
               project?.at(0)?.id ?? ''
+            );
+            this.boardService.onChangeSelectedProject(
+              project?.at(0) ?? ({} as Project)
             );
 
             return { project: project?.at(0)?.boards.at(0), error: data.error };

@@ -23,6 +23,7 @@ import {
   GET_USERS,
   GET_FILTERED_USERS,
   ADD_USER_TO_PROJECT,
+  GET_USERS_FROM_PROJECT,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
@@ -74,6 +75,15 @@ export class ApolloService {
         },
       })
       .valueChanges.pipe(map(data => data));
+  }
+
+  getUsersFromProject(userIds: string[]) {
+    return this.apollo.watchQuery<{ usersFromProject: User[] }>({
+      query: GET_USERS_FROM_PROJECT,
+      variables: {
+        userIds,
+      },
+    }).valueChanges;
   }
 
   addUserToProject(projectId: string, userId: string) {

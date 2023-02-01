@@ -52,4 +52,7 @@
 
 <ng-template #peek>
   <p>Here will be list of users which are in this project</p>
+  <div *ngFor="let user of projectUsers$ | async">
+    {{ user.email }}
+  </div>
 </ng-template>
