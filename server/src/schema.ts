@@ -93,6 +93,7 @@ export const typeDefs = gql`
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, userId: String): User
     addUserToProject(projectId: String, userId: String): Project
+    removeUserFromProject(projectId: String, userId: String): Project
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String, dotColor: String): Column
@@ -257,6 +258,32 @@ export const resolvers = {
         data: {
           users: {
             set: [...response.users, args.userId],
+          },
+        },
+      })
+    },
+    removeUserFromProject: async (
+      _parent: unknown,
+      args: { projectId: string; userId: string },
+      context: Context,
+    ) => {
+      const response = await context.prisma.project.findUnique({
+        where: {
+          id: args.projectId,
+        },
+      })
+
+      if (response?.users === undefined) {
+        return
+      }
+
+      return context.prisma.project.update({
+        where: {
+          id: args.projectId,
+        },
+        data: {
+          users: {
+            set: response.users.filter((user) => user !== args.userId),
           },
         },
       })

@@ -24,6 +24,7 @@ import {
   GET_FILTERED_USERS,
   ADD_USER_TO_PROJECT,
   GET_USERS_FROM_PROJECT,
+  REMOVE_USER_FROM_PROJECT,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map, Observable } from 'rxjs';
@@ -91,6 +92,24 @@ export class ApolloService {
       addUserToProject: Project;
     }>({
       mutation: ADD_USER_TO_PROJECT,
+      variables: {
+        projectId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+          variables: {
+            userId: this.userId,
+          },
+        },
+      ],
+    });
+  }
+
+  removeUserFromProject(projectId: string, userId: string) {
+    return this.apollo.mutate<{ removeUserFromProject: Project }>({
+      mutation: REMOVE_USER_FROM_PROJECT,
       variables: {
         projectId,
         userId,

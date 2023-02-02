@@ -19,6 +19,7 @@ export class UsersComponent implements OnInit {
   submitted = false;
   tabName: 'add' | 'peek' = 'add';
   projectUsers$: Observable<User[]> | null = null;
+  loggedInUser$: Observable<string> | null = null;
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -34,6 +35,9 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUsersFromProject();
+    this.loggedInUser$ = this.supabase.session.pipe(
+      map(data => data?.user.id ?? '')
+    );
   }
 
   fetchUsersFromProject() {
@@ -51,6 +55,7 @@ export class UsersComponent implements OnInit {
       this.tabName = 'peek';
     } else {
       this.tabName = 'add';
+      this.searchedFilteredUsers$ = null;
     }
 
     this.form.reset();
@@ -124,5 +129,24 @@ export class UsersComponent implements OnInit {
     this.searchedFilteredUsers$ = this.searchedFilteredUsers$.pipe(
       map(data => data.filter(user => user.userId !== userId))
     );
+  }
+
+  onRemoveUser(userId: string) {
+    const projectId = this.boardService.selectedProjectId.value;
+
+    if (projectId === '') {
+      return;
+    }
+
+    this.apollo
+      .removeUserFromProject(projectId, userId)
+      .pipe(
+        catchError(async () => {
+          this.toastService.showToast('delete', 'user');
+          throw new Error('Something went wrong!');
+        }),
+        tap(() => this.toastService.showConfirmToast('delete', 'user'))
+      )
+      .subscribe();
   }
 }
