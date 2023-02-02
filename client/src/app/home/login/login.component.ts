@@ -43,20 +43,20 @@ export class LoginComponent {
         this.loginForm.controls.email.value ?? '',
         this.loginForm.controls.password.value ?? ''
       );
-      if (!error) {
-        this.status = 'ok';
-        this.supabase.setSession(data.session);
-        this.router.navigate(['']).then(error => console.log(error));
-      }
       if (error) {
         this.status = 'error';
         this.errorMessage = error.message;
+        return;
       }
+
+      this.status = 'ok';
+      this.supabase.setSession(data.session);
+      this.router.navigate(['']).then(error => console.log(error));
     } catch (error) {
+      this.status = 'error';
       if (error instanceof Error) {
         this.errorMessage = error.message;
       }
-      this.status = 'error';
     }
   }
 }
