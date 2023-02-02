@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { ToastService } from '../toast/toast.service';
 
 type Tag = {
@@ -164,7 +164,11 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagBackgroundColors
         )
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'task'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'task');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'task'))
         )
         .subscribe();
     } else if (!this.isEditing && this.getFormControls.add.valid) {
@@ -186,7 +190,11 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagBackgroundColors
         )
         .pipe(
-          catchError(async () => this.toastService.showToast('add', 'task'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'task');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'task'))
         )
         .subscribe();
     } else {

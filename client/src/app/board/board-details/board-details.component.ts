@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Board, FormType, Task } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription, catchError } from 'rxjs';
+import { Subscription, catchError, tap } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
@@ -34,7 +34,6 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.boardService.selectedBoard.subscribe(board => {
       this.selectedBoard = board;
-      console.log(this.selectedBoard);
     });
   }
 
@@ -89,7 +88,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     this.apollo
       .changeColumn(columnId, taskId)
       .pipe(
-        catchError(async () => this.toastService.showToast('update', 'task'))
+        catchError(async error => {
+          this.toastService.showWarningToast('update', 'task');
+          throw new Error(error);
+        })
       )
       .subscribe();
   }
@@ -100,7 +102,6 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(currArray, event.previousIndex, event.currentIndex);
-      console.log(currArray);
     } else {
       transferArrayItem(
         prevArray,
@@ -122,7 +123,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
       this.apollo
         .changeColumn(currColumn.at(0)?.id ?? '', id)
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'task'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'task');
+            throw new Error(error);
+          })
         )
         .subscribe();
     }

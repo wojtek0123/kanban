@@ -60,4 +60,6 @@ export type FormType =
   | 'subtask'
   | 'user';
 
+export type ToastType = 'confirm' | 'warning';
+
 export type Status = 'loading' | 'error' | 'ok';

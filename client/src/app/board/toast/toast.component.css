@@ -3,8 +3,6 @@
   bottom: 0;
   right: 0;
   border-radius: var(--rounded);
-  background-color: var(--secondary-color);
-  color: var(--black-color);
   padding: 2rem;
   z-index: 25;
   transform: translate(0, 100%);
@@ -15,10 +13,17 @@
   align-items: center;
   font-size: 1.1rem;
   gap: 1rem;
+  background-color: var(--error-color);
+  color: var(--font-color);
 }
 
 .show {
   transform: translate(0, 0);
+}
+
+.informative {
+  background-color: var(--secondary-color);
+  color: var(--black-color);
 }
 
 @media (min-width: 768px) {

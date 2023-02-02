@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../apollo.service';
 import { Subscription } from 'rxjs';
 import { ToastService } from '../toast/toast.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -66,7 +66,11 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       this.apollo
         .editProject(projectId, projectName)
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'board'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'project');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'project'))
         )
         .subscribe();
     } else if (!this.isEditing && this.getFormControls.add.valid) {
@@ -75,7 +79,11 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       this.apollo
         .addProject(name)
         .pipe(
-          catchError(async () => this.toastService.showToast('add', 'board'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'project');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'project'))
         )
         .subscribe();
     } else {

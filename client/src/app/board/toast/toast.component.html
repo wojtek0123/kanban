@@ -1,4 +1,15 @@
-<div class="toast-wrapper" [ngClass]="{ show: show$ | async }">
-  <img src="../../../assets//exclamation-circle.svg" alt="exclamation mark" />
+<div
+  class="toast-wrapper"
+  [ngClass]="{
+    show: show$ | async,
+    informative: (type$ | async) === 'confirm'
+  }">
+  <img
+    [src]="
+      (type$ | async) === 'confirm'
+        ? '../../../assets/circle-info-solid.svg'
+        : '../../../assets/exclamation-circle.svg'
+    "
+    alt="exclamation mark" />
   <p>{{ message$ | async }}</p>
 </div>

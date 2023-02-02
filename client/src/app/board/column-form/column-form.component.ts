@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../form/form.service';
 import { ApolloService } from '../apollo.service';
 import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { ToastService } from '../toast/toast.service';
 
 @Component({
@@ -71,9 +71,11 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       this.apollo
         .editColumn(id, name, dotColor)
         .pipe(
-          catchError(async () =>
-            this.toastService.showToast('update', 'column')
-          )
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'column');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'column'))
         )
         .subscribe();
     } else if (!this.isEditing && this.getFormControls.add.valid) {
@@ -83,7 +85,11 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       this.apollo
         .addColumn(name, dotColor)
         .pipe(
-          catchError(async () => this.toastService.showToast('add', 'column'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'column');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'column'))
         )
         .subscribe();
     } else {

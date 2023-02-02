@@ -114,9 +114,9 @@ export class UsersComponent implements OnInit {
     this.apollo
       .addUserToProject(projectId, userId)
       .pipe(
-        catchError(async () => {
-          this.toastService.showToast('add', 'user');
-          throw new Error('Something went wrong!');
+        catchError(async error => {
+          this.toastService.showWarningToast('add', 'user');
+          throw new Error(error);
         }),
         tap(() => this.toastService.showConfirmToast('add', 'user'))
       )
@@ -141,9 +141,9 @@ export class UsersComponent implements OnInit {
     this.apollo
       .removeUserFromProject(projectId, userId)
       .pipe(
-        catchError(async () => {
-          this.toastService.showToast('delete', 'user');
-          throw new Error('Something went wrong!');
+        catchError(async error => {
+          this.toastService.showWarningToast('delete', 'user');
+          throw new Error(error);
         }),
         tap(() => this.toastService.showConfirmToast('delete', 'user'))
       )

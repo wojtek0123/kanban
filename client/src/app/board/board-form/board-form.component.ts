@@ -70,7 +70,11 @@ export class BoardFormComponent implements OnInit, OnDestroy {
       this.apollo
         .editBoard(id, name)
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'board'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'board');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'board'))
         )
         .subscribe();
     } else if (!this.isEditing && this.getFormControls.add.valid) {
@@ -84,7 +88,11 @@ export class BoardFormComponent implements OnInit, OnDestroy {
               this.boardService.onChangeSelectedBoard(data.data.addBoard);
             }
           }),
-          catchError(async () => this.toastService.showToast('add', 'board'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'board');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'board'))
         )
         .subscribe();
     } else {
