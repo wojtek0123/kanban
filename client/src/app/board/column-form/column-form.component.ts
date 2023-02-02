@@ -96,7 +96,6 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }
