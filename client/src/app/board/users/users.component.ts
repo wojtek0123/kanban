@@ -5,9 +5,8 @@ import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/supabase.service';
 import { BoardService } from '../board.service';
-import { Board, User } from 'src/app/types';
+import { User } from 'src/app/types';
 import { ToastService } from '../toast/toast.service';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-users',
@@ -74,7 +73,7 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    const userId = this.supabase.session.value?.user.id;
+    const userId$ = this.supabase.session.pipe(map(data => data?.user.id));
 
     const searchedUsers$ = this.apollo.getFilteredUsers(searchedEmail).pipe(
       catchError(async error => {
@@ -84,11 +83,20 @@ export class UsersComponent implements OnInit {
           throw new Error('Something went wrong!');
         }
       }),
-      map(data => data.data.filteredUsers.filter(user => user.id !== userId))
+      map(data => data.data.filteredUsers)
+    );
+
+    const searchedUserWithoutOwner$ = combineLatest([
+      searchedUsers$,
+      userId$,
+    ]).pipe(
+      map(([searchedUsers, userId]) =>
+        searchedUsers.filter(user => user.id !== userId)
+      )
     );
 
     this.searchedFilteredUsers$ = combineLatest([
-      searchedUsers$,
+      searchedUserWithoutOwner$,
       this.projectUsers$ ?? [],
     ]).pipe(
       map(([searchedUsers, projectUsers]) =>
@@ -105,15 +113,9 @@ export class UsersComponent implements OnInit {
   }
 
   onAddUser(userId: string) {
-    const projectId = this.boardService.selectedProjectId.value;
-
-    if (projectId === '') {
-      return;
-    }
-
-    this.apollo
-      .addUserToProject(projectId, userId)
+    this.boardService.selectedProjectId
       .pipe(
+        switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
           this.toastService.showWarningToast('add', 'user');
           throw new Error(error);
@@ -132,15 +134,11 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
-    const projectId = this.boardService.selectedProjectId.value;
-
-    if (projectId === '') {
-      return;
-    }
-
-    this.apollo
-      .removeUserFromProject(projectId, userId)
+    this.boardService.selectedProjectId
       .pipe(
+        switchMap(projectId =>
+          this.apollo.removeUserFromProject(projectId, userId)
+        ),
         catchError(async error => {
           this.toastService.showWarningToast('delete', 'user');
           throw new Error(error);
