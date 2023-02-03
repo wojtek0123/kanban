@@ -31,7 +31,6 @@ export class LoginComponent {
 
   async onSubmit() {
     if (this.loginForm.invalid) {
-      console.log('INVALID');
       return;
     }
 
@@ -51,7 +50,7 @@ export class LoginComponent {
 
       this.status = 'ok';
       this.supabase.setSession(data.session);
-      this.router.navigate(['']).then(error => console.log(error));
+      this.router.navigate(['']);
     } catch (error) {
       this.status = 'error';
       if (error instanceof Error) {
