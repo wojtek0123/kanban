@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Board, FormType, Task } from '../../types';
+import { Board, FormType, Task, User } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription, catchError, tap } from 'rxjs';
+import { Observable, Subscription, catchError, map, tap } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
@@ -21,6 +21,7 @@ import { ToastService } from '../toast/toast.service';
 export class BoardDetailsComponent implements OnInit, OnDestroy {
   selectedBoard!: Board | undefined;
   subscription = new Subscription();
+  loggedInUserEmail$: Observable<string | undefined> | null = null;
 
   constructor(
     private formService: FormService,
@@ -35,6 +36,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     this.subscription = this.boardService.selectedBoard.subscribe(board => {
       this.selectedBoard = board;
     });
+
+    this.loggedInUserEmail$ = this.supabase.session.pipe(
+      map(data => data?.user.email)
+    );
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {
