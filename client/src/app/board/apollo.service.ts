@@ -6,31 +6,30 @@ import {
   ADD_PROJECT,
   ADD_SUBTASK,
   ADD_TASK,
-  CHANGE_COMPLETION_STATE,
+  ADD_USER,
+  ADD_USER_TO_PROJECT,
   CHANGE_COLUMN,
+  CHANGE_COMPLETION_STATE,
   EDIT_BOARD,
   EDIT_COLUMN,
   EDIT_PROJECT,
   EDIT_SUBTASK,
   EDIT_TASK,
+  GET_FILTERED_USERS,
   GET_PROJECTS,
+  GET_USERS,
+  GET_USERS_FROM_PROJECT,
   REMOVE_BOARD,
   REMOVE_COLUMN,
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
-  ADD_USER,
-  GET_USERS,
-  GET_FILTERED_USERS,
-  ADD_USER_TO_PROJECT,
-  GET_USERS_FROM_PROJECT,
   REMOVE_USER_FROM_PROJECT,
 } from '../graphql.schema';
 import { SupabaseService } from '../supabase.service';
 import { map } from 'rxjs';
-import { Board, FormType, Project } from '../types';
+import { Board, FormType, Project, User } from '../types';
 import { BoardService } from './board.service';
-import { User } from '../types';
 
 @Injectable({
   providedIn: 'root',
