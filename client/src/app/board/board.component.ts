@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from './form/form.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { BoardService } from './board.service';
-import { Project, FormType, Status } from '../types';
+import { Project, FormType, Status, Board } from '../types';
 import { ApolloService } from './apollo.service';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, map, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -14,6 +14,7 @@ import { catchError, map, take } from 'rxjs/operators';
 export class BoardComponent implements OnInit {
   projects$: Observable<Project[]> | null = null;
   status: Status = 'loading';
+  selectedBoard$: Observable<Board | undefined> | null = null;
 
   constructor(
     public formService: FormService,
@@ -31,34 +32,40 @@ export class BoardComponent implements OnInit {
           throw new Error('Something went wrong!');
         }
       }),
-      map(data => data.data.projects)
+      map(data => data.data.projects),
+      tap(() => (this.status = 'ok'))
+    );
+
+    this.projects$
+      ?.pipe(
+        map(data => data.filter(project => project.boards.length !== 0).at(0))
+      )
+      .subscribe(project => {
+        if (!project) return;
+        this.boardService.onChangeSelectedProject(project);
+        this.boardService.onChangeSelectedProjectId(project.id);
+        this.boardService.onChangeSelectedBoard(project.boards.at(0));
+      });
+
+    const projectId$ = this.boardService.selectedProject.pipe(
+      map(data => data?.id)
     );
 
     const boardId$ = this.boardService.selectedBoard.pipe(
       map(data => data?.id)
     );
 
-    const selectedProject$ = combineLatest([this.projects$, boardId$]).pipe(
-      map(([projects, boardId]) =>
-        boardId
-          ? projects.filter(project =>
-              project.boards.some(board => board.id === boardId)
-            )
-          : projects.filter(board => board.boards.at(0))
+    const selectedProject$ = combineLatest([this.projects$, projectId$]).pipe(
+      map(([projects, projectId]) =>
+        projects.filter(project => project.id === projectId).at(0)
       )
     );
 
-    selectedProject$
-      .pipe(
-        take(1),
-        map(data => data.at(0))
+    this.selectedBoard$ = combineLatest([selectedProject$, boardId$]).pipe(
+      map(([project, boardId]) =>
+        project?.boards.filter(board => board.id === boardId).at(0)
       )
-      .subscribe(project => {
-        this.status = 'ok';
-        this.boardService.onChangeSelectedProjectId(project?.id ?? '');
-        this.boardService.onChangeSelectedProject(project ?? ({} as Project));
-        this.boardService.onChangeSelectedBoard(project?.boards.at(0));
-      });
+    );
   }
 
   onForm(type: FormType, columnId?: string) {
