@@ -4,8 +4,7 @@
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion
-        [projects]="(data | async)?.data?.projects"></app-accordion>
+      <app-accordion [projects]="projects$ | async"></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button
@@ -20,7 +19,7 @@
   <div class="board-details-wrapper">
     <app-board-details *ngIf="status === 'ok'">
       <app-mobile-navigation
-        [projects]="(data | async)?.data?.projects"></app-mobile-navigation>
+        [projects]="projects$ | async"></app-mobile-navigation>
     </app-board-details>
     <div class="loading-wrapper" *ngIf="status === 'loading'">
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />

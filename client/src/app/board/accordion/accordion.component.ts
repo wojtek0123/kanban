@@ -8,7 +8,7 @@ import { BoardService } from '../board.service';
   styleUrls: ['./accordion.component.css'],
 })
 export class AccordionComponent implements OnInit {
-  @Input() projects: Project[] | undefined = undefined;
+  @Input() projects: Project[] | null = null;
   selectedBoardId = '';
 
   constructor(private boardService: BoardService) {}
