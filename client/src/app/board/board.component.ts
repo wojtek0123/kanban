@@ -1,22 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from './form/form.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { BoardService } from './board.service';
-import { Project, FormType, Status } from '../types';
+import { Project, FormType, Status, Board } from '../types';
 import { ApolloService } from './apollo.service';
-import { catchError, map, tap } from 'rxjs/operators';
-import { ApolloQueryResult } from '@apollo/client/core/types';
+import { catchError, map, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
 })
-export class BoardComponent implements OnInit, OnDestroy {
-  subscription!: Subscription;
-  data: Observable<ApolloQueryResult<{ projects: Project[] }>> | undefined =
-    undefined;
+export class BoardComponent implements OnInit {
+  projects$: Observable<Project[]> | null = null;
   status: Status = 'loading';
+  selectedBoard$: Observable<Board | undefined> | null = null;
 
   constructor(
     public formService: FormService,
@@ -25,51 +23,49 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.data = this.apollo.getProjects();
+    this.projects$ = this.apollo.getProjects().pipe(
+      catchError(error => {
+        this.status = 'error';
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        } else {
+          throw new Error('Something went wrong!');
+        }
+      }),
+      map(data => data.data.projects),
+      tap(() => (this.status = 'ok'))
+    );
 
-    this.subscription = this.data
-      .pipe(
-        map(data => {
-          if (!data.data.projects) {
-            return;
-          }
-          if (this.boardService.selectedBoard.value) {
-            const project = data.data.projects.filter(project =>
-              project.boards.some(
-                board => board.id === this.boardService.selectedBoard.value?.id
-              )
-            );
-
-            return { project: project?.at(0), error: data.error };
-          } else {
-            const project = data.data.projects.filter(board =>
-              board.boards.at(0)
-            );
-
-            return { project: project?.at(0), error: data.error };
-          }
-        }),
-        catchError(async error => {
-          this.status = 'error';
-          if (error instanceof Error) {
-            throw new Error(error.message);
-          } else {
-            throw new Error('Something went wrong!');
-          }
-        })
+    this.projects$
+      ?.pipe(
+        map(data => data.filter(project => project.boards.length !== 0).at(0))
       )
       .subscribe(project => {
-        this.boardService.onChangeSelectedProjectId(project?.project?.id ?? '');
-        this.boardService.onChangeSelectedProject(
-          project?.project ?? ({} as Project)
-        );
-        this.boardService.onChangeSelectedBoard(project?.project?.boards.at(0));
-        this.status = 'ok';
+        if (!project) return;
+        this.boardService.onChangeSelectedProject(project);
+        this.boardService.onChangeSelectedProjectId(project.id);
+        this.boardService.onChangeSelectedBoard(project.boards.at(0));
       });
-  }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    const projectId$ = this.boardService.selectedProject.pipe(
+      map(data => data?.id)
+    );
+
+    const boardId$ = this.boardService.selectedBoard.pipe(
+      map(data => data?.id)
+    );
+
+    const selectedProject$ = combineLatest([this.projects$, projectId$]).pipe(
+      map(([projects, projectId]) =>
+        projects.filter(project => project.id === projectId).at(0)
+      )
+    );
+
+    this.selectedBoard$ = combineLatest([selectedProject$, boardId$]).pipe(
+      map(([project, boardId]) =>
+        project?.boards.filter(board => board.id === boardId).at(0)
+      )
+    );
   }
 
   onForm(type: FormType, columnId?: string) {

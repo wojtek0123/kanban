@@ -11,7 +11,7 @@ import { NavigationService } from '../mobile-navigation/navigation.service';
 })
 export class AccordionItemComponent implements OnInit {
   @Input() project!: Project;
-  @Input() selectedBoardId!: string;
+  @Input() selectedBoardId!: string | null;
   showContent = false;
 
   constructor(

@@ -140,7 +140,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.form);
+
     if (this.isEditing && this.getFormControls.edit.valid) {
       const id = this.formService.editingTask?.id ?? '';
       const title = this.form.value.edit?.title ?? '';

@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Board, FormType, Task } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Subscription, catchError, tap } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
@@ -18,9 +18,9 @@ import { ToastService } from '../toast/toast.service';
   templateUrl: './board-details.component.html',
   styleUrls: ['./board-details.component.css'],
 })
-export class BoardDetailsComponent implements OnInit, OnDestroy {
-  selectedBoard!: Board | undefined;
-  subscription = new Subscription();
+export class BoardDetailsComponent implements OnInit {
+  @Input() selectedBoard: Board | undefined | null = null;
+  loggedInUserEmail$: Observable<string | undefined> | null = null;
 
   constructor(
     private formService: FormService,
@@ -32,9 +32,9 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscription = this.boardService.selectedBoard.subscribe(board => {
-      this.selectedBoard = board;
-    });
+    this.loggedInUserEmail$ = this.supabase.session.pipe(
+      map(data => data?.user.email)
+    );
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {
@@ -47,8 +47,10 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getColumns(columnId: string) {
-    return this.selectedBoard?.columns.filter(column => column.id !== columnId);
+  getColumns(columnId: string, selectedBoard: Board | null | undefined) {
+    return (
+      selectedBoard?.columns.filter(column => column.id !== columnId) ?? []
+    );
   }
 
   onUpdateCompletionStateOfSubtask(event: Event) {
@@ -110,18 +112,16 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
         event.currentIndex
       );
 
-      const currColumn = this.selectedBoard?.columns.filter(
-        column => column.id === event.container.id
-      );
-
       const id = event.item.element.nativeElement.id;
 
-      if (!currColumn) {
-        return;
-      }
+      const currentColumn = this.selectedBoard?.columns
+        .filter(column => column.id === event.container.id)
+        .at(0);
+
+      if (!currentColumn) return;
 
       this.apollo
-        .changeColumn(currColumn.at(0)?.id ?? '', id)
+        .changeColumn(currentColumn.id, id)
         .pipe(
           catchError(async error => {
             this.toastService.showWarningToast('update', 'task');
@@ -130,9 +130,5 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
         )
         .subscribe();
     }
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }

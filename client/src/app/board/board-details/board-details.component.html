@@ -1,3 +1,5 @@
+<app-form></app-form>
+<app-context-menu-modal></app-context-menu-modal>
 <div class="container">
   <ng-content></ng-content>
   <div class="board-name-wrapper">
@@ -11,6 +13,7 @@
         [editingBoard]="selectedBoard"></app-context-menu>
     </div>
     <div class="button-container">
+      <p class="board-user">{{ (loggedInUserEmail$ | async) ?? '' }}</p>
       <button
         type="button"
         class="button-global button"
@@ -42,7 +45,7 @@
   </div>
 </div>
 <div cdkDropListGroup class="tasks" *ngIf="selectedBoard">
-  <p class="warning-message" *ngIf="selectedBoard.columns?.length === 0">
+  <p class="warning-message" *ngIf="selectedBoard?.columns?.length === 0">
     No columns to display
   </p>
   <section class="section" *ngFor="let column of selectedBoard?.columns">
@@ -76,7 +79,7 @@
         cdkDropList
         [cdkDropListData]="column.tasks"
         [id]="column.id"
-        (cdkDropListDropped)="drop($any($event))">
+        (cdkDropListDropped)="drop($event)">
         <p class="warning-message card" *ngIf="column.tasks.length === 0">
           No tasks to display
         </p>
@@ -89,7 +92,7 @@
             <option [value]="undefined">Choose column</option>
             <option
               [value]="column.id"
-              *ngFor="let col of getColumns(column.id)">
+              *ngFor="let col of getColumns(column.id, selectedBoard)">
               {{ col.name }}
             </option>
           </select>
@@ -144,4 +147,3 @@
     </div>
   </section>
 </div>
-<app-context-menu-modal></app-context-menu-modal>
