@@ -29,6 +29,7 @@ export const typeDefs = gql`
     id: String
     isFinished: Boolean
     name: String
+    taskId: String
     createdAt: Date
     updatedAt: Date
   }
@@ -41,6 +42,7 @@ export const typeDefs = gql`
     tagFontColors: [String]
     tagBackgroundColors: [String]
     subtasks: [Subtask]
+    columnId: String
     createdAt: Date
     updatedAt: Date
   }
@@ -50,6 +52,7 @@ export const typeDefs = gql`
     name: String
     dotColor: String
     tasks: [Task]
+    boardId: String
     createdAt: Date
     updatedAt: Date
   }
@@ -58,6 +61,8 @@ export const typeDefs = gql`
     id: String
     name: String
     columns: [Column]
+    projectId: String
+    Project: Project
     createdAt: Date
     updatedAt: Date
   }
@@ -415,7 +420,50 @@ export const resolvers = {
           projectId: args.projectId,
         },
         select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
           projectId: true,
+          columns: {
+            select: {
+              id: true,
+              name: true,
+              dotColor: true,
+              createdAt: true,
+              updatedAt: true,
+              tasks: {
+                select: {
+                  id: true,
+                  title: true,
+                  tagNames: true,
+                  tagBackgroundColors: true,
+                  tagFontColors: true,
+                  description: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  subtasks: {
+                    select: {
+                      id: true,
+                      name: true,
+                      isFinished: true,
+                      createdAt: true,
+                      updatedAt: true,
+                    },
+                    orderBy: {
+                      createdAt: 'asc',
+                    },
+                  },
+                },
+                orderBy: {
+                  createdAt: 'asc',
+                },
+              },
+            },
+            orderBy: {
+              createdAt: 'asc',
+            },
+          },
         },
       })
     },

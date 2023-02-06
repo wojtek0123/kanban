@@ -175,20 +175,30 @@ export const ADD_BOARD = gql`
     addBoard(name: $name, projectId: $projectId) {
       id
       name
+      createdAt
+      updatedAt
+      projectId
       columns {
+        createdAt
+        dotColor
         id
         name
+        updatedAt
         tasks {
-          id
-          tagNames
-          tagFontColors
-          tagBackgroundColors
+          createdAt
           description
+          id
+          tagBackgroundColors
+          tagFontColors
           title
+          updatedAt
+          tagNames
           subtasks {
             id
-            name
             isFinished
+            name
+            updatedAt
+            createdAt
           }
         }
       }
