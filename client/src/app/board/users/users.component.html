@@ -49,7 +49,7 @@
       type="button"
       class="button-global user-button"
       title="Add"
-      (click)="onAddUser(user.userId)">
+      (click)="onAddUser(user.id)">
       <img src="../../../assets/plus-solid.svg" alt="add" />
     </button>
   </div>
@@ -57,14 +57,14 @@
 
 <ng-template #peek>
   <p *ngIf="(projectUsers$ | async) === null">loading...</p>
-  <div class="user" *ngFor="let user of projectUsers$ | async">
-    <p>{{ user.email }}</p>
+  <div class="user" *ngFor="let projectUser of projectUsers$ | async">
+    <p>{{ projectUser.user.email }}</p>
     <button
       type="button"
-      *ngIf="user.userId !== (loggedInUser$ | async)"
+      *ngIf="projectUser.user.id !== (loggedInUser$ | async)"
       class="button-global user-button"
       title="Remove"
-      (click)="onRemoveUser(user.userId)">
+      (click)="onRemoveUser(projectUser.user.id)">
       <img src="../../../assets/minus-solid.svg" alt="minus" />
     </button>
   </div>

@@ -49,7 +49,6 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  userId: string;
 }
 
 export type FormType =

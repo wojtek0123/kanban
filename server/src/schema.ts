@@ -2,7 +2,6 @@ import { gql } from 'apollo-server'
 import { Context } from './context'
 
 import { GraphQLScalarType, Kind } from 'graphql'
-import { User } from '@prisma/client'
 
 export const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -68,7 +67,7 @@ export const typeDefs = gql`
     name: String
     boards: [Board]
     userId: String
-    users: [String]
+    usersOnProject: UserOnProject
     createdAt: Date
     updatedAt: Date
   }
@@ -77,22 +76,30 @@ export const typeDefs = gql`
     id: String
     name: String
     email: String
+    usersOnProject: UserOnProject
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  type UserOnProject {
+    user: User
+    project: Project
     userId: String
+    projectId: String
     createdAt: Date
     updatedAt: Date
   }
 
   type Query {
     projects(userId: String): [Project]
-    users: [User]
     filteredUsers(text: String): [User]
-    usersFromProject(userIds: [String]): [User]
+    usersFromProject(projectId: String): [UserOnProject]
   }
 
   type Mutation {
     changeColumn(columnId: String, taskId: String): Column
-    addUser(name: String, email: String, userId: String): User
-    addUserToProject(projectId: String, userId: String): Project
+    addUser(name: String, email: String, id: String): User
+    addUserToProject(projectId: String, userId: String): UserOnProject
     removeUserFromProject(projectId: String, userId: String): Project
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
@@ -131,11 +138,17 @@ export const resolvers = {
   Query: {
     projects: (_parent: any, args: { userId: string }, context: Context) => {
       return context.prisma.project.findMany({
+        where: {
+          usersOnProject: {
+            some: {
+              userId: args.userId,
+            },
+          },
+        },
         select: {
           id: true,
           name: true,
           userId: true,
-          users: true,
           createdAt: true,
           updatedAt: true,
           boards: {
@@ -147,28 +160,27 @@ export const resolvers = {
               columns: {
                 select: {
                   id: true,
-                  createdAt: true,
-                  updatedAt: true,
                   name: true,
                   dotColor: true,
+                  createdAt: true,
+                  updatedAt: true,
                   tasks: {
                     select: {
                       id: true,
-                      createdAt: true,
-                      updatedAt: true,
                       title: true,
                       tagNames: true,
-                      tagFontColors: true,
                       tagBackgroundColors: true,
+                      tagFontColors: true,
                       description: true,
+                      createdAt: true,
+                      updatedAt: true,
                       subtasks: {
                         select: {
+                          id: true,
+                          name: true,
+                          isFinished: true,
                           createdAt: true,
                           updatedAt: true,
-                          id: true,
-                          isFinished: true,
-                          name: true,
-                          taskId: true,
                         },
                         orderBy: {
                           createdAt: 'asc',
@@ -176,7 +188,7 @@ export const resolvers = {
                       },
                     },
                     orderBy: {
-                      createdAt: 'desc',
+                      createdAt: 'asc',
                     },
                   },
                 },
@@ -193,26 +205,13 @@ export const resolvers = {
         orderBy: {
           createdAt: 'asc',
         },
-        where: {
-          users: {
-            has: args.userId,
-          },
-        },
       })
     },
-    users: (_parent: any, _args: any, context: Context) => {
-      return context.prisma.user.findMany({
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          userId: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      })
-    },
-    filteredUsers: (_parent: any, args: { text: string }, context: Context) => {
+    filteredUsers: (
+      _parent: unknown,
+      args: { text: string },
+      context: Context,
+    ) => {
       return context.prisma.user.findMany({
         where: {
           email: {
@@ -223,13 +222,22 @@ export const resolvers = {
     },
     usersFromProject: (
       _parent: unknown,
-      args: { userIds: string[] },
+      args: { projectId: string },
       context: Context,
     ) => {
-      return context.prisma.user.findMany({
+      return context.prisma.userOnProject.findMany({
         where: {
-          userId: {
-            in: args.userIds,
+          project: {
+            id: args.projectId,
+          },
+        },
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
           },
         },
       })
@@ -241,24 +249,10 @@ export const resolvers = {
       args: { projectId: string; userId: string },
       context: Context,
     ) => {
-      const response = await context.prisma.project.findUnique({
-        where: {
-          id: args.projectId,
-        },
-      })
-
-      if (response?.users === undefined) {
-        return
-      }
-
-      return context.prisma.project.update({
-        where: {
-          id: args.projectId,
-        },
+      return context.prisma.userOnProject.create({
         data: {
-          users: {
-            set: [...response.users, args.userId],
-          },
+          projectId: args.projectId,
+          userId: args.userId,
         },
       })
     },
@@ -267,37 +261,25 @@ export const resolvers = {
       args: { projectId: string; userId: string },
       context: Context,
     ) => {
-      const response = await context.prisma.project.findUnique({
+      return context.prisma.userOnProject.delete({
         where: {
-          id: args.projectId,
-        },
-      })
-
-      if (response?.users === undefined) {
-        return
-      }
-
-      return context.prisma.project.update({
-        where: {
-          id: args.projectId,
-        },
-        data: {
-          users: {
-            set: response.users.filter((user) => user !== args.userId),
+          userId_projectId: {
+            projectId: args.projectId,
+            userId: args.userId,
           },
         },
       })
     },
     addUser: (
       _parent: any,
-      args: { name: string; email: string; userId: string },
+      args: { name: string; email: string; id: string },
       context: Context,
     ) => {
       return context.prisma.user.create({
         data: {
           name: args.name,
           email: args.email,
-          userId: args.userId,
+          id: args.id,
         },
       })
     },
@@ -414,8 +396,10 @@ export const resolvers = {
         data: {
           name: args.name,
           userId: args.userId,
-          users: {
-            set: [args.userId],
+          usersOnProject: {
+            create: {
+              userId: args.userId,
+            },
           },
         },
       })
@@ -429,6 +413,9 @@ export const resolvers = {
         data: {
           name: args.name,
           projectId: args.projectId,
+        },
+        select: {
+          projectId: true,
         },
       })
     },

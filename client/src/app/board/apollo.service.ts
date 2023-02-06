@@ -74,16 +74,18 @@ export class ApolloService {
       .valueChanges.pipe(map(data => data));
   }
 
-  getUsersFromProject(userIds: string[]) {
-    return this.apollo.watchQuery<{ usersFromProject: User[] }>({
+  getUsersFromProject(projectId: string) {
+    return this.apollo.watchQuery<{ usersFromProject: Array<{ user: User }> }>({
       query: GET_USERS_FROM_PROJECT,
       variables: {
-        userIds,
+        projectId,
       },
     }).valueChanges;
   }
 
   addUserToProject(projectId: string, userId: string) {
+    // const projectId = this.board.selectedProject.value?.id ?? ''
+
     return this.apollo.mutate<{
       addUserToProject: Project;
     }>({
@@ -94,9 +96,9 @@ export class ApolloService {
       },
       refetchQueries: [
         {
-          query: GET_PROJECTS,
+          query: GET_USERS_FROM_PROJECT,
           variables: {
-            userId: this.userId,
+            projectId: projectId,
           },
         },
       ],
@@ -112,9 +114,9 @@ export class ApolloService {
       },
       refetchQueries: [
         {
-          query: GET_PROJECTS,
+          query: GET_USERS_FROM_PROJECT,
           variables: {
-            userId: this.userId,
+            projectId: projectId,
           },
         },
       ],
@@ -216,10 +218,10 @@ export class ApolloService {
     });
   }
 
-  addUser(name: string, email: string, userId: string) {
+  addUser(name: string, email: string, id: string) {
     return this.apollo.mutate({
       mutation: ADD_USER,
-      variables: { name, email, userId },
+      variables: { name, email, id },
     });
   }
 

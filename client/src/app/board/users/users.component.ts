@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApolloService } from '../apollo.service';
 import { Observable, combineLatest } from 'rxjs';
-import { map, catchError, tap, switchMap } from 'rxjs/operators';
+import { map, catchError, tap, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/supabase.service';
 import { BoardService } from '../board.service';
@@ -17,7 +17,7 @@ export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
   submitted = false;
   tabName: 'add' | 'peek' = 'add';
-  projectUsers$: Observable<User[]> | null = null;
+  projectUsers$: Observable<{ user: User }[]> | null = null;
   loggedInUser$: Observable<string> | null = null;
 
   form = this.fb.group({
@@ -33,19 +33,14 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchUsersFromProject();
     this.loggedInUser$ = this.supabase.session.pipe(
       map(data => data?.user.id ?? '')
     );
-  }
 
-  fetchUsersFromProject() {
     this.projectUsers$ = this.boardService.selectedProject.pipe(
-      switchMap(project =>
-        this.apollo
-          .getUsersFromProject(project?.users ?? [])
-          .pipe(map(data => data.data.usersFromProject))
-      )
+      map(data => data?.id ?? ''),
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
+      map(data => data.data.usersFromProject)
     );
   }
 
@@ -90,9 +85,7 @@ export class UsersComponent implements OnInit {
       searchedUsers$,
       userId$,
     ]).pipe(
-      map(([searchedUsers, userId]) =>
-        searchedUsers.filter(user => user.id !== userId)
-      )
+      map(([searchedUsers, id]) => searchedUsers.filter(user => user.id !== id))
     );
 
     this.searchedFilteredUsers$ = combineLatest([
@@ -102,7 +95,7 @@ export class UsersComponent implements OnInit {
       map(([searchedUsers, projectUsers]) =>
         searchedUsers.filter(searchedUser =>
           projectUsers.every(
-            projectUser => searchedUser.userId !== projectUser.userId
+            projectUser => searchedUser.id !== projectUser.user.id
           )
         )
       )
@@ -122,15 +115,14 @@ export class UsersComponent implements OnInit {
         }),
         tap(() => this.toastService.showConfirmToast('add', 'user'))
       )
-      .subscribe();
-
-    if (!this.searchedFilteredUsers$) {
-      return;
-    }
-
-    this.searchedFilteredUsers$ = this.searchedFilteredUsers$.pipe(
-      map(data => data.filter(user => user.userId !== userId))
-    );
+      .subscribe(() => {
+        if (!this.searchedFilteredUsers$) {
+          return;
+        }
+        this.searchedFilteredUsers$ = this.searchedFilteredUsers$.pipe(
+          map(data => data.filter(user => user.id !== userId))
+        );
+      });
   }
 
   onRemoveUser(userId: string) {

@@ -38,7 +38,8 @@ export class BoardComponent implements OnInit {
 
     this.projects$
       ?.pipe(
-        map(data => data.filter(project => project.boards.length !== 0).at(0))
+        map(data => data.filter(project => project.boards.length !== 0).at(0)),
+        take(1)
       )
       .subscribe(project => {
         if (!project) return;

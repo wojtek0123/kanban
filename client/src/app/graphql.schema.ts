@@ -6,7 +6,13 @@ export const GET_PROJECTS = gql`
       id
       name
       userId
-      users
+      usersOnProject {
+        user {
+          email
+          id
+          name
+        }
+      }
       createdAt
       updatedAt
       boards {
@@ -49,7 +55,6 @@ export const GET_USERS = gql`
       id
       name
       email
-      userId
       createdAt
       updatedAt
     }
@@ -59,12 +64,15 @@ export const GET_USERS = gql`
 export const ADD_USER_TO_PROJECT = gql`
   mutation AddUserToProject($projectId: String, $userId: String) {
     addUserToProject(projectId: $projectId, userId: $userId) {
-      id
-      users
-      userId
-      updatedAt
-      name
-      createdAt
+      user {
+        email
+        id
+        name
+      }
+      project {
+        id
+        name
+      }
     }
   }
 `;
@@ -73,7 +81,13 @@ export const REMOVE_USER_FROM_PROJECT = gql`
   mutation RemoveUserFromProject($projectId: String, $userId: String) {
     removeUserFromProject(projectId: $projectId, userId: $userId) {
       id
-      users
+      usersOnProject {
+        user {
+          email
+          id
+          name
+        }
+      }
       userId
       updatedAt
       name
@@ -83,14 +97,13 @@ export const REMOVE_USER_FROM_PROJECT = gql`
 `;
 
 export const GET_USERS_FROM_PROJECT = gql`
-  query UsersFromProject($userIds: [String]) {
-    usersFromProject(userIds: $userIds) {
-      id
-      email
-      name
-      userId
-      updatedAt
-      createdAt
+  query UsersFromProject($projectId: String) {
+    usersFromProject(projectId: $projectId) {
+      user {
+        email
+        id
+        name
+      }
     }
   }
 `;
@@ -101,7 +114,6 @@ export const GET_FILTERED_USERS = gql`
       id
       name
       email
-      userId
       createdAt
       updatedAt
     }
@@ -131,12 +143,11 @@ export const CHANGE_COLUMN = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($name: String, $email: String, $userId: String) {
-    addUser(name: $name, email: $email, userId: $userId) {
+  mutation addUser($name: String, $email: String, $id: String) {
+    addUser(name: $name, email: $email, id: $id) {
       id
       name
       email
-      userId
     }
   }
 `;

@@ -72,16 +72,7 @@ export class RegisterComponent {
 
       this.supabase.setSession(data.session);
 
-      // const { status, statusText } = await this.supabase.createUser(
-      //   email,
-      //   nickname
-      // );
-
-      // if (status !== 200) {
-      // this.status = 'error';
-      // this.errorMessage = 'Something went wrong';
-      // return;
-      // }
+      console.log(data.user);
 
       this.apollo
         .addUser(nickname, email, data.user?.id ?? '')
@@ -95,7 +86,7 @@ export class RegisterComponent {
             }
           })
         )
-        .subscribe();
+        .subscribe(data => console.log(data));
 
       if (this.status !== 'loading') {
         return;
