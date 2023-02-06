@@ -7,7 +7,6 @@ import {
 } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Project } from '../../types';
-import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-collapse-button',
@@ -26,11 +25,8 @@ export class CollapseButtonComponent {
   @Output() toggleMenu = new EventEmitter<boolean>();
   @Input() showContent!: boolean;
 
-  constructor(private boardService: BoardService) {}
-
   toggleShowContent() {
     this.showContent = !this.showContent;
     this.toggleMenu.emit(this.showContent);
-    this.boardService.onChangeSelectedProject(this.project);
   }
 }

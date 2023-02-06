@@ -28,9 +28,10 @@ export class AccordionItemComponent implements OnInit {
       this.showContent = true;
   }
 
-  onForm(type: FormType, project: Project) {
-    this.boardService.onChangeSelectedProject(project);
-    this.formService.onChangeFormVisibility(type);
+  onForm() {
+    this.boardService.onChangeSelectedProject(this.project);
+    this.boardService.onChangeSelectedBoard(this.project.boards.at(0));
+    this.formService.onChangeFormVisibility('board');
   }
 
   toggleShowContent(state: boolean) {

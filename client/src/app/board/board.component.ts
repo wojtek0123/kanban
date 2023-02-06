@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from './form/form.service';
-import { Observable, Subscription, combineLatest } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { BoardService } from './board.service';
 import { Project, FormType, Status, Board } from '../types';
 import { ApolloService } from './apollo.service';
