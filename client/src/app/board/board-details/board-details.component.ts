@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Board, FormType, Task } from '../../types';
+import { Board, FormType, Task, User } from '../../types';
 import { BoardService } from '../board.service';
 import { FormService } from '../form/form.service';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, map, tap } from 'rxjs';
 import { SupabaseService } from 'src/app/supabase.service';
 import { Router } from '@angular/router';
 import { ApolloService } from '../apollo.service';
@@ -20,7 +20,8 @@ import { ToastService } from '../toast/toast.service';
 })
 export class BoardDetailsComponent implements OnInit {
   @Input() selectedBoard: Board | undefined | null = null;
-  loggedInUserEmail$: Observable<string | undefined> | null = null;
+  loggedInUser$: Observable<Partial<User> | undefined> | null = null;
+  projectOwnerId$: Observable<string> | null = null;
 
   constructor(
     private formService: FormService,
@@ -32,8 +33,9 @@ export class BoardDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loggedInUserEmail$ = this.supabase.session.pipe(
-      map(data => data?.user.email)
+    this.loggedInUser$ = this.supabase.session.pipe(map(data => data?.user));
+    this.projectOwnerId$ = this.boardService.selectedProject.pipe(
+      map(project => project?.userId ?? '')
     );
   }
 

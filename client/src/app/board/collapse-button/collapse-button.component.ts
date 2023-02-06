@@ -5,8 +5,10 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Project } from '../../types';
+import { SupabaseService } from 'src/app/supabase.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-collapse-button',
@@ -20,10 +22,19 @@ import { Project } from '../../types';
     ]),
   ],
 })
-export class CollapseButtonComponent {
+export class CollapseButtonComponent implements OnInit {
   @Input() project!: Project;
   @Output() toggleMenu = new EventEmitter<boolean>();
   @Input() showContent!: boolean;
+  loggedInUserId$: Observable<string> | null = null;
+
+  constructor(private supabase: SupabaseService) {}
+
+  ngOnInit(): void {
+    this.loggedInUserId$ = this.supabase.session.pipe(
+      map(session => session?.user.id ?? '')
+    );
+  }
 
   toggleShowContent() {
     this.showContent = !this.showContent;

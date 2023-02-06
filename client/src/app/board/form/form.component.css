@@ -22,8 +22,8 @@
 
 .close-button {
   width: 100%;
+  padding-left: 3rem;
   display: flex;
-  margin-left: 3rem;
   justify-content: flex-start;
 }
 

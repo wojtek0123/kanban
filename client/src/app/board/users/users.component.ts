@@ -16,9 +16,10 @@ import { ToastService } from '../toast/toast.service';
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
   submitted = false;
-  tabName: 'add' | 'peek' = 'add';
+  tabName: 'add' | 'peek' = 'peek';
   projectUsers$: Observable<{ user: User }[]> | null = null;
-  loggedInUser$: Observable<string> | null = null;
+  loggedInUserId$: Observable<string> | null = null;
+  projectId$: Observable<string> | null = null;
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -33,26 +34,28 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loggedInUser$ = this.supabase.session.pipe(
+    this.projectId$ = this.boardService.selectedProject.pipe(
+      map(project => project?.userId ?? '')
+    );
+
+    this.loggedInUserId$ = this.supabase.session.pipe(
       map(data => data?.user.id ?? '')
     );
 
     this.projectUsers$ = this.boardService.selectedProject.pipe(
-      map(data => data?.id ?? ''),
+      map(project => project?.id ?? ''),
       switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
       map(data => data.data.usersFromProject)
     );
   }
 
-  changeTabName() {
-    if (this.tabName === 'add') {
-      this.tabName = 'peek';
-    } else {
-      this.tabName = 'add';
-      this.searchedFilteredUsers$ = null;
-    }
-
+  changeTabToAdd() {
+    this.tabName = 'add';
     this.form.reset();
+  }
+
+  changeTabToPeek() {
+    this.tabName = 'peek';
   }
 
   onSubmit() {
