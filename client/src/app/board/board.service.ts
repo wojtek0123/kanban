@@ -4,7 +4,6 @@ import { Board, Project } from '../types';
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {
-  selectedProjectId = new BehaviorSubject<string>('');
   selectedColumnId = new BehaviorSubject<string>('');
   selectedTaskId = new BehaviorSubject<string>('');
   selectedBoard = new BehaviorSubject<Board | undefined>(undefined);
@@ -16,10 +15,6 @@ export class BoardService {
 
   onChangeSelectedBoard(board: Board | undefined) {
     this.selectedBoard.next(board);
-  }
-
-  onChangeSelectedProjectId(projectId: string) {
-    this.selectedProjectId.next(projectId);
   }
 
   onChangeSelectedColumnId(columnId: string) {

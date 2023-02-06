@@ -31,7 +31,6 @@ export class CollapseButtonComponent {
   toggleShowContent() {
     this.showContent = !this.showContent;
     this.toggleMenu.emit(this.showContent);
-    this.boardService.onChangeSelectedProjectId(this.project.id);
-    this.boardService.onChangeSelectedProjectId(this.project.id);
+    this.boardService.onChangeSelectedProject(this.project);
   }
 }

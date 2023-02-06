@@ -44,7 +44,6 @@ export class BoardComponent implements OnInit {
       .subscribe(project => {
         if (!project) return;
         this.boardService.onChangeSelectedProject(project);
-        this.boardService.onChangeSelectedProjectId(project.id);
         this.boardService.onChangeSelectedBoard(project.boards.at(0));
       });
 

@@ -138,8 +138,7 @@ export class ApolloService {
     });
   }
 
-  addBoard(name: string) {
-    const projectId = this.board.selectedProjectId.value;
+  addBoard(name: string, projectId: string) {
     return this.apollo.mutate<{ addBoard: Board }>({
       mutation: ADD_BOARD,
       variables: { name, projectId },

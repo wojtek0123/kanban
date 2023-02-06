@@ -106,14 +106,16 @@ export class UsersComponent implements OnInit {
   }
 
   onAddUser(userId: string) {
-    this.boardService.selectedProjectId
+    this.boardService.selectedProject
       .pipe(
+        map(project => project?.id ?? ''),
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
           this.toastService.showWarningToast('add', 'user');
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('add', 'user'))
+        tap(() => this.toastService.showConfirmToast('add', 'user')),
+        take(1)
       )
       .subscribe(() => {
         if (!this.searchedFilteredUsers$) {
@@ -126,8 +128,9 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
-    this.boardService.selectedProjectId
+    this.boardService.selectedProject
       .pipe(
+        map(project => project?.id ?? ''),
         switchMap(projectId =>
           this.apollo.removeUserFromProject(projectId, userId)
         ),
@@ -135,7 +138,8 @@ export class UsersComponent implements OnInit {
           this.toastService.showWarningToast('delete', 'user');
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('delete', 'user'))
+        tap(() => this.toastService.showConfirmToast('delete', 'user')),
+        take(1)
       )
       .subscribe();
   }

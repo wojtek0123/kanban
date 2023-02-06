@@ -28,8 +28,8 @@ export class AccordionItemComponent implements OnInit {
       this.showContent = true;
   }
 
-  onForm(type: FormType, projectId: string) {
-    this.boardService.onChangeSelectedProjectId(projectId);
+  onForm(type: FormType, project: Project) {
+    this.boardService.onChangeSelectedProject(project);
     this.formService.onChangeFormVisibility(type);
   }
 
@@ -38,7 +38,6 @@ export class AccordionItemComponent implements OnInit {
   }
 
   onSelectBoard(board: Board) {
-    this.boardService.onChangeSelectedProjectId(this.project.id);
     this.boardService.onChangeSelectedProject(this.project);
     this.boardService.onChangeSelectedBoard(board);
     this.navigationService.onMenu();

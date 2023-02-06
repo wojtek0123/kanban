@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormService } from '../form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../apollo.service';
-import { catchError, take, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { BoardService } from '../board.service';
 import { Subscription } from 'rxjs';
 import { ToastService } from '../toast/toast.service';
@@ -80,9 +80,10 @@ export class BoardFormComponent implements OnInit, OnDestroy {
     } else if (!this.isEditing && this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.apollo
-        .addBoard(name)
+      this.boardService.selectedProject
         .pipe(
+          map(data => data?.id ?? ''),
+          switchMap(projectId => this.apollo.addBoard(name, projectId)),
           catchError(async error => {
             this.toastService.showWarningToast('add', 'board');
             throw new Error(error);
@@ -91,6 +92,7 @@ export class BoardFormComponent implements OnInit, OnDestroy {
           take(1)
         )
         .subscribe(data => {
+          console.log(data);
           this.boardService.onChangeSelectedBoard(data.data?.addBoard);
         });
     } else {
