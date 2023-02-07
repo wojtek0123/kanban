@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
