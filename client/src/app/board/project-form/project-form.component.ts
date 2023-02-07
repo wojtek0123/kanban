@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -11,9 +11,8 @@ import { catchError, tap } from 'rxjs/operators';
   templateUrl: './project-form.component.html',
   styleUrls: [],
 })
-export class ProjectFormComponent implements OnInit, OnDestroy {
-  isEditing!: boolean;
-  subscription!: Subscription;
+export class ProjectFormComponent implements OnInit {
+  isEditing$!: Observable<boolean>;
   submitted = false;
 
   form = this.formBuilder.group({
@@ -21,7 +20,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required]],
     }),
     edit: this.formBuilder.group({
-      name: [this.formService.editingProject?.name, [Validators.required]],
+      name: [this.formService.getEditingProject?.name, [Validators.required]],
     }),
   });
 
@@ -45,22 +44,14 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.formService.isEditing.subscribe(
-      state => (this.isEditing = state)
-    );
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.isEditing$ = this.formService.getIsEditing;
   }
 
   onSubmit() {
     this.submitted = true;
 
-    if (this.isEditing && this.getFormControls.edit.valid) {
-      const projectId = this.formService.editingProject?.id ?? '';
+    if (this.getFormControls.edit.valid) {
+      const projectId = this.formService.getEditingProject?.id ?? '';
       const projectName = this.form.value.edit?.name ?? '';
 
       this.apollo
@@ -73,7 +64,8 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
           tap(() => this.toastService.showConfirmToast('update', 'project'))
         )
         .subscribe();
-    } else if (!this.isEditing && this.getFormControls.add.valid) {
+    }
+    if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
       this.apollo
@@ -86,11 +78,13 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
           tap(() => this.toastService.showConfirmToast('add', 'project'))
         )
         .subscribe();
-    } else {
+    }
+
+    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;
     }
 
-    this.formService.onChangeFormVisibility();
     this.form.reset();
+    this.formService.onChangeFormVisibility();
   }
 }

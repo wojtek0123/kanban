@@ -31,7 +31,7 @@ export class CollapseButtonComponent implements OnInit {
   constructor(private supabase: SupabaseService) {}
 
   ngOnInit(): void {
-    this.loggedInUserId$ = this.supabase.session.pipe(
+    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(session => session?.user.id ?? '')
     );
   }

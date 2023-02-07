@@ -6,23 +6,57 @@ import { Subtask } from '../models/subtask.model';
 import { Project } from '../models/project.model';
 import { FormType } from '../models/types';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
-  isFormOpen = new BehaviorSubject(false);
-  isEditing = new BehaviorSubject(false);
-  editingProject?: Project;
-  editingBoard?: Board;
-  editingColumn?: Column;
-  editingTask?: Task;
-  editingSubtask?: Subtask;
-  typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
+  private isFormOpen = new BehaviorSubject(false);
+  private isEditing = new BehaviorSubject(false);
+  private editingProject?: Project;
+  private editingBoard?: Board;
+  private editingColumn?: Column;
+  private editingTask?: Task;
+  private editingSubtask?: Subtask;
+  private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
+
+  get getIsFormOpen(): Observable<boolean> {
+    return this.isFormOpen;
+  }
+
+  get getIsEditing(): Observable<boolean> {
+    return this.isEditing;
+  }
+
+  get getTypeOfForm(): Observable<FormType | undefined> {
+    return this.typeOfForm;
+  }
+
+  get getEditingProject() {
+    return this.editingProject;
+  }
+
+  get getEditingBoard() {
+    return this.editingBoard;
+  }
+
+  get getEditingColumn() {
+    return this.editingColumn;
+  }
+
+  get getEditingTask() {
+    return this.editingTask;
+  }
+
+  get getEditingSubtask() {
+    return this.editingSubtask;
+  }
 
   onChangeFormVisibility(formType?: FormType) {
     this.isFormOpen.next(!this.isFormOpen.value);
     this.isEditing.next(false);
-    this.typeOfForm.next(formType);
+    if (formType) {
+      this.typeOfForm.next(formType);
+    }
   }
 
   onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {

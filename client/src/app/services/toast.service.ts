@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormType, ToastType } from 'src/app/models/types';
 
 type Operation = 'add' | 'delete' | 'update';
@@ -8,20 +8,32 @@ type Operation = 'add' | 'delete' | 'update';
   providedIn: 'root',
 })
 export class ToastService {
-  message = new Subject<string>();
-  show = new BehaviorSubject<boolean>(false);
-  type = new BehaviorSubject<ToastType>('confirm');
-  timeout: NodeJS.Timeout | null = null;
+  private message$ = new Subject<string>();
+  private show$ = new BehaviorSubject<boolean>(false);
+  private type$ = new BehaviorSubject<ToastType>('confirm');
+  private timeout: NodeJS.Timeout | null = null;
 
   constructor() {}
+
+  get getMessage(): Observable<string> {
+    return this.message$;
+  }
+
+  get getShow(): Observable<boolean> {
+    return this.show$;
+  }
+
+  get getType(): Observable<ToastType> {
+    return this.type$;
+  }
 
   showWarningToast(operation: Operation, name: FormType) {
     const message = `Error! Couldn't ${operation} ${
       operation === 'add' ? 'a new' : 'this'
     } ${name}`;
-    this.type.next('warning');
-    this.message.next(message);
-    this.show.next(true);
+    this.type$.next('warning');
+    this.message$.next(message);
+    this.show$.next(true);
 
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -36,9 +48,9 @@ export class ToastService {
     const message = `Successfully ${operation}${
       operation === 'add' ? 'ed' : 'd'
     } ${operation === 'add' ? 'a new' : 'this'} ${name}`;
-    this.type.next('confirm');
-    this.message.next(message);
-    this.show.next(true);
+    this.type$.next('confirm');
+    this.message$.next(message);
+    this.show$.next(true);
 
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -50,6 +62,6 @@ export class ToastService {
   }
 
   closeToast() {
-    this.show.next(false);
+    this.show$.next(false);
   }
 }

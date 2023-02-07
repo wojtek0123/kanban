@@ -33,7 +33,7 @@ export class AccordionItemComponent implements OnInit {
       this.showContent = true;
     }
 
-    this.loggedInUserId$ = this.supabase.session.pipe(
+    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(session => session?.user.id ?? '')
     );
   }

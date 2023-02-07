@@ -16,9 +16,9 @@ export class ToastComponent implements OnInit {
   constructor(private toastService: ToastService) {}
 
   ngOnInit(): void {
-    this.message$ = this.toastService.message;
-    this.show$ = this.toastService.show;
-    this.type$ = this.toastService.type;
+    this.message$ = this.toastService.getMessage;
+    this.show$ = this.toastService.getShow;
+    this.type$ = this.toastService.getType;
   }
 
   onClose() {

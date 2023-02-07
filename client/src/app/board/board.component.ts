@@ -49,11 +49,11 @@ export class BoardComponent implements OnInit {
         this.boardService.onChangeSelectedBoard(project.boards.at(0));
       });
 
-    const projectId$ = this.boardService.selectedProject.pipe(
+    const projectId$ = this.boardService.getSelectedProject.pipe(
       map(data => data?.id)
     );
 
-    const boardId$ = this.boardService.selectedBoard.pipe(
+    const boardId$ = this.boardService.getSelectedBoard.pipe(
       map(data => data?.id)
     );
 

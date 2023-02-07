@@ -1,5 +1,8 @@
 <form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="form-wrapper-global" *ngIf="!isEditing" formGroupName="add">
+  <div
+    class="form-wrapper-global"
+    *ngIf="(isEditing$ | async) === false"
+    formGroupName="add">
     <label class="form-label-global" for="column-name">Column Name</label>
     <input
       class="form-input-global"
@@ -15,7 +18,10 @@
     <input type="color" formControlName="dotColor" />
   </div>
 
-  <div *ngIf="isEditing" formGroupName="edit" class="form-wrapper-global">
+  <div
+    *ngIf="isEditing$ | async"
+    formGroupName="edit"
+    class="form-wrapper-global">
     <label class="form-label-global" for="edit-column-name">Column name</label>
     <input
       type="text"
@@ -32,6 +38,6 @@
   </div>
 
   <button type="submit" class="button-global submit-button-global">
-    {{ isEditing ? 'Update' : 'Add ' + 'column' }}
+    {{ (isEditing$ | async) ? 'Update' : 'Add ' + 'column' }}
   </button>
 </form>

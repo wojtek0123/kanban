@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 
@@ -11,9 +11,8 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './column-form.component.html',
   styleUrls: [],
 })
-export class ColumnFormComponent implements OnInit, OnDestroy {
-  isEditing!: boolean;
-  subscription!: Subscription;
+export class ColumnFormComponent implements OnInit {
+  isEditing$!: Observable<boolean>;
   submitted = false;
 
   form = this.formBuilder.group({
@@ -22,11 +21,11 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
       dotColor: this.formBuilder.control('#ffffff'),
     }),
     edit: this.formBuilder.group({
-      name: this.formBuilder.control(this.formService.editingColumn?.name, [
+      name: this.formBuilder.control(this.formService.getEditingColumn?.name, [
         Validators.required,
       ]),
       dotColor: this.formBuilder.control(
-        this.formService.editingColumn?.dotColor
+        this.formService.getEditingColumn?.dotColor
       ),
     }),
   });
@@ -39,13 +38,7 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.formService.isEditing.subscribe(state => (this.isEditing = state));
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.isEditing$ = this.formService.getIsEditing;
   }
 
   get getAddControls() {
@@ -63,8 +56,8 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.submitted = true;
 
-    if (this.isEditing && this.getFormControls.edit.valid) {
-      const id = this.formService.editingColumn?.id ?? '';
+    if (this.getFormControls.edit.valid) {
+      const id = this.formService.getEditingColumn?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
       const dotColor = this.form.value.edit?.dotColor ?? '';
 
@@ -74,11 +67,12 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
           catchError(async error => {
             this.toastService.showWarningToast('update', 'column');
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'column'))
+          })
         )
-        .subscribe();
-    } else if (!this.isEditing && this.getFormControls.add.valid) {
+        .subscribe(() =>
+          this.toastService.showConfirmToast('update', 'column')
+        );
+    } else if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
@@ -88,10 +82,9 @@ export class ColumnFormComponent implements OnInit, OnDestroy {
           catchError(async error => {
             this.toastService.showWarningToast('add', 'column');
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('add', 'column'))
+          })
         )
-        .subscribe();
+        .subscribe(() => this.toastService.showConfirmToast('add', 'column'));
     } else {
       return;
     }

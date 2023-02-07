@@ -1,21 +1,21 @@
 <div class="navigation-bar">
   <div
     class="navigation-backdrop"
-    [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'"
-    (click)="navigationService.onMenu()"></div>
+    [@smoothSlide]="!showMenu ? 'initial' : 'final'"
+    (click)="onMenu()"></div>
   <h2 class="navigation-logo">KanBan</h2>
   <button
     aria-label="hamburger menu"
     type="button"
     class="hamburger"
-    [ngClass]="{ close: navigationService.showMenu }"
-    (click)="navigationService.onMenu()">
+    [ngClass]="{ close: showMenu }"
+    (click)="onMenu()">
     <span class="hamburger-bar"></span>
   </button>
 </div>
 <nav
   class="navigation-container"
-  [@smoothSlide]="!navigationService.showMenu ? 'initial' : 'final'">
+  [@smoothSlide]="!showMenu ? 'initial' : 'final'">
   <button class="button-global navigation-logout-button" (click)="onLogout()">
     Logout
   </button>

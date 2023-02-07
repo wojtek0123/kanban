@@ -11,12 +11,16 @@
         </button>
       </div>
 
-      <app-project-form *ngIf="typeOfForm === 'project'"></app-project-form>
-      <app-board-form *ngIf="typeOfForm === 'board'"></app-board-form>
-      <app-column-form *ngIf="typeOfForm === 'column'"></app-column-form>
-      <app-task-form *ngIf="typeOfForm === 'task'"></app-task-form>
-      <app-subtask-form *ngIf="typeOfForm === 'subtask'"></app-subtask-form>
-      <app-users *ngIf="typeOfForm === 'user'"></app-users>
+      <app-project-form
+        *ngIf="(typeOfForm$ | async) === 'project'"></app-project-form>
+      <app-board-form
+        *ngIf="(typeOfForm$ | async) === 'board'"></app-board-form>
+      <app-column-form
+        *ngIf="(typeOfForm$ | async) === 'column'"></app-column-form>
+      <app-task-form *ngIf="(typeOfForm$ | async) === 'task'"></app-task-form>
+      <app-subtask-form
+        *ngIf="(typeOfForm$ | async) === 'subtask'"></app-subtask-form>
+      <app-users *ngIf="(typeOfForm$ | async) === 'user'"></app-users>
     </div>
   </div>
 </app-form-wrapper>

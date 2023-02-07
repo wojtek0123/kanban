@@ -36,8 +36,10 @@ export class BoardDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loggedInUser$ = this.supabase.session.pipe(map(data => data?.user));
-    this.projectOwnerId$ = this.boardService.selectedProject.pipe(
+    this.loggedInUser$ = this.supabase.getSessionObs.pipe(
+      map(data => data?.user)
+    );
+    this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.userId ?? '')
     );
   }

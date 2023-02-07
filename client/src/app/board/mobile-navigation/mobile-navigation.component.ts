@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormType } from '../../models/types';
 import { Project } from '../../models/project.model';
 import { FormService } from '../../services/form.service';
@@ -35,15 +35,24 @@ import { Router } from '@angular/router';
     ]),
   ],
 })
-export class MobileNavigationComponent {
+export class MobileNavigationComponent implements OnInit {
   @Input() projects: Project[] | null = null;
+  showMenu!: boolean;
 
   constructor(
     private formService: FormService,
-    public navigationService: NavigationService,
+    private navigationService: NavigationService,
     private supabase: SupabaseService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.showMenu = this.navigationService.getShowMenu();
+  }
+
+  onMenu() {
+    this.navigationService.onMenu();
+  }
 
   onForm(type: FormType) {
     this.formService.onChangeFormVisibility(type);

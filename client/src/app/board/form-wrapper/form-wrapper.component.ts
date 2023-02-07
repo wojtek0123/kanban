@@ -1,26 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-form-wrapper',
   templateUrl: './form-wrapper.component.html',
   styleUrls: ['./form-wrapper.component.css'],
 })
-export class FormWrapperComponent implements OnInit, OnDestroy {
-  show!: boolean;
-  showSubscription!: Subscription;
+export class FormWrapperComponent implements OnInit {
+  show$!: Observable<boolean>;
 
   constructor(private formService: FormService) {}
 
   ngOnInit(): void {
-    this.showSubscription = this.formService.isFormOpen.subscribe(
-      state => (this.show = state)
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.showSubscription.unsubscribe();
+    this.show$ = this.formService.getIsFormOpen;
   }
 
   close(event: Event) {

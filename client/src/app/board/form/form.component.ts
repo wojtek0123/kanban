@@ -1,27 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormType } from '../../models/types';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
-export class FormComponent implements OnInit, OnDestroy {
-  typeOfForm!: FormType | undefined;
-  typeSubscription!: Subscription;
+export class FormComponent implements OnInit {
+  typeOfForm$!: Observable<FormType | undefined>;
 
   constructor(private formService: FormService) {}
 
   ngOnInit(): void {
-    this.typeSubscription = this.formService.typeOfForm.subscribe(
-      type => (this.typeOfForm = type)
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.typeSubscription.unsubscribe();
+    this.typeOfForm$ = this.formService.getTypeOfForm;
   }
 
   onClose() {

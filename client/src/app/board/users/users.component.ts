@@ -34,15 +34,15 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.projectId$ = this.boardService.selectedProject.pipe(
+    this.projectId$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.userId ?? '')
     );
 
-    this.loggedInUserId$ = this.supabase.session.pipe(
+    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(data => data?.user.id ?? '')
     );
 
-    this.projectUsers$ = this.boardService.selectedProject.pipe(
+    this.projectUsers$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.id ?? ''),
       switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
       map(data => data.data.usersFromProject)
@@ -71,7 +71,9 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    const userId$ = this.supabase.session.pipe(map(data => data?.user.id));
+    const userId$ = this.supabase.getSessionObs.pipe(
+      map(data => data?.user.id)
+    );
 
     const searchedUsers$ = this.apollo.getFilteredUsers(searchedEmail).pipe(
       catchError(async error => {
@@ -109,7 +111,7 @@ export class UsersComponent implements OnInit {
   }
 
   onAddUser(userId: string) {
-    this.boardService.selectedProject
+    this.boardService.getSelectedProject
       .pipe(
         map(project => project?.id ?? ''),
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
@@ -131,7 +133,7 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
-    this.boardService.selectedProject
+    this.boardService.getSelectedProject
       .pipe(
         map(project => project?.id ?? ''),
         switchMap(projectId =>

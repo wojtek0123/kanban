@@ -27,7 +27,7 @@ import {
   REMOVE_USER_FROM_PROJECT,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
-import { map } from 'rxjs';
+import { combineLatest, map, mapTo, switchMap } from 'rxjs';
 import { Board } from '../models/board.model';
 import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
@@ -38,26 +38,25 @@ import { BoardService } from './board.service';
   providedIn: 'root',
 })
 export class ApolloService {
-  private userId!: string;
-
   constructor(
     private apollo: Apollo,
     private supabase: SupabaseService,
     private board: BoardService
-  ) {
-    this.supabase.session.subscribe(session => {
-      this.userId = session?.user.id ?? '';
-    });
-  }
+  ) {}
 
   getProjects() {
-    return this.apollo
-      .watchQuery<{ projects: Project[] }>({
-        query: GET_PROJECTS,
-        variables: { userId: this.userId },
-        errorPolicy: 'all',
-      })
-      .valueChanges.pipe(map(data => data));
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo
+          .watchQuery<{ projects: Project[] }>({
+            query: GET_PROJECTS,
+            variables: { userId },
+            errorPolicy: 'all',
+          })
+          .valueChanges.pipe(map(data => data))
+      )
+    );
   }
 
   getUsers() {
@@ -87,8 +86,6 @@ export class ApolloService {
   }
 
   addUserToProject(projectId: string, userId: string) {
-    // const projectId = this.board.selectedProject.value?.id ?? ''
-
     return this.apollo.mutate<{
       addUserToProject: Project;
     }>({
@@ -127,50 +124,70 @@ export class ApolloService {
   }
 
   addProject(name: string) {
-    return this.apollo.mutate<{ addProject: { id: string; name: string } }>({
-      mutation: ADD_PROJECT,
-      variables: { name, userId: this.userId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{ addProject: { id: string; name: string } }>({
+          mutation: ADD_PROJECT,
+          variables: { name, userId },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   addBoard(name: string, projectId: string) {
-    return this.apollo.mutate<{ addBoard: Board }>({
-      mutation: ADD_BOARD,
-      variables: { name, projectId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{ addBoard: Board }>({
+          mutation: ADD_BOARD,
+          variables: { name, projectId },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   addColumn(name: string, dotColor: string) {
-    const boardId = this.board.selectedBoard.value?.id ?? '';
+    const userId$ = this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? '')
+    );
 
-    return this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
-      mutation: ADD_COLUMN,
-      variables: { name, boardId, dotColor },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    const boardId$ = this.board.getSelectedBoard.pipe(
+      map(board => board?.id ?? '')
+    );
+
+    return combineLatest([userId$, boardId$]).pipe(
+      switchMap(([userId, boardId]) =>
+        this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
+          mutation: ADD_COLUMN,
+          variables: { name, boardId, dotColor },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   addTask(
@@ -180,44 +197,58 @@ export class ApolloService {
     tagFontColors: string[],
     tagBackgroundColors: string[]
   ) {
-    const columnId = this.board.selectedColumnId.value;
-
-    return this.apollo.mutate<{ addTask: { id: string } }>({
-      mutation: ADD_TASK,
-      variables: {
-        title,
-        description,
-        columnId,
-        tagNames,
-        tagFontColors,
-        tagBackgroundColors,
-      },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.board.getSelectedColumnId.pipe(
+          switchMap(columnId =>
+            this.apollo.mutate<{ addTask: { id: string } }>({
+              mutation: ADD_TASK,
+              variables: {
+                title,
+                description,
+                columnId,
+                tagNames,
+                tagFontColors,
+                tagBackgroundColors,
+              },
+              refetchQueries: [
+                {
+                  query: GET_PROJECTS,
+                  variables: {
+                    userId,
+                  },
+                },
+              ],
+            })
+          )
+        )
+      )
+    );
   }
 
   addSubtask(name: string, isFinished: boolean) {
-    const taskId = this.board.selectedTaskId.value;
-
-    return this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
-      mutation: ADD_SUBTASK,
-      variables: { name, isFinished, taskId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.board.getSelectedTaskId.pipe(
+          switchMap(taskId =>
+            this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
+              mutation: ADD_SUBTASK,
+              variables: { name, isFinished, taskId },
+              refetchQueries: [
+                {
+                  query: GET_PROJECTS,
+                  variables: {
+                    userId,
+                  },
+                },
+              ],
+            })
+          )
+        )
+      )
+    );
   }
 
   addUser(name: string, email: string, id: string) {
@@ -228,48 +259,63 @@ export class ApolloService {
   }
 
   editProject(id: string, name: string) {
-    return this.apollo.mutate<{ editProject: { id: string; name: string } }>({
-      mutation: EDIT_PROJECT,
-      variables: { id, name },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{ editProject: { id: string; name: string } }>({
+          mutation: EDIT_PROJECT,
+          variables: { id, name },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   editBoard(id: string, name: string) {
-    return this.apollo.mutate<{ editBoard: { id: string; name: string } }>({
-      mutation: EDIT_BOARD,
-      variables: { id, name },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{ editBoard: { id: string; name: string } }>({
+          mutation: EDIT_BOARD,
+          variables: { id, name },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   editColumn(id: string, name: string, dotColor: string) {
-    return this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
-      mutation: EDIT_COLUMN,
-      variables: { id, name, dotColor },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
+          mutation: EDIT_COLUMN,
+          variables: { id, name, dotColor },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   editTask(
@@ -280,51 +326,61 @@ export class ApolloService {
     tagFontColors: string[],
     tagBackgroundColors: string[]
   ) {
-    return this.apollo.mutate<{
-      editTask: {
-        id: string;
-        title: string;
-        description: string;
-        tagNames: string[];
-        tagFontColors: string[];
-        tagBackgroundColors: string[];
-      };
-    }>({
-      mutation: EDIT_TASK,
-      variables: {
-        id,
-        title,
-        description,
-        tagNames,
-        tagFontColors,
-        tagBackgroundColors,
-      },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{
+          editTask: {
+            id: string;
+            title: string;
+            description: string;
+            tagNames: string[];
+            tagFontColors: string[];
+            tagBackgroundColors: string[];
+          };
+        }>({
+          mutation: EDIT_TASK,
           variables: {
-            userId: this.userId,
+            id,
+            title,
+            description,
+            tagNames,
+            tagFontColors,
+            tagBackgroundColors,
           },
-        },
-      ],
-    });
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   editSubtask(id: string, name: string) {
-    return this.apollo.mutate<{
-      editSubtask: { id: string; name: string };
-    }>({
-      mutation: EDIT_SUBTASK,
-      variables: { id, name },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate<{
+          editSubtask: { id: string; name: string };
+        }>({
+          mutation: EDIT_SUBTASK,
+          variables: { id, name },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   remove(id: string, type: FormType) {
@@ -346,50 +402,64 @@ export class ApolloService {
         mutation = REMOVE_SUBTASK;
         break;
     }
-
-    return this.apollo.mutate({
-      mutation,
-      variables: {
-        id,
-      },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate({
+          mutation,
           variables: {
-            userId: this.userId,
+            id,
           },
-        },
-      ],
-    });
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   updateCompletionStateOfSubtask(id: string, state: boolean) {
-    return this.apollo.mutate({
-      mutation: CHANGE_COMPLETION_STATE,
-      variables: { id, state },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate({
+          mutation: CHANGE_COMPLETION_STATE,
+          variables: { id, state },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   changeColumn(columnId: string, taskId: string) {
-    return this.apollo.mutate({
-      mutation: CHANGE_COLUMN,
-      variables: { columnId, taskId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-          variables: {
-            userId: this.userId,
-          },
-        },
-      ],
-    });
+    return this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate({
+          mutation: CHANGE_COLUMN,
+          variables: { columnId, taskId },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 }
