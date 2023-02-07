@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Project, Board } from '../../types';
-import { BoardService } from '../board.service';
-import { FormService } from '../form/form.service';
-import { NavigationService } from '../mobile-navigation/navigation.service';
-import { SupabaseService } from 'src/app/supabase.service';
+import { Project } from '../../models/project.model';
+import { Board } from '../../models/board.model';
+import { BoardService } from '../../services/board.service';
+import { FormService } from '../../services/form.service';
+import { NavigationService } from '../../services/navigation.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 import { Observable, map } from 'rxjs';
 
 @Component({

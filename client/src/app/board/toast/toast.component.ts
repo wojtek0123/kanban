@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastService } from './toast.service';
+import { ToastService } from '../../services/toast.service';
 import { Observable } from 'rxjs';
-import { ToastType } from 'src/app/types';
+import { ToastType } from 'src/app/models/types';
 
 @Component({
   selector: 'app-toast',

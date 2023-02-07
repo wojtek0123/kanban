@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from './form.service';
-import { FormType } from '../../types';
+import { FormService } from '../../services/form.service';
+import { FormType } from '../../models/types';
 import { Subscription } from 'rxjs';
 
 @Component({

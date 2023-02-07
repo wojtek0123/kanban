@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { SupabaseService } from '../../supabase.service';
+import { SupabaseService } from '../../services/supabase.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formStatus } from '../home.component';
 import { Router } from '@angular/router';
-import { ApolloService } from 'src/app/board/apollo.service';
+import { ApolloService } from 'src/app/services/apollo.service';
 import { async, catchError } from 'rxjs';
 
 @Component({

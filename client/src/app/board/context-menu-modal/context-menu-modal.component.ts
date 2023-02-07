@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ContextMenuModalService } from './context-menu-modal.service';
+import { ContextMenuModalService } from '../../services/context-menu-modal.service';
 import { Subscription } from 'rxjs';
-import { ApolloService } from '../apollo.service';
+import { ApolloService } from '../../services/apollo.service';
 import { catchError, tap } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-context-menu-modal',

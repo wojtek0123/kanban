@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormService } from './form/form.service';
+import { FormService } from '../services/form.service';
 import { Observable, combineLatest } from 'rxjs';
-import { BoardService } from './board.service';
-import { Project, FormType, Status, Board } from '../types';
-import { ApolloService } from './apollo.service';
+import { BoardService } from '../services/board.service';
+import { FormType, Status } from '../models/types';
+import { Project } from '../models/project.model';
+import { Board } from '../models/board.model';
+import { ApolloService } from '../services/apollo.service';
 import { catchError, map, take, tap } from 'rxjs/operators';
 
 @Component({

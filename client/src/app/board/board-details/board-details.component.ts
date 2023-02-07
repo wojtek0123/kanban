@@ -1,17 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Board, FormType, Task, User } from '../../types';
-import { BoardService } from '../board.service';
-import { FormService } from '../form/form.service';
+import { FormType } from '../../models/types';
+import { Board } from '../../models/board.model';
+import { Task } from '../../models/task.model';
+import { User } from '../../models/user.model';
+import { BoardService } from '../../services/board.service';
+import { FormService } from '../../services/form.service';
 import { Observable, catchError, map, tap } from 'rxjs';
-import { SupabaseService } from 'src/app/supabase.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
-import { ApolloService } from '../apollo.service';
+import { ApolloService } from '../../services/apollo.service';
 import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-board-details',

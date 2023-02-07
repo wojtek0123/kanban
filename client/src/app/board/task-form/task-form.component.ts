@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
-import { ApolloService } from '../apollo.service';
+import { FormService } from '../../services/form.service';
+import { ApolloService } from '../../services/apollo.service';
 import {
   AbstractControl,
   FormArray,
@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 
 type Tag = {
   name: string;

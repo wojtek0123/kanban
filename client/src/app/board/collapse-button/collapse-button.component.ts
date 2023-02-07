@@ -6,8 +6,8 @@ import {
   animate,
 } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Project } from '../../types';
-import { SupabaseService } from 'src/app/supabase.service';
+import { Project } from '../../models/project.model';
+import { SupabaseService } from 'src/app/services/supabase.service';
 import { Observable, map } from 'rxjs';
 
 @Component({

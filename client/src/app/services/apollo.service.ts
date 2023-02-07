@@ -25,10 +25,13 @@ import {
   REMOVE_SUBTASK,
   REMOVE_TASK,
   REMOVE_USER_FROM_PROJECT,
-} from '../graphql.schema';
-import { SupabaseService } from '../supabase.service';
+} from '../graphql/graphql.schema';
+import { SupabaseService } from './supabase.service';
 import { map } from 'rxjs';
-import { Board, FormType, Project, User } from '../types';
+import { Board } from '../models/board.model';
+import { FormType } from '../models/types';
+import { Project } from '../models/project.model';
+import { User } from '../models/user.model';
 import { BoardService } from './board.service';
 
 @Injectable({

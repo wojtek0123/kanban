@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ApolloService } from '../apollo.service';
+import { ApolloService } from '../../services/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map, catchError, tap, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
-import { SupabaseService } from 'src/app/supabase.service';
-import { BoardService } from '../board.service';
-import { User } from 'src/app/types';
-import { ToastService } from '../toast/toast.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
+import { BoardService } from '../../services/board.service';
+import { User } from 'src/app/models/user.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-users',

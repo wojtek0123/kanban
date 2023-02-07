@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Project, FormType } from '../../types';
-import { FormService } from '../form/form.service';
+import { FormType } from '../../models/types';
+import { Project } from '../../models/project.model';
+import { FormService } from '../../services/form.service';
 import {
   animate,
   state,
@@ -8,8 +9,8 @@ import {
   trigger,
   style,
 } from '@angular/animations';
-import { NavigationService } from './navigation.service';
-import { SupabaseService } from 'src/app/supabase.service';
+import { NavigationService } from '../../services/navigation.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
 
 @Component({

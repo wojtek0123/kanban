@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FormType, ToastType } from 'src/app/types';
+import { FormType, ToastType } from 'src/app/models/types';
 
 type Operation = 'add' | 'delete' | 'update';
 

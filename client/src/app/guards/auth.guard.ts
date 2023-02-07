@@ -6,7 +6,7 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { SupabaseService } from './supabase.service';
+import { SupabaseService } from '../services/supabase.service';
 
 @Injectable({
   providedIn: 'root',

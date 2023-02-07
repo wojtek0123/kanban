@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FormService } from '../form/form.service';
-import { ApolloService } from '../apollo.service';
+import { FormService } from '../../services/form.service';
+import { ApolloService } from '../../services/apollo.service';
 import { Subscription } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-column-form',

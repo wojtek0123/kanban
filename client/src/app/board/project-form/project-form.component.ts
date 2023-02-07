@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
+import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../apollo.service';
+import { ApolloService } from '../../services/apollo.service';
 import { Subscription } from 'rxjs';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 import { catchError, tap } from 'rxjs/operators';
 
 @Component({

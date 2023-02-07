@@ -1,7 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { FormService } from '../form/form.service';
-import { Task, Column, Board, Subtask, Project, FormType } from '../../types';
-import { ContextMenuModalService } from '../context-menu-modal/context-menu-modal.service';
+import { FormService } from '../../services/form.service';
+import { Task } from '../../models/task.model';
+import { Column } from '../../models/column.model';
+import { Board } from '../../models/board.model';
+import { Subtask } from '../../models/subtask.model';
+import { Project } from '../../models/project.model';
+import { FormType } from '../../models/types';
+import { ContextMenuModalService } from '../../services/context-menu-modal.service';
 
 @Component({
   selector: 'app-context-menu',

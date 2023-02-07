@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Task, Column, Board, Subtask, Project, FormType } from '../../types';
+import { Task } from '../models/task.model';
+import { Column } from '../models/column.model';
+import { Board } from '../models/board.model';
+import { Subtask } from '../models/subtask.model';
+import { Project } from '../models/project.model';
+import { FormType } from '../models/types';
+
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

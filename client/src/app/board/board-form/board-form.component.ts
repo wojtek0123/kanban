@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
+import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../apollo.service';
+import { ApolloService } from '../../services/apollo.service';
 import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../services/board.service';
 import { Subscription } from 'rxjs';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-board-form',
