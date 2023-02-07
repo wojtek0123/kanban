@@ -12,6 +12,7 @@ import {
 import { NavigationService } from '../../services/navigation.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -37,7 +38,7 @@ import { Router } from '@angular/router';
 })
 export class MobileNavigationComponent implements OnInit {
   @Input() projects: Project[] | null = null;
-  showMenu!: boolean;
+  showMenu$!: Observable<boolean>;
 
   constructor(
     private formService: FormService,
@@ -47,7 +48,7 @@ export class MobileNavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showMenu = this.navigationService.getShowMenu();
+    this.showMenu$ = this.navigationService.getShowMenu();
   }
 
   onMenu() {
