@@ -1,78 +1,93 @@
-<div class="wrapper">
-  <div class="button-wrapper">
-    <button
-      *ngIf="(loggedInUserId$ | async) === (projectId$ | async)"
-      type="button"
-      class="button-global"
-      [ngClass]="{ active: tabName === 'add' }"
-      (click)="changeTabToAdd()">
-      Add more
-    </button>
-    <button
-      type="button"
-      class="button-global"
-      [ngClass]="{ active: tabName === 'peek' }"
-      (click)="changeTabToPeek()">
-      All user in project
-    </button>
-  </div>
-
-  <form
-    class="form-global form"
-    (ngSubmit)="onSubmit()"
-    [formGroup]="form"
-    *ngIf="tabName === 'add'; else peek">
-    <p class="form-message">Find user by his email</p>
-    <label class="form-label-global" for="email">Text</label>
-    <input
-      type="email"
-      class="form-input-global"
-      id="email"
-      formControlName="email" />
-    <p
-      class="text-danger-global"
-      *ngIf="(form.controls.email.touched || submitted) && form.controls.email.errors?.['required']">
-      Name is required
-    </p>
-    <button class="button-global submit-button-global" type="submit">
-      Search
-    </button>
-  </form>
-  <div class="users-wrapper" *ngIf="tabName === 'add'">
-    <p class="user-message" *ngIf="(searchedFilteredUsers$ | async) !== null">
-      Only users which aren't added to this project are displayed
-    </p>
-    <p *ngIf="(searchedFilteredUsers$ | async) === null && submitted">
-      loading...
-    </p>
-    <div class="user" *ngFor="let user of searchedFilteredUsers$ | async">
-      <p>{{ user.email }}</p>
+<div class="wrapper" *ngIf="loggedInUserId$ | async as loggedInUserId">
+  <div *ngIf="projectId$ | async as projectId">
+    <div class="button-wrapper">
       <button
         type="button"
-        class="button-global user-button"
-        title="Add"
-        (click)="onAddUser(user.id)">
-        <img src="../../../assets/plus-solid.svg" alt="add" />
+        class="button-global"
+        [ngClass]="{ active: tabName === 'peek' }"
+        (click)="changeTabToPeek()">
+        All user in project
       </button>
-    </div>
-  </div>
-
-  <ng-template #peek>
-    <p *ngIf="(projectUsers$ | async) === null">loading...</p>
-    <div class="user" *ngFor="let projectUser of projectUsers$ | async">
-      <p>{{ projectUser.user.email }}</p>
-      <p *ngIf="projectUser.user.id === (projectId$ | async)">Owner</p>
       <button
+        *ngIf="loggedInUserId === projectId"
         type="button"
-        *ngIf="
-          projectUser.user.id !== (loggedInUserId$ | async) &&
-          (loggedInUserId$ | async) === (projectId$ | async)
-        "
-        class="button-global user-button"
-        title="Remove"
-        (click)="onRemoveUser(projectUser.user.id)">
-        <img src="../../../assets/minus-solid.svg" alt="minus" />
+        class="button-global"
+        [ngClass]="{ active: tabName === 'add' }"
+        (click)="changeTabToAdd()">
+        Add more
       </button>
     </div>
-  </ng-template>
+
+    <form
+      class="form-global form"
+      (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      *ngIf="tabName === 'add'; else peek">
+      <p class="form-message">Find user by his email</p>
+      <label class="form-label-global" for="email">Text</label>
+      <input
+        type="email"
+        class="form-input-global"
+        id="email"
+        formControlName="email" />
+      <p
+        class="text-danger-global"
+        *ngIf="(form.controls.email.touched || submitted) && form.controls.email.errors?.['required']">
+        Name is required
+      </p>
+      <button class="button-global submit-button-global" type="submit">
+        Search
+      </button>
+    </form>
+    <div
+      class="users-wrapper"
+      *ngIf="
+        tabName === 'add' &&
+        (searchedFilteredUsers$ | async) as searchedFilteredUsers
+      ">
+      <p class="user-message" *ngIf="searchedFilteredUsers">
+        Only users which aren't added to this project are displayed
+      </p>
+      <p *ngIf="!searchedFilteredUsers && submitted">loading...</p>
+      <p
+        class="text-warning-global empty-array-message"
+        *ngIf="searchedFilteredUsers.length === 0">
+        Not found user
+      </p>
+      <div class="user" *ngFor="let user of searchedFilteredUsers">
+        <p>{{ user.email }}</p>
+        <button
+          type="button"
+          class="button-global user-button"
+          title="Add"
+          (click)="onAddUser(user.id)">
+          <img src="../../../assets/plus-solid.svg" alt="add" />
+        </button>
+      </div>
+    </div>
+
+    <ng-template #peek>
+      <div *ngIf="projectUsers$ | async as projectUsers; else loading">
+        <div class="user" *ngFor="let projectUser of projectUsers">
+          <p>{{ projectUser.user.email }}</p>
+          <p *ngIf="projectUser.user.id === projectId">Owner</p>
+          <button
+            type="button"
+            *ngIf="
+              projectUser.user.id !== loggedInUserId &&
+              loggedInUserId === projectId
+            "
+            class="button-global user-button"
+            title="Remove"
+            (click)="onRemoveUser(projectUser.user.id)">
+            <img src="../../../assets/minus-solid.svg" alt="minus" />
+          </button>
+        </div>
+      </div>
+
+      <ng-template #loading>
+        <p>loading...</p>
+      </ng-template>
+    </ng-template>
+  </div>
 </div>

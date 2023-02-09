@@ -56,6 +56,8 @@ export class UsersComponent implements OnInit {
 
   changeTabToPeek() {
     this.tabName = 'peek';
+
+    this.searchedFilteredUsers$ = null;
   }
 
   onSubmit() {
