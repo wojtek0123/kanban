@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ContextMenuModalService } from './context-menu-modal.service';
+import { ContextMenuModalService } from '../../services/context-menu-modal.service';
 import { Subscription } from 'rxjs';
-import { ApolloService } from '../apollo.service';
-import { catchError } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { ApolloService } from '../../services/apollo.service';
+import { catchError, tap } from 'rxjs/operators';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-context-menu-modal',
@@ -38,7 +38,13 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
 
     this.apollo
       .remove(id, type)
-      .pipe(catchError(async () => this.toastService.showToast('delete', type)))
+      .pipe(
+        catchError(async error => {
+          this.toastService.showWarningToast('delete', type);
+          throw new Error(error);
+        }),
+        tap(() => this.toastService.showConfirmToast('delete', type))
+      )
       .subscribe();
   }
 

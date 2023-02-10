@@ -8,6 +8,7 @@
     <h3 class="collapse-button-title">{{ project.name }}</h3>
   </button>
   <app-context-menu
+    *ngIf="(loggedInUserId$ | async) === project.userId"
     [id]="project.id"
     [type]="'project'"
     [editingProject]="project"></app-context-menu>

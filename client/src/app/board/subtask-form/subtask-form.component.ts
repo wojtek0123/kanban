@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
-import { ApolloService } from '../apollo.service';
+import { Component, OnInit } from '@angular/core';
+import { FormService } from '../../services/form.service';
+import { ApolloService } from '../../services/apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-subtask-form',
   templateUrl: './subtask-form.component.html',
   styleUrls: [],
 })
-export class SubtaskFormComponent implements OnInit, OnDestroy {
-  isEditing!: boolean;
-  subscription!: Subscription;
+export class SubtaskFormComponent implements OnInit {
+  isEditing$!: Observable<boolean>;
   submitted = false;
 
   form = this.formBuilder.group({
@@ -21,7 +20,7 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required]],
     }),
     edit: this.formBuilder.group({
-      name: [this.formService.editingSubtask?.name, [Validators.required]],
+      name: [this.formService.getEditingSubtask?.name, [Validators.required]],
     }),
   });
 
@@ -45,42 +44,43 @@ export class SubtaskFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.formService.isEditing.subscribe(
-      state => (this.isEditing = state)
-    );
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.isEditing$ = this.formService.getIsEditing;
   }
 
   onSubmit() {
     this.submitted = true;
 
-    if (this.isEditing && this.getFormControls.edit.valid) {
-      const id = this.formService.editingSubtask?.id ?? '';
+    if (this.getFormControls.edit.valid) {
+      const id = this.formService.getEditingSubtask?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
       this.apollo
         .editSubtask(id, name)
         .pipe(
-          catchError(async () =>
-            this.toastService.showToast('update', 'subtask')
-          )
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'subtask');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'subtask'))
         )
         .subscribe();
-    } else if (!this.isEditing && this.getFormControls.add.valid) {
+    }
+    if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
       this.apollo
         .addSubtask(name, false)
         .pipe(
-          catchError(async () => this.toastService.showToast('add', 'subtask'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'subtask');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'subtask'))
         )
         .subscribe();
-    } else {
+    }
+
+    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;
     }
 

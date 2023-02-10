@@ -1,20 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
+import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../apollo.service';
-import { catchError, tap } from 'rxjs/operators';
-import { BoardService } from '../board.service';
-import { Subscription } from 'rxjs';
-import { ToastService } from '../toast/toast.service';
+import { ApolloService } from '../../services/apollo.service';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { BoardService } from '../../services/board.service';
+import { Observable } from 'rxjs';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-board-form',
   templateUrl: './board-form.component.html',
   styleUrls: [],
 })
-export class BoardFormComponent implements OnInit, OnDestroy {
-  isEditing!: boolean;
-  subscription!: Subscription;
+export class BoardFormComponent implements OnInit {
+  isEditing$!: Observable<boolean>;
   submitted = false;
 
   form = this.formBuilder.group({
@@ -22,7 +21,7 @@ export class BoardFormComponent implements OnInit, OnDestroy {
       name: this.formBuilder.control('', [Validators.required]),
     }),
     edit: this.formBuilder.group({
-      name: this.formBuilder.control(this.formService.editingBoard?.name, [
+      name: this.formBuilder.control(this.formService.getEditingBoard?.name, [
         Validators.required,
       ]),
     }),
@@ -49,45 +48,48 @@ export class BoardFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.formService.isEditing.subscribe(
-      state => (this.isEditing = state)
-    );
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.isEditing$ = this.formService.getIsEditing;
   }
 
   onSubmit() {
     this.submitted = true;
 
-    if (this.isEditing && this.getFormControls.edit.valid) {
-      const id = this.formService.editingBoard?.id ?? '';
+    if (this.getFormControls.edit.valid) {
+      const id = this.formService.getEditingBoard?.id ?? '';
       const name = this.form.value.edit?.name ?? '';
 
       this.apollo
         .editBoard(id, name)
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'board'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'board');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'board'))
         )
         .subscribe();
-    } else if (!this.isEditing && this.getFormControls.add.valid) {
+    }
+    if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.apollo
-        .addBoard(name)
+      this.boardService.getSelectedProject
         .pipe(
-          tap(data => {
-            if (data.data?.addBoard) {
-              this.boardService.onChangeSelectedBoard(data.data.addBoard);
-            }
+          map(data => data?.id ?? ''),
+          switchMap(projectId => this.apollo.addBoard(name, projectId)),
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'board');
+            throw new Error(error);
           }),
-          catchError(async () => this.toastService.showToast('add', 'board'))
+          tap(() => this.toastService.showConfirmToast('add', 'board')),
+          take(1)
         )
-        .subscribe();
-    } else {
+        .subscribe(data => {
+          console.log(data);
+          this.boardService.onChangeSelectedBoard(data.data?.addBoard);
+        });
+    }
+
+    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;
     }
 

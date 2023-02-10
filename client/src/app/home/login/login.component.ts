@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { SupabaseService } from '../../supabase.service';
+import { SupabaseService } from '../../services/supabase.service';
 import { Router } from '@angular/router';
 import { formStatus } from '../home.component';
 
@@ -31,7 +31,6 @@ export class LoginComponent {
 
   async onSubmit() {
     if (this.loginForm.invalid) {
-      console.log('INVALID');
       return;
     }
 
@@ -43,20 +42,20 @@ export class LoginComponent {
         this.loginForm.controls.email.value ?? '',
         this.loginForm.controls.password.value ?? ''
       );
-      if (!error) {
-        this.status = 'ok';
-        this.supabase.setSession(data.session);
-        this.router.navigate(['']).then(error => console.log(error));
-      }
       if (error) {
         this.status = 'error';
         this.errorMessage = error.message;
+        return;
       }
+
+      this.status = 'ok';
+      this.supabase.setSession(data.session);
+      this.router.navigate(['']);
     } catch (error) {
+      this.status = 'error';
       if (error instanceof Error) {
         this.errorMessage = error.message;
       }
-      this.status = 'error';
     }
   }
 }

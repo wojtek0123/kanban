@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { SupabaseService } from '../../supabase.service';
+import { SupabaseService } from '../../services/supabase.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formStatus } from '../home.component';
 import { Router } from '@angular/router';
-import { ApolloService } from 'src/app/board/apollo.service';
+import { ApolloService } from 'src/app/services/apollo.service';
 import { async, catchError } from 'rxjs';
 
 @Component({
@@ -72,16 +72,7 @@ export class RegisterComponent {
 
       this.supabase.setSession(data.session);
 
-      // const { status, statusText } = await this.supabase.createUser(
-      //   email,
-      //   nickname
-      // );
-
-      // if (status !== 200) {
-      // this.status = 'error';
-      // this.errorMessage = 'Something went wrong';
-      // return;
-      // }
+      console.log(data.user);
 
       this.apollo
         .addUser(nickname, email, data.user?.id ?? '')
@@ -95,7 +86,7 @@ export class RegisterComponent {
             }
           })
         )
-        .subscribe();
+        .subscribe(data => console.log(data));
 
       if (this.status !== 'loading') {
         return;

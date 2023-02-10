@@ -1,8 +1,17 @@
+.wrapper {
+  width: 100%;
+}
+
+.form {
+  width: 100%;
+}
+
 .users-wrapper {
   display: flex;
   align-items: center;
   flex-direction: column;
   margin-top: 1rem;
+  width: 100%;
 }
 
 .user {
@@ -17,6 +26,14 @@
   box-shadow: 0 0 0.1rem var(--lighter-background-color);
 }
 
+.user-buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .user-button {
   margin: 0;
   padding: 0.5rem;
@@ -25,15 +42,29 @@
 .form-message {
   font-size: 1.3rem;
   margin-bottom: 0.75rem;
+  text-align: center;
 }
 
 .button-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .active {
   background-color: var(--secondary-color);
   color: var(--black-color);
 }
+
+.user-message {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 568px) {
+  .wrapper {
+    width: 350px;
+  }
+}
+

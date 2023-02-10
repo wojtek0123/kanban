@@ -19,9 +19,10 @@
   </p>
   <li>
     <button
+      *ngIf="(loggedInUserId$ | async) === project.userId"
       type="button"
       class="button-global accordion-item-button"
-      (click)="onForm('board', project.id)">
+      (click)="onForm()">
       Add board
     </button>
   </li>

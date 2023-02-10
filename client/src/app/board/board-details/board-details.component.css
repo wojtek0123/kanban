@@ -3,6 +3,10 @@
   height: 100%;
 }
 
+.board-user {
+  font-size: 1rem;
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
@@ -240,6 +244,12 @@
   margin-bottom: 1rem;
   font-size: 1rem;
   cursor: pointer;
+}
+
+.empty-card {
+  height: 4rem;
+  width: 100%;
+  visibility: hidden;
 }
 
 @media (min-width: 768px) {

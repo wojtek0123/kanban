@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormService } from '../form/form.service';
-import { ApolloService } from '../apollo.service';
+import { Component, OnInit } from '@angular/core';
+import { FormService } from '../../services/form.service';
+import { ApolloService } from '../../services/apollo.service';
 import {
   AbstractControl,
   FormArray,
@@ -9,9 +9,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { ToastService } from '../toast/toast.service';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { ToastService } from '../../services/toast.service';
 
 type Tag = {
   name: string;
@@ -24,9 +24,8 @@ type Tag = {
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css'],
 })
-export class TaskFormComponent implements OnInit, OnDestroy {
-  isEditing!: boolean;
-  subscription!: Subscription;
+export class TaskFormComponent implements OnInit {
+  isEditing$!: Observable<boolean>;
   submitted = false;
 
   form = this.formBuilder.group({
@@ -45,9 +44,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
       ),
     }),
     edit: this.formBuilder.group({
-      title: [this.formService.editingTask?.title, [Validators.required]],
+      title: [this.formService.getEditingTask?.title, [Validators.required]],
       description: [
-        this.formService.editingTask?.description,
+        this.formService.getEditingTask?.description,
         [Validators.required],
       ],
       tags: this.formBuilder.array(this.fillEditTags() ?? [], [
@@ -64,15 +63,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.formService.isEditing.subscribe(
-      state => (this.isEditing = state)
-    );
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.isEditing$ = this.formService.getIsEditing;
   }
 
   maxLength(max: number): ValidatorFn | any {
@@ -105,9 +96,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   fillEditTags() {
     const tags = [];
 
-    const names = this.formService.editingTask?.tagNames;
-    const fontColors = this.formService.editingTask?.tagFontColors;
-    const backgroundColors = this.formService.editingTask?.tagBackgroundColors;
+    const names = this.formService.getEditingTask?.tagNames;
+    const fontColors = this.formService.getEditingTask?.tagFontColors;
+    const backgroundColors =
+      this.formService.getEditingTask?.tagBackgroundColors;
 
     if (!names || !fontColors || !backgroundColors) {
       return;
@@ -140,9 +132,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.form);
-    if (this.isEditing && this.getFormControls.edit.valid) {
-      const id = this.formService.editingTask?.id ?? '';
+
+    if (this.getFormControls.edit.valid) {
+      const id = this.formService.getEditingTask?.id ?? '';
       const title = this.form.value.edit?.title ?? '';
       const description = this.form.value.edit?.description ?? '';
 
@@ -164,10 +156,15 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagBackgroundColors
         )
         .pipe(
-          catchError(async () => this.toastService.showToast('update', 'task'))
+          catchError(async error => {
+            this.toastService.showWarningToast('update', 'task');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('update', 'task'))
         )
         .subscribe();
-    } else if (!this.isEditing && this.getFormControls.add.valid) {
+    }
+    if (this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
@@ -186,10 +183,15 @@ export class TaskFormComponent implements OnInit, OnDestroy {
           tagBackgroundColors
         )
         .pipe(
-          catchError(async () => this.toastService.showToast('add', 'task'))
+          catchError(async error => {
+            this.toastService.showWarningToast('add', 'task');
+            throw new Error(error);
+          }),
+          tap(() => this.toastService.showConfirmToast('add', 'task'))
         )
         .subscribe();
-    } else {
+    }
+    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;
     }
 

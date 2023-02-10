@@ -6,14 +6,14 @@ import {
   Session,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  session = new BehaviorSubject<AuthSession | null>(null);
+  private session = new BehaviorSubject<AuthSession | null>(null);
 
   constructor() {
     this.supabase = createClient(
@@ -33,6 +33,10 @@ export class SupabaseService {
 
   getSession() {
     return this.supabase.auth.getSession();
+  }
+
+  get getSessionObs(): Observable<AuthSession | null> {
+    return this.session;
   }
 
   signIn(email: string, password: string) {

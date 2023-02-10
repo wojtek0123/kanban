@@ -5,6 +5,14 @@ export const GET_PROJECTS = gql`
     projects(userId: $userId) {
       id
       name
+      userId
+      usersOnProject {
+        user {
+          email
+          id
+          name
+        }
+      }
       createdAt
       updatedAt
       boards {
@@ -47,9 +55,55 @@ export const GET_USERS = gql`
       id
       name
       email
-      userId
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const ADD_USER_TO_PROJECT = gql`
+  mutation AddUserToProject($projectId: String, $userId: String) {
+    addUserToProject(projectId: $projectId, userId: $userId) {
+      user {
+        email
+        id
+        name
+      }
+      project {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const REMOVE_USER_FROM_PROJECT = gql`
+  mutation RemoveUserFromProject($projectId: String, $userId: String) {
+    removeUserFromProject(projectId: $projectId, userId: $userId) {
+      id
+      usersOnProject {
+        user {
+          email
+          id
+          name
+        }
+      }
+      userId
+      updatedAt
+      name
+      createdAt
+    }
+  }
+`;
+
+export const GET_USERS_FROM_PROJECT = gql`
+  query UsersFromProject($projectId: String) {
+    usersFromProject(projectId: $projectId) {
+      user {
+        email
+        id
+        name
+      }
     }
   }
 `;
@@ -60,7 +114,6 @@ export const GET_FILTERED_USERS = gql`
       id
       name
       email
-      userId
       createdAt
       updatedAt
     }
@@ -90,12 +143,11 @@ export const CHANGE_COLUMN = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($name: String, $email: String, $userId: String) {
-    addUser(name: $name, email: $email, userId: $userId) {
+  mutation addUser($name: String, $email: String, $id: String) {
+    addUser(name: $name, email: $email, id: $id) {
       id
       name
       email
-      userId
     }
   }
 `;
@@ -123,20 +175,30 @@ export const ADD_BOARD = gql`
     addBoard(name: $name, projectId: $projectId) {
       id
       name
+      createdAt
+      updatedAt
+      projectId
       columns {
+        createdAt
+        dotColor
         id
         name
+        updatedAt
         tasks {
-          id
-          tagNames
-          tagFontColors
-          tagBackgroundColors
+          createdAt
           description
+          id
+          tagBackgroundColors
+          tagFontColors
           title
+          updatedAt
+          tagNames
           subtasks {
             id
-            name
             isFinished
+            name
+            updatedAt
+            createdAt
           }
         }
       }

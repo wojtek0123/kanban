@@ -1,3 +1,5 @@
+<app-form></app-form>
+<app-context-menu-modal></app-context-menu-modal>
 <div class="container">
   <ng-content></ng-content>
 
@@ -8,18 +10,20 @@
       </h2>
 
       <app-context-menu
+        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
         [id]="selectedBoard?.id ?? ''"
         [type]="'board'"
         [editingBoard]="selectedBoard"></app-context-menu>
     </div>
 
     <div class="button-container">
+      <p class="board-user">{{ (loggedInUser$ | async)?.email ?? '' }}</p>
       <button
         type="button"
         class="button-global button"
         *ngIf="selectedBoard"
         (click)="onForm('user')">
-        Add people
+        People
       </button>
 
       <button
@@ -33,6 +37,7 @@
 
   <div class="buttons" *ngIf="selectedBoard">
     <button
+      *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
       type="button"
       class="button-global button"
       (click)="onForm('column')">
@@ -43,13 +48,13 @@
       type="button"
       class="button-global button add-people-button-mobile"
       (click)="onForm('user')">
-      Add people
+      People
     </button>
   </div>
 </div>
 
 <div cdkDropListGroup class="tasks" *ngIf="selectedBoard">
-  <p class="warning-message" *ngIf="selectedBoard.columns?.length === 0">
+  <p class="warning-message" *ngIf="selectedBoard?.columns?.length === 0">
     No columns to display
   </p>
 
@@ -70,12 +75,14 @@
       </div>
 
       <app-context-menu
+        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
         [id]="column.id"
         [type]="'column'"
         [editingColumn]="column"></app-context-menu>
     </div>
 
     <button
+      *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
       type="button"
       class="button-global add-task"
       (click)="onForm('task', column.id)">
@@ -88,7 +95,7 @@
         cdkDropList
         [cdkDropListData]="column.tasks"
         [id]="column.id"
-        (cdkDropListDropped)="drop($any($event))">
+        (cdkDropListDropped)="drop($event)">
         <p class="warning-message card" *ngIf="column.tasks.length === 0">
           No tasks to display
         </p>
@@ -102,8 +109,8 @@
             <option [value]="undefined">Choose column</option>
 
             <option
-              [value]="column.id"
-              *ngFor="let col of getColumns(column.id)">
+              [value]="col.id"
+              *ngFor="let col of getColumns(column.id, selectedBoard)">
               {{ col.name }}
             </option>
           </select>
@@ -130,6 +137,7 @@
 
           <div class="card-context-menu">
             <app-context-menu
+              *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
               [id]="task.id"
               [type]="'task'"
               [editingTask]="task"></app-context-menu>
@@ -149,6 +157,9 @@
               </div>
 
               <app-context-menu
+                *ngIf="
+                  (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
+                "
                 [id]="subtask.id"
                 [type]="'subtask'"
                 [editingSubtask]="subtask"></app-context-menu>
@@ -164,9 +175,8 @@
             </button>
           </div>
         </div>
+        <p class="empty-card" *ngIf="column.tasks.length === 1"></p>
       </div>
     </div>
   </section>
 </div>
-
-<app-context-menu-modal></app-context-menu-modal>

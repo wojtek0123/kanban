@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { Project, FormType } from '../../types';
-import { FormService } from '../form/form.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormType } from '../../models/types';
+import { Project } from '../../models/project.model';
+import { FormService } from '../../services/form.service';
 import {
   animate,
   state,
@@ -8,9 +9,10 @@ import {
   trigger,
   style,
 } from '@angular/animations';
-import { NavigationService } from './navigation.service';
-import { SupabaseService } from 'src/app/supabase.service';
+import { NavigationService } from '../../services/navigation.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -34,15 +36,24 @@ import { Router } from '@angular/router';
     ]),
   ],
 })
-export class MobileNavigationComponent {
-  @Input() projects: Project[] | undefined = undefined;
+export class MobileNavigationComponent implements OnInit {
+  @Input() projects: Project[] | null = null;
+  showMenu$!: Observable<boolean>;
 
   constructor(
     private formService: FormService,
-    public navigationService: NavigationService,
+    private navigationService: NavigationService,
     private supabase: SupabaseService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.showMenu$ = this.navigationService.getShowMenu();
+  }
+
+  onMenu() {
+    this.navigationService.onMenu();
+  }
 
   onForm(type: FormType) {
     this.formService.onChangeFormVisibility(type);
