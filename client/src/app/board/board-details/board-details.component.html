@@ -5,12 +5,14 @@
       <h2>
         {{ (selectedBoard$ | async)?.name ?? 'Please select a board' }}
       </h2>
+
       <app-context-menu
         *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
         [id]="(selectedBoard$ | async)?.id ?? ''"
         [type]="'board'"
         [editingBoard]="selectedBoard$ | async"></app-context-menu>
     </div>
+
     <div class="button-container">
       <button
         type="button"
@@ -31,6 +33,7 @@
         (click)="onForm('user')">
         Users ({{ (usersInTheProject$ | async)?.length }})
       </button>
+
       <button
         type="button"
         class="button-global board-logout-button"
