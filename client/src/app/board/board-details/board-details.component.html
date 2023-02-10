@@ -1,15 +1,18 @@
 <div class="container">
   <ng-content></ng-content>
+
   <div class="board-name-wrapper">
     <div class="board-name">
       <h2>
         {{ selectedBoard?.name ?? 'Please select a board' }}
       </h2>
+
       <app-context-menu
         [id]="selectedBoard?.id ?? ''"
         [type]="'board'"
         [editingBoard]="selectedBoard"></app-context-menu>
     </div>
+
     <div class="button-container">
       <button
         type="button"
@@ -18,6 +21,7 @@
         (click)="onForm('user')">
         Add people
       </button>
+
       <button
         type="button"
         class="button-global board-logout-button"
@@ -26,6 +30,7 @@
       </button>
     </div>
   </div>
+
   <div class="buttons" *ngIf="selectedBoard">
     <button
       type="button"
@@ -33,6 +38,7 @@
       (click)="onForm('column')">
       Add column
     </button>
+
     <button
       type="button"
       class="button-global button add-people-button-mobile"
@@ -41,28 +47,34 @@
     </button>
   </div>
 </div>
+
 <div cdkDropListGroup class="tasks" *ngIf="selectedBoard">
   <p class="warning-message" *ngIf="selectedBoard.columns?.length === 0">
     No columns to display
   </p>
+
   <section class="section" *ngFor="let column of selectedBoard?.columns">
     <div class="section-heading">
       <div class="section-title-wrapper">
         <span
           [style.background-color]="column.dotColor"
           class="section-title-circle"></span>
+
         <h2 class="section-title">
           {{ column.name }}
+
           <span class="section-title-task-counter"
             >({{ column.tasks.length }})</span
           >
         </h2>
       </div>
+
       <app-context-menu
         [id]="column.id"
         [type]="'column'"
         [editingColumn]="column"></app-context-menu>
     </div>
+
     <button
       type="button"
       class="button-global add-task"
@@ -80,6 +92,7 @@
         <p class="warning-message card" *ngIf="column.tasks.length === 0">
           No tasks to display
         </p>
+
         <div
           cdkDrag
           class="card"
@@ -87,18 +100,21 @@
           *ngFor="let task of column.tasks">
           <select class="card-select" (change)="changeColumn($event)">
             <option [value]="undefined">Choose column</option>
+
             <option
               [value]="column.id"
               *ngFor="let col of getColumns(column.id)">
               {{ col.name }}
             </option>
           </select>
+
           <div class="card-arrow-move">
             <img
               src="../../../assets/arrows-move.svg"
               alt="arrows move"
               cdkDragHandle />
           </div>
+
           <div class="card-tags">
             <span
               *ngFor="let tag of task.tagNames; let i = index"
@@ -107,14 +123,18 @@
               >{{ tag }}</span
             >
           </div>
+
           <h3>{{ task.title }}</h3>
+
           <p>{{ task.description }}</p>
+
           <div class="card-context-menu">
             <app-context-menu
               [id]="task.id"
               [type]="'task'"
               [editingTask]="task"></app-context-menu>
           </div>
+
           <div class="card-subtask-wrapper">
             <div class="card-subtask" *ngFor="let subtask of task.subtasks">
               <div>
@@ -124,14 +144,18 @@
                   [id]="subtask.id"
                   [checked]="subtask.isFinished"
                   (change)="onUpdateCompletionStateOfSubtask($event)" />
+
                 <label [for]="subtask.id">{{ subtask.name }}</label>
               </div>
+
               <app-context-menu
                 [id]="subtask.id"
                 [type]="'subtask'"
                 [editingSubtask]="subtask"></app-context-menu>
             </div>
+
             <div class="card-subtask-line"></div>
+
             <button
               type="button"
               class="button-global card-subtask-button"
@@ -144,4 +168,5 @@
     </div>
   </section>
 </div>
+
 <app-context-menu-modal></app-context-menu-modal>
