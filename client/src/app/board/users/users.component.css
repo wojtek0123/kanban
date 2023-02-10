@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.form {
+  width: 100%;
+}
+
 .users-wrapper {
   display: flex;
   align-items: center;
@@ -38,12 +42,15 @@
 .form-message {
   font-size: 1.3rem;
   margin-bottom: 0.75rem;
+  text-align: center;
 }
 
 .button-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .active {
@@ -60,3 +67,4 @@
     width: 350px;
   }
 }
+

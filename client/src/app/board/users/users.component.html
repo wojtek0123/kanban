@@ -1,20 +1,20 @@
 <div class="wrapper">
   <div class="button-wrapper">
     <button
+      type="button"
+      class="button-global"
+      [ngClass]="{ active: tabName === 'peek' }"
+      (click)="changeTabToPeek()">
+      All user in project
+    </button>
+
+    <button
       *ngIf="(loggedInUserId$ | async) === (projectId$ | async)"
       type="button"
       class="button-global"
       [ngClass]="{ active: tabName === 'add' }"
       (click)="changeTabToAdd()">
       Add more
-    </button>
-
-    <button
-      type="button"
-      class="button-global"
-      [ngClass]="{ active: tabName === 'peek' }"
-      (click)="changeTabToPeek()">
-      All user in project
     </button>
   </div>
 
@@ -31,7 +31,8 @@
       type="email"
       class="form-input-global"
       id="email"
-      formControlName="email" />
+      formControlName="email"
+      placeholder="Search" />
 
     <p
       class="text-danger-global"
