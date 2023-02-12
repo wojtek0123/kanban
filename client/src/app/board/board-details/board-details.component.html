@@ -38,12 +38,21 @@
       (click)="onForm('column')">
       Add column
     </button>
-    <button
-      type="button"
-      class="button-global button add-people-button-mobile"
-      (click)="onForm('user')">
-      People
-    </button>
+    <div class="extended-buttons">
+      <button
+        type="button"
+        class="button-global button add-people-button-mobile"
+        (click)="onForm('user')">
+        People
+      </button>
+      <input
+        type="text"
+        aria-label="search task by title"
+        placeholder="Search by title"
+        class="search-input"
+        name="searchTerm"
+        [(ngModel)]="searchTerm" />
+    </div>
   </div>
 </div>
 <div cdkDropListGroup class="tasks" *ngIf="selectedBoard">
@@ -91,7 +100,7 @@
           cdkDrag
           class="card"
           [id]="task.id"
-          *ngFor="let task of column.tasks">
+          *ngFor="let task of column.tasks | filter : searchTerm">
           <select class="card-select" (change)="changeColumn($event)">
             <option [value]="undefined">Choose column</option>
             <option

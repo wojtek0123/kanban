@@ -25,6 +25,7 @@ export class BoardDetailsComponent implements OnInit {
   @Input() selectedBoard: Board | undefined | null = null;
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
+  searchTerm = '';
 
   constructor(
     private formService: FormService,
