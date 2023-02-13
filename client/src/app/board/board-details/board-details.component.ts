@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { FormType } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { Task } from '../../models/task.model';
@@ -21,11 +21,15 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './board-details.component.html',
   styleUrls: ['./board-details.component.css'],
 })
-export class BoardDetailsComponent implements OnInit {
+export class BoardDetailsComponent implements OnInit, DoCheck {
   @Input() selectedBoard: Board | undefined | null = null;
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
   searchTerm = '';
+  tags: string[] = [];
+  allTags: Set<string> = new Set();
+  show = false;
+  boardId = '';
 
   constructor(
     private formService: FormService,
@@ -36,10 +40,30 @@ export class BoardDetailsComponent implements OnInit {
     private toastService: ToastService
   ) {}
 
+  ngDoCheck(): void {
+    if (!this.selectedBoard) return;
+    if (this.boardId === this.selectedBoard.id) return;
+    this.boardId = this.selectedBoard.id;
+
+    this.allTags.clear();
+
+    this.selectedBoard.columns.forEach(column =>
+      column.tasks.forEach(task =>
+        task.tagNames.forEach(task => this.allTags.add(task))
+      )
+    );
+
+    this.tags = [''];
+    for (const tag of this.allTags) {
+      this.tags.push(tag);
+    }
+  }
+
   ngOnInit() {
     this.loggedInUser$ = this.supabase.getSessionObs.pipe(
       map(data => data?.user)
     );
+
     this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.userId ?? '')
     );
@@ -138,5 +162,24 @@ export class BoardDetailsComponent implements OnInit {
         )
         .subscribe();
     }
+  }
+
+  onFilter(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    if (!target.classList.contains('checkbox')) return;
+    const isChecked = target.checked;
+
+    if (isChecked && !this.tags.includes(target.value)) {
+      this.tags = [...this.tags, target.value];
+    }
+
+    if (!isChecked && this.tags.includes(target.value)) {
+      this.tags = this.tags.filter(tag => tag !== target.value);
+    }
+  }
+
+  onToggleFilter() {
+    this.show = !this.show;
   }
 }

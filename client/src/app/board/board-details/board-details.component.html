@@ -1,7 +1,6 @@
 <app-form></app-form>
 <app-context-menu-modal></app-context-menu-modal>
 <div class="container">
-  <ng-content></ng-content>
   <div class="board-name-wrapper">
     <div class="board-name">
       <h2>
@@ -45,6 +44,37 @@
         (click)="onForm('user')">
         People
       </button>
+      <div class="filter-wrapper">
+        <button
+          type="button"
+          (click)="onToggleFilter()"
+          class="button-global filter-button">
+          Filter
+        </button>
+        <ul
+          class="filter-list"
+          [ngClass]="{ show: show }"
+          (click)="onFilter($event)">
+          <li class="filter-item" *ngFor="let tag of allTags; let i = index">
+            <input
+              checked
+              [id]="i"
+              type="checkbox"
+              class="checkbox"
+              [value]="tag" />
+            <label [for]="i">{{ tag }}</label>
+          </li>
+          <li class="filter-item">
+            <input
+              checked
+              id="none"
+              type="checkbox"
+              class="checkbox"
+              value="" />
+            <label for="none">none</label>
+          </li>
+        </ul>
+      </div>
       <input
         type="text"
         aria-label="search task by title"
@@ -68,7 +98,9 @@
         <h2 class="section-title">
           {{ column.name }}
           <span class="section-title-task-counter"
-            >({{ column.tasks.length }})</span
+            >({{
+              (column.tasks | filter : searchTerm | filterByTags : tags).length
+            }})</span
           >
         </h2>
       </div>
@@ -100,7 +132,9 @@
           cdkDrag
           class="card"
           [id]="task.id"
-          *ngFor="let task of column.tasks | filter : searchTerm">
+          *ngFor="
+            let task of column.tasks | filter : searchTerm | filterByTags : tags
+          ">
           <select class="card-select" (change)="changeColumn($event)">
             <option [value]="undefined">Choose column</option>
             <option

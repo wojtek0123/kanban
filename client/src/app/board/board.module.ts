@@ -20,7 +20,8 @@ import { SubtaskFormComponent } from './subtask-form/subtask-form.component';
 import { ToastComponent } from './toast/toast.component';
 import { UsersComponent } from './users/users.component';
 import { FormWrapperComponent } from './form-wrapper/form-wrapper.component';
-import { FilterPipe } from '../pipes/filter.pipe';
+import { FilterByTitlePipe } from '../pipes/filter-by-title.pipe';
+import { FilterByTagsPipe } from '../pipes/filter-by-tags.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { FilterPipe } from '../pipes/filter.pipe';
     ToastComponent,
     UsersComponent,
     FormWrapperComponent,
-    FilterPipe,
+    FilterByTitlePipe,
+    FilterByTagsPipe,
   ],
   imports: [
     BrowserAnimationsModule,
