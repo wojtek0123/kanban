@@ -1,0 +1,47 @@
+.filter-button {
+  margin: 0;
+}
+
+.filter-list {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 50;
+  background-color: var(--button-hover-color);
+  padding: 1rem;
+  list-style-type: none;
+  border-radius: var(--rounded);
+  box-shadow: 0 0 0.5rem var(--black-color);
+  transform: translateY(100%);
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.filter-list.show {
+  transform: translateY(0);
+}
+
+.filter-item label {
+  padding-left: 0.5rem;
+  cursor: pointer;
+}
+
+.filter-item input {
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .filter-list {
+    top: 11rem;
+    bottom: auto;
+    right: 3rem;
+    transform: translate(calc(100% + 4rem), 0);
+    font-size: 1rem;
+    width: max-content;
+  }
+
+  .filter-list.show {
+    transform: translate(0, 0);
+  }
+}

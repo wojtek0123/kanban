@@ -33,7 +33,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
   searchTerm = '';
-  tags: string[] = [''];
+  tags: string[] = [];
   show = false;
   boardId = '';
   allTags!: Observable<string[]>;
@@ -174,22 +174,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFilter(event: Event) {
-    const target = event.target as HTMLInputElement;
-
-    if (!target.classList.contains('checkbox')) return;
-    const isChecked = target.checked;
-
-    if (isChecked && !this.tags.includes(target.value)) {
-      this.tags = [...this.tags, target.value];
-    }
-
-    if (!isChecked && this.tags.includes(target.value)) {
-      this.tags = this.tags.filter(tag => tag !== target.value);
-    }
-  }
-
-  onToggleFilter() {
-    this.show = !this.show;
+  onSelectedTags(checkedTags: string[]) {
+    this.tags = checkedTags;
   }
 }

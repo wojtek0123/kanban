@@ -22,6 +22,7 @@ import { UsersComponent } from './users/users.component';
 import { FormWrapperComponent } from './form-wrapper/form-wrapper.component';
 import { FilterByTitlePipe } from '../pipes/filter-by-title.pipe';
 import { FilterByTagsPipe } from '../pipes/filter-by-tags.pipe';
+import { FilterMenuComponent } from './filter-menu/filter-menu.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { FilterByTagsPipe } from '../pipes/filter-by-tags.pipe';
     FormWrapperComponent,
     FilterByTitlePipe,
     FilterByTagsPipe,
+    FilterMenuComponent,
   ],
   imports: [
     BrowserAnimationsModule,
