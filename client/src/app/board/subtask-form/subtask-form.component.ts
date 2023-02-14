@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
+import { BoardService } from 'src/app/services/board.service';
 
 @Component({
   selector: 'app-subtask-form',
@@ -28,7 +29,8 @@ export class SubtaskFormComponent implements OnInit {
     private formService: FormService,
     private apollo: ApolloService,
     private formBuilder: FormBuilder,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private boardService: BoardService
   ) {}
 
   get getAddControls() {
@@ -77,7 +79,10 @@ export class SubtaskFormComponent implements OnInit {
           }),
           tap(() => this.toastService.showConfirmToast('add', 'subtask'))
         )
-        .subscribe();
+        .subscribe(() => {
+          console.log('asdfsdedrfitgy');
+          this.boardService.refreshSelectedBoard();
+        });
     }
 
     if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {

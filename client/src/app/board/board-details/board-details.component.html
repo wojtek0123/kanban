@@ -4,20 +4,20 @@
   <div class="board-name-wrapper">
     <div class="board-name">
       <h2>
-        {{ selectedBoard?.name ?? 'Please select a board' }}
+        {{ (selectedBoard$ | async)?.name ?? 'Please select a board' }}
       </h2>
       <app-context-menu
         *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-        [id]="selectedBoard?.id ?? ''"
+        [id]="(selectedBoard$ | async)?.id ?? ''"
         [type]="'board'"
-        [editingBoard]="selectedBoard"></app-context-menu>
+        [editingBoard]="selectedBoard$ | async"></app-context-menu>
     </div>
     <div class="button-container">
       <p class="board-user">{{ (loggedInUser$ | async)?.email ?? '' }}</p>
       <button
         type="button"
         class="button-global button"
-        *ngIf="selectedBoard"
+        *ngIf="selectedBoard$ | async"
         (click)="onForm('user')">
         People
       </button>
@@ -29,7 +29,7 @@
       </button>
     </div>
   </div>
-  <div class="buttons" *ngIf="selectedBoard">
+  <div class="buttons" *ngIf="selectedBoard$ | async">
     <button
       *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
       type="button"
@@ -55,7 +55,9 @@
           class="filter-list"
           [ngClass]="{ show: show }"
           (click)="onFilter($event)">
-          <li class="filter-item" *ngFor="let tag of allTags; let i = index">
+          <li
+            class="filter-item"
+            *ngFor="let tag of allTags | async; let i = index">
             <input
               checked
               [id]="i"
@@ -85,11 +87,15 @@
     </div>
   </div>
 </div>
-<div cdkDropListGroup class="tasks" *ngIf="selectedBoard">
-  <p class="warning-message" *ngIf="selectedBoard?.columns?.length === 0">
+<div cdkDropListGroup class="tasks" *ngIf="selectedBoard$ | async">
+  <p
+    class="warning-message"
+    *ngIf="(selectedBoard$ | async)?.columns?.length === 0">
     No columns to display
   </p>
-  <section class="section" *ngFor="let column of selectedBoard?.columns">
+  <section
+    class="section"
+    *ngFor="let column of (selectedBoard$ | async)?.columns">
     <div class="section-heading">
       <div class="section-title-wrapper">
         <span
@@ -99,7 +105,8 @@
           {{ column.name }}
           <span class="section-title-task-counter"
             >({{
-              (column.tasks | filter : searchTerm | filterByTags : tags).length
+              (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
+                .length
             }})</span
           >
         </h2>
@@ -125,7 +132,12 @@
         [cdkDropListData]="column.tasks"
         [id]="column.id"
         (cdkDropListDropped)="drop($event)">
-        <p class="warning-message card" *ngIf="column.tasks.length === 0">
+        <p
+          class="warning-message card"
+          *ngIf="
+            (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
+              .length === 0
+          ">
           No tasks to display
         </p>
         <div
@@ -133,13 +145,15 @@
           class="card"
           [id]="task.id"
           *ngFor="
-            let task of column.tasks | filter : searchTerm | filterByTags : tags
+            let task of column.tasks
+              | filterByTitle : searchTerm
+              | filterByTags : tags
           ">
           <select class="card-select" (change)="changeColumn($event)">
             <option [value]="undefined">Choose column</option>
             <option
               [value]="col.id"
-              *ngFor="let col of getColumns(column.id, selectedBoard)">
+              *ngFor="let col of getColumns(column.id, selectedBoard$ | async)">
               {{ col.name }}
             </option>
           </select>

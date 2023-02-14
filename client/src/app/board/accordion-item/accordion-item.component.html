@@ -7,7 +7,7 @@
     <button
       type="button"
       class="accordion-item"
-      [ngClass]="{ highlight: selectedBoardId === board.id }"
+      [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }"
       (click)="onSelectBoard(board)">
       {{ board.name }}
     </button>

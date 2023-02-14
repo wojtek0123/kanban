@@ -5,7 +5,7 @@ import { BoardService } from '../../services/board.service';
 import { FormService } from '../../services/form.service';
 import { NavigationService } from '../../services/navigation.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-accordion-item',
@@ -14,9 +14,9 @@ import { Observable, map } from 'rxjs';
 })
 export class AccordionItemComponent implements OnInit {
   @Input() project!: Project;
-  @Input() selectedBoardId!: string | null;
-  showContent = false;
+  showContent = true;
   loggedInUserId$: Observable<string | undefined> | null = null;
+  selectedBoardId$: Observable<string | undefined> | null = null;
 
   constructor(
     private boardService: BoardService,
@@ -26,12 +26,14 @@ export class AccordionItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (
-      this.project.boards.filter(board => board.id === this.selectedBoardId)
-        .length !== 0
-    ) {
-      this.showContent = true;
-    }
+    this.selectedBoardId$ = this.boardService.getSelectedBoard.pipe(
+      map(board => board?.id),
+      tap(boardId =>
+        this.project.boards.filter(board =>
+          board.id === boardId ? (this.showContent = true) : null
+        )
+      )
+    );
 
     this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(session => session?.user.id ?? '')

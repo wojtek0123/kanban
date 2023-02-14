@@ -1,12 +1,9 @@
-<!-- <app-form></app-form> -->
 <app-toast></app-toast>
 <main class="main">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
     <div class="board-wrapper">
-      <app-accordion
-        [projects]="projects$ | async"
-        [selectedBoardId]="(selectedBoard$ | async)?.id ?? ''"></app-accordion>
+      <app-accordion></app-accordion>
     </div>
     <div class="board-button-wrapper">
       <button
@@ -19,11 +16,8 @@
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details
-      *ngIf="status === 'ok'"
-      [selectedBoard]="selectedBoard$ | async">
-      <app-mobile-navigation
-        [projects]="projects$ | async"></app-mobile-navigation>
+    <app-board-details *ngIf="status === 'ok'">
+      <app-mobile-navigation></app-mobile-navigation>
     </app-board-details>
     <div class="loading-wrapper" *ngIf="status === 'loading'">
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
