@@ -1,6 +1,5 @@
-<app-form></app-form>
-<app-context-menu-modal></app-context-menu-modal>
 <div class="container">
+  <ng-content select="app-mobile-navigation"></ng-content>
   <div class="board-name-wrapper">
     <div class="board-name">
       <h2>
@@ -45,7 +44,7 @@
         People
       </button>
       <app-filter-menu
-        [tags]="allTags | async"
+        [tags]="tags | async"
         (selectedTags)="onSelectedTags($event)"></app-filter-menu>
       <input
         type="text"
@@ -57,129 +56,7 @@
     </div>
   </div>
 </div>
-<div cdkDropListGroup class="tasks" *ngIf="selectedBoard$ | async">
-  <p
-    class="warning-message"
-    *ngIf="(selectedBoard$ | async)?.columns?.length === 0">
-    No columns to display
-  </p>
-  <section
-    class="section"
-    *ngFor="let column of (selectedBoard$ | async)?.columns">
-    <div class="section-heading">
-      <div class="section-title-wrapper">
-        <span
-          [style.background-color]="column.dotColor"
-          class="section-title-circle"></span>
-        <h2 class="section-title">
-          {{ column.name }}
-          <span class="section-title-task-counter"
-            >({{
-              (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
-                .length
-            }})</span
-          >
-        </h2>
-      </div>
-      <app-context-menu
-        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-        [id]="column.id"
-        [type]="'column'"
-        [editingColumn]="column"></app-context-menu>
-    </div>
-    <button
-      *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-      type="button"
-      class="button-global add-task"
-      (click)="onForm('task', column.id)">
-      Add task
-    </button>
-
-    <div class="cards">
-      <div
-        class="card-wrapper"
-        cdkDropList
-        [cdkDropListData]="column.tasks"
-        [id]="column.id"
-        (cdkDropListDropped)="drop($event)">
-        <p
-          class="warning-message card"
-          *ngIf="
-            (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
-              .length === 0
-          ">
-          No tasks to display
-        </p>
-        <div
-          cdkDrag
-          class="card"
-          [id]="task.id"
-          *ngFor="
-            let task of column.tasks
-              | filterByTitle : searchTerm
-              | filterByTags : tags
-          ">
-          <select class="card-select" (change)="changeColumn($event)">
-            <option [value]="undefined">Choose column</option>
-            <option
-              [value]="col.id"
-              *ngFor="let col of getColumns(column.id, selectedBoard$ | async)">
-              {{ col.name }}
-            </option>
-          </select>
-          <div class="card-arrow-move">
-            <img
-              src="../../../assets/arrows-move.svg"
-              alt="arrows move"
-              cdkDragHandle />
-          </div>
-          <div class="card-tags">
-            <span
-              *ngFor="let tag of task.tagNames; let i = index"
-              [style.background-color]="task.tagBackgroundColors[i]"
-              [style.color]="task.tagFontColors[i]"
-              >{{ tag }}</span
-            >
-          </div>
-          <h3>{{ task.title }}</h3>
-          <p>{{ task.description }}</p>
-          <div class="card-context-menu">
-            <app-context-menu
-              *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-              [id]="task.id"
-              [type]="'task'"
-              [editingTask]="task"></app-context-menu>
-          </div>
-          <div class="card-subtask-wrapper">
-            <div class="card-subtask" *ngFor="let subtask of task.subtasks">
-              <div>
-                <input
-                  aria-label="subtask"
-                  type="checkbox"
-                  [id]="subtask.id"
-                  [checked]="subtask.isFinished"
-                  (change)="onUpdateCompletionStateOfSubtask($event)" />
-                <label [for]="subtask.id">{{ subtask.name }}</label>
-              </div>
-              <app-context-menu
-                *ngIf="
-                  (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
-                "
-                [id]="subtask.id"
-                [type]="'subtask'"
-                [editingSubtask]="subtask"></app-context-menu>
-            </div>
-            <div class="card-subtask-line"></div>
-            <button
-              type="button"
-              class="button-global card-subtask-button"
-              (click)="onForm('subtask', undefined, task.id)">
-              <span>+</span> Add subtask
-            </button>
-          </div>
-        </div>
-        <p class="empty-card" *ngIf="column.tasks.length === 1"></p>
-      </div>
-    </div>
-  </section>
-</div>
+<app-tasks
+  [selectedBoard$]="selectedBoard$"
+  [searchTerm]="searchTerm"
+  [tags]="checkedTags"></app-tasks>
