@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormType } from '../../models/types';
-import { Project } from '../../models/project.model';
 import { FormService } from '../../services/form.service';
 import {
   animate,
@@ -37,7 +36,6 @@ import { Observable } from 'rxjs';
   ],
 })
 export class MobileNavigationComponent implements OnInit {
-  @Input() projects: Project[] | null = null;
   showMenu$!: Observable<boolean>;
 
   constructor(

@@ -195,7 +195,6 @@ export class TaskFormComponent implements OnInit {
       return;
     }
 
-    this.form.reset();
     this.formService.onChangeFormVisibility();
   }
 }

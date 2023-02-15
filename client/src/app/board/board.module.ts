@@ -3,7 +3,7 @@ import { AccordionComponent } from './accordion/accordion.component';
 import { BoardComponent } from './board.component';
 import { FormComponent } from './form/form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { BoardDetailsComponent } from './board-details/board-details.component';
@@ -20,6 +20,9 @@ import { SubtaskFormComponent } from './subtask-form/subtask-form.component';
 import { ToastComponent } from './toast/toast.component';
 import { UsersComponent } from './users/users.component';
 import { FormWrapperComponent } from './form-wrapper/form-wrapper.component';
+import { FilterByTitlePipe } from '../pipes/filter-by-title.pipe';
+import { FilterByTagsPipe } from '../pipes/filter-by-tags.pipe';
+import { FilterMenuComponent } from './filter-menu/filter-menu.component';
 
 @NgModule({
   declarations: [
@@ -40,12 +43,16 @@ import { FormWrapperComponent } from './form-wrapper/form-wrapper.component';
     ToastComponent,
     UsersComponent,
     FormWrapperComponent,
+    FilterByTitlePipe,
+    FilterByTagsPipe,
+    FilterMenuComponent,
   ],
   imports: [
     BrowserAnimationsModule,
     ReactiveFormsModule,
     CommonModule,
     DragDropModule,
+    FormsModule,
   ],
   exports: [BoardComponent],
 })

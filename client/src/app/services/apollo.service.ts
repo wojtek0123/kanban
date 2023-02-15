@@ -27,7 +27,7 @@ import {
   REMOVE_USER_FROM_PROJECT,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
-import { combineLatest, map, mapTo, switchMap } from 'rxjs';
+import { combineLatest, map, mapTo, switchMap, take, tap } from 'rxjs';
 import { Board } from '../models/board.model';
 import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
@@ -139,7 +139,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -159,7 +160,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -186,7 +188,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -223,7 +226,8 @@ export class ApolloService {
             })
           )
         )
-      )
+      ),
+      take(1)
     );
   }
 
@@ -247,7 +251,8 @@ export class ApolloService {
             })
           )
         )
-      )
+      ),
+      take(1)
     );
   }
 
@@ -274,7 +279,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -294,7 +300,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -314,7 +321,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -357,7 +365,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -379,7 +388,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -419,7 +429,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -439,7 +450,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
@@ -459,7 +471,8 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 }

@@ -47,6 +47,7 @@
 .board-details-wrapper {
   overflow-x: auto;
   height: 100vh;
+  overflow-y: scroll;
 }
 
 @media (min-width: 1024px) {
@@ -78,18 +79,15 @@
     height: 100%;
   }
 
+  .board-button-wrapper {
+    padding-right: 1rem;
+  }
+
   .board-button {
-    bottom: 0;
-    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
     width: 100%;
-  }
-
-  .board-button-wrapper {
-    padding-right: 1rem;
   }
 
   .board-logo {
