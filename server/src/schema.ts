@@ -207,7 +207,7 @@ export const resolvers = {
                       },
                     },
                     orderBy: {
-                      createdAt: 'asc',
+                      title: 'asc',
                     },
                   },
                 },
