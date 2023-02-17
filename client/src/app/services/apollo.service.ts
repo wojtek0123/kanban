@@ -8,6 +8,7 @@ import {
   ADD_TASK,
   ADD_USER,
   ADD_USER_TO_PROJECT,
+  ADD_USER_TO_TASK,
   CHANGE_COLUMN,
   CHANGE_COMPLETION_STATE,
   EDIT_BOARD,
@@ -19,12 +20,14 @@ import {
   GET_PROJECTS,
   GET_USERS,
   GET_USERS_FROM_PROJECT,
+  GET_USERS_FROM_TASK,
   REMOVE_BOARD,
   REMOVE_COLUMN,
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
   REMOVE_USER_FROM_PROJECT,
+  REMOVE_USER_FROM_TASK,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
 import { combineLatest, map, mapTo, switchMap, take, tap } from 'rxjs';
@@ -85,6 +88,15 @@ export class ApolloService {
     }).valueChanges;
   }
 
+  getUsersFromTask(taskId: string) {
+    return this.apollo.watchQuery<{ usersFromTask: Array<{ user: User }> }>({
+      query: GET_USERS_FROM_TASK,
+      variables: {
+        taskId,
+      },
+    }).valueChanges;
+  }
+
   addUserToProject(projectId: string, userId: string) {
     return this.apollo.mutate<{
       addUserToProject: Project;
@@ -105,8 +117,31 @@ export class ApolloService {
     });
   }
 
+  addUserToTask(taskId: string, userId: string) {
+    return this.apollo.mutate<{}>({
+      mutation: ADD_USER_TO_TASK,
+      variables: {
+        taskId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS_FROM_TASK,
+          variables: {
+            taskId,
+          },
+        },
+      ],
+    });
+  }
+
   removeUserFromProject(projectId: string, userId: string) {
-    return this.apollo.mutate<{ removeUserFromProject: Project }>({
+    return this.apollo.mutate<{
+      removeUserFromProject: {
+        projectId: string;
+        userId: string;
+      };
+    }>({
       mutation: REMOVE_USER_FROM_PROJECT,
       variables: {
         projectId,
@@ -117,6 +152,29 @@ export class ApolloService {
           query: GET_USERS_FROM_PROJECT,
           variables: {
             projectId: projectId,
+          },
+        },
+      ],
+    });
+  }
+
+  removeUserFromTask(taskId: string, userId: string) {
+    return this.apollo.mutate<{
+      removeUserFromTask: {
+        taskId: string;
+        userId: string;
+      };
+    }>({
+      mutation: REMOVE_USER_FROM_TASK,
+      variables: {
+        taskId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS_FROM_TASK,
+          variables: {
+            taskId: taskId,
           },
         },
       ],

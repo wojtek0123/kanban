@@ -19,17 +19,18 @@ model Subtask {
 }
 
 model Task {
-  id                  String    @id @default(uuid())
+  id                  String       @id @default(uuid())
   title               String
   description         String
   columnId            String
-  column              Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  column              Column       @relation(fields: [columnId], references: [id], onDelete: Cascade)
   tagNames            String[]
   tagFontColors       String[]
   tagBackgroundColors String[]
   subtasks            Subtask[]
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime? @updatedAt
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime?    @updatedAt
+  userOnTask          UserOnTask[]
 }
 
 model Column {
@@ -70,8 +71,20 @@ model User {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime?       @updatedAt
   usersOnProject UserOnProject[]
+  userOnTask     UserOnTask[]
 
   @@unique([id])
+}
+
+model UserOnTask {
+  user      User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  task      Task      @relation(fields: [taskId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  taskId    String
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now())
+
+  @@id([userId, taskId])
 }
 
 model UserOnProject {

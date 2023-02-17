@@ -77,21 +77,45 @@ export const ADD_USER_TO_PROJECT = gql`
   }
 `;
 
+export const ADD_USER_TO_TASK = gql`
+  mutation AddUserToTask($userId: String, $taskId: String) {
+    addUserToTask(userId: $userId, taskId: $taskId) {
+      createdAt
+      userId
+      taskId
+      updatedAt
+    }
+  }
+`;
+
 export const REMOVE_USER_FROM_PROJECT = gql`
   mutation RemoveUserFromProject($projectId: String, $userId: String) {
     removeUserFromProject(projectId: $projectId, userId: $userId) {
-      id
-      usersOnProject {
-        user {
-          email
-          id
-          name
-        }
-      }
+      projectId
       userId
       updatedAt
-      name
       createdAt
+    }
+  }
+`;
+
+export const REMOVE_USER_FROM_TASK = gql`
+  mutation RemoveUserFromTask($taskId: String, $userId: String) {
+    removeUserFromTask(taskId: $taskId, userId: $userId) {
+      taskId
+      userId
+    }
+  }
+`;
+
+export const GET_USERS_FROM_TASK = gql`
+  query UsersFromTask($usersFromTaskTaskId2: String) {
+    usersFromTask(taskId: $usersFromTaskTaskId2) {
+      user {
+        name
+        email
+        id
+      }
     }
   }
 `;

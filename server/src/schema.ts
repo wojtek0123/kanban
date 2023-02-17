@@ -45,6 +45,7 @@ export const typeDefs = gql`
     columnId: String
     createdAt: Date
     updatedAt: Date
+    userOnTask: [UserOnTask]
   }
 
   type Column {
@@ -82,6 +83,7 @@ export const typeDefs = gql`
     name: String
     email: String
     usersOnProject: UserOnProject
+    userOnTask: UserOnTask
     createdAt: Date
     updatedAt: Date
   }
@@ -95,17 +97,29 @@ export const typeDefs = gql`
     updatedAt: Date
   }
 
+  type UserOnTask {
+    user: User
+    task: Task
+    userId: String
+    taskId: String
+    createdAt: Date
+    updatedAt: Date
+  }
+
   type Query {
     projects(userId: String): [Project]
     filteredUsers(text: String): [User]
     usersFromProject(projectId: String): [UserOnProject]
+    usersFromTask(taskId: String): [UserOnTask]
   }
 
   type Mutation {
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
-    removeUserFromProject(projectId: String, userId: String): Project
+    removeUserFromProject(projectId: String, userId: String): UserOnProject
+    removeUserFromTask(taskId: String, userId: String): UserOnTask
+    addUserToTask(userId: String, taskId: String): UserOnTask
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String, dotColor: String): Column
@@ -247,8 +261,54 @@ export const resolvers = {
         },
       })
     },
+    usersFromTask: (
+      _parent: unknown,
+      args: { taskId: string },
+      context: Context,
+    ) => {
+      return context.prisma.userOnTask.findMany({
+        where: {
+          taskId: args.taskId,
+        },
+        select: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+            },
+          },
+        },
+      })
+    },
   },
   Mutation: {
+    addUserToTask: (
+      _parent: unknown,
+      args: { userId: string; taskId: string },
+      context: Context,
+    ) => {
+      return context.prisma.userOnTask.create({
+        data: {
+          userId: args.userId,
+          taskId: args.taskId,
+        },
+      })
+    },
+    removeUserFromTask: (
+      _parent: unknown,
+      args: { userId: string; taskId: string },
+      context: Context,
+    ) => {
+      return context.prisma.userOnTask.delete({
+        where: {
+          userId_taskId: {
+            userId: args.userId,
+            taskId: args.taskId,
+          },
+        },
+      })
+    },
     addUserToProject: async (
       _parent: unknown,
       args: { projectId: string; userId: string },
