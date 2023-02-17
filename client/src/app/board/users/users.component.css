@@ -46,11 +46,15 @@
 }
 
 .button-wrapper {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
-  justify-content: space-between;
   width: 100%;
+  margin-bottom: 1rem;
+}
+
+.button-wrapper button {
+  margin: 0;
 }
 
 .active {
@@ -67,4 +71,3 @@
     width: 350px;
   }
 }
-

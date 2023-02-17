@@ -53,13 +53,14 @@
         </p>
         <div
           cdkDrag
-          class="card"
           [id]="task.id"
+          class="card"
           *ngFor="
             let task of column.tasks
               | filterByTitle : searchTerm
               | filterByTags : tags
           ">
+          <!-- <div > -->
           <select class="card-select" (change)="changeColumn($event)">
             <option [value]="undefined">Choose column</option>
             <option
@@ -111,12 +112,28 @@
                 [editingSubtask]="subtask"></app-context-menu>
             </div>
             <div class="card-subtask-line"></div>
-            <button
-              type="button"
-              class="button-global card-subtask-button"
-              (click)="onForm('subtask', undefined, task.id)">
-              <span>+</span> Add subtask
-            </button>
+            <div class="card-buttons">
+              <button
+                type="button"
+                class="button-global button"
+                (click)="onForm('subtask', column.id, task.id)">
+                Add subtask
+              </button>
+              <button
+                *ngIf="
+                  (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
+                "
+                type="button"
+                class="button-global button"
+                (click)="onForm('assign-user', column.id, task.id)">
+                Add user
+              </button>
+            </div>
+            <div class="card-stats">
+              <app-display-number-of-users-in-task
+                [taskId]="task.id"></app-display-number-of-users-in-task>
+              <span>{{ showTimeDifference(task.createdAt) }}</span>
+            </div>
           </div>
         </div>
         <p class="empty-card" *ngIf="column.tasks.length === 1"></p>

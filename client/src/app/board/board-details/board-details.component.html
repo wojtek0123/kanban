@@ -36,6 +36,8 @@
       (click)="onForm('column')">
       Add column
     </button>
+    <div
+      *ngIf="(loggedInUser$ | async)?.id !== (projectOwnerId$ | async)"></div>
     <div class="extended-buttons">
       <button
         type="button"

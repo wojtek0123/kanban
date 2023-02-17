@@ -1,11 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { Task } from 'src/app/models/task.model';
 import { BoardService } from '../../services/board.service';
 import { SupabaseService } from '../../services/supabase.service';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import {
+  catchError,
+  concatAll,
+  exhaustMap,
+  map,
+  switchAll,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import {
@@ -129,4 +138,27 @@ export class TasksComponent implements OnInit {
       .updateCompletionStateOfSubtask(id ?? '', target.checked)
       .subscribe();
   }
+
+  showTimeDifference = (createdAt: Date) => {
+    const currentTime = new Date().getTime();
+
+    const seconds =
+      Math.floor(currentTime / 1000) -
+      Math.floor(new Date(createdAt).getTime() / 1000);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const hours = Math.floor(seconds / 3600);
+    const days = Math.floor(hours / 24);
+
+    if (days >= 1) {
+      return `${days}d ago`;
+    }
+    if (hours >= 1) {
+      return `${hours}h ago`;
+    }
+    if (minutes >= 1) {
+      return `${minutes}m ago`;
+    }
+
+    return `${seconds}s ago`;
+  };
 }

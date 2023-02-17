@@ -80,7 +80,7 @@ export class ApolloService {
   }
 
   getUsersFromProject(projectId: string) {
-    return this.apollo.watchQuery<{ usersFromProject: Array<{ user: User }> }>({
+    return this.apollo.watchQuery<{ usersFromProject: { user: User }[] }>({
       query: GET_USERS_FROM_PROJECT,
       variables: {
         projectId,
@@ -89,7 +89,7 @@ export class ApolloService {
   }
 
   getUsersFromTask(taskId: string) {
-    return this.apollo.watchQuery<{ usersFromTask: Array<{ user: User }> }>({
+    return this.apollo.watchQuery<{ usersFromTask: { user: User }[] }>({
       query: GET_USERS_FROM_TASK,
       variables: {
         taskId,

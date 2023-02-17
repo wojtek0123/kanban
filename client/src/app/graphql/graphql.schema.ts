@@ -6,13 +6,6 @@ export const GET_PROJECTS = gql`
       id
       name
       userId
-      usersOnProject {
-        user {
-          email
-          id
-          name
-        }
-      }
       createdAt
       updatedAt
       boards {

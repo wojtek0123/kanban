@@ -4,7 +4,8 @@ export type FormType =
   | 'task'
   | 'column'
   | 'subtask'
-  | 'user';
+  | 'user'
+  | 'assign-user';
 
 export type ToastType = 'confirm' | 'warning';
 

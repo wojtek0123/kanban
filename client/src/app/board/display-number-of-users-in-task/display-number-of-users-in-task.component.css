@@ -1,0 +1,10 @@
+.button-users {
+  padding: 0.5rem 0.2rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--font-color-grey);
+  font-size: 0.85rem;
+  font-family: 'Oswald', sans-serif;
+}

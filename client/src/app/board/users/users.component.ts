@@ -7,6 +7,9 @@ import { SupabaseService } from 'src/app/services/supabase.service';
 import { BoardService } from '../../services/board.service';
 import { User } from 'src/app/models/user.model';
 import { ToastService } from '../../services/toast.service';
+import { Task } from 'src/app/models/task.model';
+
+type Tabs = 'add' | 'peek';
 
 @Component({
   selector: 'app-users',
@@ -16,7 +19,7 @@ import { ToastService } from '../../services/toast.service';
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
   submitted = false;
-  tabName: 'add' | 'peek' = 'peek';
+  tabName: Tabs = 'peek';
   projectUsers$: Observable<{ user: User }[]> | null = null;
   loggedInUserId$: Observable<string> | null = null;
   projectId$: Observable<string> | null = null;
@@ -49,13 +52,14 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  changeTabToAdd() {
-    this.tabName = 'add';
-    this.form.reset();
-  }
+  changeTab(tabName: Tabs) {
+    this.tabName = tabName;
 
-  changeTabToPeek() {
-    this.tabName = 'peek';
+    if (tabName === 'add') {
+      this.form.reset();
+      this.submitted = false;
+      this.searchedFilteredUsers$ = null;
+    }
   }
 
   onSubmit() {
@@ -105,9 +109,6 @@ export class UsersComponent implements OnInit {
         )
       )
     );
-
-    this.submitted = false;
-    this.form.reset();
   }
 
   onAddUser(userId: string) {

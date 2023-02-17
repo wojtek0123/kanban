@@ -1,0 +1,67 @@
+<div class="wrapper">
+  <div
+    class="button-wrapper"
+    *ngIf="(loggedInUserId$ | async) === (projectId$ | async)">
+    <button
+      type="button"
+      class="button-global"
+      [ngClass]="{ active: tabName === 'peek' }"
+      (click)="changeTab('peek')">
+      Users
+    </button>
+
+    <button
+      type="button"
+      class="button-global"
+      [ngClass]="{ active: tabName === 'assign' }"
+      (click)="changeTab('assign')">
+      Add user
+    </button>
+  </div>
+
+  <div *ngIf="tabName === 'peek'">
+    <h3>Users assign to this task</h3>
+    <div
+      class="assign-user-container"
+      *ngFor="let data of userFromTask$ | async">
+      <div class="assign-user-wrapper">
+        <span>{{ data.user.email }}</span>
+        <span>{{ data.user.name }}</span>
+      </div>
+      <button
+        *ngIf="(loggedInUserId$ | async) === (projectId$ | async)"
+        type="button"
+        class="button-global assign-user-button"
+        (click)="onRemoveUserFromTask(data.user.id)">
+        <img src="../../../assets/minus-solid.svg" alt="" />
+      </button>
+    </div>
+  </div>
+  <div *ngIf="tabName === 'assign'">
+    <h3>Assign user to this task</h3>
+    <div
+      class="assign-user-container"
+      *ngFor="let data of projectUsers$ | async">
+      <div class="assign-user-wrapper">
+        <span>{{ data.user.email }}</span>
+        <span>{{ data.user.name }}</span>
+      </div>
+      <div class="assign-user-buttons">
+        <button
+          *ngIf="!(isUserAssign$ | async)?.includes(data.user.id)"
+          type="button"
+          class="button-global assign-user-button"
+          (click)="onAddUserToTask(data.user.id)">
+          <img src="../../../assets/plus-solid.svg" alt="" />
+        </button>
+        <button
+          *ngIf="(isUserAssign$ | async)?.includes(data.user.id)"
+          type="button"
+          class="button-global assign-user-button"
+          (click)="onRemoveUserFromTask(data.user.id)">
+          <img src="../../../assets/minus-solid.svg" alt="" />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
