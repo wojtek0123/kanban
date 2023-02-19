@@ -20,6 +20,7 @@ import {
   GET_PROJECTS,
   GET_TASKS_FROM_USER,
   GET_USERS,
+  GET_USERS_AND_TASKS,
   GET_USERS_FROM_PROJECT,
   GET_USERS_FROM_TASK,
   REMOVE_BOARD,
@@ -105,6 +106,14 @@ export class ApolloService {
       variables: {
         userId,
       },
+    }).valueChanges;
+  }
+
+  getUsersAndTasks() {
+    return this.apollo.watchQuery<{
+      getUsersAndTasks: { taskId: string; userId: string }[];
+    }>({
+      query: GET_USERS_AND_TASKS,
     }).valueChanges;
   }
 

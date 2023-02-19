@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { map, Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FormType } from 'src/app/models/types';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { BoardService } from 'src/app/services/board.service';
@@ -22,8 +23,15 @@ export class DisplayNumberOfUsersInTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.users$ = this.apollo
-      .getUsersFromTask(this.taskId)
-      .pipe(map(data => data.data.usersFromTask.length));
+      .getUsersAndTasks()
+      .pipe(
+        map(
+          data =>
+            data.data.getUsersAndTasks.filter(
+              data => data.taskId === this.taskId
+            ).length
+        )
+      );
   }
 
   onForm(type: FormType) {

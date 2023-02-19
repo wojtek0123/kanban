@@ -65,6 +65,15 @@ export const GET_TASKS_FROM_USER = gql`
   }
 `;
 
+export const GET_USERS_AND_TASKS = gql`
+  query GetUsersAndTasks {
+    getUsersAndTasks {
+      taskId
+      userId
+    }
+  }
+`;
+
 export const ADD_USER_TO_PROJECT = gql`
   mutation AddUserToProject($projectId: String, $userId: String) {
     addUserToProject(projectId: $projectId, userId: $userId) {
