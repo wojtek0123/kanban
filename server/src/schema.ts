@@ -111,6 +111,7 @@ export const typeDefs = gql`
     filteredUsers(text: String): [User]
     usersFromProject(projectId: String): [UserOnProject]
     usersFromTask(taskId: String): [UserOnTask]
+    getTasksFromUser(userId: String): [UserOnTask]
   }
 
   type Mutation {
@@ -281,7 +282,27 @@ export const resolvers = {
         },
       })
     },
+    getTasksFromUser: (
+      _parent: unknown,
+      args: { userId: string },
+      context: Context,
+    ) => {
+      return context.prisma.userOnTask.findMany({
+        where: {
+          userId: args.userId,
+        },
+        select: {
+          task: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
+        },
+      })
+    },
   },
+
   Mutation: {
     addUserToTask: (
       _parent: unknown,

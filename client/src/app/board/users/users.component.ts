@@ -23,6 +23,7 @@ export class UsersComponent implements OnInit {
   projectUsers$: Observable<{ user: User }[]> | null = null;
   loggedInUserId$: Observable<string> | null = null;
   projectId$: Observable<string> | null = null;
+  tasksFromUser!: { task: Task }[];
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -134,6 +135,28 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
+    this.apollo
+      .getTasksFromUser(userId)
+      .pipe(
+        map(data => data.data.getTasksFromUser),
+        take(1)
+      )
+      .subscribe(data => {
+        console.log(data);
+        this.tasksFromUser = data;
+
+        for (let index = 0; index < data.length; index++) {
+          const taskId = data.at(index)?.task.id ?? '';
+
+          this.apollo
+            .removeUserFromTask(taskId, userId)
+            .pipe(take(1))
+            .subscribe();
+        }
+      });
+
+    // tasksFromUser$.pipe(switchMap(tasks => tasks.map(task => this.apollo.removeUserFromTask(task.task.id, userId)))
+
     this.boardService.getSelectedProject
       .pipe(
         map(project => project?.id ?? ''),

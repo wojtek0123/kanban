@@ -18,6 +18,7 @@ import {
   EDIT_TASK,
   GET_FILTERED_USERS,
   GET_PROJECTS,
+  GET_TASKS_FROM_USER,
   GET_USERS,
   GET_USERS_FROM_PROJECT,
   GET_USERS_FROM_TASK,
@@ -36,6 +37,7 @@ import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
 import { User } from '../models/user.model';
 import { BoardService } from './board.service';
+import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -93,6 +95,15 @@ export class ApolloService {
       query: GET_USERS_FROM_TASK,
       variables: {
         taskId,
+      },
+    }).valueChanges;
+  }
+
+  getTasksFromUser(userId: string) {
+    return this.apollo.watchQuery<{ getTasksFromUser: { task: Task }[] }>({
+      query: GET_TASKS_FROM_USER,
+      variables: {
+        userId,
       },
     }).valueChanges;
   }
