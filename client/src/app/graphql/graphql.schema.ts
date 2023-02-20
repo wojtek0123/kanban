@@ -122,8 +122,8 @@ export const REMOVE_USER_FROM_TASK = gql`
 `;
 
 export const GET_USERS_FROM_TASK = gql`
-  query UsersFromTask($taskId2: String) {
-    usersFromTask(taskId: $taskId2) {
+  query UsersFromTask($taskId: String) {
+    usersFromTask(taskId: $taskId) {
       user {
         name
         email

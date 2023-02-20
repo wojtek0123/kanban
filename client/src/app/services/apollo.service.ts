@@ -146,6 +146,9 @@ export class ApolloService {
       },
       refetchQueries: [
         {
+          query: GET_USERS_AND_TASKS,
+        },
+        {
           query: GET_USERS_FROM_TASK,
           variables: {
             taskId,
@@ -192,9 +195,12 @@ export class ApolloService {
       },
       refetchQueries: [
         {
+          query: GET_USERS_AND_TASKS,
+        },
+        {
           query: GET_USERS_FROM_TASK,
           variables: {
-            taskId: taskId,
+            taskId,
           },
         },
       ],
