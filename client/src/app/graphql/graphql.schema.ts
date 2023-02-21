@@ -20,6 +20,7 @@ export const GET_PROJECTS = gql`
             id
             name
             dotColor
+            columnWrapperId
             createdAt
             updatedAt
             tasks {
@@ -157,6 +158,26 @@ export const GET_FILTERED_USERS = gql`
       email
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const CHANGE_COLUMN_WRAPPER = gql`
+  mutation ChangeColumnWrapper(
+    $currColumnWrapperId: String
+    $prevColumnWrapperId: String
+    $currColumnId: String
+    $prevColumnId: String
+    $boardId: String
+  ) {
+    changeColumnWrapper(
+      currColumnWrapperId: $currColumnWrapperId
+      prevColumnWrapperId: $prevColumnWrapperId
+      currColumnId: $currColumnId
+      prevColumnId: $prevColumnId
+      boardId: $boardId
+    ) {
+      id
     }
   }
 `;

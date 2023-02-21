@@ -1,20 +1,18 @@
 <div
   cdkDropList
   cdkDropListOrientation="horizontal"
-  [cdkDropListData]="columns(selectedBoard$ | async)"
+  [cdkDropListData]="columns(board)"
   (cdkDropListDropped)="dropColumn($event)"
   class="tasks"
   *ngIf="selectedBoard$ | async as board">
-  <p
-    class="warning-message"
-    *ngIf="(selectedBoard$ | async)?.columns?.length === 0">
+  <p class="warning-message" *ngIf="board?.columns?.length === 0">
     No columns to display
   </p>
   <section
     [id]="columnWrapper.id"
     class="section"
-    *ngFor="let columnWrapper of (selectedBoard$ | async)?.columns">
-    <div cdkDrag>
+    *ngFor="let columnWrapper of board?.columns">
+    <div cdkDrag [id]="columnWrapper.column.id">
       <div class="section-heading">
         <div class="section-title-wrapper">
           <span
@@ -54,10 +52,7 @@
           [cdkDropListData]="columnWrapper.column.tasks"
           [id]="columnWrapper.column.id"
           [cdkDropListConnectedTo]="
-            columnIds(
-              columnWrapper.column.id,
-              (selectedBoard$ | async)?.columns ?? []
-            )
+            columnIds(columnWrapper.column.id, board?.columns)
           "
           (cdkDropListDropped)="drop($event)">
           <p
@@ -88,7 +83,7 @@
                 *ngFor="
                   let col of getColumns(
                     columnWrapper.column.id,
-                    (selectedBoard$ | async)?.columns ?? []
+                    board?.columns ?? []
                   )
                 ">
                 {{ col.name }}

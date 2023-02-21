@@ -5,6 +5,7 @@ export interface Column {
   name: string;
   dotColor: string;
   tasks: Task[];
+  columnWrapperId: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -123,7 +123,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    changeColumnWrapper(oldColumnWrapperId: String, oldColumnId: String, newColumnWrapperId: String, newColumnId: String): ColumnWrapper
+    changeColumnWrapper(currColumnWrapperId: String, prevColumnWrapperId: String, currColumnId: String, prevColumnId: String, boardId: String): ColumnWrapper
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
@@ -196,6 +196,7 @@ export const resolvers = {
                       id: true,
                       name: true,
                       dotColor: true,
+                      columnWrapperId: true,
                       createdAt: true,
                       updatedAt: true,
                       tasks: {
@@ -324,28 +325,38 @@ export const resolvers = {
   },
 
   Mutation: {
-    changeColumnWrapper: async (_parent: unknown, args: {columnWrapperId: string, firstColumnId: string, secondColumnId: string}, context: Context) => {
-      const response = await context.prisma.column.findUnique({
-        where: {
-          id: args.firstColumnId
-        }
-      })
-      await context.prisma.column.update({
-        where: {
-          id: args.firstColumnId,
-        },
+    changeColumnWrapper: async (_parent: unknown, args: { currColumnWrapperId: string, prevColumnWrapperId: string, currColumnId: string, prevColumnId: string, boardId: string}, context: Context) => {
+      const response = await context.prisma.columnWrapper.create({
         data: {
-          columnWrapperId: args.columnWrapperId
+          boardId: args.boardId,
         }
       })
 
-      return context.prisma.column.update({
+      await context.prisma.column.update({
+        where: { id: args.currColumnId },
+        data: { columnWrapperId: response.id }
+      })
+
+      await context.prisma.column.update({
         where: {
-          id: args.secondColumnId
+          id: args.prevColumnId,
         },
         data: {
-          columnWrapperId: response?.columnWrapperId ?? ''
+          columnWrapperId: args.currColumnWrapperId
         }
+      })
+
+      await context.prisma.column.update({
+        where: {
+          id: args.currColumnId
+        },
+        data: {
+          columnWrapperId: args.prevColumnWrapperId
+        }
+      })
+
+      return await context.prisma.columnWrapper.delete({
+        where: { id: response.id }
       })
     },
     addUserToTask: (

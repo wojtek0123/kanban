@@ -10,6 +10,7 @@ import {
   ADD_USER_TO_PROJECT,
   ADD_USER_TO_TASK,
   CHANGE_COLUMN,
+  CHANGE_COLUMN_WRAPPER,
   CHANGE_COMPLETION_STATE,
   EDIT_BOARD,
   EDIT_COLUMN,
@@ -546,6 +547,43 @@ export class ApolloService {
         this.apollo.mutate({
           mutation: CHANGE_COLUMN,
           variables: { columnId, taskId },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      ),
+      take(1)
+    );
+  }
+
+  changeColumnWrapper(
+    currColumnWrapperId: string,
+    prevColumnWrapperId: string,
+    currColumnId: string,
+    prevColumnId: string
+  ) {
+    const userId$ = this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id)
+    );
+
+    const boardId$ = this.board.getSelectedBoard.pipe(map(board => board?.id));
+
+    return combineLatest([userId$, boardId$]).pipe(
+      switchMap(([userId, boardId]) =>
+        this.apollo.mutate({
+          mutation: CHANGE_COLUMN_WRAPPER,
+          variables: {
+            currColumnWrapperId,
+            prevColumnWrapperId,
+            currColumnId,
+            prevColumnId,
+            boardId,
+          },
           refetchQueries: [
             {
               query: GET_PROJECTS,

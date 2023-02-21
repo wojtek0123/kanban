@@ -97,19 +97,31 @@ export class TasksComponent implements OnInit {
         catchError(async error => {
           this.toastService.showWarningToast('update', 'task');
           throw new Error(error);
-        }),
-        take(1)
+        })
       )
       .subscribe();
   }
 
   dropColumn(event: CdkDragDrop<Column[] | undefined>) {
-    const id = event.item.element.nativeElement.id;
+    const currColumnWrapperId = event.container.data?.at(
+      event.currentIndex
+    )?.columnWrapperId;
 
-    console.log('Container id: ' + event.container.id);
-    console.log('Prev container id' + event.previousContainer.id);
+    const prevColumnWrapperId = event.container.data?.at(
+      event.previousIndex
+    )?.columnWrapperId;
 
-    console.log('Element Id: ' + id);
+    const currColumnId = event.container.data?.at(event.currentIndex)?.id;
+    const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
+
+    this.apollo
+      .changeColumnWrapper(
+        currColumnWrapperId ?? '',
+        prevColumnWrapperId ?? '',
+        currColumnId ?? '',
+        prevColumnId ?? ''
+      )
+      .subscribe();
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {
@@ -154,7 +166,8 @@ export class TasksComponent implements OnInit {
     return `${seconds}s ago`;
   };
 
-  columnIds(columnId: string, columns: ColumnWrapper[]) {
+  columnIds(columnId: string, columns: ColumnWrapper[] | undefined) {
+    if (!columns) return [];
     const filteredColumns = columns
       .flatMap(column => column.column)
       .filter(column => column.id !== columnId);
