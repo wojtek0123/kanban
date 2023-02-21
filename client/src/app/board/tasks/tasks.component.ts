@@ -1,20 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { Task } from 'src/app/models/task.model';
 import { BoardService } from '../../services/board.service';
 import { SupabaseService } from '../../services/supabase.service';
-import {
-  catchError,
-  concatAll,
-  exhaustMap,
-  map,
-  switchAll,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import {
@@ -24,6 +15,8 @@ import {
 } from '@angular/cdk/drag-drop';
 import { FormType } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
+import { Column } from 'src/app/models/column.model';
+import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
 
 @Component({
   selector: 'app-tasks',
@@ -77,47 +70,46 @@ export class TasksComponent implements OnInit {
       .subscribe();
   }
 
-  getColumns(columnId: string, selectedBoard: Board | null | undefined) {
-    return (
-      selectedBoard?.columns.filter(column => column.id !== columnId) ?? []
-    );
+  getColumns(columnId: string, columns: ColumnWrapper[]) {
+    return columns
+      .flatMap(column => column.column)
+      .filter(col => col.id !== columnId);
   }
 
   drop(event: CdkDragDrop<Task[]>) {
-    const prevArray = [...event.previousContainer.data];
-    const currArray = [...event.container.data];
-
     if (event.previousContainer === event.container) {
-      moveItemInArray(currArray, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        prevArray,
-        currArray,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      const id = event.item.element.nativeElement.id;
-
-      const currentColumn$ = this.boardService.getSelectedBoard.pipe(
-        map(board =>
-          board?.columns
-            .filter(column => column.id === event.container.id)
-            .at(0)
-        )
-      );
-
-      currentColumn$
-        .pipe(
-          switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
-          catchError(async error => {
-            this.toastService.showWarningToast('update', 'task');
-            throw new Error(error);
-          }),
-          take(1)
-        )
-        .subscribe();
+      return;
     }
+    const id = event.item.element.nativeElement.id;
+
+    const currentColumn$ = this.boardService.getSelectedBoard.pipe(
+      map(board =>
+        board?.columns
+          .flatMap(column => column.column)
+          .filter(column => column.id === event.container.id)
+          .at(0)
+      )
+    );
+
+    currentColumn$
+      .pipe(
+        switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
+        catchError(async error => {
+          this.toastService.showWarningToast('update', 'task');
+          throw new Error(error);
+        }),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  dropColumn(event: CdkDragDrop<Column[] | undefined>) {
+    const id = event.item.element.nativeElement.id;
+
+    console.log('Container id: ' + event.container.id);
+    console.log('Prev container id' + event.previousContainer.id);
+
+    console.log('Element Id: ' + id);
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {
@@ -161,4 +153,16 @@ export class TasksComponent implements OnInit {
 
     return `${seconds}s ago`;
   };
+
+  columnIds(columnId: string, columns: ColumnWrapper[]) {
+    const filteredColumns = columns
+      .flatMap(column => column.column)
+      .filter(column => column.id !== columnId);
+    return [...filteredColumns.map(column => column.id)];
+  }
+
+  columns(board: Board | null | undefined) {
+    if (!board) return;
+    return board.columns.flatMap(column => column.column);
+  }
 }

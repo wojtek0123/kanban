@@ -15,25 +15,29 @@ export const GET_PROJECTS = gql`
         updatedAt
         columns {
           id
-          name
-          dotColor
-          createdAt
-          updatedAt
-          tasks {
+          columnId
+          column {
             id
-            title
-            description
-            tagNames
-            tagFontColors
-            tagBackgroundColors
+            name
+            dotColor
             createdAt
             updatedAt
-            subtasks {
+            tasks {
               id
-              isFinished
-              name
+              title
+              description
+              tagNames
+              tagFontColors
+              tagBackgroundColors
               createdAt
               updatedAt
+              subtasks {
+                id
+                isFinished
+                name
+                createdAt
+                updatedAt
+              }
             }
           }
         }

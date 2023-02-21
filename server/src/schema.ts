@@ -53,15 +53,22 @@ export const typeDefs = gql`
     name: String
     dotColor: String
     tasks: [Task]
+    columnWrapperId: String
     boardId: String
     createdAt: Date
     updatedAt: Date
   }
 
+  type ColumnWrapper {
+    id: String
+    column: Column
+    columnId: String
+  }
+
   type Board {
     id: String
     name: String
-    columns: [Column]
+    columns: [ColumnWrapper]
     projectId: String
     Project: Project
     createdAt: Date
@@ -116,6 +123,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
+    changeColumnWrapper(oldColumnWrapperId: String, oldColumnId: String, newColumnWrapperId: String, newColumnId: String): ColumnWrapper
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
@@ -181,37 +189,45 @@ export const resolvers = {
               columns: {
                 select: {
                   id: true,
-                  name: true,
-                  dotColor: true,
                   createdAt: true,
                   updatedAt: true,
-                  tasks: {
+                  column: {
                     select: {
                       id: true,
-                      title: true,
-                      tagNames: true,
-                      tagBackgroundColors: true,
-                      tagFontColors: true,
-                      description: true,
+                      name: true,
+                      dotColor: true,
                       createdAt: true,
                       updatedAt: true,
-                      subtasks: {
+                      tasks: {
                         select: {
                           id: true,
-                          name: true,
-                          isFinished: true,
+                          title: true,
+                          tagNames: true,
+                          tagBackgroundColors: true,
+                          tagFontColors: true,
+                          description: true,
                           createdAt: true,
                           updatedAt: true,
+                          subtasks: {
+                            select: {
+                              id: true,
+                              name: true,
+                              isFinished: true,
+                              createdAt: true,
+                              updatedAt: true,
+                            },
+                            orderBy: {
+                              createdAt: 'asc',
+                            },
+                          },
                         },
                         orderBy: {
-                          createdAt: 'asc',
+                          title: 'asc',
                         },
                       },
+                      
                     },
-                    orderBy: {
-                      title: 'asc',
-                    },
-                  },
+                  }
                 },
                 orderBy: {
                   createdAt: 'asc',
@@ -308,6 +324,30 @@ export const resolvers = {
   },
 
   Mutation: {
+    changeColumnWrapper: async (_parent: unknown, args: {columnWrapperId: string, firstColumnId: string, secondColumnId: string}, context: Context) => {
+      const response = await context.prisma.column.findUnique({
+        where: {
+          id: args.firstColumnId
+        }
+      })
+      await context.prisma.column.update({
+        where: {
+          id: args.firstColumnId,
+        },
+        data: {
+          columnWrapperId: args.columnWrapperId
+        }
+      })
+
+      return context.prisma.column.update({
+        where: {
+          id: args.secondColumnId
+        },
+        data: {
+          columnWrapperId: response?.columnWrapperId ?? ''
+        }
+      })
+    },
     addUserToTask: (
       _parent: unknown,
       args: { userId: string; taskId: string },
@@ -504,64 +544,24 @@ export const resolvers = {
           name: args.name,
           projectId: args.projectId,
         },
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-          projectId: true,
-          columns: {
-            select: {
-              id: true,
-              name: true,
-              dotColor: true,
-              createdAt: true,
-              updatedAt: true,
-              tasks: {
-                select: {
-                  id: true,
-                  title: true,
-                  tagNames: true,
-                  tagBackgroundColors: true,
-                  tagFontColors: true,
-                  description: true,
-                  createdAt: true,
-                  updatedAt: true,
-                  subtasks: {
-                    select: {
-                      id: true,
-                      name: true,
-                      isFinished: true,
-                      createdAt: true,
-                      updatedAt: true,
-                    },
-                    orderBy: {
-                      createdAt: 'asc',
-                    },
-                  },
-                },
-                orderBy: {
-                  createdAt: 'asc',
-                },
-              },
-            },
-            orderBy: {
-              createdAt: 'asc',
-            },
-          },
-        },
       })
     },
-    addColumn: (
+    addColumn: async (
       _parent: any,
       args: { boardId: string; name: string; dotColor: string },
       context: Context,
     ) => {
+      const response = await context.prisma.columnWrapper.create({
+        data: {
+          boardId: args.boardId
+        }
+      })
+
       return context.prisma.column.create({
         data: {
           name: args.name,
-          boardId: args.boardId,
           dotColor: args.dotColor,
+          columnWrapperId: response.id
         },
       })
     },
