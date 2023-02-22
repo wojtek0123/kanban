@@ -89,11 +89,10 @@ export class SubtaskFormComponent implements OnInit {
           })
         )
         .subscribe(() => {
-          () =>
-            this.toastService.showToast(
-              'confirm',
-              'Successfully added a new subtask'
-            );
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new subtask'
+          );
           this.boardService.refreshSelectedBoard();
         });
     }
