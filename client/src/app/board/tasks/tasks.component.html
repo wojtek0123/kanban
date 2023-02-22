@@ -12,7 +12,12 @@
     [id]="columnWrapper.id"
     class="section"
     *ngFor="let columnWrapper of board?.columns">
-    <div cdkDrag [id]="columnWrapper.column.id">
+    <div
+      cdkDrag
+      [cdkDragDisabled]="
+        (loggedInUser$ | async)?.id !== (projectOwnerId$ | async)
+      "
+      [id]="columnWrapper.column.id">
       <div class="section-heading">
         <div class="section-title-wrapper">
           <span
