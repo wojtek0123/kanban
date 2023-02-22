@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
-import { map, catchError, tap, switchMap, take } from 'rxjs/operators';
+import { map, catchError, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { BoardService } from '../../services/board.service';
@@ -118,16 +118,16 @@ export class UsersComponent implements OnInit {
         map(project => project?.id ?? ''),
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
-          this.toastService.showWarningToast('add', 'user');
+          this.toastService.showToast('warning', 'Coudn&apos;t add a new user');
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('add', 'user')),
         take(1)
       )
       .subscribe(() => {
         if (!this.searchedFilteredUsers$) {
           return;
         }
+        this.toastService.showToast('confirm', 'Successfully added a new user');
         this.searchedFilteredUsers$ = this.searchedFilteredUsers$.pipe(
           map(data => data.filter(user => user.id !== userId))
         );
@@ -155,8 +155,6 @@ export class UsersComponent implements OnInit {
         }
       });
 
-    // tasksFromUser$.pipe(switchMap(tasks => tasks.map(task => this.apollo.removeUserFromTask(task.task.id, userId)))
-
     this.boardService.getSelectedProject
       .pipe(
         map(project => project?.id ?? ''),
@@ -164,12 +162,16 @@ export class UsersComponent implements OnInit {
           this.apollo.removeUserFromProject(projectId, userId)
         ),
         catchError(async error => {
-          this.toastService.showWarningToast('delete', 'user');
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t delete this user'
+          );
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('delete', 'user')),
         take(1)
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast('confirm', 'Successfully deleted this user')
+      );
   }
 }

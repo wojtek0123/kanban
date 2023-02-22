@@ -65,12 +65,18 @@ export class ColumnFormComponent implements OnInit {
         .editColumn(id, name, dotColor)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'column');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t update this column'
+            );
             throw new Error(error);
           })
         )
         .subscribe(() =>
-          this.toastService.showConfirmToast('update', 'column')
+          this.toastService.showToast(
+            'confirm',
+            'Successfully update this column'
+          )
         );
     } else if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -80,11 +86,19 @@ export class ColumnFormComponent implements OnInit {
         .addColumn(name, dotColor)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'column');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t add a new column'
+            );
             throw new Error(error);
           })
         )
-        .subscribe(() => this.toastService.showConfirmToast('add', 'column'));
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new column'
+          )
+        );
     } else {
       return;
     }

@@ -3,8 +3,9 @@ import { combineLatest, firstValueFrom, Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { BoardService } from 'src/app/services/board.service';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-assign-user-form',
@@ -23,7 +24,8 @@ export class AssignUserFormComponent implements OnInit {
   constructor(
     private boardService: BoardService,
     private apollo: ApolloService,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -81,17 +83,41 @@ export class AssignUserFormComponent implements OnInit {
     this.taskId$
       .pipe(
         switchMap(taskId => this.apollo.addUserToTask(taskId, userId)),
+        catchError(async error => {
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t assign this user'
+          );
+          throw new Error(error);
+        }),
         take(1)
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully assigned this user'
+        )
+      );
   }
 
   onRemoveUserFromTask(userId: string) {
     this.taskId$
       .pipe(
         switchMap(taskId => this.apollo.removeUserFromTask(taskId, userId)),
+        catchError(async error => {
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t remove this user from this task'
+          );
+          throw new Error(error);
+        }),
         take(1)
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully remove this user from this task'
+        )
+      );
   }
 }

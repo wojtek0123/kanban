@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContextMenuModalService } from '../../services/context-menu-modal.service';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApolloService } from '../../services/apollo.service';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -10,9 +10,8 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './context-menu-modal.component.html',
   styleUrls: ['./context-menu-modal.component.css'],
 })
-export class ContextMenuModalComponent implements OnInit, OnDestroy {
-  show = false;
-  subscription: Subscription = new Subscription();
+export class ContextMenuModalComponent implements OnInit {
+  show$ = new Observable<boolean>();
 
   constructor(
     private contextMenuModalService: ContextMenuModalService,
@@ -21,9 +20,7 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscription = this.contextMenuModalService.show.subscribe(value => {
-      this.show = value;
-    });
+    this.show$ = this.contextMenuModalService.show;
   }
 
   onHide() {
@@ -40,15 +37,18 @@ export class ContextMenuModalComponent implements OnInit, OnDestroy {
       .remove(id, type)
       .pipe(
         catchError(async error => {
-          this.toastService.showWarningToast('delete', type);
+          this.toastService.showToast(
+            'warning',
+            `Coudn&apos;t delete this ${type}`
+          );
           throw new Error(error);
-        }),
-        tap(() => this.toastService.showConfirmToast('delete', type))
+        })
       )
-      .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          `Successfully deleted this ${type}`
+        )
+      );
   }
 }

@@ -8,11 +8,7 @@ import { SupabaseService } from '../../services/supabase.service';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { FormType } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
 import { Column } from 'src/app/models/column.model';
@@ -63,11 +59,19 @@ export class TasksComponent implements OnInit {
       .changeColumn(columnId, taskId)
       .pipe(
         catchError(async error => {
-          this.toastService.showWarningToast('update', 'task');
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t change the column for this task'
+          );
           throw new Error(error);
         })
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the column for this task'
+        )
+      );
   }
 
   getColumns(columnId: string, columns: ColumnWrapper[]) {
@@ -95,11 +99,20 @@ export class TasksComponent implements OnInit {
       .pipe(
         switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
         catchError(async error => {
-          this.toastService.showWarningToast('update', 'task');
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t change the column for this task'
+          );
           throw new Error(error);
-        })
+        }),
+        take(1)
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the column for this task'
+        )
+      );
   }
 
   dropColumn(event: CdkDragDrop<Column[] | undefined>) {
@@ -121,7 +134,21 @@ export class TasksComponent implements OnInit {
         currColumnId ?? '',
         prevColumnId ?? ''
       )
-      .subscribe();
+      .pipe(
+        catchError(async error => {
+          this.toastService.showToast(
+            'warning',
+            'Coudn&apos;t change the order of the columns'
+          );
+          throw new Error(error);
+        })
+      )
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the order of the columns'
+        )
+      );
   }
 
   onForm(type: FormType, columnId?: string, taskId?: string) {

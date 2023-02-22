@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { FormType, ToastType } from 'src/app/models/types';
-
-type Operation = 'add' | 'delete' | 'update';
+import { ToastType } from 'src/app/models/types';
 
 @Injectable({
   providedIn: 'root',
@@ -27,30 +25,10 @@ export class ToastService {
     return this.type$;
   }
 
-  showWarningToast(operation: Operation, name: FormType) {
-    const message = `Error! Couldn't ${operation} ${
-      operation === 'add' ? 'a new' : 'this'
-    } ${name}`;
-    this.type$.next('warning');
-    this.message$.next(message);
+  showToast(type: ToastType, message: string) {
+    this.type$.next(type);
     this.show$.next(true);
-
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-
-    this.timeout = setTimeout(() => {
-      this.closeToast();
-    }, 3000);
-  }
-
-  showConfirmToast(operation: Operation, name: FormType) {
-    const message = `Successfully ${operation}${
-      operation === 'add' ? 'ed' : 'd'
-    } ${operation === 'add' ? 'a new' : 'this'} ${name}`;
-    this.type$.next('confirm');
     this.message$.next(message);
-    this.show$.next(true);
 
     if (this.timeout) {
       clearTimeout(this.timeout);

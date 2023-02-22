@@ -62,12 +62,19 @@ export class BoardFormComponent implements OnInit {
         .editBoard(id, name)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'board');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t update this board'
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'board'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this board'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -77,14 +84,19 @@ export class BoardFormComponent implements OnInit {
           map(data => data?.id ?? ''),
           switchMap(projectId => this.apollo.addBoard(name, projectId)),
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'board');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t add a new board'
+            );
             throw new Error(error);
           }),
-          tap(() => this.toastService.showConfirmToast('add', 'board')),
           take(1)
         )
         .subscribe(data => {
-          console.log(data);
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new board'
+          );
           this.boardService.onChangeSelectedBoard(data.data?.addBoard);
         });
     }

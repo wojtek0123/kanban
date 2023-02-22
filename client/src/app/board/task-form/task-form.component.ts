@@ -157,12 +157,19 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'task');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t update this task'
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'task'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this task'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
@@ -184,12 +191,19 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'task');
+            this.toastService.showToast(
+              'warning',
+              'Coudn&apos;t add a new task'
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('add', 'task'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new task'
+          )
+        );
     }
     if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;
