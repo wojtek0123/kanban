@@ -239,28 +239,32 @@ export const ADD_BOARD = gql`
       name
       createdAt
       updatedAt
-      projectId
       columns {
-        createdAt
-        dotColor
         id
-        name
-        updatedAt
-        tasks {
-          createdAt
-          description
+        columnId
+        column {
           id
-          tagBackgroundColors
-          tagFontColors
-          title
+          name
+          dotColor
+          columnWrapperId
+          createdAt
           updatedAt
-          tagNames
-          subtasks {
+          tasks {
             id
-            isFinished
-            name
-            updatedAt
+            title
+            description
+            tagNames
+            tagFontColors
+            tagBackgroundColors
             createdAt
+            updatedAt
+            subtasks {
+              id
+              isFinished
+              name
+              createdAt
+              updatedAt
+            }
           }
         }
       }

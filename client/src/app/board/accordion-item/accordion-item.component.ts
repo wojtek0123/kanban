@@ -5,7 +5,8 @@ import { BoardService } from '../../services/board.service';
 import { FormService } from '../../services/form.service';
 import { NavigationService } from '../../services/navigation.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
-import { Observable, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-accordion-item',

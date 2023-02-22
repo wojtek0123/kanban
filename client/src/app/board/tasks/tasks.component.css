@@ -188,6 +188,30 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  background-color: var(--lighter-background-color);
+  opacity: 0.7;
+  width: 100%;
+  border-radius: var(--rounded);
+  min-height: 18rem;
+  height: 100%;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  margin-bottom: 1rem;
+}
+
+.task-placeholder {
+  min-height: 18rem;
+}
+
+.column-placeholder {
+  height: 35rem;
+}
+
+
 .warning-message {
   color: var(--error-color);
   text-align: center;

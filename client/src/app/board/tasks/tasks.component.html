@@ -18,6 +18,9 @@
         (loggedInUser$ | async)?.id !== (projectOwnerId$ | async)
       "
       [id]="columnWrapper.column.id">
+      <div
+        class="cdk-drag-placeholder column-placeholder"
+        *cdkDragPlaceholder></div>
       <div class="section-heading">
         <div class="section-title-wrapper">
           <span
@@ -80,7 +83,10 @@
                 | filterByTitle : searchTerm
                 | filterByTags : tags
             ">
-            <!-- <div > -->
+            <div
+              class="cdk-drag-placeholder task-placeholder"
+              *cdkDragPlaceholder></div>
+
             <select class="card-select" (change)="changeColumn($event)">
               <option [value]="undefined">Choose column</option>
               <option

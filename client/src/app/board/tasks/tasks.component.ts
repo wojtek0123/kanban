@@ -116,6 +116,9 @@ export class TasksComponent implements OnInit {
   }
 
   dropColumn(event: CdkDragDrop<Column[] | undefined>) {
+    if (event.previousContainer === event.container) {
+      return;
+    }
     const currColumnWrapperId = event.container.data?.at(
       event.currentIndex
     )?.columnWrapperId;

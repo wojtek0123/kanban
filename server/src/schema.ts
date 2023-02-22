@@ -555,6 +555,60 @@ export const resolvers = {
           name: args.name,
           projectId: args.projectId,
         },
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+          columns: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              column: {
+                select: {
+                  id: true,
+                  name: true,
+                  dotColor: true,
+                  columnWrapperId: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  tasks: {
+                    select: {
+                      id: true,
+                      title: true,
+                      tagNames: true,
+                      tagBackgroundColors: true,
+                      tagFontColors: true,
+                      description: true,
+                      createdAt: true,
+                      updatedAt: true,
+                      subtasks: {
+                        select: {
+                          id: true,
+                          name: true,
+                          isFinished: true,
+                          createdAt: true,
+                          updatedAt: true,
+                        },
+                        orderBy: {
+                          createdAt: 'asc',
+                        },
+                      },
+                    },
+                    orderBy: {
+                      title: 'asc',
+                    },
+                  },
+                  
+                },
+              }
+            },
+            orderBy: {
+              createdAt: 'asc',
+            },
+          },
+        }
       })
     },
     addColumn: async (

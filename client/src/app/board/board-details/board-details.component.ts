@@ -4,7 +4,8 @@ import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { BoardService } from '../../services/board.service';
 import { FormService } from '../../services/form.service';
-import { Observable, Subject, map, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
 
