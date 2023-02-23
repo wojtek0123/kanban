@@ -18,7 +18,7 @@
         class="button-global button"
         *ngIf="selectedBoard$ | async"
         (click)="onForm('user')">
-        People
+        People ({{ (usersInTheProject$ | async)?.length }})
       </button>
       <button
         type="button"

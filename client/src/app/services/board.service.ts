@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, combineLatest, take } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  map,
+  combineLatest,
+  take,
+  Subject,
+} from 'rxjs';
 import { Board } from '../models/board.model';
 import { Project } from '../models/project.model';
+import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {
@@ -14,6 +22,7 @@ export class BoardService {
   );
   private taskTagsFromTheSelectedBoard$ = new BehaviorSubject<string[]>([]);
   private firstLoad = true;
+  private usersInTheProject$ = new BehaviorSubject<{ user: User }[]>([]);
 
   get getProjects(): Observable<Project[] | undefined> {
     return this.projects;
@@ -37,6 +46,14 @@ export class BoardService {
 
   get getSelectedProject(): Observable<Project | undefined> {
     return this.selectedProject$;
+  }
+
+  get getUsersInTheProject(): Observable<{ user: User }[]> {
+    return this.usersInTheProject$;
+  }
+
+  onSetUsersInTheProject(users: { user: User }[]) {
+    this.usersInTheProject$.next(users);
   }
 
   onSetProjects(projects: Project[] | undefined) {

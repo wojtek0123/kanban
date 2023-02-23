@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { BoardService } from '../services/board.service';
 import { FormType, Status } from '../models/types';
 import { ApolloService } from '../services/apollo.service';
-import { catchError, map, takeUntil } from 'rxjs/operators';
+import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -40,6 +40,15 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.status = 'ok';
         this.boardService.onSetProjects(data);
       });
+
+    this.boardService.getSelectedProject
+      .pipe(
+        takeUntil(this.destroy$),
+        map(project => project?.id ?? ''),
+        switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
+        map(data => data.data.usersFromProject)
+      )
+      .subscribe(data => this.boardService.onSetUsersInTheProject(data));
   }
 
   ngOnDestroy(): void {

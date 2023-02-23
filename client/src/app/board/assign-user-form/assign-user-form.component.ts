@@ -39,11 +39,7 @@ export class AssignUserFormComponent implements OnInit {
       map(project => project?.userId ?? '')
     );
 
-    this.projectUsers$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.id ?? ''),
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(data => data.data.usersFromProject)
-    );
+    this.projectUsers$ = this.boardService.getUsersInTheProject;
 
     this.userFromTask$ = this.taskId$.pipe(
       switchMap(taskId => this.apollo.getUsersFromTask(taskId)),

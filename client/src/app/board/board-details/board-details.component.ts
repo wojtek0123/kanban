@@ -24,6 +24,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   tags!: Observable<string[]>;
   destroy$ = new Subject<void>();
   selectedBoard$: Observable<Board | undefined> | null = null;
+  usersInTheProject$: Observable<{ user: User }[]> | null = null;
 
   constructor(
     private formService: FormService,
@@ -42,6 +43,8 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.userId ?? '')
     );
+
+    this.usersInTheProject$ = this.boardService.getUsersInTheProject;
 
     this.tags = this.boardService.getTags;
 

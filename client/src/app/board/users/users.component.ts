@@ -46,11 +46,7 @@ export class UsersComponent implements OnInit {
       map(data => data?.user.id ?? '')
     );
 
-    this.projectUsers$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.id ?? ''),
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(data => data.data.usersFromProject)
-    );
+    this.projectUsers$ = this.boardService.getUsersInTheProject;
   }
 
   changeTab(tabName: Tabs) {
