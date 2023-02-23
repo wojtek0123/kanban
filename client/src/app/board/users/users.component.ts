@@ -114,7 +114,7 @@ export class UsersComponent implements OnInit {
         map(project => project?.id ?? ''),
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
-          this.toastService.showToast('warning', 'Coudn&apos;t add a new user');
+          this.toastService.showToast('warning', `Couldn't add a new user`);
           throw new Error(error);
         }),
         take(1)
@@ -158,10 +158,7 @@ export class UsersComponent implements OnInit {
           this.apollo.removeUserFromProject(projectId, userId)
         ),
         catchError(async error => {
-          this.toastService.showToast(
-            'warning',
-            'Coudn&apos;t delete this user'
-          );
+          this.toastService.showToast('warning', `Couldn't delete this user`);
           throw new Error(error);
         }),
         take(1)

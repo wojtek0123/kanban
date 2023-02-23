@@ -85,10 +85,7 @@ export class AssignUserFormComponent implements OnInit {
       .pipe(
         switchMap(taskId => this.apollo.addUserToTask(taskId, userId)),
         catchError(async error => {
-          this.toastService.showToast(
-            'warning',
-            'Coudn&apos;t assign this user'
-          );
+          this.toastService.showToast('warning', `Couldn't assign this user`);
           throw new Error(error);
         }),
         take(1)
@@ -108,7 +105,7 @@ export class AssignUserFormComponent implements OnInit {
         catchError(async error => {
           this.toastService.showToast(
             'warning',
-            'Coudn&apos;t remove this user from this task'
+            `Couldn't remove this user from this task`
           );
           throw new Error(error);
         }),

@@ -62,7 +62,7 @@ export class SubtaskFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t update this subtask'
+              `Couldn't update this subtask`
             );
             throw new Error(error);
           })
@@ -83,7 +83,7 @@ export class SubtaskFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t add a new subtask'
+              `Couldn't add a new subtask`
             );
             throw new Error(error);
           })

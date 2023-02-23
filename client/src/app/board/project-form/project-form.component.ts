@@ -60,7 +60,7 @@ export class ProjectFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t update this project'
+              `Couldn't update this project`
             );
             throw new Error(error);
           })
@@ -81,7 +81,7 @@ export class ProjectFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t add a new project'
+              `Couldn't add a new project`
             );
             throw new Error(error);
           })

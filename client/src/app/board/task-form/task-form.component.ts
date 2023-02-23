@@ -157,10 +157,7 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showToast(
-              'warning',
-              'Coudn&apos;t update this task'
-            );
+            this.toastService.showToast('warning', `Couldn't update this task`);
             throw new Error(error);
           })
         )
@@ -191,10 +188,7 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showToast(
-              'warning',
-              'Coudn&apos;t add a new task'
-            );
+            this.toastService.showToast('warning', `Couldn't add a new task`);
             throw new Error(error);
           })
         )

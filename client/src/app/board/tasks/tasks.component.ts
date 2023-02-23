@@ -63,7 +63,7 @@ export class TasksComponent implements OnInit {
         catchError(async error => {
           this.toastService.showToast(
             'warning',
-            'Coudn&apos;t change the column for this task'
+            `Couldn't change the column for this task`
           );
           throw new Error(error);
         })
@@ -103,7 +103,7 @@ export class TasksComponent implements OnInit {
         catchError(async error => {
           this.toastService.showToast(
             'warning',
-            'Coudn&apos;t change the column for this task'
+            `Couldn't change the column for this task`
           );
           throw new Error(error);
         }),
@@ -143,7 +143,7 @@ export class TasksComponent implements OnInit {
         catchError(async error => {
           this.toastService.showToast(
             'warning',
-            'Coudn&apos;t change the order of the columns'
+            `Couldn't change the order of the columns`
           );
           throw new Error(error);
         })

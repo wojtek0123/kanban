@@ -67,7 +67,7 @@ export class ColumnFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t update this column'
+              `Couldn't update this column`
             );
             throw new Error(error);
           })
@@ -86,10 +86,7 @@ export class ColumnFormComponent implements OnInit {
         .addColumn(name, dotColor)
         .pipe(
           catchError(async error => {
-            this.toastService.showToast(
-              'warning',
-              'Coudn&apos;t add a new column'
-            );
+            this.toastService.showToast('warning', `Couldn't add a new column`);
             throw new Error(error);
           })
         )

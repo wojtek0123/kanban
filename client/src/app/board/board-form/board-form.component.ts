@@ -64,7 +64,7 @@ export class BoardFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast(
               'warning',
-              'Coudn&apos;t update this board'
+              `Couldn't update a new board`
             );
             throw new Error(error);
           })
@@ -84,10 +84,7 @@ export class BoardFormComponent implements OnInit {
           map(data => data?.id ?? ''),
           switchMap(projectId => this.apollo.addBoard(name, projectId)),
           catchError(async error => {
-            this.toastService.showToast(
-              'warning',
-              'Coudn&apos;t add a new board'
-            );
+            this.toastService.showToast('warning', `Couldn't add a new board`);
             throw new Error(error);
           }),
           take(1)

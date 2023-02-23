@@ -39,7 +39,7 @@ export class ContextMenuModalComponent implements OnInit {
         catchError(async error => {
           this.toastService.showToast(
             'warning',
-            `Coudn&apos;t delete this ${type}`
+            `Couldn't delete this ${type}`
           );
           throw new Error(error);
         })
