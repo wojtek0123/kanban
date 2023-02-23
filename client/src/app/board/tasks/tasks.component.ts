@@ -9,10 +9,11 @@ import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { FormType } from 'src/app/models/types';
+import { FormType, TabNameAssign } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
 import { Column } from 'src/app/models/column.model';
 import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
+import { AssignUserService } from 'src/app/services/assign-user.service';
 
 @Component({
   selector: 'app-tasks',
@@ -32,7 +33,8 @@ export class TasksComponent implements OnInit {
     private boardService: BoardService,
     private apollo: ApolloService,
     private toastService: ToastService,
-    private formService: FormService
+    private formService: FormService,
+    private assignUserService: AssignUserService
   ) {}
 
   ngOnInit(): void {
@@ -154,13 +156,21 @@ export class TasksComponent implements OnInit {
       );
   }
 
-  onForm(type: FormType, columnId?: string, taskId?: string) {
+  onForm(
+    type: FormType,
+    columnId?: string,
+    taskId?: string,
+    tabName?: TabNameAssign
+  ) {
     this.formService.onChangeFormVisibility(type);
     if (columnId) {
       this.boardService.onChangeSelectedColumnId(columnId);
     }
     if (taskId) {
       this.boardService.onChangeSelectedTaskId(taskId);
+    }
+    if (tabName) {
+      this.assignUserService.changeTab(tabName);
     }
   }
 

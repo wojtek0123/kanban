@@ -6,6 +6,8 @@ import { BoardService } from 'src/app/services/board.service';
 import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { TabNameAssign } from 'src/app/models/types';
+import { AssignUserService } from 'src/app/services/assign-user.service';
 
 @Component({
   selector: 'app-assign-user-form',
@@ -16,7 +18,7 @@ export class AssignUserFormComponent implements OnInit {
   taskId$ = new Observable<string>();
   projectUsers$: Observable<{ user: User }[]> | null = null;
   userFromTask$: Observable<{ user: User }[]> | null = null;
-  tabName: 'peek' | 'assign' = 'peek';
+  tabName$ = new Observable<TabNameAssign>();
   loggedInUserId$: Observable<string> | null = null;
   projectId$: Observable<string> | null = null;
   isUserAssign$: Observable<string[]> = new Observable<string[]>();
@@ -25,11 +27,14 @@ export class AssignUserFormComponent implements OnInit {
     private boardService: BoardService,
     private apollo: ApolloService,
     private supabase: SupabaseService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private assignUserService: AssignUserService
   ) {}
 
   ngOnInit(): void {
     this.taskId$ = this.boardService.getSelectedTaskId;
+
+    this.tabName$ = this.assignUserService.getTabName;
 
     this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(data => data?.user.id ?? '')
@@ -71,8 +76,8 @@ export class AssignUserFormComponent implements OnInit {
     return await firstValueFrom(value$);
   }
 
-  changeTab(tabName: 'peek' | 'assign') {
-    this.tabName = tabName;
+  changeTab(tabName: TabNameAssign) {
+    this.assignUserService.changeTab(tabName);
   }
 
   onAddUserToTask(userId: string) {

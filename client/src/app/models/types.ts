@@ -10,3 +10,5 @@ export type FormType =
 export type ToastType = 'confirm' | 'warning';
 
 export type Status = 'loading' | 'error' | 'ok';
+
+export type TabNameAssign = 'peek' | 'assign';

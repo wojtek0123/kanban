@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FormType } from 'src/app/models/types';
+import { FormType, TabNameAssign } from 'src/app/models/types';
 import { ApolloService } from 'src/app/services/apollo.service';
+import { AssignUserService } from 'src/app/services/assign-user.service';
 import { BoardService } from 'src/app/services/board.service';
 import { FormService } from 'src/app/services/form.service';
 
@@ -18,7 +19,8 @@ export class DisplayNumberOfUsersInTaskComponent implements OnInit {
   constructor(
     private apollo: ApolloService,
     private formService: FormService,
-    private boardService: BoardService
+    private boardService: BoardService,
+    private assignUserService: AssignUserService
   ) {}
 
   ngOnInit(): void {
@@ -34,8 +36,9 @@ export class DisplayNumberOfUsersInTaskComponent implements OnInit {
       );
   }
 
-  onForm(type: FormType) {
+  onForm(type: FormType, tabName: TabNameAssign) {
     this.formService.onChangeFormVisibility(type);
     this.boardService.onChangeSelectedTaskId(this.taskId);
+    this.assignUserService.changeTab(tabName);
   }
 }

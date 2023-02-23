@@ -5,7 +5,7 @@
     <button
       type="button"
       class="button-global"
-      [ngClass]="{ active: tabName === 'peek' }"
+      [ngClass]="{ active: (tabName$ | async) === 'peek' }"
       (click)="changeTab('peek')">
       Users
     </button>
@@ -13,13 +13,13 @@
     <button
       type="button"
       class="button-global"
-      [ngClass]="{ active: tabName === 'assign' }"
+      [ngClass]="{ active: (tabName$ | async) === 'assign' }"
       (click)="changeTab('assign')">
       Add user
     </button>
   </div>
 
-  <div *ngIf="tabName === 'peek'">
+  <div *ngIf="(tabName$ | async) === 'peek'">
     <h3>Users assign to this task</h3>
     <div
       class="assign-user-container"
@@ -37,7 +37,7 @@
       </button>
     </div>
   </div>
-  <div *ngIf="tabName === 'assign'">
+  <div *ngIf="(tabName$ | async) === 'assign'">
     <h3>Assign user to this task</h3>
     <div
       class="assign-user-container"
