@@ -79,8 +79,12 @@ export class ProfileComponent implements OnInit {
         }),
         take(1)
       )
-      .subscribe(() =>
-        this.toastService.showToast('confirm', 'Successfully updated your name')
-      );
+      .subscribe(() => {
+        this.toastService.showToast(
+          'confirm',
+          'Successfully updated your name'
+        );
+        this.onShowNameForm();
+      });
   }
 }

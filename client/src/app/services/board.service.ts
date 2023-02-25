@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  map,
-  combineLatest,
-  take,
-  Subject,
-} from 'rxjs';
+import { BehaviorSubject, Observable, map, combineLatest, take } from 'rxjs';
 import { Board } from '../models/board.model';
 import { Project } from '../models/project.model';
 import { User } from '../models/user.model';
