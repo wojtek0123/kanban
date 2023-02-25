@@ -160,6 +160,7 @@ export const typeDefs = gql`
     removeTask(id: String): Task
     removeSubtask(id: String): Subtask
     changeCompletionState(id: String, state: Boolean): Subtask
+    updateUserName(id: String, name: String): User
   }
 `
 
@@ -325,6 +326,12 @@ export const resolvers = {
   },
 
   Mutation: {
+    updateUserName: (_parent: unknown, args: {id: string, name: string}, context: Context) => {
+      return context.prisma.user.update({
+        where: { id: args.id },
+        data: { name: args.name }
+      })
+    },
     changeColumnWrapper: async (_parent: unknown, args: { currColumnWrapperId: string, prevColumnWrapperId: string, currColumnId: string, prevColumnId: string, boardId: string}, context: Context) => {
       const response = await context.prisma.columnWrapper.create({
         data: {

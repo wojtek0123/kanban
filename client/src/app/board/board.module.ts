@@ -26,6 +26,7 @@ import { FilterMenuComponent } from './filter-menu/filter-menu.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { AssignUserFormComponent } from './assign-user-form/assign-user-form.component';
 import { DisplayNumberOfUsersInTaskComponent } from './display-number-of-users-in-task/display-number-of-users-in-task.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { DisplayNumberOfUsersInTaskComponent } from './display-number-of-users-i
     TasksComponent,
     AssignUserFormComponent,
     DisplayNumberOfUsersInTaskComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserAnimationsModule,

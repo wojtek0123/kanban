@@ -12,13 +12,18 @@
         [editingBoard]="selectedBoard$ | async"></app-context-menu>
     </div>
     <div class="button-container">
-      <p class="board-user">{{ (loggedInUser$ | async)?.email ?? '' }}</p>
+      <button
+        type="button"
+        class="button-global button"
+        (click)="onForm('profile')">
+        Profile
+      </button>
       <button
         type="button"
         class="button-global button"
         *ngIf="selectedBoard$ | async"
         (click)="onForm('user')">
-        People ({{ (usersInTheProject$ | async)?.length }})
+        Users ({{ (usersInTheProject$ | async)?.length }})
       </button>
       <button
         type="button"

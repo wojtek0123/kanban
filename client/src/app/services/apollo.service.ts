@@ -31,6 +31,7 @@ import {
   REMOVE_TASK,
   REMOVE_USER_FROM_PROJECT,
   REMOVE_USER_FROM_TASK,
+  UPDATE_USER_NAME,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
 import { combineLatest, map, mapTo, switchMap, take, tap } from 'rxjs';
@@ -596,5 +597,20 @@ export class ApolloService {
       ),
       take(1)
     );
+  }
+
+  updateUserName(id: string, name: string) {
+    return this.apollo.mutate({
+      mutation: UPDATE_USER_NAME,
+      variables: {
+        id,
+        name,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS,
+        },
+      ],
+    });
   }
 }
