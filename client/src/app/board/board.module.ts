@@ -27,6 +27,8 @@ import { TasksComponent } from './tasks/tasks.component';
 import { AssignUserFormComponent } from './assign-user-form/assign-user-form.component';
 import { DisplayNumberOfUsersInTaskComponent } from './display-number-of-users-in-task/display-number-of-users-in-task.component';
 import { ProfileComponent } from './profile/profile.component';
+import { TaskTableComponent } from './task-table/task-table.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ import { ProfileComponent } from './profile/profile.component';
     AssignUserFormComponent,
     DisplayNumberOfUsersInTaskComponent,
     ProfileComponent,
+    TaskTableComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -61,6 +64,7 @@ import { ProfileComponent } from './profile/profile.component';
     CommonModule,
     DragDropModule,
     FormsModule,
+    MatTableModule,
   ],
   exports: [BoardComponent],
 })

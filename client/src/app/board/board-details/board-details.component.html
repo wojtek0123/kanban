@@ -44,11 +44,16 @@
     <div
       *ngIf="(loggedInUser$ | async)?.id !== (projectOwnerId$ | async)"></div>
     <div class="extended-buttons">
+      <select class="button-global button">
+        <option default>Kanban</option>
+        <option>Table</option>
+        <option>List</option>
+      </select>
       <button
         type="button"
         class="button-global button add-people-button-mobile"
         (click)="onForm('user')">
-        People
+        Users
       </button>
       <app-filter-menu
         [tags]="tags | async"
@@ -63,7 +68,8 @@
     </div>
   </div>
 </div>
-<app-tasks
+<!-- <app-tasks
   [selectedBoard$]="selectedBoard$"
   [searchTerm]="searchTerm"
-  [tags]="checkedTags"></app-tasks>
+  [tags]="checkedTags"></app-tasks> -->
+<app-task-table [selectedBoard]="selectedBoard$"></app-task-table>
