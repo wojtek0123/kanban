@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
@@ -11,6 +16,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-board-form',
   templateUrl: './board-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

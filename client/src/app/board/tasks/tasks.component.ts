@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
@@ -19,6 +24,7 @@ import { AssignUserService } from 'src/app/services/assign-user.service';
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {
   @Input() selectedBoard$: Observable<Board | undefined> | null = null;

@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Project } from '../../models/project.model';
 import { Board } from '../../models/board.model';
 import { BoardService } from '../../services/board.service';
@@ -12,6 +17,7 @@ import { Observable } from 'rxjs';
   selector: 'app-accordion-item',
   templateUrl: './accordion-item.component.html',
   styleUrls: ['./accordion-item.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionItemComponent implements OnInit {
   @Input() project!: Project;

@@ -1,4 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormType } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
@@ -13,6 +18,7 @@ import { Router } from '@angular/router';
   selector: 'app-board-details',
   templateUrl: './board-details.component.html',
   styleUrls: ['./board-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardDetailsComponent implements OnInit, OnDestroy {
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;

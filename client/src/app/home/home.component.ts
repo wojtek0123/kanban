@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 export type formStatus = 'loading' | 'error' | 'ok';
 
@@ -6,6 +6,7 @@ export type formStatus = 'loading' | 'error' | 'ok';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
   isRegister = true;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import {
@@ -23,6 +23,7 @@ type Tag = {
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

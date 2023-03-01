@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ContextMenuModalService } from '../../services/context-menu-modal.service';
 import { Observable } from 'rxjs';
 import { ApolloService } from '../../services/apollo.service';
@@ -9,6 +9,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-context-menu-modal',
   templateUrl: './context-menu-modal.component.html',
   styleUrls: ['./context-menu-modal.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContextMenuModalComponent implements OnInit {
   show$ = new Observable<boolean>();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { Observable } from 'rxjs';
 
@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   selector: 'app-form-wrapper',
   templateUrl: './form-wrapper.component.html',
   styleUrls: ['./form-wrapper.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormWrapperComponent implements OnInit {
   show$!: Observable<boolean>;

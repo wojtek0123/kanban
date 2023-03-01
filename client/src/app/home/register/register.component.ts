@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
 import {
   AbstractControl,
@@ -15,6 +15,7 @@ import { async, catchError } from 'rxjs';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   showToast = false;

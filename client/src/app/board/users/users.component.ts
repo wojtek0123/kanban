@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map, catchError, switchMap, take } from 'rxjs/operators';
@@ -15,6 +15,7 @@ type Tabs = 'add' | 'peek';
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;

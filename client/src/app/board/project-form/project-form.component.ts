@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
@@ -10,6 +10,7 @@ import { catchError } from 'rxjs/operators';
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

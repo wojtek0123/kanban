@@ -1,4 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormService } from '../services/form.service';
 import { Subject } from 'rxjs';
 import { BoardService } from '../services/board.service';
@@ -10,6 +15,7 @@ import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent implements OnInit, OnDestroy {
   status: Status = 'loading';

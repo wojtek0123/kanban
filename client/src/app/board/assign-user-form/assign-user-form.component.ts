@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { combineLatest, firstValueFrom, Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { ApolloService } from 'src/app/services/apollo.service';
@@ -13,6 +13,7 @@ import { AssignUserService } from 'src/app/services/assign-user.service';
   selector: 'app-assign-user-form',
   templateUrl: './assign-user-form.component.html',
   styleUrls: ['./assign-user-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignUserFormComponent implements OnInit {
   taskId$ = new Observable<string>();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { BoardService } from 'src/app/services/board.service';
   selector: 'app-subtask-form',
   templateUrl: './subtask-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubtaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

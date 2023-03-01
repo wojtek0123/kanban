@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
@@ -10,6 +10,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-column-form',
   templateUrl: './column-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColumnFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
