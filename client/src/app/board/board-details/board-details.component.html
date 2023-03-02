@@ -44,7 +44,7 @@
     <div
       *ngIf="(loggedInUser$ | async)?.id !== (projectOwnerId$ | async)"></div>
     <div class="extended-buttons">
-      <select class="button-global button" (change)="changeBoardType($event)">
+      <select class="button-global button" [(ngModel)]="boardType">
         <option default value="kanban">Kanban</option>
         <option value="table">Table</option>
       </select>

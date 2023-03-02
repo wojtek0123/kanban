@@ -67,11 +67,6 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeBoardType(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as BoardTypes;
-    this.boardType = value;
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
   }
