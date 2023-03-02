@@ -124,7 +124,7 @@ export class TasksComponent implements OnInit {
   }
 
   dropColumn(event: CdkDragDrop<Column[] | undefined>) {
-    if (event.previousContainer === event.container) {
+    if (event.previousIndex === event.currentIndex) {
       return;
     }
     const currColumnWrapperId = event.container.data?.at(
@@ -152,7 +152,8 @@ export class TasksComponent implements OnInit {
             `Couldn't change the order of the columns`
           );
           throw new Error(error);
-        })
+        }),
+        take(1)
       )
       .subscribe(() =>
         this.toastService.showToast(
