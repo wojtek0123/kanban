@@ -14,6 +14,8 @@ import { map, takeUntil } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
 
+type BoardTypes = 'kanban' | 'table';
+
 @Component({
   selector: 'app-board-details',
   templateUrl: './board-details.component.html',
@@ -31,6 +33,7 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   selectedBoard$: Observable<Board | undefined> | null = null;
   usersInTheProject$: Observable<{ user: User }[]> | null = null;
+  boardType: BoardTypes = 'kanban';
 
   constructor(
     private formService: FormService,
@@ -62,6 +65,11 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
       this.checkedTags = [''];
       this.checkedTags = [...this.checkedTags, ...data];
     });
+  }
+
+  changeBoardType(event: Event) {
+    const value = (event.target as HTMLSelectElement).value as BoardTypes;
+    this.boardType = value;
   }
 
   ngOnDestroy(): void {

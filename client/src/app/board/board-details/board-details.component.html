@@ -44,10 +44,9 @@
     <div
       *ngIf="(loggedInUser$ | async)?.id !== (projectOwnerId$ | async)"></div>
     <div class="extended-buttons">
-      <select class="button-global button">
-        <option default>Kanban</option>
-        <option>Table</option>
-        <option>List</option>
+      <select class="button-global button" (change)="changeBoardType($event)">
+        <option default value="kanban">Kanban</option>
+        <option value="table">Table</option>
       </select>
       <button
         type="button"
@@ -68,8 +67,11 @@
     </div>
   </div>
 </div>
-<!-- <app-tasks
+<app-tasks
   [selectedBoard$]="selectedBoard$"
   [searchTerm]="searchTerm"
-  [tags]="checkedTags"></app-tasks> -->
-<app-task-table [selectedBoard]="selectedBoard$"></app-task-table>
+  [tags]="checkedTags"
+  *ngIf="boardType === 'kanban'"></app-tasks>
+<app-task-table
+  [selectedBoard]="selectedBoard$"
+  *ngIf="boardType === 'table'"></app-task-table>
