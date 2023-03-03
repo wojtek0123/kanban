@@ -28,8 +28,8 @@ export class TaskTableComponent implements OnInit, OnDestroy {
   displayedTableColumns = [
     'title',
     'description',
-    'columnName',
-    'tagNames',
+    'column name',
+    'tag names',
     'createdAt',
     'updatedAt',
   ];

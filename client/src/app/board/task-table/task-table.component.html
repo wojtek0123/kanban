@@ -1,17 +1,17 @@
-<table mat-table [dataSource]="dataSource">
-  <ng-container
-    *ngFor="let column of displayedTableColumns"
-    matColumnDef="{{ column }}">
-    <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-    <td mat-cell *matCellDef="let element">
-      {{
-        column === 'createdAt' || column === 'updatedAt'
-          ? (element[column] | date)
-          : element[column]
-      }}
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedTableColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedTableColumns"></tr>
-</table>
+<div class="row">
+  <span
+    *ngFor="let column of displayedTableColumns; let i = index"
+    class="{{ 'column column-' + i + ' header' }}"
+    >{{ column }}</span
+  >
+</div>
+<div class="row" *ngFor="let task of tableTask$ | async">
+  <span class="column column-0">{{ task.title }}</span>
+  <span class="column column-1">{{ task.description }}</span>
+  <span class="column column-2">{{ task.columnName }}</span>
+  <span class="column column-3"
+    ><span *ngFor="let tagName of task.tagNames">{{ tagName + ' ' }}</span>
+  </span>
+  <span class="column column-4">{{ task.createdAt | date }}</span>
+  <span class="column column-5">{{ task.updatedAt | date }}</span>
+</div>
