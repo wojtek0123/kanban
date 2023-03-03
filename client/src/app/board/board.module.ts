@@ -29,6 +29,7 @@ import { DisplayNumberOfUsersInTaskComponent } from './display-number-of-users-i
 import { ProfileComponent } from './profile/profile.component';
 import { TaskTableComponent } from './task-table/task-table.component';
 import { MatTableModule } from '@angular/material/table';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MatTableModule } from '@angular/material/table';
     DisplayNumberOfUsersInTaskComponent,
     ProfileComponent,
     TaskTableComponent,
+    UserTasksComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -65,6 +65,19 @@ export const GET_TASKS_FROM_USER = gql`
       task {
         id
         title
+        description
+        tagNames
+        tagFontColors
+        tagBackgroundColors
+        createdAt
+        updatedAt
+        subtasks {
+          id
+          isFinished
+          name
+          createdAt
+          updatedAt
+        }
       }
     }
   }

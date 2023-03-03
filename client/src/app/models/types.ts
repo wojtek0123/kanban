@@ -6,7 +6,8 @@ export type FormType =
   | 'subtask'
   | 'user'
   | 'assign-user'
-  | 'profile';
+  | 'profile'
+  | 'see-tasks';
 
 export type ToastType = 'confirm' | 'warning';
 

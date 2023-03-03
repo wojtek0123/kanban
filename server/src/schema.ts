@@ -91,6 +91,7 @@ export const typeDefs = gql`
     email: String
     usersOnProject: UserOnProject
     userOnTask: UserOnTask
+    column: Column
     createdAt: Date
     updatedAt: Date
   }
@@ -315,6 +316,30 @@ export const resolvers = {
             select: {
               id: true,
               title: true,
+              tagNames: true,
+              tagBackgroundColors: true,
+              tagFontColors: true,
+              description: true,
+              createdAt: true,
+              columnId: true,
+              column: {
+                select: {
+                  name: true,
+                }
+              },
+              updatedAt: true,
+              subtasks: {
+                select: {
+                  id: true,
+                  name: true,
+                  isFinished: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                orderBy: {
+                  createdAt: 'asc',
+                },
+              },
             },
           },
         },

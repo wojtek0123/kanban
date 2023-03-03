@@ -132,7 +132,7 @@ export class ApolloService {
         {
           query: GET_USERS_FROM_PROJECT,
           variables: {
-            projectId: projectId,
+            projectId,
           },
         },
       ],
@@ -154,6 +154,12 @@ export class ApolloService {
           query: GET_USERS_FROM_TASK,
           variables: {
             taskId,
+          },
+        },
+        {
+          query: GET_TASKS_FROM_USER,
+          variables: {
+            userId,
           },
         },
       ],
@@ -203,6 +209,12 @@ export class ApolloService {
           query: GET_USERS_FROM_TASK,
           variables: {
             taskId,
+          },
+        },
+        {
+          query: GET_TASKS_FROM_USER,
+          variables: {
+            userId,
           },
         },
       ],
