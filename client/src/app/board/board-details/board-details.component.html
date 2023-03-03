@@ -80,4 +80,6 @@
   *ngIf="boardType === 'kanban'"></app-tasks>
 <app-task-table
   [selectedBoard]="selectedBoard$"
+  [searchTerm]="searchTerm"
+  [tags]="checkedTags"
   *ngIf="boardType === 'table'"></app-task-table>

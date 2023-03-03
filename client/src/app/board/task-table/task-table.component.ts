@@ -2,14 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Board } from 'src/app/models/board.model';
-import { CdkTableDataSourceInput } from '@angular/cdk/table';
-import { MatTableDataSource } from '@angular/material/table';
 import { Task } from 'src/app/models/task.model';
 
 export interface TaskTable {
@@ -22,8 +19,10 @@ export interface TaskTable {
   styleUrls: ['./task-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskTableComponent implements OnInit, OnDestroy {
+export class TaskTableComponent implements OnInit {
   @Input() selectedBoard: Observable<Board | undefined> | null = null;
+  @Input() searchTerm = '';
+  @Input() tags: string[] = [];
   displayColumns$: Observable<string[]> | undefined = undefined;
   displayedTableColumns = [
     'title',
@@ -33,11 +32,7 @@ export class TaskTableComponent implements OnInit, OnDestroy {
     'createdAt',
     'updatedAt',
   ];
-  dataSource!: CdkTableDataSourceInput<Task & { columnName: string }>;
-  tableTask$:
-    | Observable<(Task & { columnName: string })[] | undefined>
-    | undefined = undefined;
-  destroy$ = new Subject<void>();
+  tableTask$: Observable<Task[] | undefined> | undefined = undefined;
 
   constructor() {}
 
@@ -55,19 +50,5 @@ export class TaskTableComponent implements OnInit, OnDestroy {
     this.displayColumns$ = this.selectedBoard?.pipe(
       map(board => board?.columns.flatMap(column => column.column.name) ?? [])
     );
-
-    if (this.tableTask$) {
-      this.tableTask$.pipe(takeUntil(this.destroy$)).subscribe(data => {
-        if (data) {
-          this.dataSource = new MatTableDataSource<
-            Task & { columnName: string }
-          >(data);
-        }
-      });
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
   }
 }
