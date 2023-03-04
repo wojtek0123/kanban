@@ -9,7 +9,10 @@
   <div
     class="row"
     *ngFor="
-      let task of tasks | filterByTitle : searchTerm | filterByTags : tags
+      let task of tasks
+        | filterByTitle : searchTerm
+        | filterByTags : tags
+        | sort : sortBy.direction : sortBy.column
     ">
     <span class="column column-0">{{ task.title }}</span>
     <span class="column column-1">{{ task.description }}</span>

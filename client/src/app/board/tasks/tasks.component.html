@@ -82,6 +82,7 @@
               let task of columnWrapper.column.tasks
                 | filterByTitle : searchTerm
                 | filterByTags : tags
+                | sort : sortBy.direction : sortBy.column
             ">
             <div
               class="cdk-drag-placeholder task-placeholder"
@@ -166,7 +167,10 @@
               <div class="card-stats">
                 <app-display-number-of-users-in-task
                   [taskId]="task.id"></app-display-number-of-users-in-task>
-                <span>{{ showTimeDifference(task.createdAt) }}</span>
+                <span
+                  >{{ showTimeDifference(task.updatedAt) }} |
+                  {{ showTimeDifference(task.createdAt) }}</span
+                >
               </div>
             </div>
           </div>

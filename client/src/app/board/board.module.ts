@@ -30,6 +30,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { TaskTableComponent } from './task-table/task-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { SortPipe } from '../pipes/sort.pipe';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { UserTasksComponent } from './user-tasks/user-tasks.component';
     ProfileComponent,
     TaskTableComponent,
     UserTasksComponent,
+    SortPipe,
   ],
   imports: [
     BrowserAnimationsModule,

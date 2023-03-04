@@ -14,7 +14,7 @@ import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { FormType, TabNameAssign } from 'src/app/models/types';
+import { FormType, SortBy, TabNameAssign } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
 import { Column } from 'src/app/models/column.model';
 import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
@@ -30,9 +30,11 @@ export class TasksComponent implements OnInit {
   @Input() selectedBoard$: Observable<Board | undefined> | null = null;
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
+  @Input() sortBy!: SortBy;
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
   allTags!: Observable<string[]>;
+  selectedBoard!: Board;
 
   constructor(
     private supabase: SupabaseService,
@@ -190,12 +192,12 @@ export class TasksComponent implements OnInit {
       .subscribe();
   }
 
-  showTimeDifference = (createdAt: Date) => {
+  showTimeDifference = (date: Date) => {
     const currentTime = new Date().getTime();
 
     const seconds =
       Math.floor(currentTime / 1000) -
-      Math.floor(new Date(createdAt).getTime() / 1000);
+      Math.floor(new Date(date).getTime() / 1000);
     const minutes = Math.floor((seconds % 3600) / 60);
     const hours = Math.floor(seconds / 3600);
     const days = Math.floor(hours / 24);

@@ -60,6 +60,29 @@
         (click)="onForm('user')">
         Users
       </button>
+      <select class="button-global button" [(ngModel)]="sortBy">
+        <option default [value]="{ column: 'title', direction: 'asc' }" hidden>
+          Title A-Z
+        </option>
+        <option [ngValue]="{ column: 'title', direction: 'asc' }">
+          Title A-Z
+        </option>
+        <option [ngValue]="{ column: 'title', direction: 'des' }">
+          Title Z-A
+        </option>
+        <option [ngValue]="{ column: 'updatedAt', direction: 'asc' }">
+          UpdatedAt asc
+        </option>
+        <option [ngValue]="{ column: 'updatedAt', direction: 'des' }">
+          UpdatedAt des
+        </option>
+        <option [ngValue]="{ column: 'createdAt', direction: 'asc' }">
+          CreatedAt asc
+        </option>
+        <option [ngValue]="{ column: 'createdAt', direction: 'des' }">
+          CreatedAt des
+        </option>
+      </select>
       <app-filter-menu
         [tags]="tags | async"
         (selectedTags)="onSelectedTags($event)"></app-filter-menu>
@@ -77,9 +100,11 @@
   [selectedBoard$]="selectedBoard$"
   [searchTerm]="searchTerm"
   [tags]="checkedTags"
+  [sortBy]="sortBy"
   *ngIf="boardType === 'kanban'"></app-tasks>
 <app-task-table
   [selectedBoard]="selectedBoard$"
   [searchTerm]="searchTerm"
   [tags]="checkedTags"
+  [sortBy]="sortBy"
   *ngIf="boardType === 'table'"></app-task-table>

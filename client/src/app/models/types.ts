@@ -1,3 +1,5 @@
+import { Task } from './task.model';
+
 export type FormType =
   | 'project'
   | 'board'
@@ -14,3 +16,5 @@ export type ToastType = 'confirm' | 'warning';
 export type Status = 'loading' | 'error' | 'ok';
 
 export type TabNameAssign = 'peek' | 'assign';
+
+export type SortBy = { column: keyof Task; direction: 'asc' | 'des' };

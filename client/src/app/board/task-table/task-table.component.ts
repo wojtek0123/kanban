@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Board } from 'src/app/models/board.model';
 import { Task } from 'src/app/models/task.model';
+import { SortBy } from 'src/app/models/types';
 
 export interface TaskTable {
   [key: string]: string;
@@ -23,6 +24,7 @@ export class TaskTableComponent implements OnInit {
   @Input() selectedBoard: Observable<Board | undefined> | null = null;
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
+  @Input() sortBy!: SortBy;
   displayColumns$: Observable<string[]> | undefined = undefined;
   displayedTableColumns = [
     'title',
