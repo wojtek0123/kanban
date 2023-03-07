@@ -2,9 +2,13 @@
   width: 250px;
 }
 
+.form span {
+  display: block;
+}
+
 .form-button {
   margin-top: 2rem;
-  background-color: var(--black-color);
+  background-color: var(--lighter-background-color);
   transition: opacity 0.3s;
   width: 100%;
 }
@@ -39,6 +43,7 @@
 
 .form-error-message {
   margin-top: 1rem;
+  color: var(--error-color);
 }
 
 .toast {
@@ -105,6 +110,10 @@
 @media (min-width: 1024px) {
   .form {
     width: 400px;
+  }
+
+  .form-button {
+    background-color: var(--black-color);
   }
 }
 

@@ -24,6 +24,13 @@ import { FilterByTitlePipe } from '../pipes/filter-by-title.pipe';
 import { FilterByTagsPipe } from '../pipes/filter-by-tags.pipe';
 import { FilterMenuComponent } from './filter-menu/filter-menu.component';
 import { TasksComponent } from './tasks/tasks.component';
+import { AssignUserFormComponent } from './assign-user-form/assign-user-form.component';
+import { DisplayNumberOfUsersInTaskComponent } from './display-number-of-users-in-task/display-number-of-users-in-task.component';
+import { ProfileComponent } from './profile/profile.component';
+import { TaskTableComponent } from './task-table/task-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { SortPipe } from '../pipes/sort.pipe';
 
 @NgModule({
   declarations: [
@@ -48,6 +55,12 @@ import { TasksComponent } from './tasks/tasks.component';
     FilterByTagsPipe,
     FilterMenuComponent,
     TasksComponent,
+    AssignUserFormComponent,
+    DisplayNumberOfUsersInTaskComponent,
+    ProfileComponent,
+    TaskTableComponent,
+    UserTasksComponent,
+    SortPipe,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -55,6 +68,7 @@ import { TasksComponent } from './tasks/tasks.component';
     CommonModule,
     DragDropModule,
     FormsModule,
+    MatTableModule,
   ],
   exports: [BoardComponent],
 })

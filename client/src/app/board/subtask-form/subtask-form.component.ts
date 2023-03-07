@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 import { BoardService } from 'src/app/services/board.service';
 
@@ -11,6 +11,7 @@ import { BoardService } from 'src/app/services/board.service';
   selector: 'app-subtask-form',
   templateUrl: './subtask-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubtaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -60,12 +61,19 @@ export class SubtaskFormComponent implements OnInit {
         .editSubtask(id, name)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'subtask');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't update this subtask`
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'subtask'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this subtask'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -74,13 +82,18 @@ export class SubtaskFormComponent implements OnInit {
         .addSubtask(name, false)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'subtask');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't add a new subtask`
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('add', 'subtask'))
+          })
         )
         .subscribe(() => {
-          console.log('asdfsdedrfitgy');
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new subtask'
+          );
           this.boardService.refreshSelectedBoard();
         });
     }

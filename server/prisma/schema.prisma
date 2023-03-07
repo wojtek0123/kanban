@@ -19,38 +19,48 @@ model Subtask {
 }
 
 model Task {
-  id                  String    @id @default(uuid())
+  id                  String       @id @default(uuid())
   title               String
   description         String
   columnId            String
-  column              Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  column              Column       @relation(fields: [columnId], references: [id], onDelete: Cascade)
   tagNames            String[]
   tagFontColors       String[]
   tagBackgroundColors String[]
   subtasks            Subtask[]
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime? @updatedAt
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime?    @updatedAt
+  userOnTask          UserOnTask[]
 }
 
 model Column {
-  id        String    @id @default(uuid())
-  name      String
-  dotColor  String
+  id              String        @id @default(uuid())
+  name            String
+  dotColor        String
+  tasks           Task[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?     @updatedAt
+  ColumnWrapper   ColumnWrapper @relation(fields: [columnWrapperId], references: [id])
+  columnWrapperId String        @unique
+}
+
+model ColumnWrapper {
+  id        String   @id @default(uuid())
+  column    Column?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Board     Board    @relation(fields: [boardId], references: [id])
   boardId   String
-  Board     Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  tasks     Task[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
 }
 
 model Board {
-  id        String    @id @default(uuid())
+  id        String          @id @default(uuid())
   name      String
-  columns   Column[]
-  Project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  columns   ColumnWrapper[]
+  Project   Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime        @default(now())
+  updatedAt DateTime?       @updatedAt
 }
 
 model Project {
@@ -70,8 +80,20 @@ model User {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime?       @updatedAt
   usersOnProject UserOnProject[]
+  userOnTask     UserOnTask[]
 
   @@unique([id])
+}
+
+model UserOnTask {
+  user      User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  task      Task      @relation(fields: [taskId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  taskId    String
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now())
+
+  @@id([userId, taskId])
 }
 
 model UserOnProject {

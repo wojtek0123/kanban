@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
@@ -11,6 +16,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-board-form',
   templateUrl: './board-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -62,12 +68,19 @@ export class BoardFormComponent implements OnInit {
         .editBoard(id, name)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'board');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't update a new board`
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'board'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this board'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -77,14 +90,16 @@ export class BoardFormComponent implements OnInit {
           map(data => data?.id ?? ''),
           switchMap(projectId => this.apollo.addBoard(name, projectId)),
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'board');
+            this.toastService.showToast('warning', `Couldn't add a new board`);
             throw new Error(error);
           }),
-          tap(() => this.toastService.showConfirmToast('add', 'board')),
           take(1)
         )
         .subscribe(data => {
-          console.log(data);
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new board'
+          );
           this.boardService.onChangeSelectedBoard(data.data?.addBoard);
         });
     }

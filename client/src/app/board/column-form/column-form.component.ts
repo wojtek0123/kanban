@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
@@ -10,6 +10,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-column-form',
   templateUrl: './column-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColumnFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -65,12 +66,18 @@ export class ColumnFormComponent implements OnInit {
         .editColumn(id, name, dotColor)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'column');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't update this column`
+            );
             throw new Error(error);
           })
         )
         .subscribe(() =>
-          this.toastService.showConfirmToast('update', 'column')
+          this.toastService.showToast(
+            'confirm',
+            'Successfully update this column'
+          )
         );
     } else if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -80,11 +87,16 @@ export class ColumnFormComponent implements OnInit {
         .addColumn(name, dotColor)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'column');
+            this.toastService.showToast('warning', `Couldn't add a new column`);
             throw new Error(error);
           })
         )
-        .subscribe(() => this.toastService.showConfirmToast('add', 'column'));
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new column'
+          )
+        );
     } else {
       return;
     }

@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -58,12 +59,19 @@ export class ProjectFormComponent implements OnInit {
         .editProject(projectId, projectName)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'project');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't update this project`
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'project'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this project'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
@@ -72,12 +80,19 @@ export class ProjectFormComponent implements OnInit {
         .addProject(name)
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'project');
+            this.toastService.showToast(
+              'warning',
+              `Couldn't add a new project`
+            );
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('add', 'project'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new project'
+          )
+        );
     }
 
     if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {

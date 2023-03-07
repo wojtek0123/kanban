@@ -5,7 +5,14 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Project } from '../../models/project.model';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { Observable, map } from 'rxjs';
@@ -21,6 +28,7 @@ import { Observable, map } from 'rxjs';
       transition('default<=>rotated', animate('250ms')),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollapseButtonComponent implements OnInit {
   @Input() project!: Project;

@@ -6,7 +6,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - change color of dots next to column name and tag background
 
 
-## Live demo: [angular-kanban-app.netlify.app](https://angular-kanban-app.netlify.app/)
+## [Live demo](https://project-kanban-angular.vercel.app/)
 ##### Warning! First load an app after login can last up to 2 minutes.
 ###### This is couse of render.com node js app hosting. This problem isn't appear on localhost.
 

@@ -19,9 +19,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-width: max-content;
   width: 100%;
   max-width: var(--task-width);
   padding: 0 1rem;
+}
+
+.add-task {
+  min-width: var(--task-width-mobile);
 }
 
 .section-title-wrapper {
@@ -72,6 +77,11 @@
   margin-bottom: 1rem;
 }
 
+.button {
+  margin: 0;
+  box-shadow: 0 0 2px var(--black-color);
+}
+
 .card p {
   color: var(--font-color-grey);
 }
@@ -118,13 +128,6 @@
   cursor: pointer;
 }
 
-.card-subtask-button {
-  text-align: left;
-  display: flex;
-  align-items: center;
-  padding: 0.25rem 1rem;
-}
-
 .card-subtask-button span {
   font-size: 2rem;
   margin-right: 0.5rem;
@@ -135,6 +138,12 @@
   height: 2px;
   margin: 1rem 0;
   background-color: var(--background-color);
+}
+
+.card-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .card-arrow-move {
@@ -179,9 +188,47 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  background-color: var(--lighter-background-color);
+  opacity: 0.7;
+  width: 100%;
+  border-radius: var(--rounded);
+  min-height: 18rem;
+  height: 100%;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  margin-bottom: 1rem;
+}
+
+.task-placeholder {
+  min-height: 18rem;
+}
+
+.column-placeholder {
+  height: 35rem;
+}
+
+
 .warning-message {
   color: var(--error-color);
   text-align: center;
+}
+
+.card-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--font-color-grey);
+  font-size: 0.85rem;
+}
+
+.card-stats button {
+  color: var(--font-color-grey);
+  font-size: 0.85rem;
+  font-family: 'Oswald', sans-serif;
 }
 
 @media (min-width: 768px) {

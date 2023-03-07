@@ -1,9 +1,9 @@
-import { Column } from './column.model';
+import { ColumnWrapper } from './columnWrapper.model';
 
 export interface Board {
   id: string;
   name: string;
-  columns: Column[];
+  columns: ColumnWrapper[];
   projectId: string;
   createdAt: Date;
   updatedAt: Date;

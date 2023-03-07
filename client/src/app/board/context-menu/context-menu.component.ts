@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { Task } from '../../models/task.model';
 import { Column } from '../../models/column.model';
@@ -12,6 +12,7 @@ import { ContextMenuModalService } from '../../services/context-menu-modal.servi
   selector: 'app-context-menu',
   templateUrl: './context-menu.component.html',
   styleUrls: ['./context-menu.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContextMenuComponent {
   @Input() id!: string;

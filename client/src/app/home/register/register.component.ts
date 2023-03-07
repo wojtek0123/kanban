@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { formStatus } from '../home.component';
 import { Router } from '@angular/router';
 import { ApolloService } from 'src/app/services/apollo.service';
@@ -10,6 +15,7 @@ import { async, catchError } from 'rxjs';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   showToast = false;
@@ -18,11 +24,17 @@ export class RegisterComponent {
   errorMessage = '';
   timeoutCleaner: NodeJS.Timeout | null = null;
 
-  registerForm = this.fb.group({
-    email: ['', [Validators.email, Validators.required]],
-    nickname: ['', [Validators.maxLength(25), Validators.required]],
-    password: ['', [Validators.minLength(8), Validators.required]],
-  });
+  registerForm = this.fb.group(
+    {
+      email: ['', [Validators.email, Validators.required]],
+      nickname: ['', [Validators.maxLength(25), Validators.required]],
+      password: ['', [Validators.minLength(8), Validators.required]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    {
+      validators: [this.matchPassword('password', 'confirmPassword')],
+    }
+  );
 
   constructor(
     private supabase: SupabaseService,
@@ -46,8 +58,44 @@ export class RegisterComponent {
     return this.registerForm.controls.nickname.value?.length ?? 0;
   }
 
+  get confirmPasswordLength() {
+    return this.registerForm.controls.confirmPassword.value?.length ?? 0;
+  }
+
+  get passwordLength() {
+    return this.registerForm.controls.password.value?.length ?? 0;
+  }
+
+  matchPassword(password: string, confirmPassword: string) {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const passwordControl = formGroup.get(password);
+      const confirmPasswordControl = formGroup.get(confirmPassword);
+
+      if (!passwordControl || !confirmPasswordControl) {
+        return null;
+      }
+
+      if (
+        confirmPasswordControl.errors &&
+        !confirmPasswordControl.errors['passwordMismatch']
+      ) {
+        return null;
+      }
+
+      if (passwordControl.value !== confirmPasswordControl.value) {
+        confirmPasswordControl.setErrors({ passwordMismatch: true });
+        return { passwordMismatch: true };
+      } else {
+        confirmPasswordControl.setErrors(null);
+        return null;
+      }
+    };
+  }
+
   async onSubmit() {
     if (this.registerForm.invalid) {
+      this.status = 'error';
+      this.errorMessage = 'Form is invalid!';
       return;
     }
 

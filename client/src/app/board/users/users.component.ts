@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
-import { map, catchError, tap, switchMap, take } from 'rxjs/operators';
+import { map, catchError, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { BoardService } from '../../services/board.service';
 import { User } from 'src/app/models/user.model';
 import { ToastService } from '../../services/toast.service';
+import { Task } from 'src/app/models/task.model';
+
+type Tabs = 'add' | 'peek';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
   submitted = false;
-  tabName: 'add' | 'peek' = 'peek';
+  tabName: Tabs = 'peek';
   projectUsers$: Observable<{ user: User }[]> | null = null;
   loggedInUserId$: Observable<string> | null = null;
   projectId$: Observable<string> | null = null;
+  tasksFromUser!: { task: Task }[];
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -42,20 +47,17 @@ export class UsersComponent implements OnInit {
       map(data => data?.user.id ?? '')
     );
 
-    this.projectUsers$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.id ?? ''),
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(data => data.data.usersFromProject)
-    );
+    this.projectUsers$ = this.boardService.getUsersInTheProject;
   }
 
-  changeTabToAdd() {
-    this.tabName = 'add';
-    this.form.reset();
-  }
+  changeTab(tabName: Tabs) {
+    this.tabName = tabName;
 
-  changeTabToPeek() {
-    this.tabName = 'peek';
+    if (tabName === 'add') {
+      this.form.reset();
+      this.submitted = false;
+      this.searchedFilteredUsers$ = null;
+    }
   }
 
   onSubmit() {
@@ -105,9 +107,6 @@ export class UsersComponent implements OnInit {
         )
       )
     );
-
-    this.submitted = false;
-    this.form.reset();
   }
 
   onAddUser(userId: string) {
@@ -116,16 +115,16 @@ export class UsersComponent implements OnInit {
         map(project => project?.id ?? ''),
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
-          this.toastService.showWarningToast('add', 'user');
+          this.toastService.showToast('warning', `Couldn't add a new user`);
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('add', 'user')),
         take(1)
       )
       .subscribe(() => {
         if (!this.searchedFilteredUsers$) {
           return;
         }
+        this.toastService.showToast('confirm', 'Successfully added a new user');
         this.searchedFilteredUsers$ = this.searchedFilteredUsers$.pipe(
           map(data => data.filter(user => user.id !== userId))
         );
@@ -133,6 +132,26 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
+    this.apollo
+      .getTasksFromUser(userId)
+      .pipe(
+        map(data => data.data.getTasksFromUser),
+        take(1)
+      )
+      .subscribe(data => {
+        console.log(data);
+        this.tasksFromUser = data;
+
+        for (let index = 0; index < data.length; index++) {
+          const taskId = data.at(index)?.task.id ?? '';
+
+          this.apollo
+            .removeUserFromTask(taskId, userId)
+            .pipe(take(1))
+            .subscribe();
+        }
+      });
+
     this.boardService.getSelectedProject
       .pipe(
         map(project => project?.id ?? ''),
@@ -140,12 +159,13 @@ export class UsersComponent implements OnInit {
           this.apollo.removeUserFromProject(projectId, userId)
         ),
         catchError(async error => {
-          this.toastService.showWarningToast('delete', 'user');
+          this.toastService.showToast('warning', `Couldn't delete this user`);
           throw new Error(error);
         }),
-        tap(() => this.toastService.showConfirmToast('delete', 'user')),
         take(1)
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast('confirm', 'Successfully deleted this user')
+      );
   }
 }

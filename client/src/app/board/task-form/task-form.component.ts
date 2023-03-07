@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import {
@@ -23,6 +23,7 @@ type Tag = {
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -157,12 +158,16 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('update', 'task');
+            this.toastService.showToast('warning', `Couldn't update this task`);
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('update', 'task'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully updated this task'
+          )
+        );
     }
     if (this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
@@ -184,12 +189,16 @@ export class TaskFormComponent implements OnInit {
         )
         .pipe(
           catchError(async error => {
-            this.toastService.showWarningToast('add', 'task');
+            this.toastService.showToast('warning', `Couldn't add a new task`);
             throw new Error(error);
-          }),
-          tap(() => this.toastService.showConfirmToast('add', 'task'))
+          })
         )
-        .subscribe();
+        .subscribe(() =>
+          this.toastService.showToast(
+            'confirm',
+            'Successfully added a new task'
+          )
+        );
     }
     if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
       return;

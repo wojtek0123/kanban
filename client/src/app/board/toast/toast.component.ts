@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
 import { Observable } from 'rxjs';
 import { ToastType } from 'src/app/models/types';
@@ -7,6 +7,7 @@ import { ToastType } from 'src/app/models/types';
   selector: 'app-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent implements OnInit {
   message$: Observable<string> | null = null;

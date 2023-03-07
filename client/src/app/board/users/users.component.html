@@ -1,20 +1,21 @@
 <div class="wrapper">
-  <div class="button-wrapper">
+  <div
+    class="button-wrapper"
+    *ngIf="(loggedInUserId$ | async) === (projectId$ | async)">
     <button
       type="button"
       class="button-global"
       [ngClass]="{ active: tabName === 'peek' }"
-      (click)="changeTabToPeek()">
-      All user in project
+      (click)="changeTab('peek')">
+      Users
     </button>
 
     <button
-      *ngIf="(loggedInUserId$ | async) === (projectId$ | async)"
       type="button"
       class="button-global"
       [ngClass]="{ active: tabName === 'add' }"
-      (click)="changeTabToAdd()">
-      Add more
+      (click)="changeTab('add')">
+      Add user
     </button>
   </div>
 
@@ -22,7 +23,7 @@
     class="form-global form"
     (ngSubmit)="onSubmit()"
     [formGroup]="form"
-    *ngIf="tabName === 'add'; else peek">
+    *ngIf="tabName === 'add'">
     <p class="form-message">Find user by his email</p>
 
     <label class="form-label-global" for="email">Text</label>
@@ -54,6 +55,12 @@
       loading...
     </p>
 
+    <p
+      class="text-danger-global"
+      *ngIf="(searchedFilteredUsers$ | async)?.length === 0">
+      Not found user!
+    </p>
+
     <div class="user" *ngFor="let user of searchedFilteredUsers$ | async">
       <p>{{ user.email }}</p>
 
@@ -67,25 +74,25 @@
     </div>
   </div>
 
-  <ng-template #peek>
+  <div *ngIf="tabName === 'peek'">
     <p *ngIf="(projectUsers$ | async) === null">loading...</p>
 
-    <div class="user" *ngFor="let projectUser of projectUsers$ | async">
-      <p>{{ projectUser.user.email }}</p>
+    <div class="user" *ngFor="let data of projectUsers$ | async">
+      <p>{{ data.user.email }}</p>
 
-      <p *ngIf="projectUser.user.id === (projectId$ | async)">Owner</p>
+      <p *ngIf="data.user.id === (projectId$ | async)">Owner</p>
 
       <button
         type="button"
         *ngIf="
-          projectUser.user.id !== (loggedInUserId$ | async) &&
+          data.user.id !== (loggedInUserId$ | async) &&
           (loggedInUserId$ | async) === (projectId$ | async)
         "
         class="button-global user-button"
         title="Remove"
-        (click)="onRemoveUser(projectUser.user.id)">
+        (click)="onRemoveUser(data.user.id)">
         <img src="../../../assets/minus-solid.svg" alt="minus" />
       </button>
     </div>
-  </ng-template>
+  </div>
 </div>

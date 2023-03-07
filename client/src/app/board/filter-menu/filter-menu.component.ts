@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-filter-menu',
   templateUrl: './filter-menu.component.html',
   styleUrls: ['./filter-menu.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterMenuComponent implements OnInit {
   @Input() tags: string[] | null = null;

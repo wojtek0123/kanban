@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Project } from '../../models/project.model';
 import { Observable } from 'rxjs';
 import { BoardService } from 'src/app/services/board.service';
@@ -7,6 +7,7 @@ import { BoardService } from 'src/app/services/board.service';
   selector: 'app-accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionComponent implements OnInit {
   projects$!: Observable<Project[] | undefined>;

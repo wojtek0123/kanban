@@ -11,11 +11,11 @@
     placeholder="email@xyz.abc"
     formControlName="email"
     required />
-  <p
+  <span
     class="form-invalid-message"
     *ngIf="formControls.email.invalid && formControls.email.touched">
-    Please provide valid email.
-  </p>
+    Provide valid email.
+  </span>
   <label class="form-label" for="nick">Nick</label>
   <input
     class="form-input"
@@ -27,12 +27,12 @@
     }"
     placeholder="john"
     required />
-  <p
+  <span
     class="form-invalid-message"
     *ngIf="nicknameLength === 0 && formControls.nickname.touched">
     Nickname is required.
-  </p>
-  <p
+  </span>
+  <span
     class="form-invalid-message"
     *ngIf="
       formControls.nickname.invalid &&
@@ -40,7 +40,7 @@
       formControls.nickname.touched
     ">
     Nickname has max 25 characters.
-  </p>
+  </span>
   <label class="form-label" for="password">Password</label>
   <input
     class="form-input"
@@ -52,26 +52,61 @@
       error: formControls.password.invalid && formControls.password.touched
     }"
     required />
-  <p
+  <span
     class="form-invalid-message"
-    *ngIf="formControls.password.invalid && formControls.password.touched">
+    *ngIf="
+      formControls.password.invalid &&
+      formControls.password.touched &&
+      passwordLength !== 0
+    ">
     Password should have at least 8 characters
-  </p>
-  <p class="form-error-message" *ngIf="status === 'error'">
+  </span>
+  <span
+    class="form-invalid-message"
+    *ngIf="passwordLength === 0 && formControls.password.touched">
+    Password is required
+  </span>
+
+  <label class="form-label" for="confirm-password">Confirm password</label>
+  <input
+    class="form-input"
+    type="password"
+    placeholder="•••••••••"
+    id="confirm-password"
+    formControlName="confirmPassword"
+    [ngClass]="{
+      error:
+        formControls.confirmPassword.invalid &&
+        formControls.confirmPassword.touched
+    }"
+    required />
+  <span
+    class="form-invalid-message"
+    *ngIf="confirmPasswordLength === 0 && formControls.confirmPassword.touched">
+    Confirm password is required
+  </span>
+  <span
+    class="form-invalid-message"
+    *ngIf="formControls.confirmPassword.touched && formControls.confirmPassword.errors?.['passwordMismatch']">
+    Passwords do not match
+  </span>
+
+  <span class="form-error-message" *ngIf="status === 'error'">
     {{ errorMessage }}
-  </p>
+  </span>
+
   <button type="submit" class="button-global form-button">
-    <p *ngIf="status !== 'loading'">Register</p>
-    <p *ngIf="status === 'loading'">Loading...</p>
+    <span *ngIf="status !== 'loading'">Register</span>
+    <span *ngIf="status === 'loading'">Loading...</span>
   </button>
 </form>
 
 <div class="toast" [ngClass]="{ show: showToast }">
-  <p class="toast-message" *ngIf="status === 'ok'">
+  <span class="toast-message" *ngIf="status === 'ok'">
     Check your mailbox. We send you a email to verify!
-  </p>
-  <p class="toast-message" *ngIf="status === 'error'">
+  </span>
+  <span class="toast-message" *ngIf="status === 'error'">
     {{ errorMessage }}
-  </p>
+  </span>
   <button class="toast-button" type="button" (click)="closeToast()">X</button>
 </div>

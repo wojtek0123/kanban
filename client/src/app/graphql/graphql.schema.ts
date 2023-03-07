@@ -6,13 +6,6 @@ export const GET_PROJECTS = gql`
       id
       name
       userId
-      usersOnProject {
-        user {
-          email
-          id
-          name
-        }
-      }
       createdAt
       updatedAt
       boards {
@@ -22,25 +15,30 @@ export const GET_PROJECTS = gql`
         updatedAt
         columns {
           id
-          name
-          dotColor
-          createdAt
-          updatedAt
-          tasks {
+          columnId
+          column {
             id
-            title
-            description
-            tagNames
-            tagFontColors
-            tagBackgroundColors
+            name
+            dotColor
+            columnWrapperId
             createdAt
             updatedAt
-            subtasks {
+            tasks {
               id
-              isFinished
-              name
+              title
+              description
+              tagNames
+              tagFontColors
+              tagBackgroundColors
               createdAt
               updatedAt
+              subtasks {
+                id
+                isFinished
+                name
+                createdAt
+                updatedAt
+              }
             }
           }
         }
@@ -61,6 +59,39 @@ export const GET_USERS = gql`
   }
 `;
 
+export const GET_TASKS_FROM_USER = gql`
+  query GetTasksFromUser($userId: String) {
+    getTasksFromUser(userId: $userId) {
+      task {
+        id
+        title
+        description
+        tagNames
+        tagFontColors
+        tagBackgroundColors
+        createdAt
+        updatedAt
+        subtasks {
+          id
+          isFinished
+          name
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USERS_AND_TASKS = gql`
+  query GetUsersAndTasks {
+    getUsersAndTasks {
+      taskId
+      userId
+    }
+  }
+`;
+
 export const ADD_USER_TO_PROJECT = gql`
   mutation AddUserToProject($projectId: String, $userId: String) {
     addUserToProject(projectId: $projectId, userId: $userId) {
@@ -77,21 +108,45 @@ export const ADD_USER_TO_PROJECT = gql`
   }
 `;
 
+export const ADD_USER_TO_TASK = gql`
+  mutation AddUserToTask($userId: String, $taskId: String) {
+    addUserToTask(userId: $userId, taskId: $taskId) {
+      createdAt
+      userId
+      taskId
+      updatedAt
+    }
+  }
+`;
+
 export const REMOVE_USER_FROM_PROJECT = gql`
   mutation RemoveUserFromProject($projectId: String, $userId: String) {
     removeUserFromProject(projectId: $projectId, userId: $userId) {
-      id
-      usersOnProject {
-        user {
-          email
-          id
-          name
-        }
-      }
+      projectId
       userId
       updatedAt
-      name
       createdAt
+    }
+  }
+`;
+
+export const REMOVE_USER_FROM_TASK = gql`
+  mutation RemoveUserFromTask($taskId: String, $userId: String) {
+    removeUserFromTask(taskId: $taskId, userId: $userId) {
+      taskId
+      userId
+    }
+  }
+`;
+
+export const GET_USERS_FROM_TASK = gql`
+  query UsersFromTask($taskId: String) {
+    usersFromTask(taskId: $taskId) {
+      user {
+        name
+        email
+        id
+      }
     }
   }
 `;
@@ -116,6 +171,26 @@ export const GET_FILTERED_USERS = gql`
       email
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const CHANGE_COLUMN_WRAPPER = gql`
+  mutation ChangeColumnWrapper(
+    $currColumnWrapperId: String
+    $prevColumnWrapperId: String
+    $currColumnId: String
+    $prevColumnId: String
+    $boardId: String
+  ) {
+    changeColumnWrapper(
+      currColumnWrapperId: $currColumnWrapperId
+      prevColumnWrapperId: $prevColumnWrapperId
+      currColumnId: $currColumnId
+      prevColumnId: $prevColumnId
+      boardId: $boardId
+    ) {
+      id
     }
   }
 `;
@@ -177,28 +252,32 @@ export const ADD_BOARD = gql`
       name
       createdAt
       updatedAt
-      projectId
       columns {
-        createdAt
-        dotColor
         id
-        name
-        updatedAt
-        tasks {
-          createdAt
-          description
+        columnId
+        column {
           id
-          tagBackgroundColors
-          tagFontColors
-          title
+          name
+          dotColor
+          columnWrapperId
+          createdAt
           updatedAt
-          tagNames
-          subtasks {
+          tasks {
             id
-            isFinished
-            name
-            updatedAt
+            title
+            description
+            tagNames
+            tagFontColors
+            tagBackgroundColors
             createdAt
+            updatedAt
+            subtasks {
+              id
+              isFinished
+              name
+              createdAt
+              updatedAt
+            }
           }
         }
       }
@@ -345,6 +424,15 @@ export const REMOVE_SUBTASK = gql`
   mutation removeSubtask($id: String) {
     removeSubtask(id: $id) {
       id
+    }
+  }
+`;
+
+export const UPDATE_USER_NAME = gql`
+  mutation updateUserName($id: String, $name: String) {
+    updateUserName(id: $id, name: $name) {
+      id
+      name
     }
   }
 `;

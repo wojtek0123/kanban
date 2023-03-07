@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
@@ -8,33 +13,36 @@ import { SupabaseService } from '../../services/supabase.service';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
-import { FormType } from 'src/app/models/types';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { FormType, SortBy, TabNameAssign } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
+import { Column } from 'src/app/models/column.model';
+import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
+import { AssignUserService } from 'src/app/services/assign-user.service';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {
   @Input() selectedBoard$: Observable<Board | undefined> | null = null;
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
+  @Input() sortBy!: SortBy;
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
   allTags!: Observable<string[]>;
+  selectedBoard!: Board;
 
   constructor(
     private supabase: SupabaseService,
     private boardService: BoardService,
     private apollo: ApolloService,
     private toastService: ToastService,
-    private formService: FormService
+    private formService: FormService,
+    private assignUserService: AssignUserService
   ) {}
 
   ngOnInit(): void {
@@ -61,63 +69,117 @@ export class TasksComponent implements OnInit {
       .changeColumn(columnId, taskId)
       .pipe(
         catchError(async error => {
-          this.toastService.showWarningToast('update', 'task');
+          this.toastService.showToast(
+            'warning',
+            `Couldn't change the column for this task`
+          );
           throw new Error(error);
         })
       )
-      .subscribe();
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the column for this task'
+        )
+      );
   }
 
-  getColumns(columnId: string, selectedBoard: Board | null | undefined) {
-    return (
-      selectedBoard?.columns.filter(column => column.id !== columnId) ?? []
-    );
+  getColumns(columnId: string, columns: ColumnWrapper[]) {
+    return columns
+      .flatMap(column => column.column)
+      .filter(col => col.id !== columnId);
   }
 
   drop(event: CdkDragDrop<Task[]>) {
-    const prevArray = [...event.previousContainer.data];
-    const currArray = [...event.container.data];
-
     if (event.previousContainer === event.container) {
-      moveItemInArray(currArray, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        prevArray,
-        currArray,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      const id = event.item.element.nativeElement.id;
-
-      const currentColumn$ = this.boardService.getSelectedBoard.pipe(
-        map(board =>
-          board?.columns
-            .filter(column => column.id === event.container.id)
-            .at(0)
-        )
-      );
-
-      currentColumn$
-        .pipe(
-          switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
-          catchError(async error => {
-            this.toastService.showWarningToast('update', 'task');
-            throw new Error(error);
-          }),
-          take(1)
-        )
-        .subscribe();
+      return;
     }
+    const id = event.item.element.nativeElement.id;
+
+    const currentColumn$ = this.boardService.getSelectedBoard.pipe(
+      map(board =>
+        board?.columns
+          .flatMap(column => column.column)
+          .filter(column => column.id === event.container.id)
+          .at(0)
+      )
+    );
+
+    currentColumn$
+      .pipe(
+        switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
+        catchError(async error => {
+          this.toastService.showToast(
+            'warning',
+            `Couldn't change the column for this task`
+          );
+          throw new Error(error);
+        }),
+        take(1)
+      )
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the column for this task'
+        )
+      );
   }
 
-  onForm(type: FormType, columnId?: string, taskId?: string) {
+  dropColumn(event: CdkDragDrop<Column[] | undefined>) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    const currColumnWrapperId = event.container.data?.at(
+      event.currentIndex
+    )?.columnWrapperId;
+
+    const prevColumnWrapperId = event.container.data?.at(
+      event.previousIndex
+    )?.columnWrapperId;
+
+    const currColumnId = event.container.data?.at(event.currentIndex)?.id;
+    const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
+
+    this.apollo
+      .changeColumnWrapper(
+        currColumnWrapperId ?? '',
+        prevColumnWrapperId ?? '',
+        currColumnId ?? '',
+        prevColumnId ?? ''
+      )
+      .pipe(
+        catchError(async error => {
+          this.toastService.showToast(
+            'warning',
+            `Couldn't change the order of the columns`
+          );
+          throw new Error(error);
+        }),
+        take(1)
+      )
+      .subscribe(() =>
+        this.toastService.showToast(
+          'confirm',
+          'Successfully changed the order of the columns'
+        )
+      );
+  }
+
+  onForm(
+    type: FormType,
+    columnId?: string,
+    taskId?: string,
+    tabName?: TabNameAssign
+  ) {
     this.formService.onChangeFormVisibility(type);
     if (columnId) {
       this.boardService.onChangeSelectedColumnId(columnId);
     }
     if (taskId) {
       this.boardService.onChangeSelectedTaskId(taskId);
+    }
+    if (tabName) {
+      this.assignUserService.changeTab(tabName);
     }
   }
 
@@ -128,5 +190,41 @@ export class TasksComponent implements OnInit {
     this.apollo
       .updateCompletionStateOfSubtask(id ?? '', target.checked)
       .subscribe();
+  }
+
+  showTimeDifference = (date: Date) => {
+    const currentTime = new Date().getTime();
+
+    const seconds =
+      Math.floor(currentTime / 1000) -
+      Math.floor(new Date(date).getTime() / 1000);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const hours = Math.floor(seconds / 3600);
+    const days = Math.floor(hours / 24);
+
+    if (days >= 1) {
+      return `${days}d ago`;
+    }
+    if (hours >= 1) {
+      return `${hours}h ago`;
+    }
+    if (minutes >= 1) {
+      return `${minutes}m ago`;
+    }
+
+    return `${seconds}s ago`;
+  };
+
+  columnIds(columnId: string, columns: ColumnWrapper[] | undefined) {
+    if (!columns) return [];
+    const filteredColumns = columns
+      .flatMap(column => column.column)
+      .filter(column => column.id !== columnId);
+    return [...filteredColumns.map(column => column.id)];
+  }
+
+  columns(board: Board | null | undefined) {
+    if (!board) return;
+    return board.columns.flatMap(column => column.column);
   }
 }

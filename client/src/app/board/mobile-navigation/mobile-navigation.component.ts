@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormType } from '../../models/types';
 import { FormService } from '../../services/form.service';
 import {
@@ -34,6 +34,7 @@ import { Observable } from 'rxjs';
       transition('initial<=>final', animate('300ms')),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileNavigationComponent implements OnInit {
   showMenu$!: Observable<boolean>;

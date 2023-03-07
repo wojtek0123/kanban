@@ -8,7 +8,9 @@ import {
   ADD_TASK,
   ADD_USER,
   ADD_USER_TO_PROJECT,
+  ADD_USER_TO_TASK,
   CHANGE_COLUMN,
+  CHANGE_COLUMN_WRAPPER,
   CHANGE_COMPLETION_STATE,
   EDIT_BOARD,
   EDIT_COLUMN,
@@ -17,14 +19,19 @@ import {
   EDIT_TASK,
   GET_FILTERED_USERS,
   GET_PROJECTS,
+  GET_TASKS_FROM_USER,
   GET_USERS,
+  GET_USERS_AND_TASKS,
   GET_USERS_FROM_PROJECT,
+  GET_USERS_FROM_TASK,
   REMOVE_BOARD,
   REMOVE_COLUMN,
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
   REMOVE_USER_FROM_PROJECT,
+  REMOVE_USER_FROM_TASK,
+  UPDATE_USER_NAME,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
 import { combineLatest, map, mapTo, switchMap, take, tap } from 'rxjs';
@@ -33,6 +40,7 @@ import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
 import { User } from '../models/user.model';
 import { BoardService } from './board.service';
+import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -77,11 +85,37 @@ export class ApolloService {
   }
 
   getUsersFromProject(projectId: string) {
-    return this.apollo.watchQuery<{ usersFromProject: Array<{ user: User }> }>({
+    return this.apollo.watchQuery<{ usersFromProject: { user: User }[] }>({
       query: GET_USERS_FROM_PROJECT,
       variables: {
         projectId,
       },
+    }).valueChanges;
+  }
+
+  getUsersFromTask(taskId: string) {
+    return this.apollo.watchQuery<{ usersFromTask: { user: User }[] }>({
+      query: GET_USERS_FROM_TASK,
+      variables: {
+        taskId,
+      },
+    }).valueChanges;
+  }
+
+  getTasksFromUser(userId: string) {
+    return this.apollo.watchQuery<{ getTasksFromUser: { task: Task }[] }>({
+      query: GET_TASKS_FROM_USER,
+      variables: {
+        userId,
+      },
+    }).valueChanges;
+  }
+
+  getUsersAndTasks() {
+    return this.apollo.watchQuery<{
+      getUsersAndTasks: { taskId: string; userId: string }[];
+    }>({
+      query: GET_USERS_AND_TASKS,
     }).valueChanges;
   }
 
@@ -98,7 +132,34 @@ export class ApolloService {
         {
           query: GET_USERS_FROM_PROJECT,
           variables: {
-            projectId: projectId,
+            projectId,
+          },
+        },
+      ],
+    });
+  }
+
+  addUserToTask(taskId: string, userId: string) {
+    return this.apollo.mutate<{}>({
+      mutation: ADD_USER_TO_TASK,
+      variables: {
+        taskId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS_AND_TASKS,
+        },
+        {
+          query: GET_USERS_FROM_TASK,
+          variables: {
+            taskId,
+          },
+        },
+        {
+          query: GET_TASKS_FROM_USER,
+          variables: {
+            userId,
           },
         },
       ],
@@ -106,7 +167,12 @@ export class ApolloService {
   }
 
   removeUserFromProject(projectId: string, userId: string) {
-    return this.apollo.mutate<{ removeUserFromProject: Project }>({
+    return this.apollo.mutate<{
+      removeUserFromProject: {
+        projectId: string;
+        userId: string;
+      };
+    }>({
       mutation: REMOVE_USER_FROM_PROJECT,
       variables: {
         projectId,
@@ -117,6 +183,38 @@ export class ApolloService {
           query: GET_USERS_FROM_PROJECT,
           variables: {
             projectId: projectId,
+          },
+        },
+      ],
+    });
+  }
+
+  removeUserFromTask(taskId: string, userId: string) {
+    return this.apollo.mutate<{
+      removeUserFromTask: {
+        taskId: string;
+        userId: string;
+      };
+    }>({
+      mutation: REMOVE_USER_FROM_TASK,
+      variables: {
+        taskId,
+        userId,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS_AND_TASKS,
+        },
+        {
+          query: GET_USERS_FROM_TASK,
+          variables: {
+            taskId,
+          },
+        },
+        {
+          query: GET_TASKS_FROM_USER,
+          variables: {
+            userId,
           },
         },
       ],
@@ -474,5 +572,57 @@ export class ApolloService {
       ),
       take(1)
     );
+  }
+
+  changeColumnWrapper(
+    currColumnWrapperId: string,
+    prevColumnWrapperId: string,
+    currColumnId: string,
+    prevColumnId: string
+  ) {
+    const userId$ = this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id)
+    );
+
+    const boardId$ = this.board.getSelectedBoard.pipe(map(board => board?.id));
+
+    return combineLatest([userId$, boardId$]).pipe(
+      switchMap(([userId, boardId]) =>
+        this.apollo.mutate({
+          mutation: CHANGE_COLUMN_WRAPPER,
+          variables: {
+            currColumnWrapperId,
+            prevColumnWrapperId,
+            currColumnId,
+            prevColumnId,
+            boardId,
+          },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      ),
+      take(1)
+    );
+  }
+
+  updateUserName(id: string, name: string) {
+    return this.apollo.mutate({
+      mutation: UPDATE_USER_NAME,
+      variables: {
+        id,
+        name,
+      },
+      refetchQueries: [
+        {
+          query: GET_USERS,
+        },
+      ],
+    });
   }
 }

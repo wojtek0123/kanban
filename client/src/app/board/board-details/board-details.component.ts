@@ -1,17 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormType } from '../../models/types';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormType, SortBy } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { BoardService } from '../../services/board.service';
 import { FormService } from '../../services/form.service';
-import { Observable, Subject, map, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { Router } from '@angular/router';
+import { Task } from 'src/app/models/task.model';
+
+type BoardTypes = 'kanban' | 'table';
 
 @Component({
   selector: 'app-board-details',
   templateUrl: './board-details.component.html',
   styleUrls: ['./board-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardDetailsComponent implements OnInit, OnDestroy {
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
@@ -23,6 +33,12 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
   tags!: Observable<string[]>;
   destroy$ = new Subject<void>();
   selectedBoard$: Observable<Board | undefined> | null = null;
+  usersInTheProject$: Observable<{ user: User }[]> | null = null;
+  boardType: BoardTypes = 'kanban';
+  sortBy: SortBy = {
+    column: 'title',
+    direction: 'asc',
+  };
 
   constructor(
     private formService: FormService,
@@ -41,6 +57,8 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
       map(project => project?.userId ?? '')
     );
+
+    this.usersInTheProject$ = this.boardService.getUsersInTheProject;
 
     this.tags = this.boardService.getTags;
 
