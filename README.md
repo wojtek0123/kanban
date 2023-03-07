@@ -1,9 +1,22 @@
 # KanbanAngular
-Kanban is an app to manage tasks in a team. For now owner of project / board cannot add more person to board but I am thinking how to implement this and websocket to everyone has up-to-date version of board. So far, user can:
+Kanban is an app to manage tasks in a team. For now owner of project / board cannot add more person to board but I am thinking how to implement this and websocket to everyone has up-to-date version of board.
+
+- [Features](#user-can)
+- [Live](#live-demo)
+- [Built with](#built-with)
+- [Screenshots](#screenshots)
+- [To do](#to-do)
+- [How to run on local machine]($how-to-run-on-local-machine)
+- [What I learned](#what-i-learned)
+
+ ## User can:
 - register / login
 - add, remove and update project, board, column, task and subtask
 - drag and drop task between columns
+- drag and drop columns (change of order)
 - change color of dots next to column name and tag background
+- filter tasks by tags or title
+- sort tasks by title, updated and created time
 
 
 ## [Live demo](https://project-kanban-angular.vercel.app/)
@@ -18,15 +31,22 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - prisma
 - apollo server
 
+## Screenshots
+
 ## To do:
-- [ ] implement the ability to change the order of columns
+- [x] implement the ability to change the order of columns
 - [ ] implement websocker (subscription)
-- [ ] add more person to one board
+- [x] add more person to one board
+- [x] add additionall views of tasks (table and kanban)
 
-I am thinking about change graphql, apollo and prisma backend to supabase (supabase handles sign in and up). I reckon this is a good idea to simplify an app logic. Graphql causes the most problems because apollo-angular has poor documentation with many mistakes which make harder to use it. Another trouble is an node js hosting on render.com. First load an app (after login) can last up to 2 minutes which is unacceptable. Still, this is the best free node js hosting for my backend.
-Now I think how to implement subscription in graphql, apollo server and prisma.
+## What I learned:
+- reactive form
+- how rxjs works and how to use some of the rxjs operators
+- how to create more reactive code
+- components should be devide on smart and dumb (I didn't change my components to smart and dumb so far)
+- nx folder structure will be better than mine
 
-## How to start on local machine:
+## How to run on local machine:
 ```bash
 git clone https://github.com/wojtek0123/kanban.git
 cd kanban
