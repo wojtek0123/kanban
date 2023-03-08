@@ -6,6 +6,10 @@
   margin-top: 1rem;
 }
 
+.form {
+  text-align: center;
+}
+
 .form-tag-wrapper {
   width: 100%;
 }
