@@ -14,6 +14,20 @@
       *ngIf="(getAddControls.title.touched || submitted) && getAddControls.title.errors?.['required']">
       Name is required
     </p>
+    <select
+      *ngIf="selectColumn$ | async"
+      class="button-global select-input"
+      (change)="changeSelectedColumn($event)">
+      <option default [value]="undefined">Select column</option>
+      <option [value]="column.id" *ngFor="let column of columns$ | async">
+        {{ column.name }}
+      </option>
+    </select>
+    <p
+      class="text-danger-global"
+      *ngIf="submitted && !selectedColumn && (selectColumn$ | async)">
+      Column is required
+    </p>
     <label class="form-label-global" for="task-description"
       >Short description</label
     >
@@ -26,7 +40,7 @@
         (getAddControls.description.touched || submitted) && getAddControls.description.errors?.['required']
       "
       class="text-danger-global">
-      Description is required.
+      Description is required
     </p>
     <div formArrayName="tags" class="form-tags-wrapper">
       <div class="form-tags-buttons">
@@ -65,7 +79,7 @@
               getAddControls.tags.controls[i].controls.name.errors?.['required']
             "
             class="text-danger-global">
-            Tag name is required.
+            Tag name is required
           </p>
         </ng-container>
       </div>
@@ -105,7 +119,7 @@
         getEditControls.description.errors?.['required']
       "
       class="text-danger-global">
-      Description is required.
+      Description is required
     </p>
     <div formArrayName="tags" class="form-tags-wrapper">
       <div class="form-tags-buttons">
@@ -150,7 +164,7 @@
               getEditControls.tags.controls[i].controls.name.errors?.['required']
             "
             class="text-danger-global">
-            Tag name is required.
+            Tag name is required
           </p>
         </ng-container>
       </div>

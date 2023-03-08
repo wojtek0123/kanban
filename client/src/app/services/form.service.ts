@@ -18,6 +18,7 @@ export class FormService {
   private editingTask?: Task;
   private editingSubtask?: Subtask;
   private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
+  private selectColumn = new BehaviorSubject(false);
 
   get getIsFormOpen(): Observable<boolean> {
     return this.isFormOpen;
@@ -51,10 +52,18 @@ export class FormService {
     return this.editingSubtask;
   }
 
-  onChangeFormVisibility(formType?: FormType) {
+  get getSelectColumn() {
+    return this.selectColumn.asObservable();
+  }
+
+  onChangeFormVisibility(formType?: FormType, selectColumn?: boolean) {
     this.isFormOpen.next(!this.isFormOpen.value);
     this.isEditing.next(false);
     this.typeOfForm.next(formType);
+    this.selectColumn.next(false);
+    if (selectColumn) {
+      this.selectColumn.next(selectColumn);
+    }
   }
 
   onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {
