@@ -101,7 +101,10 @@
     </div>
   </div>
 
-  <div *ngIf="isEditing$ | async" formGroupName="edit" class="form-wrapper">
+  <div
+    *ngIf="isEditing$ | async"
+    formGroupName="edit"
+    class="form-wrapper-global">
     <label class="form-label-global" for="edit-task-title">Task name</label>
     <input
       type="text"
