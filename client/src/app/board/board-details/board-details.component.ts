@@ -76,14 +76,8 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  onForm(type: FormType, columnId?: string, taskId?: string) {
-    this.formService.onChangeFormVisibility(type);
-    if (columnId) {
-      this.boardService.onChangeSelectedColumnId(columnId);
-    }
-    if (taskId) {
-      this.boardService.onChangeSelectedTaskId(taskId);
-    }
+  onForm(type: FormType, selectColumn?: boolean) {
+    this.formService.onChangeFormVisibility(type, selectColumn);
   }
 
   async onLogout() {

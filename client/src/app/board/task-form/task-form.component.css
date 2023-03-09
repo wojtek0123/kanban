@@ -6,6 +6,10 @@
   margin-top: 1rem;
 }
 
+.form {
+  text-align: center;
+}
+
 .form-tag-wrapper {
   width: 100%;
 }
@@ -46,6 +50,10 @@
   display: flex;
   gap: 0.25rem;
   justify-content: space-between;
+}
+
+.select-input {
+  margin-top: 1rem;
 }
 
 @media (min-width: 1024px) {

@@ -10,8 +10,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
+import { Column } from 'src/app/models/column.model';
+import { BoardService } from 'src/app/services/board.service';
 
 type Tag = {
   name: string;
@@ -28,6 +30,9 @@ type Tag = {
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
   submitted = false;
+  selectColumn$!: Observable<boolean>;
+  columns$!: Observable<Column[] | undefined>;
+  selectedColumn: string | undefined = undefined;
 
   form = this.formBuilder.group({
     add: this.formBuilder.group({
@@ -60,11 +65,20 @@ export class TaskFormComponent implements OnInit {
     private formService: FormService,
     private apollo: ApolloService,
     private formBuilder: FormBuilder,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private boardService: BoardService
   ) {}
 
   ngOnInit(): void {
     this.isEditing$ = this.formService.getIsEditing;
+    this.selectColumn$ = this.formService.getSelectColumn.pipe(
+      tap(value =>
+        value ? (this.selectedColumn = undefined) : (this.selectedColumn = '')
+      )
+    );
+    this.columns$ = this.boardService.getSelectedBoard.pipe(
+      map(board => board?.columns.flatMap(column => column.column))
+    );
   }
 
   maxLength(max: number): ValidatorFn | any {
@@ -131,6 +145,12 @@ export class TaskFormComponent implements OnInit {
     (<FormArray>this.form.get(groupName)?.get('tags')).removeAt(-1);
   }
 
+  changeSelectedColumn(event: Event) {
+    const columnId = (event.target as HTMLSelectElement).value;
+    this.selectedColumn = columnId;
+    this.boardService.onChangeSelectedColumnId(columnId);
+  }
+
   onSubmit() {
     this.submitted = true;
 
@@ -168,8 +188,10 @@ export class TaskFormComponent implements OnInit {
             'Successfully updated this task'
           )
         );
+      this.formService.onChangeFormVisibility();
     }
-    if (this.getFormControls.add.valid) {
+
+    if (this.getFormControls.add.valid && this.selectedColumn !== undefined) {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
@@ -199,11 +221,7 @@ export class TaskFormComponent implements OnInit {
             'Successfully added a new task'
           )
         );
+      this.formService.onChangeFormVisibility();
     }
-    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
-      return;
-    }
-
-    this.formService.onChangeFormVisibility();
   }
 }

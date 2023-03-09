@@ -84,6 +84,12 @@
   background-color: var(--background-color);
 }
 
+.add-button-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 @media (min-width: 1024px) {
   .add-people-button-mobile {
     display: none;
