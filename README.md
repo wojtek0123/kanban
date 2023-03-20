@@ -38,8 +38,6 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 
 ![table-view](https://user-images.githubusercontent.com/87533043/226334740-a6d06c54-675b-41c0-bea5-3103b82e5dd5.png)
 
-![search](https://user-images.githubusercontent.com/87533043/226334767-c4b565f1-06a9-410b-8565-2804aeab0d80.png)
-
 ![add-task](https://user-images.githubusercontent.com/87533043/226334784-0e3832a2-9b98-4346-be56-0556a14ce74d.png)
 
 ![assign-tasks](https://user-images.githubusercontent.com/87533043/226334798-5bf8aae4-666e-4cdd-b635-3808541b80cb.png)
@@ -49,7 +47,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - [ ] implement websocket (subscription)
 - [x] add more person to one board
 - [x] add additionall views of tasks (table and kanban)
-- [ ] devide components into smart and dump
+- [ ] divide components into smart and dump
 - [ ] write tests
 
 ## What I learned:
