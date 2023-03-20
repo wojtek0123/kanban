@@ -32,19 +32,31 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - apollo server
 
 ## Screenshots
+![login-page](https://user-images.githubusercontent.com/87533043/226334698-6aaa381b-536e-4555-9a43-84c8e2f895eb.png)
+
+![kanban-view](https://user-images.githubusercontent.com/87533043/226334729-4c18a152-15c2-4b69-a1c9-3b36815ea09c.png)
+
+![table-view](https://user-images.githubusercontent.com/87533043/226334740-a6d06c54-675b-41c0-bea5-3103b82e5dd5.png)
+
+![search](https://user-images.githubusercontent.com/87533043/226334767-c4b565f1-06a9-410b-8565-2804aeab0d80.png)
+
+![add-task](https://user-images.githubusercontent.com/87533043/226334784-0e3832a2-9b98-4346-be56-0556a14ce74d.png)
+
+![assign-tasks](https://user-images.githubusercontent.com/87533043/226334798-5bf8aae4-666e-4cdd-b635-3808541b80cb.png)
 
 ## To do:
 - [x] implement the ability to change the order of columns
-- [ ] implement websocker (subscription)
+- [ ] implement websocket (subscription)
 - [x] add more person to one board
 - [x] add additionall views of tasks (table and kanban)
+- [ ] devide components into smart and dump
+- [ ] write tests
 
 ## What I learned:
 - reactive form
 - how rxjs works and how to use some of the rxjs operators
 - how to create more reactive code
-- components should be devide on smart and dumb (I didn't change my components to smart and dumb so far)
-- nx folder structure will be better than mine
+- components should be devide on smart and dumb
 
 ## How to run on local machine:
 ```bash
