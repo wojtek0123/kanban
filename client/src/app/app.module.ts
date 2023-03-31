@@ -6,10 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { BoardModule } from './board/board.module';
 import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageNotFoundModule } from './page-not-found/page-not-found.module';
 
 @NgModule({
-  declarations: [AppComponent, PageNotFoundComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     GraphQLModule,
@@ -17,6 +17,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     BoardModule,
     HomeModule,
     AppRoutingModule,
+    PageNotFoundModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
