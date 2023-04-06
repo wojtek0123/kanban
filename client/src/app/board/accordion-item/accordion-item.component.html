@@ -4,13 +4,14 @@
   [showContent]="showContent"></app-collapse-button>
 <ul class="accordion-list" [ngClass]="{ show: showContent }">
   <li *ngFor="let board of project.boards">
-    <button
+    <a
+      [routerLink]="['/', 'project', project.id, 'board', board.id]"
       type="button"
       class="accordion-item"
       [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }"
       (click)="onSelectBoard(board)">
       {{ board.name }}
-    </button>
+    </a>
   </li>
   <p
     class="accordion-item accordion-item-paragraph"

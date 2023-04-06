@@ -18,9 +18,10 @@
     </div>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details *ngIf="status === 'ok'">
+    <router-outlet></router-outlet>
+    <!-- <app-board-details *ngIf="status === 'ok'">
       <app-mobile-navigation></app-mobile-navigation>
-    </app-board-details>
+    </app-board-details> -->
     <div class="loading-wrapper" *ngIf="status === 'loading'">
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
       <p>Loading...</p>

@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FilterMenuModule } from '../filter-menu/filter-menu.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { TaskTableModule } from '../task-table/task-table.module';
+import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks.module';
 
 @NgModule({
   declarations: [BoardDetailsComponent],
@@ -16,6 +17,7 @@ import { TaskTableModule } from '../task-table/task-table.module';
     FormsModule,
     FilterMenuModule,
     TasksModule,
+    GetTagsFromTasksModule,
   ],
   exports: [BoardDetailsComponent],
 })

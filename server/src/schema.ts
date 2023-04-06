@@ -116,6 +116,7 @@ export const typeDefs = gql`
 
   type Query {
     projects(userId: String): [Project]
+    board(id: String): Board
     filteredUsers(text: String): [User]
     usersFromProject(projectId: String): [UserOnProject]
     usersFromTask(taskId: String): [UserOnTask]
@@ -124,7 +125,13 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    changeColumnWrapper(currColumnWrapperId: String, prevColumnWrapperId: String, currColumnId: String, prevColumnId: String, boardId: String): ColumnWrapper
+    changeColumnWrapper(
+      currColumnWrapperId: String
+      prevColumnWrapperId: String
+      currColumnId: String
+      prevColumnId: String
+      boardId: String
+    ): ColumnWrapper
     changeColumn(columnId: String, taskId: String): Column
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
@@ -167,6 +174,64 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
+    board: (_parent: unknown, args: { id: string }, context: Context) => {
+      return context.prisma.board.findUnique({
+        where: { id: args.id },
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+          columns: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              column: {
+                select: {
+                  id: true,
+                  name: true,
+                  dotColor: true,
+                  columnWrapperId: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  tasks: {
+                    select: {
+                      id: true,
+                      title: true,
+                      tagNames: true,
+                      tagBackgroundColors: true,
+                      tagFontColors: true,
+                      description: true,
+                      createdAt: true,
+                      updatedAt: true,
+                      subtasks: {
+                        select: {
+                          id: true,
+                          name: true,
+                          isFinished: true,
+                          createdAt: true,
+                          updatedAt: true,
+                        },
+                        orderBy: {
+                          createdAt: 'asc',
+                        },
+                      },
+                    },
+                    orderBy: {
+                      title: 'asc',
+                    },
+                  },
+                },
+              },
+            },
+            orderBy: {
+              createdAt: 'asc',
+            },
+          },
+        },
+      })
+    },
     projects: (_parent: any, args: { userId: string }, context: Context) => {
       return context.prisma.project.findMany({
         where: {
@@ -228,9 +293,8 @@ export const resolvers = {
                           title: 'asc',
                         },
                       },
-                      
                     },
-                  }
+                  },
                 },
                 orderBy: {
                   createdAt: 'asc',
@@ -325,7 +389,7 @@ export const resolvers = {
               column: {
                 select: {
                   name: true,
-                }
+                },
               },
               updatedAt: true,
               subtasks: {
@@ -351,22 +415,36 @@ export const resolvers = {
   },
 
   Mutation: {
-    updateUserName: (_parent: unknown, args: {id: string, name: string}, context: Context) => {
+    updateUserName: (
+      _parent: unknown,
+      args: { id: string; name: string },
+      context: Context,
+    ) => {
       return context.prisma.user.update({
         where: { id: args.id },
-        data: { name: args.name }
+        data: { name: args.name },
       })
     },
-    changeColumnWrapper: async (_parent: unknown, args: { currColumnWrapperId: string, prevColumnWrapperId: string, currColumnId: string, prevColumnId: string, boardId: string}, context: Context) => {
+    changeColumnWrapper: async (
+      _parent: unknown,
+      args: {
+        currColumnWrapperId: string
+        prevColumnWrapperId: string
+        currColumnId: string
+        prevColumnId: string
+        boardId: string
+      },
+      context: Context,
+    ) => {
       const response = await context.prisma.columnWrapper.create({
         data: {
           boardId: args.boardId,
-        }
+        },
       })
 
       await context.prisma.column.update({
         where: { id: args.currColumnId },
-        data: { columnWrapperId: response.id }
+        data: { columnWrapperId: response.id },
       })
 
       await context.prisma.column.update({
@@ -374,21 +452,21 @@ export const resolvers = {
           id: args.prevColumnId,
         },
         data: {
-          columnWrapperId: args.currColumnWrapperId
-        }
+          columnWrapperId: args.currColumnWrapperId,
+        },
       })
 
       await context.prisma.column.update({
         where: {
-          id: args.currColumnId
+          id: args.currColumnId,
         },
         data: {
-          columnWrapperId: args.prevColumnWrapperId
-        }
+          columnWrapperId: args.prevColumnWrapperId,
+        },
       })
 
       return await context.prisma.columnWrapper.delete({
-        where: { id: response.id }
+        where: { id: response.id },
       })
     },
     addUserToTask: (
@@ -632,15 +710,14 @@ export const resolvers = {
                       title: 'asc',
                     },
                   },
-                  
                 },
-              }
+              },
             },
             orderBy: {
               createdAt: 'asc',
             },
           },
-        }
+        },
       })
     },
     addColumn: async (
@@ -650,15 +727,15 @@ export const resolvers = {
     ) => {
       const response = await context.prisma.columnWrapper.create({
         data: {
-          boardId: args.boardId
-        }
+          boardId: args.boardId,
+        },
       })
 
       return context.prisma.column.create({
         data: {
           name: args.name,
           dotColor: args.dotColor,
-          columnWrapperId: response.id
+          columnWrapperId: response.id,
         },
       })
     },

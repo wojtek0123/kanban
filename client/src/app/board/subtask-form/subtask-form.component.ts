@@ -94,7 +94,6 @@ export class SubtaskFormComponent implements OnInit {
             'confirm',
             'Successfully added a new subtask'
           );
-          this.boardService.refreshSelectedBoard();
         });
     }
 

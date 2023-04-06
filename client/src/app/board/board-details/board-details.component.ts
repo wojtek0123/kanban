@@ -1,19 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormType, SortBy } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { BoardService } from '../../services/board.service';
 import { FormService } from '../../services/form.service';
-import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase.service';
-import { Router } from '@angular/router';
-import { Task } from 'src/app/models/task.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApolloService } from 'src/app/services/apollo.service';
 
 type BoardTypes = 'kanban' | 'table';
 
@@ -23,16 +18,12 @@ type BoardTypes = 'kanban' | 'table';
   styleUrls: ['./board-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardDetailsComponent implements OnInit, OnDestroy {
+export class BoardDetailsComponent implements OnInit {
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
   projectOwnerId$: Observable<string> | null = null;
   searchTerm = '';
   checkedTags: string[] = [];
-  show = false;
-  boardId = '';
-  tags!: Observable<string[]>;
-  destroy$ = new Subject<void>();
-  selectedBoard$: Observable<Board | undefined> | null = null;
+  selectedBoard$: Observable<Board> | null = null;
   usersInTheProject$: Observable<{ user: User }[]> | null = null;
   boardType: BoardTypes = 'kanban';
   sortBy: SortBy = {
@@ -44,11 +35,19 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private boardService: BoardService,
     private supabase: SupabaseService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private apollo: ApolloService
   ) {}
 
   ngOnInit() {
-    this.selectedBoard$ = this.boardService.getSelectedBoard;
+    const params$ = this.route.params;
+
+    this.selectedBoard$ = params$.pipe(
+      map(data => data['boardId']),
+      switchMap(boardId => this.apollo.getBoard(boardId)),
+      map(data => data.data.board)
+    );
 
     this.loggedInUser$ = this.supabase.getSessionObs.pipe(
       map(data => data?.user)
@@ -59,21 +58,6 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.usersInTheProject$ = this.boardService.getUsersInTheProject;
-
-    this.tags = this.boardService.getTags;
-
-    this.boardService.getTags.pipe(takeUntil(this.destroy$)).subscribe(data => {
-      if (!data) {
-        return;
-      }
-
-      this.checkedTags = [''];
-      this.checkedTags = [...this.checkedTags, ...data];
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
   }
 
   onForm(type: FormType, selectColumn?: boolean) {
@@ -96,5 +80,6 @@ export class BoardDetailsComponent implements OnInit, OnDestroy {
 
   onSelectedTags(checkedTags: string[]) {
     this.checkedTags = checkedTags;
+    console.log(this.checkedTags);
   }
 }

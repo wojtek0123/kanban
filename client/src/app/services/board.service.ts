@@ -60,8 +60,6 @@ export class BoardService {
 
       this.onChangeSelectedProject(projectsWithBoards?.at(0));
       this.onChangeSelectedBoard(projectsWithBoards?.at(0)?.boards.at(0));
-    } else {
-      this.refreshSelectedBoard();
     }
   }
 
@@ -71,9 +69,6 @@ export class BoardService {
 
   onChangeSelectedBoard(board: Board | undefined) {
     this.selectedBoard$.next(board);
-
-    if (!board) return;
-    this.allTagsFromOneBoard(board);
   }
 
   onChangeSelectedColumnId(columnId: string) {
@@ -82,46 +77,5 @@ export class BoardService {
 
   onChangeSelectedTaskId(taskId: string) {
     this.selectedTaskId$.next(taskId);
-  }
-
-  allTagsFromOneBoard(board: Board | undefined) {
-    const columns = board?.columns.flatMap(column => column.column);
-
-    const tags = columns?.flatMap(column =>
-      column.tasks.flatMap(task => task.tagNames)
-    );
-
-    if (!tags) return;
-
-    const tagsWithoutDuplicates = new Set([...tags]);
-    this.taskTagsFromTheSelectedBoard$.next([
-      ...tagsWithoutDuplicates.values(),
-    ]);
-  }
-
-  refreshSelectedBoard() {
-    const projectId$ = this.getSelectedProject.pipe(
-      map(project => project?.id)
-    );
-
-    const boardId$ = this.getSelectedBoard.pipe(map(data => data?.id));
-
-    const selectedProject$ = combineLatest([this.projects, projectId$]).pipe(
-      map(([projects, projectId]) =>
-        projects?.filter(project => project.id === projectId).at(0)
-      )
-    );
-
-    combineLatest([selectedProject$, boardId$])
-      .pipe(
-        map(([project, boardId]) =>
-          project?.boards.filter(board => board.id === boardId).at(0)
-        ),
-        take(1)
-      )
-      .subscribe(board => {
-        this.onChangeSelectedBoard(board);
-        this.allTagsFromOneBoard(board);
-      });
   }
 }

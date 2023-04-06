@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { BoardComponent } from './board/board.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
+import { BoardDetailsComponent } from './board/board-details/board-details.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -11,6 +12,12 @@ const routes: Routes = [
     path: '',
     component: BoardComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'project/:projectId/board/:boardId',
+        component: BoardDetailsComponent,
+      },
+    ],
   },
   { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
 ];

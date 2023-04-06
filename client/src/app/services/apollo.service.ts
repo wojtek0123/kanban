@@ -41,6 +41,7 @@ import { Project } from '../models/project.model';
 import { User } from '../models/user.model';
 import { BoardService } from './board.service';
 import { Task } from '../models/task.model';
+import { GET_BOARD } from '../graphql/queries/getBoard.query';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,13 @@ export class ApolloService {
           .valueChanges.pipe(map(data => data))
       )
     );
+  }
+
+  getBoard(id: string) {
+    return this.apollo.watchQuery<{ board: Board }>({
+      query: GET_BOARD,
+      variables: { id },
+    }).valueChanges;
   }
 
   getUsers() {

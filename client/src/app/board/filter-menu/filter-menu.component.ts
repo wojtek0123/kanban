@@ -14,13 +14,15 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterMenuComponent implements OnInit {
-  @Input() tags: string[] | null = null;
+  @Input() tags: string[] = [];
   @Output() selectedTags = new EventEmitter<string[]>();
   show = false;
   checkedTags: string[] = [''];
 
   ngOnInit(): void {
-    this.checkedTags = [...this.checkedTags, ...(this.tags ?? [])];
+    this.checkedTags = [...this.checkedTags, ...this.tags];
+
+    this.selectedTags.emit(this.checkedTags);
   }
 
   onToggleFilter() {
@@ -30,6 +32,7 @@ export class FilterMenuComponent implements OnInit {
   onFilter(event: Event) {
     const target = event.target as HTMLInputElement;
     if (!this.checkedTags) return;
+    console.log(target.value);
 
     if (!target.classList.contains('checkbox')) return;
     const isChecked = target.checked;
