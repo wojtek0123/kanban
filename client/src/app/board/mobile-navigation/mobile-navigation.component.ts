@@ -41,9 +41,7 @@ export class MobileNavigationComponent implements OnInit {
 
   constructor(
     private formService: FormService,
-    private navigationService: NavigationService,
-    private supabase: SupabaseService,
-    private router: Router
+    private navigationService: NavigationService
   ) {}
 
   ngOnInit(): void {
@@ -56,19 +54,5 @@ export class MobileNavigationComponent implements OnInit {
 
   onForm(type: FormType) {
     this.formService.onChangeFormVisibility(type);
-  }
-
-  async onLogout() {
-    try {
-      const { error } = await this.supabase.signOut();
-      if (error) {
-        console.error(error.message);
-      }
-      this.router.navigate(['/home']);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-    }
   }
 }

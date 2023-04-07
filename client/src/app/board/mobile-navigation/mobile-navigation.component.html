@@ -16,9 +16,7 @@
 <nav
   class="navigation-container"
   [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'">
-  <button class="button-global navigation-logout-button" (click)="onLogout()">
-    Logout
-  </button>
+  <app-logout-button></app-logout-button>
   <div class="navigation-wrapper">
     <app-accordion></app-accordion>
   </div>

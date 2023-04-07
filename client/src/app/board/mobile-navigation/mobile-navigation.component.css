@@ -70,16 +70,6 @@
   padding-right: 1rem;
 }
 
-.navigation-logout-button {
-  background-color: var(--secondary-color);
-  color: var(--black-color);
-  transition: opacity 0.3s ease-in-out;
-}
-
-.navigation-logout-button:hover {
-  opacity: 0.7;
-}
-
 .hamburger {
   padding: 1rem;
   cursor: pointer;

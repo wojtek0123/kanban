@@ -7,6 +7,7 @@ import { FilterMenuModule } from '../filter-menu/filter-menu.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { TaskTableModule } from '../task-table/task-table.module';
 import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks.module';
+import { LogoutButtonModule } from '../logout-button/logout-button.module';
 
 @NgModule({
   declarations: [BoardDetailsComponent],
@@ -18,6 +19,7 @@ import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks.module
     FilterMenuModule,
     TasksModule,
     GetTagsFromTasksModule,
+    LogoutButtonModule,
   ],
   exports: [BoardDetailsComponent],
 })

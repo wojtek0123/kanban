@@ -26,19 +26,7 @@
         (click)="onForm('profile')">
         Profile
       </button>
-      <button
-        type="button"
-        class="button-global button"
-        (click)="onForm('user')">
-        Users ({{ (usersInTheProject$ | async)?.length }})
-      </button>
-
-      <button
-        type="button"
-        class="button-global board-logout-button"
-        (click)="onLogout()">
-        Logout
-      </button>
+      <app-logout-button></app-logout-button>
     </div>
   </div>
   <div class="buttons">

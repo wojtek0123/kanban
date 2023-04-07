@@ -35,7 +35,6 @@ export class BoardDetailsComponent implements OnInit {
     private formService: FormService,
     private boardService: BoardService,
     private supabase: SupabaseService,
-    private router: Router,
     private route: ActivatedRoute,
     private apollo: ApolloService
   ) {}
@@ -57,25 +56,15 @@ export class BoardDetailsComponent implements OnInit {
       map(project => project?.userId ?? '')
     );
 
-    this.usersInTheProject$ = this.boardService.getUsersInTheProject;
+    this.usersInTheProject$ = params$.pipe(
+      map(params => params['projectId']),
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
+      map(response => response.data.usersFromProject)
+    );
   }
 
   onForm(type: FormType, selectColumn?: boolean) {
     this.formService.onChangeFormVisibility(type, selectColumn);
-  }
-
-  async onLogout() {
-    try {
-      const { error } = await this.supabase.signOut();
-      if (error) {
-        console.error(error.message);
-      }
-      this.router.navigate(['/home']);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-    }
   }
 
   onSelectedTags(checkedTags: string[]) {
