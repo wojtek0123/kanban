@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
 import { Router } from '@angular/router';
 import { formStatus } from '../home.component';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,12 @@ import { formStatus } from '../home.component';
 })
 export class LoginComponent {
   isSubmitted = false;
-  status: formStatus = 'ok';
-  errorMessage = '';
+  status = new BehaviorSubject<formStatus>('ok');
+  errorMessage = new BehaviorSubject('');
 
   loginForm = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
-    password: ['', [Validators.min(8), Validators.required]],
+    password: ['', [Validators.minLength(8), Validators.required]],
   });
 
   constructor(
@@ -35,27 +36,28 @@ export class LoginComponent {
       return;
     }
 
-    this.status = 'loading';
+    this.status.next('loading');
     this.isSubmitted = true;
 
     try {
       const { data, error } = await this.supabase.signIn(
-        this.loginForm.controls.email.value ?? '',
-        this.loginForm.controls.password.value ?? ''
+        this.formControls.email.value ?? '',
+        this.formControls.password.value ?? ''
       );
+
       if (error) {
-        this.status = 'error';
-        this.errorMessage = error.message;
-        return;
+        this.status.next('error');
+        throw new Error(error.message);
       }
 
-      this.status = 'ok';
+      this.status.next('ok');
       this.supabase.setSession(data.session);
       this.router.navigate(['']);
     } catch (error) {
-      this.status = 'error';
+      this.status.next('error');
+
       if (error instanceof Error) {
-        this.errorMessage = error.message;
+        this.errorMessage.next(error.message);
       }
     }
   }
