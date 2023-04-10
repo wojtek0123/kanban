@@ -1,30 +1,39 @@
 <app-toast></app-toast>
 <app-form></app-form>
 <app-context-menu-modal></app-context-menu-modal>
-<main class="main">
+<main
+  class="main"
+  *ngIf="{
+    projects: projects$ | async,
+    projectsError: projectsError$ | async
+  } as vm">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
-    <div class="board-wrapper">
-      <app-accordion></app-accordion>
-    </div>
-    <div class="board-button-wrapper">
-      <button
-        *ngIf="status === 'ok'"
-        type="button"
-        class="button-global board-button"
-        (click)="onForm('project')">
-        Add project
-      </button>
-    </div>
+    <ng-container *ngIf="!vm.projectsError && vm.projects as projects">
+      <div class="board-wrapper">
+        <app-accordion></app-accordion>
+      </div>
+      <div class="board-button-wrapper">
+        <button
+          type="button"
+          class="button-global board-button"
+          (click)="onForm('project')">
+          Add project
+        </button>
+      </div>
+    </ng-container>
   </aside>
   <div class="board-details-wrapper">
     <router-outlet></router-outlet>
-    <div class="loading-wrapper" *ngIf="status === 'loading'">
+    <div
+      *ngIf="!vm.projectsError && !vm.projects"
+      class="loading-wrapper"
+      #loading>
       <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
       <p>Loading...</p>
     </div>
-    <div class="loading-wrapper" *ngIf="status === 'error'">
-      <h2>Something went wrong! Try later!</h2>
+    <div class="loading-wrapper" *ngIf="vm.projectsError as error">
+      <h2>{{ error }}</h2>
     </div>
   </div>
 </main>

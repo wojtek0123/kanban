@@ -1,15 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../services/form.service';
-import { Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { BoardService } from '../services/board.service';
-import { FormType, Status } from '../models/types';
+import { FormType } from '../models/types';
 import { ApolloService } from '../services/apollo.service';
-import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, ignoreElements, map } from 'rxjs/operators';
+import { Project } from '../models/project.model';
 
 @Component({
   selector: 'app-board',
@@ -17,9 +13,9 @@ import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
   styleUrls: ['./board.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardComponent implements OnInit, OnDestroy {
-  status: Status = 'loading';
-  destroy$ = new Subject<void>();
+export class BoardComponent implements OnInit {
+  projects$: Observable<Project[]> | null = null;
+  projectsError$: Observable<string> | null = null;
 
   constructor(
     public formService: FormService,
@@ -28,37 +24,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.apollo
+    this.projects$ = this.apollo
       .getProjects()
-      .pipe(
-        catchError(error => {
-          this.status = 'error';
-          if (error instanceof Error) {
-            throw new Error(error.message);
-          } else {
-            throw new Error('Something went wrong!');
-          }
-        }),
-        takeUntil(this.destroy$),
-        map(data => data.data.projects)
-      )
-      .subscribe(data => {
-        this.status = 'ok';
-        this.boardService.onSetProjects(data);
-      });
+      .pipe(map(data => data.data.projects));
 
-    this.boardService.getSelectedProject
-      .pipe(
-        takeUntil(this.destroy$),
-        map(project => project?.id ?? ''),
-        switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-        map(data => data.data.usersFromProject)
-      )
-      .subscribe(data => this.boardService.onSetUsersInTheProject(data));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
+    this.projectsError$ = this.projects$.pipe(
+      ignoreElements(),
+      catchError(error => of(error))
+    );
   }
 
   onForm(type: FormType, columnId?: string) {
