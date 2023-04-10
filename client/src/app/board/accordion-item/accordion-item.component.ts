@@ -12,6 +12,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-accordion-item',
@@ -27,19 +28,14 @@ export class AccordionItemComponent implements OnInit {
 
   constructor(
     private boardService: BoardService,
-    private navigationService: NavigationService,
     private formService: FormService,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.selectedBoardId$ = this.boardService.getSelectedBoard.pipe(
-      map(board => board?.id),
-      tap(boardId =>
-        this.project.boards.filter(board =>
-          board.id === boardId ? (this.showContent = true) : null
-        )
-      )
+    this.selectedBoardId$ = this.route.params.pipe(
+      map(param => param['boardId'])
     );
 
     this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
@@ -55,11 +51,5 @@ export class AccordionItemComponent implements OnInit {
 
   toggleShowContent(state: boolean) {
     this.showContent = state;
-  }
-
-  onSelectBoard(board: Board) {
-    this.boardService.onChangeSelectedProject(this.project);
-    this.boardService.onChangeSelectedBoard(board);
-    this.navigationService.onMenu();
   }
 }

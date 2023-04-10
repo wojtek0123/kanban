@@ -8,8 +8,7 @@
       [routerLink]="['/', 'project', project.id, 'board', board.id]"
       type="button"
       class="accordion-item"
-      [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }"
-      (click)="onSelectBoard(board)">
+      [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }">
       {{ board.name }}
     </a>
   </li>

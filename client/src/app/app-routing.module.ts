@@ -4,20 +4,18 @@ import { HomeComponent } from './home/home.component';
 import { BoardComponent } from './board/board.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
-import { BoardDetailsComponent } from './board/board-details/board-details.component';
+import { ProjectsComponent } from './projects/projects.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
     path: '',
+    component: ProjectsComponent,
+  },
+  {
+    path: 'project/:projectId/board/:boardId',
     component: BoardComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'project/:projectId/board/:boardId',
-        component: BoardDetailsComponent,
-      },
-    ],
   },
   { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
 ];

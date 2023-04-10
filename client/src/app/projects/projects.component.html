@@ -1,0 +1,13 @@
+<ul *ngIf="{ projects: projects$ | async } as vm">
+  <li *ngFor="let project of vm.projects">
+    <h2>{{ project.name }}</h2>
+    <div *ngFor="let board of project.boards">
+      <a
+        [routerLink]="['/', 'project', project.id, 'board', board.id]"
+        type="button"
+        class="accordion-item">
+        {{ board.name }}
+      </a>
+    </div>
+  </li>
+</ul>

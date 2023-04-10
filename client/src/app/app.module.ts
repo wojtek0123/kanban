@@ -7,6 +7,7 @@ import { BoardModule } from './board/board.module';
 import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
 import { PageNotFoundModule } from './page-not-found/page-not-found.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { PageNotFoundModule } from './page-not-found/page-not-found.module';
     HomeModule,
     AppRoutingModule,
     PageNotFoundModule,
+    ProjectsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

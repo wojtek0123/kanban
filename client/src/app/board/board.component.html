@@ -11,7 +11,7 @@
     <h2 class="board-logo">KanBan</h2>
     <ng-container *ngIf="!vm.projectsError && vm.projects as projects">
       <div class="board-wrapper">
-        <app-accordion></app-accordion>
+        <app-accordion [projects]="projects"></app-accordion>
       </div>
       <div class="board-button-wrapper">
         <button
@@ -24,7 +24,7 @@
     </ng-container>
   </aside>
   <div class="board-details-wrapper">
-    <router-outlet></router-outlet>
+    <app-board-details></app-board-details>
     <div
       *ngIf="!vm.projectsError && !vm.projects"
       class="loading-wrapper"
