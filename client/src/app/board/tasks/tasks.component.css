@@ -58,6 +58,7 @@
   justify-content: center;
   row-gap: 1rem;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .card-wrapper {
@@ -210,7 +211,6 @@
 .column-placeholder {
   height: 35rem;
 }
-
 
 .warning-message {
   color: var(--error-color);

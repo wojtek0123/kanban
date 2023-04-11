@@ -165,24 +165,6 @@ export class TasksComponent implements OnInit {
       );
   }
 
-  onForm(
-    type: FormType,
-    columnId?: string,
-    taskId?: string,
-    tabName?: TabNameAssign
-  ) {
-    this.formService.onChangeFormVisibility(type);
-    if (columnId) {
-      this.boardService.onChangeSelectedColumnId(columnId);
-    }
-    if (taskId) {
-      this.boardService.onChangeSelectedTaskId(taskId);
-    }
-    if (tabName) {
-      this.assignUserService.changeTab(tabName);
-    }
-  }
-
   onUpdateCompletionStateOfSubtask(event: Event) {
     const target = event.target as HTMLInputElement;
     const id = target.id;

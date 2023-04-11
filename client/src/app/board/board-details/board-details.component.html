@@ -14,37 +14,46 @@
     </div>
 
     <div class="button-container">
-      <button
+      <app-open-form-button text="Users" type="user"></app-open-form-button>
+      <app-open-form-button
+        text="Tasks"
+        type="see-tasks"></app-open-form-button>
+      <app-open-form-button
+        text="Profile"
+        type="profile"></app-open-form-button>
+      <!-- <button
         type="button"
         class="button-global button"
         (click)="onForm('see-tasks')">
         Tasks
-      </button>
-      <button
+      </button> -->
+      <!-- <button
         type="button"
         class="button-global button"
         (click)="onForm('profile')">
         Profile
-      </button>
+      </button> -->
       <app-logout-button></app-logout-button>
     </div>
   </div>
   <div class="buttons">
     <div class="add-button-container">
-      <button
-        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-        type="button"
-        class="button-global button"
-        (click)="onForm('column')">
-        Add column
-      </button>
-      <button
+      <app-open-form-button
+        type="column"
+        text="Add column"
+        [parentId]="board.id"></app-open-form-button>
+
+      <app-open-form-button
+        *ngIf="boardType === 'table'"
+        type="task"
+        text="Add task"></app-open-form-button>
+      <!-- <button
         type="button"
         *ngIf="boardType === 'table'"
         class="button-global button"
         (click)="onForm('task', true)">
         Add task
-      </button>
+      </button> -->
     </div>
 
     <div
@@ -54,12 +63,17 @@
         <option default value="kanban">Kanban</option>
         <option value="table">Table</option>
       </select>
-      <button
+
+      <!-- <button
         type="button"
         class="button-global button add-people-button-mobile"
         (click)="onForm('user')">
         Users
-      </button>
+      </button> -->
+      <app-open-form-button
+        class="add-people-button-mobile"
+        text="Users"
+        type="user"></app-open-form-button>
       <select class="button-global button" [(ngModel)]="sortBy">
         <option default [value]="{ column: 'title', direction: 'asc' }" hidden>
           Title A-Z

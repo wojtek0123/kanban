@@ -45,13 +45,18 @@
           [type]="'column'"
           [editingColumn]="columnWrapper.column"></app-context-menu>
       </div>
-      <button
+      <app-open-form-button
+        text="Add task"
+        type="task"
+        size="wide"
+        [parentId]="columnWrapper.column.id"></app-open-form-button>
+      <!-- <button
         *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
         type="button"
         class="button-global add-task"
         (click)="onForm('task', columnWrapper.column.id)">
         Add task
-      </button>
+      </button> -->
 
       <div class="cards">
         <div
@@ -141,13 +146,11 @@
               </div>
               <div class="card-subtask-line"></div>
               <div class="card-buttons">
-                <button
-                  type="button"
-                  class="button-global button"
-                  (click)="onForm('subtask', columnWrapper.column.id, task.id)">
-                  Add subtask
-                </button>
-                <button
+                <app-open-form-button
+                  type="subtask"
+                  text="Add subtask"
+                  [parentId]="task.id"></app-open-form-button>
+                <!-- <button
                   *ngIf="
                     (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
                   "
@@ -162,7 +165,11 @@
                     )
                   ">
                   Add user
-                </button>
+                </button> -->
+                <app-open-form-button
+                  text="Add user"
+                  type="assign-user"
+                  [parentId]="task.id"></app-open-form-button>
               </div>
               <div class="card-stats">
                 <app-display-number-of-users-in-task

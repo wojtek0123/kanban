@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
-import { User } from 'src/app/models/user.model';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { BoardService } from 'src/app/services/board.service';
+import { User } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-profile',
@@ -26,27 +25,12 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private supabase: SupabaseService,
     private apollo: ApolloService,
-    private toastService: ToastService,
-    private boardService: BoardService
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
-    const userFromSession$ = this.supabase.getSessionObs.pipe(
+    this.loggedInUser$ = this.supabase.getSessionObs.pipe(
       map(session => session?.user)
-    );
-
-    const usersFromProject$ = this.boardService.getUsersInTheProject;
-
-    this.loggedInUser$ = combineLatest([
-      userFromSession$,
-      usersFromProject$,
-    ]).pipe(
-      map(([user, users]) =>
-        users
-          .flatMap(u => u.user)
-          .filter(u => u.id === user?.id ?? '')
-          .at(0)
-      )
     );
   }
 

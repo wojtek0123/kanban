@@ -33,11 +33,4 @@ export class BoardComponent implements OnInit {
       catchError(error => of(error))
     );
   }
-
-  onForm(type: FormType, columnId?: string) {
-    this.formService.onChangeFormVisibility(type);
-    if (columnId) {
-      this.boardService.onChangeSelectedColumnId(columnId);
-    }
-  }
 }

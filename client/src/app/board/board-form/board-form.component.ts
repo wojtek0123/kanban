@@ -85,10 +85,9 @@ export class BoardFormComponent implements OnInit {
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.boardService.getSelectedProject
+      this.formService.getParentId
         .pipe(
-          map(data => data?.id ?? ''),
-          switchMap(projectId => this.apollo.addBoard(name, projectId)),
+          switchMap(parentId => this.apollo.addBoard(name, parentId)),
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't add a new board`);
             throw new Error(error);

@@ -63,12 +63,7 @@ export class BoardDetailsComponent implements OnInit {
     );
   }
 
-  onForm(type: FormType, selectColumn?: boolean) {
-    this.formService.onChangeFormVisibility(type, selectColumn);
-  }
-
   onSelectedTags(checkedTags: string[]) {
     this.checkedTags = checkedTags;
-    console.log(this.checkedTags);
   }
 }

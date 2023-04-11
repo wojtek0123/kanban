@@ -3,7 +3,7 @@ import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 import { BoardService } from 'src/app/services/board.service';
 
@@ -78,9 +78,10 @@ export class SubtaskFormComponent implements OnInit {
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.apollo
-        .addSubtask(name, false)
+      this.formService.getParentId
         .pipe(
+          switchMap(parentId => this.apollo.addSubtask(name, false, parentId)),
+          take(1),
           catchError(async error => {
             this.toastService.showToast(
               'warning',

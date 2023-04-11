@@ -8,6 +8,7 @@ import { BoardService } from '../../services/board.service';
 import { User } from 'src/app/models/user.model';
 import { ToastService } from '../../services/toast.service';
 import { Task } from 'src/app/models/task.model';
+import { ActivatedRoute } from '@angular/router';
 
 type Tabs = 'add' | 'peek';
 
@@ -35,19 +36,21 @@ export class UsersComponent implements OnInit {
     private fb: FormBuilder,
     private supabase: SupabaseService,
     private boardService: BoardService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.projectId$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.userId ?? '')
-    );
+  ngOnInit() {
+    this.projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
     this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
       map(data => data?.user.id ?? '')
     );
 
-    this.projectUsers$ = this.boardService.getUsersInTheProject;
+    this.projectUsers$ = this.projectId$.pipe(
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
+      map(data => data.data.usersFromProject)
+    );
   }
 
   changeTab(tabName: Tabs) {
@@ -110,9 +113,8 @@ export class UsersComponent implements OnInit {
   }
 
   onAddUser(userId: string) {
-    this.boardService.getSelectedProject
-      .pipe(
-        map(project => project?.id ?? ''),
+    this.projectId$
+      ?.pipe(
         switchMap(projectId => this.apollo.addUserToProject(projectId, userId)),
         catchError(async error => {
           this.toastService.showToast('warning', `Couldn't add a new user`);
@@ -139,7 +141,6 @@ export class UsersComponent implements OnInit {
         take(1)
       )
       .subscribe(data => {
-        console.log(data);
         this.tasksFromUser = data;
 
         for (let index = 0; index < data.length; index++) {
@@ -151,21 +152,5 @@ export class UsersComponent implements OnInit {
             .subscribe();
         }
       });
-
-    this.boardService.getSelectedProject
-      .pipe(
-        map(project => project?.id ?? ''),
-        switchMap(projectId =>
-          this.apollo.removeUserFromProject(projectId, userId)
-        ),
-        catchError(async error => {
-          this.toastService.showToast('warning', `Couldn't delete this user`);
-          throw new Error(error);
-        }),
-        take(1)
-      )
-      .subscribe(() =>
-        this.toastService.showToast('confirm', 'Successfully deleted this user')
-      );
   }
 }

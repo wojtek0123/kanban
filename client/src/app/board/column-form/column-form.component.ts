@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
 import { ApolloService } from '../../services/apollo.service';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -83,13 +83,16 @@ export class ColumnFormComponent implements OnInit {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
-      this.apollo
-        .addColumn(name, dotColor)
+      this.formService.getParentId
         .pipe(
+          switchMap(parentId =>
+            this.apollo.addColumn(name, dotColor, parentId)
+          ),
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't add a new column`);
             throw new Error(error);
-          })
+          }),
+          take(1)
         )
         .subscribe(() =>
           this.toastService.showToast(

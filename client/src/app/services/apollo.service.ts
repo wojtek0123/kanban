@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, MutationResult } from 'apollo-angular';
 import {
   ADD_BOARD,
   ADD_COLUMN,
@@ -34,7 +34,15 @@ import {
   UPDATE_USER_NAME,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
-import { combineLatest, map, mapTo, switchMap, take, tap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  map,
+  mapTo,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { Board } from '../models/board.model';
 import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
@@ -239,127 +247,66 @@ export class ApolloService {
           refetchQueries: [
             {
               query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
             },
           ],
         })
-      ),
-      take(1)
+      )
     );
   }
 
   addBoard(name: string, projectId: string) {
-    return this.supabase.getSessionObs.pipe(
-      map(session => session?.user.id ?? ''),
-      switchMap(userId =>
-        this.apollo.mutate<{ addBoard: Board }>({
-          mutation: ADD_BOARD,
-          variables: { name, projectId },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
-            },
-          ],
-        })
-      ),
-      take(1)
-    );
+    return this.apollo.mutate<{ addBoard: Board }>({
+      mutation: ADD_BOARD,
+      variables: { name, projectId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+        },
+      ],
+    });
   }
 
-  addColumn(name: string, dotColor: string) {
-    const userId$ = this.supabase.getSessionObs.pipe(
-      map(session => session?.user.id ?? '')
-    );
-
-    const boardId$ = this.board.getSelectedBoard.pipe(
-      map(board => board?.id ?? '')
-    );
-
-    return combineLatest([userId$, boardId$]).pipe(
-      switchMap(([userId, boardId]) =>
-        this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
-          mutation: ADD_COLUMN,
-          variables: { name, boardId, dotColor },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
-            },
-          ],
-        })
-      ),
-      take(1)
-    );
+  addColumn(name: string, dotColor: string, boardId: string) {
+    return this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
+      mutation: ADD_COLUMN,
+      variables: { name, boardId, dotColor },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+        },
+      ],
+    });
   }
 
-  addTask(
-    title: string,
-    description: string,
-    tagNames: string[],
-    tagFontColors: string[],
-    tagBackgroundColors: string[]
-  ) {
-    return this.supabase.getSessionObs.pipe(
-      map(session => session?.user.id ?? ''),
-      switchMap(userId =>
-        this.board.getSelectedColumnId.pipe(
-          switchMap(columnId =>
-            this.apollo.mutate<{ addTask: { id: string } }>({
-              mutation: ADD_TASK,
-              variables: {
-                title,
-                description,
-                columnId,
-                tagNames,
-                tagFontColors,
-                tagBackgroundColors,
-              },
-              refetchQueries: [
-                {
-                  query: GET_PROJECTS,
-                  variables: {
-                    userId,
-                  },
-                },
-              ],
-            })
-          )
-        )
-      ),
-      take(1)
-    );
+  addTask(task: Partial<Task>, columnId: string) {
+    return this.apollo.mutate<{ addTask: { id: string } }>({
+      mutation: ADD_TASK,
+      variables: {
+        title: task.title,
+        description: task.description,
+        columnId,
+        tagNames: task.tagNames,
+        tagFontColors: task.tagFontColors,
+        tagBackgroundColors: task.tagBackgroundColors,
+      },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+        },
+      ],
+    });
   }
 
-  addSubtask(name: string, isFinished: boolean) {
-    return this.supabase.getSessionObs.pipe(
-      map(session => session?.user.id ?? ''),
-      switchMap(userId =>
-        this.board.getSelectedTaskId.pipe(
-          switchMap(taskId =>
-            this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
-              mutation: ADD_SUBTASK,
-              variables: { name, isFinished, taskId },
-              refetchQueries: [
-                {
-                  query: GET_PROJECTS,
-                  variables: {
-                    userId,
-                  },
-                },
-              ],
-            })
-          )
-        )
-      ),
-      take(1)
-    );
+  addSubtask(name: string, isFinished: boolean, taskId: string) {
+    return this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
+      mutation: ADD_SUBTASK,
+      variables: { name, isFinished, taskId },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+        },
+      ],
+    });
   }
 
   addUser(name: string, email: string, id: string) {

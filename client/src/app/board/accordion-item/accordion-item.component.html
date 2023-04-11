@@ -18,12 +18,10 @@
     No boards
   </p>
   <li>
-    <button
-      *ngIf="(loggedInUserId$ | async) === project.userId"
-      type="button"
-      class="button-global accordion-item-button"
-      (click)="onForm()">
-      Add board
-    </button>
+    <app-open-form-button
+      text="Add board"
+      type="board"
+      size="compact"
+      [parentId]="project.id"></app-open-form-button>
   </li>
 </ul>

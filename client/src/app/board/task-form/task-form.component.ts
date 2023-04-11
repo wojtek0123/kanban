@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { ToastService } from '../../services/toast.service';
 import { Column } from 'src/app/models/column.model';
 import { BoardService } from 'src/app/services/board.service';
@@ -201,15 +201,17 @@ export class TaskFormComponent implements OnInit {
         (tag: Tag) => tag.backgroundColor
       );
 
-      this.apollo
-        .addTask(
-          title,
-          description,
-          tagNames,
-          tagFontColors,
-          tagBackgroundColors
-        )
+      const task = {
+        title,
+        description,
+        tagNames,
+        tagFontColors,
+        tagBackgroundColors,
+      };
+
+      this.formService.getParentId
         .pipe(
+          switchMap(parentId => this.apollo.addTask(task, parentId)),
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't add a new task`);
             throw new Error(error);

@@ -12,6 +12,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FormService {
   private isFormOpen = new BehaviorSubject(false);
   private isEditing = new BehaviorSubject(false);
+  private parentId = new BehaviorSubject('');
+
   private editingProject?: Project;
   private editingBoard?: Board;
   private editingColumn?: Column;
@@ -19,6 +21,10 @@ export class FormService {
   private editingSubtask?: Subtask;
   private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
   private selectColumn = new BehaviorSubject(false);
+
+  get getParentId() {
+    return this.parentId.asObservable();
+  }
 
   get getIsFormOpen(): Observable<boolean> {
     return this.isFormOpen;
@@ -54,6 +60,10 @@ export class FormService {
 
   get getSelectColumn() {
     return this.selectColumn.asObservable();
+  }
+
+  onChangeParentId(id: string) {
+    this.parentId.next(id);
   }
 
   onChangeFormVisibility(formType?: FormType, selectColumn?: boolean) {

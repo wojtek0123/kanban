@@ -8,6 +8,7 @@ import { TasksModule } from '../tasks/tasks.module';
 import { TaskTableModule } from '../task-table/task-table.module';
 import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks.module';
 import { LogoutButtonModule } from '../logout-button/logout-button.module';
+import { OpenFormButtonModule } from '../open-form-button/open-form-button.module';
 
 @NgModule({
   declarations: [BoardDetailsComponent],
@@ -20,6 +21,7 @@ import { LogoutButtonModule } from '../logout-button/logout-button.module';
     TasksModule,
     GetTagsFromTasksModule,
     LogoutButtonModule,
+    OpenFormButtonModule,
   ],
   exports: [BoardDetailsComponent],
 })

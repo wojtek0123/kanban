@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ApolloService } from '../../services/apollo.service';
 import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -85,7 +85,8 @@ export class ProjectFormComponent implements OnInit {
               `Couldn't add a new project`
             );
             throw new Error(error);
-          })
+          }),
+          take(1)
         )
         .subscribe(() =>
           this.toastService.showToast(

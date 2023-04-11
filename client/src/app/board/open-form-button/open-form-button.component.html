@@ -1,0 +1,7 @@
+<button
+  type="button"
+  class="button-global button"
+  [ngClass]="{ compact: size === 'compact', wide: size === 'wide' }"
+  (click)="onForm()">
+  {{ text }}
+</button>

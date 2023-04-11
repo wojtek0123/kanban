@@ -9,6 +9,7 @@ import { ContextMenuModalModule } from './context-menu-modal/context-menu-modal.
 import { MobileNavigationModule } from './mobile-navigation/mobile-navigation.module';
 import { ToastModule } from './toast/toast.module';
 import { RouterModule } from '@angular/router';
+import { OpenFormButtonModule } from './open-form-button/open-form-button.module';
 
 @NgModule({
   declarations: [BoardComponent],
@@ -22,6 +23,7 @@ import { RouterModule } from '@angular/router';
     ContextMenuModalModule,
     MobileNavigationModule,
     ToastModule,
+    OpenFormButtonModule,
   ],
   exports: [BoardComponent],
 })
