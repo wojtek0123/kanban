@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormType } from 'src/app/models/types';
 import { FormService } from 'src/app/services/form.service';
 
@@ -6,12 +11,14 @@ import { FormService } from 'src/app/services/form.service';
   selector: 'app-open-form-button',
   templateUrl: './open-form-button.component.html',
   styleUrls: ['./open-form-button.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenFormButtonComponent {
   @Input() parentId: string | undefined = undefined;
   @Input() type!: FormType;
   @Input() text = '';
   @Input() size!: 'compact' | 'wide';
+  @Input() enableSelectColumnForTask: boolean | undefined = undefined;
 
   constructor(private formService: FormService) {}
 
@@ -26,9 +33,12 @@ export class OpenFormButtonComponent {
       return;
     }
 
-    if (!this.parentId) return;
+    this.formService.onChangeFormVisibility(
+      this.type,
+      this.enableSelectColumnForTask
+    );
 
-    this.formService.onChangeFormVisibility(this.type);
+    if (!this.parentId) return;
     this.formService.onChangeParentId(this.parentId);
   }
 }

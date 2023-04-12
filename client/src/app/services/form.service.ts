@@ -20,7 +20,9 @@ export class FormService {
   private editingTask?: Task;
   private editingSubtask?: Subtask;
   private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
-  private selectColumn = new BehaviorSubject(false);
+  private _enableSelectColumn$ = new BehaviorSubject<boolean | undefined>(
+    undefined
+  );
 
   get getParentId() {
     return this.parentId.asObservable();
@@ -58,8 +60,8 @@ export class FormService {
     return this.editingSubtask;
   }
 
-  get getSelectColumn() {
-    return this.selectColumn.asObservable();
+  get selectColumn$() {
+    return this._enableSelectColumn$.asObservable();
   }
 
   onChangeParentId(id: string) {
@@ -68,12 +70,8 @@ export class FormService {
 
   onChangeFormVisibility(formType?: FormType, selectColumn?: boolean) {
     this.isFormOpen.next(!this.isFormOpen.value);
-    this.isEditing.next(false);
     this.typeOfForm.next(formType);
-    this.selectColumn.next(false);
-    if (selectColumn) {
-      this.selectColumn.next(selectColumn);
-    }
+    this._enableSelectColumn$.next(selectColumn);
   }
 
   onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {

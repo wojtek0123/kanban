@@ -30,7 +30,7 @@ type Tag = {
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
   submitted = false;
-  selectColumn$!: Observable<boolean>;
+  selectColumn$ = new Observable<boolean | undefined>();
   columns$!: Observable<Column[] | undefined>;
   selectedColumn: string | undefined = undefined;
 
@@ -71,11 +71,7 @@ export class TaskFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.isEditing$ = this.formService.getIsEditing;
-    this.selectColumn$ = this.formService.getSelectColumn.pipe(
-      tap(value =>
-        value ? (this.selectedColumn = undefined) : (this.selectedColumn = '')
-      )
-    );
+    this.selectColumn$ = this.formService.selectColumn$;
     this.columns$ = this.boardService.getSelectedBoard.pipe(
       map(board => board?.columns.flatMap(column => column.column))
     );
@@ -191,7 +187,7 @@ export class TaskFormComponent implements OnInit {
       this.formService.onChangeFormVisibility();
     }
 
-    if (this.getFormControls.add.valid && this.selectedColumn !== undefined) {
+    if (this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
@@ -208,6 +204,24 @@ export class TaskFormComponent implements OnInit {
         tagFontColors,
         tagBackgroundColors,
       };
+
+      if (this.selectedColumn) {
+        this.apollo
+          .addTask(task, this.selectedColumn)
+          .pipe(
+            catchError(async error => {
+              this.toastService.showToast('warning', `Couldn't add a new task`);
+              throw new Error(error);
+            })
+          )
+          .subscribe(() =>
+            this.toastService.showToast(
+              'confirm',
+              'Successfully added a new task'
+            )
+          );
+        return;
+      }
 
       this.formService.getParentId
         .pipe(
