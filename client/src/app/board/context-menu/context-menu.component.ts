@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormService } from '../../services/form.service';
 import { Task } from '../../models/task.model';
 import { Column } from '../../models/column.model';
@@ -7,6 +12,8 @@ import { Subtask } from '../../models/subtask.model';
 import { Project } from '../../models/project.model';
 import { FormType } from '../../models/types';
 import { ContextMenuModalService } from '../../services/context-menu-modal.service';
+import { Observable } from 'rxjs';
+import { ApolloService } from 'src/app/services/apollo.service';
 
 @Component({
   selector: 'app-context-menu',
@@ -14,7 +21,7 @@ import { ContextMenuModalService } from '../../services/context-menu-modal.servi
   styleUrls: ['./context-menu.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContextMenuComponent {
+export class ContextMenuComponent implements OnInit {
   @Input() id!: string;
   @Input() type!: FormType;
   @Input() editingProject?: Project;
@@ -22,12 +29,19 @@ export class ContextMenuComponent {
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
   @Input() editingSubtask?: Subtask;
+  @Input() isProtected = true;
   openedContextMenuOfElementId = '';
+  isOwner$ = new Observable<boolean>();
 
   constructor(
     private formService: FormService,
-    private contextMenuModalService: ContextMenuModalService
+    private contextMenuModalService: ContextMenuModalService,
+    private apollo: ApolloService
   ) {}
+
+  ngOnInit() {
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
+  }
 
   onToggle(id: string) {
     this.openedContextMenuOfElementId = id;

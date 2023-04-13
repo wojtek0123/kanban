@@ -46,18 +46,11 @@
           [editingColumn]="columnWrapper.column"></app-context-menu>
       </div>
       <app-open-form-button
+        [isProtected]="true"
         text="Add task"
         type="task"
         size="wide"
         [parentId]="columnWrapper.column.id"></app-open-form-button>
-      <!-- <button
-        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
-        type="button"
-        class="button-global add-task"
-        (click)="onForm('task', columnWrapper.column.id)">
-        Add task
-      </button> -->
-
       <div class="cards">
         <div
           class="card-wrapper"
@@ -118,9 +111,7 @@
             <p>{{ task.description }}</p>
             <div class="card-context-menu">
               <app-context-menu
-                *ngIf="
-                  (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
-                "
+                [isProtected]="true"
                 [id]="task.id"
                 [type]="'task'"
                 [editingTask]="task"></app-context-menu>
@@ -137,9 +128,7 @@
                   <label [for]="subtask.id">{{ subtask.name }}</label>
                 </div>
                 <app-context-menu
-                  *ngIf="
-                    (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
-                  "
+                  [isProtected]="true"
                   [id]="subtask.id"
                   [type]="'subtask'"
                   [editingSubtask]="subtask"></app-context-menu>
@@ -147,28 +136,15 @@
               <div class="card-subtask-line"></div>
               <div class="card-buttons">
                 <app-open-form-button
+                  [isProtected]="true"
                   type="subtask"
                   text="Add subtask"
                   [parentId]="task.id"></app-open-form-button>
-                <!-- <button
-                  *ngIf="
-                    (loggedInUser$ | async)?.id === (projectOwnerId$ | async)
-                  "
-                  type="button"
-                  class="button-global button"
-                  (click)="
-                    onForm(
-                      'assign-user',
-                      columnWrapper.column.id,
-                      task.id,
-                      'assign'
-                    )
-                  ">
-                  Add user
-                </button> -->
                 <app-open-form-button
-                  text="Add user"
+                  [isProtected]="true"
+                  text="Assign user"
                   type="assign-user"
+                  assignUserTabName="assign"
                   [parentId]="task.id"></app-open-form-button>
               </div>
               <div class="card-stats">

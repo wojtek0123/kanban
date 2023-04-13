@@ -14,11 +14,9 @@ import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { FormType, SortBy, TabNameAssign } from 'src/app/models/types';
-import { FormService } from 'src/app/services/form.service';
+import { SortBy } from 'src/app/models/types';
 import { Column } from 'src/app/models/column.model';
 import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
-import { AssignUserService } from 'src/app/services/assign-user.service';
 
 @Component({
   selector: 'app-tasks',
@@ -40,9 +38,7 @@ export class TasksComponent implements OnInit {
     private supabase: SupabaseService,
     private boardService: BoardService,
     private apollo: ApolloService,
-    private toastService: ToastService,
-    private formService: FormService,
-    private assignUserService: AssignUserService
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {

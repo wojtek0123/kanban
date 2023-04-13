@@ -55,3 +55,13 @@ h3 {
   background-color: var(--secondary-color);
   color: var(--black-color);
 }
+
+.message {
+  text-align: center;
+  display: block;
+  color: var(--font-color-grey);
+}
+
+.tab-button {
+  min-width: max-content;
+}

@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { combineLatest, firstValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { ApolloService } from 'src/app/services/apollo.service';
-import { BoardService } from 'src/app/services/board.service';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast.service';
 import { TabNameAssign } from 'src/app/models/types';
-import { AssignUserService } from 'src/app/services/assign-user.service';
+import { ActivatedRoute } from '@angular/router';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-assign-user-form',
@@ -18,67 +17,38 @@ import { AssignUserService } from 'src/app/services/assign-user.service';
 export class AssignUserFormComponent implements OnInit {
   taskId$ = new Observable<string>();
   projectUsers$: Observable<{ user: User }[]> | null = null;
-  userFromTask$: Observable<{ user: User }[]> | null = null;
+  assignedUsers$: Observable<{ user: User }[]> | null = null;
   tabName$ = new Observable<TabNameAssign>();
-  loggedInUserId$: Observable<string> | null = null;
-  projectId$: Observable<string> | null = null;
   isUserAssign$: Observable<string[]> = new Observable<string[]>();
+  isOwner$ = new Observable<boolean>();
 
   constructor(
-    private boardService: BoardService,
     private apollo: ApolloService,
-    private supabase: SupabaseService,
     private toastService: ToastService,
-    private assignUserService: AssignUserService
+    private route: ActivatedRoute,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
-    this.taskId$ = this.boardService.getSelectedTaskId;
+    const projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
-    this.tabName$ = this.assignUserService.getTabName;
+    this.taskId$ = this.formService.getParentId;
+    this.tabName$ = this.formService.assignUserTabName$;
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
-    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
-      map(data => data?.user.id ?? '')
+    this.projectUsers$ = projectId$.pipe(
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
+      map(data => data.data.usersFromProject)
     );
 
-    this.projectId$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.userId ?? '')
-    );
-
-    this.projectUsers$ = this.boardService.getUsersInTheProject;
-
-    this.userFromTask$ = this.taskId$.pipe(
+    this.assignedUsers$ = this.taskId$.pipe(
       switchMap(taskId => this.apollo.getUsersFromTask(taskId)),
       map(data => data.data.usersFromTask)
     );
-
-    this.isUserAssign$ = combineLatest([
-      this.projectUsers$,
-      this.userFromTask$,
-    ]).pipe(
-      map(([projectUsers, taskUsers]) =>
-        projectUsers.filter(projectUser =>
-          taskUsers.some(taskUser => taskUser.user.id === projectUser.user.id)
-        )
-      ),
-      map(users => users.map(user => user.user.id))
-    );
-  }
-
-  async checkIsUserAssign(userId: string) {
-    if (!this.userFromTask$) return false;
-
-    const value$ = this.userFromTask$.pipe(
-      map(users => users.filter(data => data.user.id === userId)),
-      map(users => users.length === 0),
-      take(1)
-    );
-    value$.subscribe(data => console.log(data));
-    return await firstValueFrom(value$);
   }
 
   changeTab(tabName: TabNameAssign) {
-    this.assignUserService.changeTab(tabName);
+    this.formService.onChangeTabName(tabName);
   }
 
   onAddUserToTask(userId: string) {

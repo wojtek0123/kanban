@@ -1,6 +1,7 @@
 .button {
   margin: 0;
   min-width: max-content;
+  font-family: 'Oswald', sans-serif;
 }
 
 .compact {
@@ -13,4 +14,10 @@
 
 .wide {
   width: 100%;
+}
+
+.minimal {
+  padding: 0.5rem 0.2rem;
+  color: var(--font-color-grey);
+  font-size: 0.85rem;
 }

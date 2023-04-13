@@ -21,11 +21,12 @@ type Tabs = 'add' | 'peek';
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
   submitted = false;
-  tabName: Tabs = 'peek';
   projectUsers$: Observable<{ user: User }[]> | null = null;
-  loggedInUserId$: Observable<string> | null = null;
+  tabName: Tabs = 'peek';
   projectId$: Observable<string> | null = null;
   tasksFromUser!: { task: Task }[];
+  isOwner$ = new Observable<boolean>();
+  userId$ = new Observable<string>();
 
   form = this.fb.group({
     email: this.fb.control('', [Validators.required]),
@@ -35,7 +36,6 @@ export class UsersComponent implements OnInit {
     private apollo: ApolloService,
     private fb: FormBuilder,
     private supabase: SupabaseService,
-    private boardService: BoardService,
     private toastService: ToastService,
     private route: ActivatedRoute
   ) {}
@@ -43,9 +43,11 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
     this.projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
-    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
-      map(data => data?.user.id ?? '')
+    this.userId$ = this.supabase.getSessionObs.pipe(
+      map(session => session?.user.id ?? '')
     );
+
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
     this.projectUsers$ = this.projectId$.pipe(
       switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
@@ -76,10 +78,6 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    const userId$ = this.supabase.getSessionObs.pipe(
-      map(data => data?.user.id)
-    );
-
     const searchedUsers$ = this.apollo.getFilteredUsers(searchedEmail).pipe(
       catchError(async error => {
         if (error instanceof Error) {
@@ -93,7 +91,7 @@ export class UsersComponent implements OnInit {
 
     const searchedUserWithoutOwner$ = combineLatest([
       searchedUsers$,
-      userId$,
+      this.userId$,
     ]).pipe(
       map(([searchedUsers, id]) => searchedUsers.filter(user => user.id !== id))
     );

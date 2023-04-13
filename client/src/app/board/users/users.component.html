@@ -1,7 +1,5 @@
 <div class="wrapper">
-  <div
-    class="button-wrapper"
-    *ngIf="(loggedInUserId$ | async) === (projectId$ | async)">
+  <div class="button-wrapper" *ngIf="isOwner$ | async">
     <button
       type="button"
       class="button-global"
@@ -84,10 +82,7 @@
 
       <button
         type="button"
-        *ngIf="
-          data.user.id !== (loggedInUserId$ | async) &&
-          (loggedInUserId$ | async) === (projectId$ | async)
-        "
+        *ngIf="(isOwner$ | async) && (userId$ | async) !== data.user.id"
         class="button-global user-button"
         title="Remove"
         (click)="onRemoveUser(data.user.id)">

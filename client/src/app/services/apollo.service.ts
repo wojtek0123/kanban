@@ -34,15 +34,7 @@ import {
   UPDATE_USER_NAME,
 } from '../graphql/graphql.schema';
 import { SupabaseService } from './supabase.service';
-import {
-  Observable,
-  combineLatest,
-  map,
-  mapTo,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, map, switchMap, take } from 'rxjs';
 import { Board } from '../models/board.model';
 import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
@@ -55,11 +47,24 @@ import { GET_BOARD } from '../graphql/queries/getBoard.query';
   providedIn: 'root',
 })
 export class ApolloService {
+  private _projectOwnerId = new BehaviorSubject('');
+
   constructor(
     private apollo: Apollo,
     private supabase: SupabaseService,
     private board: BoardService
   ) {}
+
+  get isLoggedInUserAOwnerOfTheProject$() {
+    return combineLatest([
+      this.supabase.getSessionObs,
+      this._projectOwnerId,
+    ]).pipe(map(([session, ownerId]) => session?.user.id === ownerId));
+  }
+
+  setProjectOwnerId(id: string) {
+    this._projectOwnerId.next(id);
+  }
 
   getProjects() {
     return this.supabase.getSessionObs.pipe(
@@ -77,7 +82,9 @@ export class ApolloService {
   }
 
   getBoard(id: string) {
-    return this.apollo.watchQuery<{ board: Board }>({
+    return this.apollo.watchQuery<{
+      board: Board;
+    }>({
       query: GET_BOARD,
       variables: { id },
     }).valueChanges;
@@ -168,15 +175,11 @@ export class ApolloService {
         },
         {
           query: GET_USERS_FROM_TASK,
-          variables: {
-            taskId,
-          },
+          variables: { taskId },
         },
         {
           query: GET_TASKS_FROM_USER,
-          variables: {
-            userId,
-          },
+          variables: { taskId },
         },
       ],
     });

@@ -4,7 +4,9 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { FormType } from 'src/app/models/types';
+import { Observable } from 'rxjs';
+import { FormType, TabNameAssign } from 'src/app/models/types';
+import { ApolloService } from 'src/app/services/apollo.service';
 import { FormService } from 'src/app/services/form.service';
 
 @Component({
@@ -13,14 +15,24 @@ import { FormService } from 'src/app/services/form.service';
   styleUrls: ['./open-form-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenFormButtonComponent {
+export class OpenFormButtonComponent implements OnInit {
   @Input() parentId: string | undefined = undefined;
   @Input() type!: FormType;
   @Input() text = '';
-  @Input() size!: 'compact' | 'wide';
+  @Input() size!: 'compact' | 'wide' | 'minimal';
   @Input() enableSelectColumnForTask: boolean | undefined = undefined;
+  @Input() isProtected = false;
+  @Input() assignUserTabName?: TabNameAssign;
+  isOwner$ = new Observable<boolean>();
 
-  constructor(private formService: FormService) {}
+  constructor(
+    private formService: FormService,
+    private apollo: ApolloService
+  ) {}
+
+  ngOnInit() {
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
+  }
 
   onForm() {
     if (
@@ -37,6 +49,10 @@ export class OpenFormButtonComponent {
       this.type,
       this.enableSelectColumnForTask
     );
+
+    if (this.type === 'assign-user' && this.assignUserTabName) {
+      this.formService.onChangeTabName(this.assignUserTabName);
+    }
 
     if (!this.parentId) return;
     this.formService.onChangeParentId(this.parentId);

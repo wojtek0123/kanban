@@ -178,6 +178,11 @@ export const resolvers = {
       return context.prisma.board.findUnique({
         where: { id: args.id },
         select: {
+          Project: {
+            select: {
+              userId: true,
+            },
+          },
           id: true,
           name: true,
           createdAt: true,

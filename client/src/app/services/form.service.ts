@@ -4,7 +4,7 @@ import { Column } from '../models/column.model';
 import { Board } from '../models/board.model';
 import { Subtask } from '../models/subtask.model';
 import { Project } from '../models/project.model';
-import { FormType } from '../models/types';
+import { FormType, TabNameAssign } from '../models/types';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -13,6 +13,11 @@ export class FormService {
   private isFormOpen = new BehaviorSubject(false);
   private isEditing = new BehaviorSubject(false);
   private parentId = new BehaviorSubject('');
+  private _enableSelectColumn$ = new BehaviorSubject<boolean | undefined>(
+    undefined
+  );
+  private _projectOwnerId = new BehaviorSubject('');
+  private _assignUserTabName = new BehaviorSubject<TabNameAssign>('assign');
 
   private editingProject?: Project;
   private editingBoard?: Board;
@@ -20,12 +25,13 @@ export class FormService {
   private editingTask?: Task;
   private editingSubtask?: Subtask;
   private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
-  private _enableSelectColumn$ = new BehaviorSubject<boolean | undefined>(
-    undefined
-  );
 
   get getParentId() {
     return this.parentId.asObservable();
+  }
+
+  get assignUserTabName$() {
+    return this._assignUserTabName.asObservable();
   }
 
   get getIsFormOpen(): Observable<boolean> {
@@ -62,6 +68,14 @@ export class FormService {
 
   get selectColumn$() {
     return this._enableSelectColumn$.asObservable();
+  }
+
+  set projectOwnerId(id: string) {
+    this._projectOwnerId.next(id);
+  }
+
+  onChangeTabName(name: TabNameAssign) {
+    this._assignUserTabName.next(name);
   }
 
   onChangeParentId(id: string) {

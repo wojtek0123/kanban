@@ -36,6 +36,9 @@ export const GET_BOARD = gql`
           }
         }
       }
+      Project {
+        userId
+      }
     }
   }
 `;

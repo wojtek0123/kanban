@@ -7,7 +7,6 @@
       </h2>
 
       <app-context-menu
-        *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
         [id]="board.id"
         [type]="'board'"
         [editingBoard]="board"></app-context-menu>
@@ -21,56 +20,31 @@
       <app-open-form-button
         text="Profile"
         type="profile"></app-open-form-button>
-      <!-- <button
-        type="button"
-        class="button-global button"
-        (click)="onForm('see-tasks')">
-        Tasks
-      </button> -->
-      <!-- <button
-        type="button"
-        class="button-global button"
-        (click)="onForm('profile')">
-        Profile
-      </button> -->
       <app-logout-button></app-logout-button>
     </div>
   </div>
   <div class="buttons">
     <div class="add-button-container">
       <app-open-form-button
+        [isProtected]="true"
         type="column"
         text="Add column"
         [parentId]="board.id"></app-open-form-button>
 
       <app-open-form-button
+        [isProtected]="true"
         *ngIf="boardType === 'table'"
         type="task"
         text="Add task"
         [enableSelectColumnForTask]="true"></app-open-form-button>
-      <!-- <button
-        type="button"
-        *ngIf="boardType === 'table'"
-        class="button-global button"
-        (click)="onForm('task', true)">
-        Add task
-      </button> -->
     </div>
 
-    <div
-      *ngIf="(loggedInUser$ | async)?.id !== (projectOwnerId$ | async)"></div>
+    <div *ngIf="isOwner$ | async"></div>
     <div class="extended-buttons">
       <select class="button-global button" [(ngModel)]="boardType">
         <option default value="kanban">Kanban</option>
         <option value="table">Table</option>
       </select>
-
-      <!-- <button
-        type="button"
-        class="button-global button add-people-button-mobile"
-        (click)="onForm('user')">
-        Users
-      </button> -->
       <app-open-form-button
         class="add-people-button-mobile"
         text="Users"

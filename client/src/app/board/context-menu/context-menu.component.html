@@ -2,7 +2,9 @@
   class="context-menu-backdrop"
   (click)="onToggle('')"
   *ngIf="openedContextMenuOfElementId.length !== 0"></div>
-<div class="context-menu-container">
+<div
+  class="context-menu-container"
+  *ngIf="isOwner$ | async | showElement : isProtected">
   <button type="button" class="context-menu-button" (click)="onToggle(id)">
     <img src="../../../assets/three-dots-vertical.svg" alt="menu" />
   </button>

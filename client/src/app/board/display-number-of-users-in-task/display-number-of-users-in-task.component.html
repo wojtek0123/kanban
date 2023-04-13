@@ -1,6 +1,6 @@
-<button
-  type="button"
-  class="button-global button-users"
-  (click)="onForm('assign-user', 'peek')">
-  Users: {{ users$ | async }}
-</button>
+<app-open-form-button
+  [text]="'Users: ' + (usersLength$ | async)"
+  [parentId]="taskId"
+  type="assign-user"
+  size="minimal"
+  assignUserTabName="peek"></app-open-form-button>

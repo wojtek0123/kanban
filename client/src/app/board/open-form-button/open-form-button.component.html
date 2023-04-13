@@ -1,7 +1,12 @@
 <button
+  *ngIf="isOwner$ | async | showElement : isProtected"
   type="button"
   class="button-global button"
-  [ngClass]="{ compact: size === 'compact', wide: size === 'wide' }"
+  [ngClass]="{
+    compact: size === 'compact',
+    wide: size === 'wide',
+    minimal: size === 'minimal'
+  }"
   (click)="onForm()">
   {{ text }}
 </button>

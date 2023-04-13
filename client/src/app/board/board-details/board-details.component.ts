@@ -1,13 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormType, SortBy } from '../../models/types';
+import { SortBy } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
-import { BoardService } from '../../services/board.service';
-import { FormService } from '../../services/form.service';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { SupabaseService } from 'src/app/services/supabase.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { map, switchMap, take } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { ApolloService } from 'src/app/services/apollo.service';
 
 type BoardTypes = 'kanban' | 'table';
@@ -19,8 +16,7 @@ type BoardTypes = 'kanban' | 'table';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardDetailsComponent implements OnInit {
-  loggedInUser$: Observable<Partial<User> | undefined> | null = null;
-  projectOwnerId$: Observable<string> | null = null;
+  isOwner$ = new Observable();
   searchTerm = '';
   checkedTags: string[] = [];
   selectedBoard$: Observable<Board> | null = null;
@@ -31,13 +27,7 @@ export class BoardDetailsComponent implements OnInit {
     direction: 'asc',
   };
 
-  constructor(
-    private formService: FormService,
-    private boardService: BoardService,
-    private supabase: SupabaseService,
-    private route: ActivatedRoute,
-    private apollo: ApolloService
-  ) {}
+  constructor(private route: ActivatedRoute, private apollo: ApolloService) {}
 
   ngOnInit() {
     const params$ = this.route.params;
@@ -48,13 +38,14 @@ export class BoardDetailsComponent implements OnInit {
       map(data => data.data.board)
     );
 
-    this.loggedInUser$ = this.supabase.getSessionObs.pipe(
-      map(data => data?.user)
-    );
+    this.selectedBoard$
+      .pipe(
+        map(board => board.Project.userId),
+        take(1)
+      )
+      .subscribe(ownerId => this.apollo.setProjectOwnerId(ownerId));
 
-    this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.userId ?? '')
-    );
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
     this.usersInTheProject$ = params$.pipe(
       map(params => params['projectId']),
