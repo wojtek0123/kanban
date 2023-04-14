@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FilterMenuModule } from '../filter-menu/filter-menu.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { TaskTableModule } from '../task-table/task-table.module';
-import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks.module';
+import { GetTagsFromTasksModule } from 'src/app/pipes/get-tags-from-tasks/get-tags-from-tasks.module';
 import { LogoutButtonModule } from '../logout-button/logout-button.module';
 import { OpenFormButtonModule } from '../open-form-button/open-form-button.module';
 

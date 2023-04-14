@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Board } from '../models/board.model';
+import { Board } from '../../models/board.model';
 
 @Pipe({
   name: 'getTagsFromTasks',
