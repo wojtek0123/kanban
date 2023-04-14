@@ -1,7 +1,7 @@
 <div
   cdkDropList
   cdkDropListOrientation="horizontal"
-  [cdkDropListData]="columns(board)"
+  [cdkDropListData]="board | getColumns"
   (cdkDropListDropped)="dropColumn($event)"
   class="tasks"
   *ngIf="selectedBoard$ | async as board">
@@ -14,9 +14,7 @@
     *ngFor="let columnWrapper of board?.columns">
     <div
       cdkDrag
-      [cdkDragDisabled]="
-        (loggedInUser$ | async)?.id !== (projectOwnerId$ | async)
-      "
+      [cdkDragDisabled]="(isOwner$ | async) === false"
       [id]="columnWrapper.column.id">
       <div
         class="cdk-drag-placeholder column-placeholder"
@@ -40,7 +38,7 @@
           </h2>
         </div>
         <app-context-menu
-          *ngIf="(loggedInUser$ | async)?.id === (projectOwnerId$ | async)"
+          *ngIf="isOwner$ | async"
           [id]="columnWrapper.column.id"
           [type]="'column'"
           [editingColumn]="columnWrapper.column"></app-context-menu>
@@ -58,9 +56,9 @@
           [cdkDropListData]="columnWrapper.column.tasks"
           [id]="columnWrapper.column.id"
           [cdkDropListConnectedTo]="
-            columnIds(columnWrapper.column.id, board?.columns)
+            board?.columns ?? [] | getColumnIds : columnWrapper.column.id
           "
-          (cdkDropListDropped)="drop($event)">
+          (cdkDropListDropped)="dropTask($event)">
           <p
             class="warning-message card"
             *ngIf="
@@ -89,14 +87,12 @@
             <select class="card-select" (change)="changeColumn($event)">
               <option [value]="undefined">Choose column</option>
               <option
-                [value]="col.id"
+                [value]="column.id"
                 *ngFor="
-                  let col of getColumns(
-                    columnWrapper.column.id,
-                    board?.columns ?? []
-                  )
+                  let column of board?.columns ?? []
+                    | getColumnsWithoutOneSpecific : columnWrapper.column.id
                 ">
-                {{ col.name }}
+                {{ column.name }}
               </option>
             </select>
             <div class="card-tags">

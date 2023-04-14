@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Apollo, MutationResult } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import {
   ADD_BOARD,
   ADD_COLUMN,
@@ -485,8 +485,7 @@ export class ApolloService {
             },
           ],
         })
-      ),
-      take(1)
+      )
     );
   }
 
@@ -536,37 +535,30 @@ export class ApolloService {
     currColumnWrapperId: string,
     prevColumnWrapperId: string,
     currColumnId: string,
-    prevColumnId: string
+    prevColumnId: string,
+    boardId: string
   ) {
-    const userId$ = this.supabase.getSessionObs.pipe(
-      map(session => session?.user.id)
-    );
-
-    const boardId$ = this.board.getSelectedBoard.pipe(map(board => board?.id));
-
-    return combineLatest([userId$, boardId$]).pipe(
-      switchMap(([userId, boardId]) =>
-        this.apollo.mutate({
-          mutation: CHANGE_COLUMN_WRAPPER,
+    return this.apollo.mutate<{ id: string }>({
+      mutation: CHANGE_COLUMN_WRAPPER,
+      variables: {
+        currColumnWrapperId,
+        prevColumnWrapperId,
+        currColumnId,
+        prevColumnId,
+        boardId,
+      },
+      refetchQueries: [
+        {
+          query: GET_PROJECTS,
+        },
+        {
+          query: GET_BOARD,
           variables: {
-            currColumnWrapperId,
-            prevColumnWrapperId,
-            currColumnId,
-            prevColumnId,
             boardId,
           },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
-            },
-          ],
-        })
-      ),
-      take(1)
-    );
+        },
+      ],
+    });
   }
 
   updateUserName(id: string, name: string) {

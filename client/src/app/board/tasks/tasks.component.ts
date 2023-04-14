@@ -6,17 +6,13 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
-import { User } from '../../models/user.model';
 import { Task } from 'src/app/models/task.model';
-import { BoardService } from '../../services/board.service';
-import { SupabaseService } from '../../services/supabase.service';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from 'src/app/services/apollo.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { SortBy } from 'src/app/models/types';
 import { Column } from 'src/app/models/column.model';
-import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
 
 @Component({
   selector: 'app-tasks',
@@ -29,26 +25,16 @@ export class TasksComponent implements OnInit {
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
   @Input() sortBy!: SortBy;
-  loggedInUser$: Observable<Partial<User> | undefined> | null = null;
-  projectOwnerId$: Observable<string> | null = null;
-  allTags!: Observable<string[]>;
-  selectedBoard!: Board;
+  allTags = new Observable<string[]>();
+  isOwner$ = new Observable<boolean>();
 
   constructor(
-    private supabase: SupabaseService,
-    private boardService: BoardService,
     private apollo: ApolloService,
     private toastService: ToastService
   ) {}
 
-  ngOnInit(): void {
-    this.loggedInUser$ = this.supabase.getSessionObs.pipe(
-      map(data => data?.user)
-    );
-
-    this.projectOwnerId$ = this.boardService.getSelectedProject.pipe(
-      map(project => project?.userId ?? '')
-    );
+  ngOnInit() {
+    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
   }
 
   changeColumn(event: Event) {
@@ -80,19 +66,13 @@ export class TasksComponent implements OnInit {
       );
   }
 
-  getColumns(columnId: string, columns: ColumnWrapper[]) {
-    return columns
-      .flatMap(column => column.column)
-      .filter(col => col.id !== columnId);
-  }
-
-  drop(event: CdkDragDrop<Task[]>) {
+  dropTask(event: CdkDragDrop<Task[]>) {
     if (event.previousContainer === event.container) {
       return;
     }
     const id = event.item.element.nativeElement.id;
 
-    const currentColumn$ = this.boardService.getSelectedBoard.pipe(
+    const currentColumn$ = this.selectedBoard$?.pipe(
       map(board =>
         board?.columns
           .flatMap(column => column.column)
@@ -102,7 +82,7 @@ export class TasksComponent implements OnInit {
     );
 
     currentColumn$
-      .pipe(
+      ?.pipe(
         switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
         catchError(async error => {
           this.toastService.showToast(
@@ -121,7 +101,7 @@ export class TasksComponent implements OnInit {
       );
   }
 
-  dropColumn(event: CdkDragDrop<Column[] | undefined>) {
+  dropColumn(event: CdkDragDrop<Column[]>) {
     if (event.previousIndex === event.currentIndex) {
       return;
     }
@@ -136,14 +116,18 @@ export class TasksComponent implements OnInit {
     const currColumnId = event.container.data?.at(event.currentIndex)?.id;
     const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
 
-    this.apollo
-      .changeColumnWrapper(
-        currColumnWrapperId ?? '',
-        prevColumnWrapperId ?? '',
-        currColumnId ?? '',
-        prevColumnId ?? ''
-      )
-      .pipe(
+    this.selectedBoard$
+      ?.pipe(
+        map(board => board?.id ?? ''),
+        switchMap(boardId =>
+          this.apollo.changeColumnWrapper(
+            currColumnWrapperId ?? '',
+            prevColumnWrapperId ?? '',
+            currColumnId ?? '',
+            prevColumnId ?? '',
+            boardId
+          )
+        ),
         catchError(async error => {
           this.toastService.showToast(
             'warning',
@@ -192,17 +176,4 @@ export class TasksComponent implements OnInit {
 
     return `${seconds}s ago`;
   };
-
-  columnIds(columnId: string, columns: ColumnWrapper[] | undefined) {
-    if (!columns) return [];
-    const filteredColumns = columns
-      .flatMap(column => column.column)
-      .filter(column => column.id !== columnId);
-    return [...filteredColumns.map(column => column.id)];
-  }
-
-  columns(board: Board | null | undefined) {
-    if (!board) return;
-    return board.columns.flatMap(column => column.column);
-  }
 }
