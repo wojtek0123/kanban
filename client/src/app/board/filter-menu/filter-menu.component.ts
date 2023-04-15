@@ -1,9 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DoCheck,
   EventEmitter,
   Input,
-  OnInit,
   Output,
 } from '@angular/core';
 
@@ -13,15 +13,14 @@ import {
   styleUrls: ['./filter-menu.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterMenuComponent implements OnInit {
+export class FilterMenuComponent implements DoCheck {
   @Input() tags: string[] = [];
   @Output() selectedTags = new EventEmitter<string[]>();
   show = false;
   checkedTags: string[] = [''];
 
-  ngOnInit(): void {
+  ngDoCheck() {
     this.checkedTags = [...this.checkedTags, ...this.tags];
-
     this.selectedTags.emit(this.checkedTags);
   }
 
@@ -32,7 +31,6 @@ export class FilterMenuComponent implements OnInit {
   onFilter(event: Event) {
     const target = event.target as HTMLInputElement;
     if (!this.checkedTags) return;
-    console.log(target.value);
 
     if (!target.classList.contains('checkbox')) return;
     const isChecked = target.checked;
