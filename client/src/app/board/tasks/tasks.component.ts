@@ -6,13 +6,13 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
-import { Task } from 'src/app/models/task.model';
+import { Task } from '../../models/task.model';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
-import { ApolloService } from 'src/app/services/apollo.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { SortBy } from 'src/app/models/types';
-import { Column } from 'src/app/models/column.model';
+import { SortBy } from '../../models/types';
+import { Column } from '../../models/column.model';
 
 @Component({
   selector: 'app-tasks',

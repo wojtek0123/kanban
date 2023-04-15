@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApolloService } from 'src/app/services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 
 @Component({
   selector: 'app-display-number-of-users-in-task',

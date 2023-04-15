@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../models/task.model';
-import { Column } from '../models/column.model';
-import { Board } from '../models/board.model';
-import { Subtask } from '../models/subtask.model';
-import { Project } from '../models/project.model';
-import { FormType, TabNameAssign } from '../models/types';
+import { Task } from '../../models/task.model';
+import { Column } from '../../models/column.model';
+import { Board } from '../../models/board.model';
+import { Subtask } from '../../models/subtask.model';
+import { Project } from '../../models/project.model';
+import { FormType, TabNameAssign } from '../../models/types';
 
 import { BehaviorSubject, Observable, map, take } from 'rxjs';
 

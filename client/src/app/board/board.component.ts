@@ -4,11 +4,9 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormService } from '../services/form.service';
+import { FormService } from '../services/form/form.service';
 import { Observable, Subject, combineLatest, of } from 'rxjs';
-import { BoardService } from '../services/board.service';
-import { FormType } from '../models/types';
-import { ApolloService } from '../services/apollo.service';
+import { ApolloService } from '../services/apollo/apollo.service';
 import { catchError, ignoreElements, map, takeUntil } from 'rxjs/operators';
 import { Project } from '../models/project.model';
 import { ActivatedRoute } from '@angular/router';

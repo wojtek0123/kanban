@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FormService } from '../../services/form.service';
-import { ApolloService } from '../../services/apollo.service';
+import { FormService } from '../../services/form/form.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable } from 'rxjs';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
-import { ToastService } from '../../services/toast.service';
+import { catchError, switchMap, take } from 'rxjs/operators';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-column-form',

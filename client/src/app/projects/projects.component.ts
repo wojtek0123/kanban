@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Project } from '../models/project.model';
-import { ApolloService } from '../services/apollo.service';
+import { ApolloService } from '../services/apollo/apollo.service';
 import { map } from 'rxjs/operators';
 
 @Component({

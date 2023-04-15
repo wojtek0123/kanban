@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Observable } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
-import { ApolloService } from 'src/app/services/apollo.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { User } from '@supabase/supabase-js';
 
 @Component({

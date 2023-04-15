@@ -5,9 +5,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FormType, TabNameAssign } from 'src/app/models/types';
-import { ApolloService } from 'src/app/services/apollo.service';
-import { FormService } from 'src/app/services/form.service';
+import { FormType, TabNameAssign } from '../../models/types';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { FormService } from '../../services/form/form.service';
 
 @Component({
   selector: 'app-open-form-button',

@@ -4,12 +4,12 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { FormService } from '../../services/form.service';
+import { FormService } from '../../services/form/form.service';
 import { Project } from '../../models/project.model';
 import { FormType } from '../../models/types';
-import { ContextMenuModalService } from '../../services/context-menu-modal.service';
+import { ContextMenuModalService } from '../../services/context-menu-modal/context-menu-modal.service';
 import { Observable } from 'rxjs';
-import { ApolloService } from 'src/app/services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 
 @Component({
   selector: 'app-context-menu',

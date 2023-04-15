@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
-import { ApolloService } from 'src/app/services/apollo.service';
-import { User } from 'src/app/models/user.model';
-import { SupabaseService } from 'src/app/services/supabase.service';
-import { Task } from 'src/app/models/task.model';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { User } from '../../models/user.model';
+import { SupabaseService } from '../../services/supabase/supabase.service';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-user-tasks',

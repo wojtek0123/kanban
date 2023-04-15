@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ContextMenuModalService } from '../../services/context-menu-modal.service';
+import { ContextMenuModalService } from '../../services/context-menu-modal/context-menu-modal.service';
 import { Observable } from 'rxjs';
-import { ApolloService } from '../../services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError } from 'rxjs/operators';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-context-menu-modal',

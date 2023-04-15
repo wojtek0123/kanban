@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { SupabaseService } from './services/supabase.service';
+import { SupabaseService } from './services/supabase/supabase.service';
 
 @Component({
   selector: 'app-root',

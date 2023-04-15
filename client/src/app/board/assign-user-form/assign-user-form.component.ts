@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { ApolloService } from 'src/app/services/apollo.service';
+import { ApolloService } from 'src/app/services/apollo/apollo.service';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 import { TabNameAssign } from 'src/app/models/types';
 import { ActivatedRoute } from '@angular/router';
-import { FormService } from 'src/app/services/form.service';
+import { FormService } from 'src/app/services/form/form.service';
 
 @Component({
   selector: 'app-assign-user-form',

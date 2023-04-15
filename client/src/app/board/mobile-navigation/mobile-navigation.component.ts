@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormType } from '../../models/types';
-import { FormService } from '../../services/form.service';
+import { FormService } from '../../services/form/form.service';
 import {
   animate,
   state,
@@ -8,8 +8,8 @@ import {
   trigger,
   style,
 } from '@angular/animations';
-import { NavigationService } from '../../services/navigation.service';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { NavigationService } from '../../services/navigation/navigation.service';
+import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 

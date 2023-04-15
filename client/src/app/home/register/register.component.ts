@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SupabaseService } from '../../services/supabase.service';
+import { SupabaseService } from '../../services/supabase/supabase.service';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { formStatus } from '../home.component';
 import { Router } from '@angular/router';
-import { ApolloService } from 'src/app/services/apollo.service';
-import { async, catchError } from 'rxjs';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-register',

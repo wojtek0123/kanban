@@ -5,7 +5,7 @@ import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { ApolloService } from 'src/app/services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 
 type BoardTypes = 'kanban' | 'table';
 

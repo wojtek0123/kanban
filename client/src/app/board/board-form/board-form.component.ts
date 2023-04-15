@@ -1,16 +1,10 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { FormService } from '../../services/form.service';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FormService } from '../../services/form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../../services/apollo.service';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
-import { BoardService } from '../../services/board.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { catchError, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-board-form',
@@ -37,7 +31,6 @@ export class BoardFormComponent implements OnInit {
     private formService: FormService,
     private formBuilder: FormBuilder,
     private apollo: ApolloService,
-    private boardService: BoardService,
     private toastService: ToastService
   ) {}
 
@@ -94,12 +87,11 @@ export class BoardFormComponent implements OnInit {
           }),
           take(1)
         )
-        .subscribe(data => {
+        .subscribe(() => {
           this.toastService.showToast(
             'confirm',
             'Successfully added a new board'
           );
-          this.boardService.onChangeSelectedBoard(data.data?.addBoard);
         });
     }
 

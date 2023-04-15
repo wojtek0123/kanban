@@ -14,7 +14,7 @@ import {
   Output,
 } from '@angular/core';
 import { Project } from '../../models/project.model';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { Observable, map } from 'rxjs';
 
 @Component({

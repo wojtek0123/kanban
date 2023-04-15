@@ -32,15 +32,15 @@ import {
   REMOVE_USER_FROM_PROJECT,
   REMOVE_USER_FROM_TASK,
   UPDATE_USER_NAME,
-} from '../graphql/graphql.schema';
-import { SupabaseService } from './supabase.service';
+} from '../../graphql/graphql.schema';
+import { SupabaseService } from '../supabase/supabase.service';
 import { BehaviorSubject, combineLatest, map, switchMap, take } from 'rxjs';
-import { Board } from '../models/board.model';
-import { FormType } from '../models/types';
-import { Project } from '../models/project.model';
-import { User } from '../models/user.model';
-import { Task } from '../models/task.model';
-import { GET_BOARD } from '../graphql/queries/getBoard.query';
+import { Board } from '../../models/board.model';
+import { FormType } from '../../models/types';
+import { Project } from '../../models/project.model';
+import { User } from '../../models/user.model';
+import { Task } from '../../models/task.model';
+import { GET_BOARD } from '../../graphql/queries/getBoard.query';
 
 @Injectable({
   providedIn: 'root',

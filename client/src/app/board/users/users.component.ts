@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ApolloService } from '../../services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map, catchError, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
-import { SupabaseService } from 'src/app/services/supabase.service';
-import { BoardService } from '../../services/board.service';
+import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { User } from 'src/app/models/user.model';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { Task } from 'src/app/models/task.model';
 import { ActivatedRoute } from '@angular/router';
 

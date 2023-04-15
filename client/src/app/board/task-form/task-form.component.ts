@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormService } from '../../services/form.service';
-import { ApolloService } from '../../services/apollo.service';
+import { FormService } from '../../services/form/form.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import {
   AbstractControl,
   FormArray,
@@ -10,10 +10,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { ToastService } from '../../services/toast.service';
-import { Column } from 'src/app/models/column.model';
-import { BoardService } from 'src/app/services/board.service';
+import { catchError, switchMap } from 'rxjs/operators';
+import { ToastService } from '../../services/toast/toast.service';
+import { Column } from '../../models/column.model';
 
 type Tag = {
   name: string;
@@ -65,16 +64,12 @@ export class TaskFormComponent implements OnInit {
     private formService: FormService,
     private apollo: ApolloService,
     private formBuilder: FormBuilder,
-    private toastService: ToastService,
-    private boardService: BoardService
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
     this.isEditing$ = this.formService.isEditing$;
     this.selectColumn$ = this.formService.selectColumn$;
-    this.columns$ = this.boardService.getSelectedBoard.pipe(
-      map(board => board?.columns.flatMap(column => column.column))
-    );
   }
 
   maxLength(max: number): ValidatorFn | any {
@@ -144,7 +139,6 @@ export class TaskFormComponent implements OnInit {
   changeSelectedColumn(event: Event) {
     const columnId = (event.target as HTMLSelectElement).value;
     this.selectedColumn = columnId;
-    this.boardService.onChangeSelectedColumnId(columnId);
   }
 
   onSubmit() {

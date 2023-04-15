@@ -5,12 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { Project } from '../../models/project.model';
-import { Board } from '../../models/board.model';
-import { BoardService } from '../../services/board.service';
-import { FormService } from '../../services/form.service';
-import { NavigationService } from '../../services/navigation.service';
-import { SupabaseService } from 'src/app/services/supabase.service';
-import { map, tap } from 'rxjs/operators';
+import { SupabaseService } from 'src/app/services/supabase/supabase.service';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -27,8 +23,6 @@ export class AccordionItemComponent implements OnInit {
   selectedBoardId$: Observable<string | undefined> | null = null;
 
   constructor(
-    private boardService: BoardService,
-    private formService: FormService,
     private supabase: SupabaseService,
     private route: ActivatedRoute
   ) {}

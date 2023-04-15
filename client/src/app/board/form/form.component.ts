@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormService } from '../../services/form.service';
+import { FormService } from '../../services/form/form.service';
 import { FormType } from '../../models/types';
 import { Observable } from 'rxjs';
 

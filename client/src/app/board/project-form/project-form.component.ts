@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormService } from '../../services/form.service';
+import { FormService } from '../../services/form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../../services/apollo.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable } from 'rxjs';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { catchError, take } from 'rxjs/operators';
 
 @Component({
