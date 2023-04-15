@@ -10,16 +10,14 @@ import { ToastType } from 'src/app/models/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent implements OnInit {
-  message$ = new Observable<string>();
   show$ = new Observable<boolean>();
-  type$ = new Observable<ToastType>();
+  toast$ = new Observable<{ type: ToastType; message: string }>();
 
   constructor(private toastService: ToastService) {}
 
   ngOnInit(): void {
-    this.message$ = this.toastService.message$;
     this.show$ = this.toastService.show$;
-    this.type$ = this.toastService.type$;
+    this.toast$ = this.toastService.toast$;
   }
 
   onClose() {
