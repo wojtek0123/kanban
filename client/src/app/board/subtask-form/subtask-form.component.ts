@@ -47,7 +47,7 @@ export class SubtaskFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEditing$ = this.formService.getIsEditing;
+    this.isEditing$ = this.formService.isEditing$;
   }
 
   onSubmit() {
@@ -78,7 +78,7 @@ export class SubtaskFormComponent implements OnInit {
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.formService.getParentId
+      this.formService.parentId$
         .pipe(
           switchMap(parentId => this.apollo.addSubtask(name, false, parentId)),
           take(1),

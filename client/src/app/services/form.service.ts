@@ -6,18 +6,22 @@ import { Subtask } from '../models/subtask.model';
 import { Project } from '../models/project.model';
 import { FormType, TabNameAssign } from '../models/types';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map, take } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
-  private isFormOpen = new BehaviorSubject(false);
-  private isEditing = new BehaviorSubject(false);
-  private parentId = new BehaviorSubject('');
+  private _isFormOpen$ = new BehaviorSubject(false);
+  private _isEditing$ = new BehaviorSubject(false);
+  private _parentId$ = new BehaviorSubject('');
   private _enableSelectColumn$ = new BehaviorSubject<boolean | undefined>(
     undefined
   );
   private _projectOwnerId = new BehaviorSubject('');
   private _assignUserTabName = new BehaviorSubject<TabNameAssign>('assign');
+  private _project$ = new BehaviorSubject<Project | undefined>(undefined);
+  editingObject$ = new Observable<
+    Project | Board | Column | Task | Subtask | undefined
+  >();
 
   private editingProject?: Project;
   private editingBoard?: Board;
@@ -26,24 +30,28 @@ export class FormService {
   private editingSubtask?: Subtask;
   private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
 
-  get getParentId() {
-    return this.parentId.asObservable();
+  get parentId$() {
+    return this._parentId$.asObservable();
   }
 
   get assignUserTabName$() {
     return this._assignUserTabName.asObservable();
   }
 
-  get getIsFormOpen(): Observable<boolean> {
-    return this.isFormOpen;
+  get project$() {
+    return this._project$.asObservable();
   }
 
-  get getIsEditing(): Observable<boolean> {
-    return this.isEditing;
+  get isFormOpen$() {
+    return this._isFormOpen$.asObservable();
   }
 
-  get getTypeOfForm(): Observable<FormType | undefined> {
-    return this.typeOfForm;
+  get isEditing$() {
+    return this._isEditing$.asObservable();
+  }
+
+  get getTypeOfForm() {
+    return this.typeOfForm.asObservable();
   }
 
   get getEditingProject() {
@@ -74,42 +82,95 @@ export class FormService {
     this._projectOwnerId.next(id);
   }
 
+  onChangeProject(project: Project | undefined) {
+    this._project$.next(project);
+  }
+
   onChangeTabName(name: TabNameAssign) {
     this._assignUserTabName.next(name);
   }
 
   onChangeParentId(id: string) {
-    this.parentId.next(id);
+    this._parentId$.next(id);
   }
 
   onChangeFormVisibility(formType?: FormType, selectColumn?: boolean) {
-    this.isFormOpen.next(!this.isFormOpen.value);
+    this._isFormOpen$.next(!this._isFormOpen$.value);
     this.typeOfForm.next(formType);
     this._enableSelectColumn$.next(selectColumn);
   }
 
-  onEditing(type: FormType, object: Project | Board | Column | Task | Subtask) {
-    this.isEditing.next(true);
+  onEdit(type: FormType, id: string) {
+    this._isEditing$.next(true);
     this.typeOfForm.next(type);
 
-    switch (type) {
-      case 'project':
-        this.editingProject = object as Project;
-        break;
-      case 'board':
-        this.editingBoard = object as Board;
-        break;
-      case 'column':
-        this.editingColumn = object as Column;
-        break;
-      case 'task':
-        this.editingTask = object as Task;
-        break;
-      case 'subtask':
-        this.editingSubtask = object as Subtask;
-        break;
-      default:
-        break;
+    if (type === 'project') {
+      this.editingObject$ = this._project$;
+      this._project$
+        .pipe(take(1))
+        .subscribe(project => (this.editingProject = project));
     }
+
+    if (type === 'board') {
+      this.getBoards()
+        .pipe(
+          map(boards => boards?.find(board => board.id === id)),
+          take(1)
+        )
+        .subscribe(board => (this.editingBoard = board));
+    }
+
+    if (type === 'column') {
+      this.getColumns()
+        .pipe(
+          map(columns => columns?.find(column => column.id === id)),
+          take(1)
+        )
+        .subscribe(column => (this.editingColumn = column));
+    }
+
+    if (type === 'task') {
+      this.getTasks()
+        .pipe(
+          map(tasks => tasks?.find(task => task.id === id)),
+          take(1)
+        )
+        .subscribe(task => (this.editingTask = task));
+    }
+
+    if (type === 'subtask') {
+      this.getSubtasks()
+        .pipe(
+          map(subtasks => subtasks?.find(subtask => subtask.id === id)),
+          take(1)
+        )
+        .subscribe(subtask => (this.editingSubtask = subtask));
+    }
+  }
+
+  private getBoards() {
+    return this._project$.pipe(map(project => project?.boards));
+  }
+
+  private getColumns() {
+    return this.getBoards().pipe(
+      map(boards =>
+        boards?.flatMap(board =>
+          board.columns.flatMap(columnWrapper => columnWrapper.column)
+        )
+      )
+    );
+  }
+
+  private getTasks() {
+    return this.getColumns().pipe(
+      map(columns => columns?.flatMap(column => column.tasks))
+    );
+  }
+
+  private getSubtasks() {
+    return this.getTasks().pipe(
+      map(tasks => tasks?.flatMap(task => task.subtasks))
+    );
   }
 }

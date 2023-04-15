@@ -32,7 +32,7 @@ export class AssignUserFormComponent implements OnInit {
   ngOnInit(): void {
     const projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
-    this.taskId$ = this.formService.getParentId;
+    this.taskId$ = this.formService.parentId$;
     this.tabName$ = this.formService.assignUserTabName$;
     this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 

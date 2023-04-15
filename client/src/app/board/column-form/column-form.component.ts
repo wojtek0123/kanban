@@ -39,7 +39,7 @@ export class ColumnFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEditing$ = this.formService.getIsEditing;
+    this.isEditing$ = this.formService.isEditing$;
   }
 
   get getAddControls() {
@@ -83,7 +83,7 @@ export class ColumnFormComponent implements OnInit {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
-      this.formService.getParentId
+      this.formService.parentId$
         .pipe(
           switchMap(parentId =>
             this.apollo.addColumn(name, dotColor, parentId)

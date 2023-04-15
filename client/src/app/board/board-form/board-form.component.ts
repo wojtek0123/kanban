@@ -54,7 +54,7 @@ export class BoardFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEditing$ = this.formService.getIsEditing;
+    this.isEditing$ = this.formService.isEditing$;
   }
 
   onSubmit() {
@@ -85,7 +85,7 @@ export class BoardFormComponent implements OnInit {
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.formService.getParentId
+      this.formService.parentId$
         .pipe(
           switchMap(parentId => this.apollo.addBoard(name, parentId)),
           catchError(async error => {

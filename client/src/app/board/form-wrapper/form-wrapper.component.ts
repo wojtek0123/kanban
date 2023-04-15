@@ -14,7 +14,7 @@ export class FormWrapperComponent implements OnInit {
   constructor(private formService: FormService) {}
 
   ngOnInit(): void {
-    this.show$ = this.formService.getIsFormOpen;
+    this.show$ = this.formService.isFormOpen$;
   }
 
   close(event: Event) {

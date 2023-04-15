@@ -1,11 +1,17 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormService } from '../services/form.service';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, combineLatest, of } from 'rxjs';
 import { BoardService } from '../services/board.service';
 import { FormType } from '../models/types';
 import { ApolloService } from '../services/apollo.service';
-import { catchError, ignoreElements, map } from 'rxjs/operators';
+import { catchError, ignoreElements, map, takeUntil } from 'rxjs/operators';
 import { Project } from '../models/project.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -13,17 +19,22 @@ import { Project } from '../models/project.model';
   styleUrls: ['./board.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   projects$: Observable<Project[]> | null = null;
   projectsError$: Observable<string> | null = null;
 
   constructor(
     public formService: FormService,
-    private boardService: BoardService,
-    private apollo: ApolloService
+    private apollo: ApolloService,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    const projectId$ = this.route.params.pipe(
+      map(params => params['projectId'])
+    );
+
     this.projects$ = this.apollo
       .getProjects()
       .pipe(map(data => data.data.projects));
@@ -32,5 +43,19 @@ export class BoardComponent implements OnInit {
       ignoreElements(),
       catchError(error => of(error))
     );
+
+    combineLatest([this.projects$, projectId$])
+      .pipe(
+        map(([projects, projectId]) =>
+          projects.find(project => project.id === projectId)
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(project => this.formService.onChangeProject(project));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -45,7 +45,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEditing$ = this.formService.getIsEditing;
+    this.isEditing$ = this.formService.isEditing$;
   }
 
   onSubmit() {

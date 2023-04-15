@@ -25,7 +25,8 @@ export class ContextMenuComponent implements OnInit {
   @Input() id!: string;
   @Input() type!: FormType;
   @Input() editingProject?: Project;
-  @Input() editingBoard?: Board | null;
+
+  @Input() editingBoard?: Board;
   @Input() editingColumn?: Column;
   @Input() editingTask?: Task;
   @Input() editingSubtask?: Subtask;
@@ -56,22 +57,26 @@ export class ContextMenuComponent implements OnInit {
 
   edit() {
     this.openedContextMenuOfElementId = '';
-    this.formService.onChangeFormVisibility();
 
-    if (this.type === 'project' && this.editingProject) {
-      this.formService.onEditing('project', this.editingProject);
+    if (this.type === 'project') {
+      this.formService.onEdit('project', this.id);
+      this.formService.onChangeFormVisibility('project');
     }
-    if (this.type === 'board' && this.editingBoard) {
-      this.formService.onEditing('board', this.editingBoard);
+    if (this.type === 'board') {
+      this.formService.onEdit('board', this.id);
+      this.formService.onChangeFormVisibility('board');
     }
-    if (this.type === 'column' && this.editingColumn) {
-      this.formService.onEditing('column', this.editingColumn);
+    if (this.type === 'column') {
+      this.formService.onEdit('column', this.id);
+      this.formService.onChangeFormVisibility('column');
     }
-    if (this.type === 'task' && this.editingTask) {
-      this.formService.onEditing('task', this.editingTask);
+    if (this.type === 'task') {
+      this.formService.onEdit('task', this.id);
+      this.formService.onChangeFormVisibility('task');
     }
-    if (this.type === 'subtask' && this.editingSubtask) {
-      this.formService.onEditing('subtask', this.editingSubtask);
+    if (this.type === 'subtask') {
+      this.formService.onEdit('subtask', this.id);
+      this.formService.onChangeFormVisibility('subtask');
     }
   }
 }

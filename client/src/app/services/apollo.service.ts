@@ -39,7 +39,6 @@ import { Board } from '../models/board.model';
 import { FormType } from '../models/types';
 import { Project } from '../models/project.model';
 import { User } from '../models/user.model';
-import { BoardService } from './board.service';
 import { Task } from '../models/task.model';
 import { GET_BOARD } from '../graphql/queries/getBoard.query';
 
@@ -49,11 +48,7 @@ import { GET_BOARD } from '../graphql/queries/getBoard.query';
 export class ApolloService {
   private _projectOwnerId = new BehaviorSubject('');
 
-  constructor(
-    private apollo: Apollo,
-    private supabase: SupabaseService,
-    private board: BoardService
-  ) {}
+  constructor(private apollo: Apollo, private supabase: SupabaseService) {}
 
   get isLoggedInUserAOwnerOfTheProject$() {
     return combineLatest([

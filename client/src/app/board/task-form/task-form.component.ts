@@ -70,7 +70,7 @@ export class TaskFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEditing$ = this.formService.getIsEditing;
+    this.isEditing$ = this.formService.isEditing$;
     this.selectColumn$ = this.formService.selectColumn$;
     this.columns$ = this.boardService.getSelectedBoard.pipe(
       map(board => board?.columns.flatMap(column => column.column))
@@ -223,7 +223,7 @@ export class TaskFormComponent implements OnInit {
         return;
       }
 
-      this.formService.getParentId
+      this.formService.parentId$
         .pipe(
           switchMap(parentId => this.apollo.addTask(task, parentId)),
           catchError(async error => {
