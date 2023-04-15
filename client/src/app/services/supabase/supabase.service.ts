@@ -6,48 +6,48 @@ import {
   Session,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
-  private supabase: SupabaseClient;
-  private session = new BehaviorSubject<AuthSession | null>(null);
+  private _supabase: SupabaseClient;
+  private _session$ = new BehaviorSubject<AuthSession | null>(null);
 
   constructor() {
-    this.supabase = createClient(
+    this._supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
     );
   }
 
   setSession(session: Session | null) {
-    this.session.next(session);
+    this._session$.next(session);
   }
 
   async refreshSession() {
-    const { data } = await this.supabase.auth.getSession();
-    this.session.next(data.session);
+    const { data } = await this._supabase.auth.getSession();
+    this._session$.next(data.session);
   }
 
   getSession() {
-    return this.supabase.auth.getSession();
+    return this._supabase.auth.getSession();
   }
 
-  get getSessionObs(): Observable<AuthSession | null> {
-    return this.session;
+  get session$() {
+    return this._session$.asObservable();
   }
 
   signIn(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({
+    return this._supabase.auth.signInWithPassword({
       email,
       password,
     });
   }
 
   singUp(email: string, password: string, nick: string) {
-    return this.supabase.auth.signUp({
+    return this._supabase.auth.signUp({
       email,
       password,
       options: {
@@ -59,6 +59,6 @@ export class SupabaseService {
   }
 
   signOut() {
-    return this.supabase.auth.signOut();
+    return this._supabase.auth.signOut();
   }
 }

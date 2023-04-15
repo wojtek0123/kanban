@@ -9,8 +9,6 @@ import {
   style,
 } from '@angular/animations';
 import { NavigationService } from '../../services/navigation/navigation.service';
-import { SupabaseService } from 'src/app/services/supabase/supabase.service';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -45,7 +43,7 @@ export class MobileNavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showMenu$ = this.navigationService.getShowMenu();
+    this.showMenu$ = this.navigationService.showMenu$;
   }
 
   onMenu() {

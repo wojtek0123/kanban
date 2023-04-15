@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loggedInUser$ = this.supabase.getSessionObs.pipe(
+    this.loggedInUser$ = this.supabase.session$.pipe(
       map(session => session?.user)
     );
   }

@@ -1,45 +1,45 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ToastType } from 'src/app/models/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  private message$ = new Subject<string>();
-  private show$ = new BehaviorSubject<boolean>(false);
-  private type$ = new BehaviorSubject<ToastType>('confirm');
-  private timeout: NodeJS.Timeout | null = null;
+  private _message$ = new Subject<string>();
+  private _show$ = new BehaviorSubject<boolean>(false);
+  private _type$ = new BehaviorSubject<ToastType>('confirm');
+  private _timeout: NodeJS.Timeout | null = null;
 
   constructor() {}
 
-  get getMessage(): Observable<string> {
-    return this.message$;
+  get message$() {
+    return this._message$.asObservable();
   }
 
-  get getShow(): Observable<boolean> {
-    return this.show$;
+  get show$() {
+    return this._show$.asObservable();
   }
 
-  get getType(): Observable<ToastType> {
-    return this.type$;
+  get type$() {
+    return this._type$.asObservable();
   }
 
   showToast(type: ToastType, message: string) {
-    this.type$.next(type);
-    this.show$.next(true);
-    this.message$.next(message);
+    this._type$.next(type);
+    this._show$.next(true);
+    this._message$.next(message);
 
-    if (this.timeout) {
-      clearTimeout(this.timeout);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
     }
 
-    this.timeout = setTimeout(() => {
+    this._timeout = setTimeout(() => {
       this.closeToast();
     }, 3000);
   }
 
   closeToast() {
-    this.show$.next(false);
+    this._show$.next(false);
   }
 }

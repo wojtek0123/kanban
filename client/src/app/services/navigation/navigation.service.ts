@@ -3,13 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
-  private showMenu = new BehaviorSubject<boolean>(false);
+  private _showMenu$ = new BehaviorSubject<boolean>(false);
 
-  getShowMenu(): Observable<boolean> {
-    return this.showMenu;
+  get showMenu$() {
+    return this._showMenu$.asObservable();
   }
 
   onMenu() {
-    this.showMenu.next(!this.showMenu.value);
+    this._showMenu$.next(!this._showMenu$.value);
   }
 }

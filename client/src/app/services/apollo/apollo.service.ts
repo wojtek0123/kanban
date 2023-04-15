@@ -51,10 +51,9 @@ export class ApolloService {
   constructor(private apollo: Apollo, private supabase: SupabaseService) {}
 
   get isLoggedInUserAOwnerOfTheProject$() {
-    return combineLatest([
-      this.supabase.getSessionObs,
-      this._projectOwnerId,
-    ]).pipe(map(([session, ownerId]) => session?.user.id === ownerId));
+    return combineLatest([this.supabase.session$, this._projectOwnerId]).pipe(
+      map(([session, ownerId]) => session?.user.id === ownerId)
+    );
   }
 
   setProjectOwnerId(id: string) {
@@ -62,7 +61,7 @@ export class ApolloService {
   }
 
   getProjects() {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo
@@ -236,7 +235,7 @@ export class ApolloService {
   }
 
   addProject(name: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{ addProject: { id: string; name: string } }>({
@@ -315,7 +314,7 @@ export class ApolloService {
   }
 
   editProject(id: string, name: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{ editProject: { id: string; name: string } }>({
@@ -336,7 +335,7 @@ export class ApolloService {
   }
 
   editBoard(id: string, name: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{ editBoard: { id: string; name: string } }>({
@@ -357,7 +356,7 @@ export class ApolloService {
   }
 
   editColumn(id: string, name: string, dotColor: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{ editColumn: { id: string; name: string } }>({
@@ -385,7 +384,7 @@ export class ApolloService {
     tagFontColors: string[],
     tagBackgroundColors: string[]
   ) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{
@@ -419,7 +418,7 @@ export class ApolloService {
   }
 
   editSubtask(id: string, name: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate<{
@@ -460,7 +459,7 @@ export class ApolloService {
         mutation = REMOVE_SUBTASK;
         break;
     }
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate({
@@ -482,7 +481,7 @@ export class ApolloService {
   }
 
   updateCompletionStateOfSubtask(id: string, state: boolean) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate({
@@ -503,7 +502,7 @@ export class ApolloService {
   }
 
   changeColumn(columnId: string, taskId: string) {
-    return this.supabase.getSessionObs.pipe(
+    return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo.mutate({

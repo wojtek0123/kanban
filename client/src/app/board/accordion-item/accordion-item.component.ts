@@ -32,7 +32,7 @@ export class AccordionItemComponent implements OnInit {
       map(param => param['boardId'])
     );
 
-    this.loggedInUserId$ = this.supabase.getSessionObs.pipe(
+    this.loggedInUserId$ = this.supabase.session$.pipe(
       map(session => session?.user.id ?? '')
     );
   }

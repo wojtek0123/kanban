@@ -42,7 +42,7 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
     this.projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
-    this.userId$ = this.supabase.getSessionObs.pipe(
+    this.userId$ = this.supabase.session$.pipe(
       map(session => session?.user.id ?? '')
     );
 

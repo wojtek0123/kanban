@@ -16,26 +16,25 @@ export class FormService {
   private _enableSelectColumn$ = new BehaviorSubject<boolean | undefined>(
     undefined
   );
-  private _projectOwnerId = new BehaviorSubject('');
-  private _assignUserTabName = new BehaviorSubject<TabNameAssign>('assign');
+  private _assignUserTabName$ = new BehaviorSubject<TabNameAssign>('assign');
   private _project$ = new BehaviorSubject<Project | undefined>(undefined);
   editingObject$ = new Observable<
     Project | Board | Column | Task | Subtask | undefined
   >();
 
-  private editingProject?: Project;
-  private editingBoard?: Board;
-  private editingColumn?: Column;
-  private editingTask?: Task;
-  private editingSubtask?: Subtask;
-  private typeOfForm = new BehaviorSubject<FormType | undefined>(undefined);
+  private _editingProject?: Project;
+  private _editingBoard?: Board;
+  private _editingColumn?: Column;
+  private _editingTask?: Task;
+  private _editingSubtask?: Subtask;
+  private _typeOfForm$ = new BehaviorSubject<FormType | undefined>(undefined);
 
   get parentId$() {
     return this._parentId$.asObservable();
   }
 
   get assignUserTabName$() {
-    return this._assignUserTabName.asObservable();
+    return this._assignUserTabName$.asObservable();
   }
 
   get project$() {
@@ -51,35 +50,31 @@ export class FormService {
   }
 
   get getTypeOfForm() {
-    return this.typeOfForm.asObservable();
+    return this._typeOfForm$.asObservable();
   }
 
   get getEditingProject() {
-    return this.editingProject;
+    return this._editingProject;
   }
 
   get getEditingBoard() {
-    return this.editingBoard;
+    return this._editingBoard;
   }
 
   get getEditingColumn() {
-    return this.editingColumn;
+    return this._editingColumn;
   }
 
   get getEditingTask() {
-    return this.editingTask;
+    return this._editingTask;
   }
 
   get getEditingSubtask() {
-    return this.editingSubtask;
+    return this._editingSubtask;
   }
 
   get selectColumn$() {
     return this._enableSelectColumn$.asObservable();
-  }
-
-  set projectOwnerId(id: string) {
-    this._projectOwnerId.next(id);
   }
 
   onChangeProject(project: Project | undefined) {
@@ -87,7 +82,7 @@ export class FormService {
   }
 
   onChangeTabName(name: TabNameAssign) {
-    this._assignUserTabName.next(name);
+    this._assignUserTabName$.next(name);
   }
 
   onChangeParentId(id: string) {
@@ -96,7 +91,7 @@ export class FormService {
 
   onChangeFormVisibility(formType?: FormType, selectColumn?: boolean) {
     this._isFormOpen$.next(!this._isFormOpen$.value);
-    this.typeOfForm.next(formType);
+    this._typeOfForm$.next(formType);
     this._enableSelectColumn$.next(selectColumn);
   }
 
@@ -106,12 +101,12 @@ export class FormService {
 
     if (type === 'project') {
       if (project) {
-        this.editingProject = project;
+        this._editingProject = project;
         return;
       }
       this._project$
         .pipe(take(1))
-        .subscribe(project => (this.editingProject = project));
+        .subscribe(project => (this._editingProject = project));
     }
 
     if (type === 'board') {
@@ -120,7 +115,7 @@ export class FormService {
           map(boards => boards?.find(board => board.id === id)),
           take(1)
         )
-        .subscribe(board => (this.editingBoard = board));
+        .subscribe(board => (this._editingBoard = board));
     }
 
     if (type === 'column') {
@@ -129,7 +124,7 @@ export class FormService {
           map(columns => columns?.find(column => column.id === id)),
           take(1)
         )
-        .subscribe(column => (this.editingColumn = column));
+        .subscribe(column => (this._editingColumn = column));
     }
 
     if (type === 'task') {
@@ -138,7 +133,7 @@ export class FormService {
           map(tasks => tasks?.find(task => task.id === id)),
           take(1)
         )
-        .subscribe(task => (this.editingTask = task));
+        .subscribe(task => (this._editingTask = task));
     }
 
     if (type === 'subtask') {
@@ -147,7 +142,7 @@ export class FormService {
           map(subtasks => subtasks?.find(subtask => subtask.id === id)),
           take(1)
         )
-        .subscribe(subtask => (this.editingSubtask = subtask));
+        .subscribe(subtask => (this._editingSubtask = subtask));
     }
   }
 
