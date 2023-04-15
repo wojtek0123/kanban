@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 import { ToastService } from '../../services/toast/toast.service';
 import { Column } from '../../models/column.model';
 
@@ -70,6 +70,7 @@ export class TaskFormComponent implements OnInit {
   ngOnInit(): void {
     this.isEditing$ = this.formService.isEditing$;
     this.selectColumn$ = this.formService.selectColumn$;
+    this.columns$ = this.formService.getColumnsFormBoard();
   }
 
   maxLength(max: number): ValidatorFn | any {
@@ -170,7 +171,8 @@ export class TaskFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't update this task`);
             throw new Error(error);
-          })
+          }),
+          take(1)
         )
         .subscribe(() =>
           this.toastService.showToast(
@@ -178,7 +180,6 @@ export class TaskFormComponent implements OnInit {
             'Successfully updated this task'
           )
         );
-      this.formService.onChangeFormVisibility();
     }
 
     if (this.getFormControls.add.valid) {
@@ -206,7 +207,8 @@ export class TaskFormComponent implements OnInit {
             catchError(async error => {
               this.toastService.showToast('warning', `Couldn't add a new task`);
               throw new Error(error);
-            })
+            }),
+            take(1)
           )
           .subscribe(() =>
             this.toastService.showToast(
@@ -214,6 +216,7 @@ export class TaskFormComponent implements OnInit {
               'Successfully added a new task'
             )
           );
+        this.formService.onChangeFormVisibility();
         return;
       }
 
@@ -231,7 +234,7 @@ export class TaskFormComponent implements OnInit {
             'Successfully added a new task'
           )
         );
-      this.formService.onChangeFormVisibility();
     }
+    this.formService.onChangeFormVisibility();
   }
 }

@@ -410,9 +410,6 @@ export class ApolloService {
           refetchQueries: [
             {
               query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
             },
           ],
         })

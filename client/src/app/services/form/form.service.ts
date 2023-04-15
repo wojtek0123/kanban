@@ -6,7 +6,7 @@ import { Subtask } from '../../models/subtask.model';
 import { Project } from '../../models/project.model';
 import { FormType, TabNameAssign } from '../../models/types';
 
-import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, take } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
@@ -174,6 +174,17 @@ export class FormService {
   private getSubtasks() {
     return this.getTasks().pipe(
       map(tasks => tasks?.flatMap(task => task.subtasks))
+    );
+  }
+
+  getColumnsFormBoard() {
+    return combineLatest([this.parentId$, this.project$]).pipe(
+      map(([parentId, project]) =>
+        project?.boards.find(board => board.id === parentId)
+      ),
+      map(board =>
+        board?.columns.flatMap(columnWrapper => columnWrapper.column)
+      )
     );
   }
 }
