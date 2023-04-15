@@ -32,13 +32,11 @@
     *ngIf="formControls.password.invalid && formControls.password.touched">
     Password should have at least 8 characters
   </p>
-  <p class="form-error-message" *ngIf="status === 'error'">
-    {{
-      errorMessage.length === 0 ? 'Incorrect email or password' : errorMessage
-    }}
+  <p class="form-error-message" *ngIf="(status | async) === 'error'">
+    {{ errorMessage | async }}
   </p>
   <button type="submit" class="button-global form-button">
-    <p *ngIf="status !== 'loading'">Login</p>
-    <p *ngIf="status === 'loading'">Loading...</p>
+    <span *ngIf="(status | async) !== 'loading'">Login</span>
+    <span *ngIf="(status | async) === 'loading'">Loading...</span>
   </button>
 </form>
