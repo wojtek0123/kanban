@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormType } from '../../models/types';
 import { FormService } from '../../services/form/form.service';
 import {
@@ -10,6 +15,7 @@ import {
 } from '@angular/animations';
 import { NavigationService } from '../../services/navigation/navigation.service';
 import { Observable } from 'rxjs';
+import { Project } from 'src/app/models/project.model';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -36,6 +42,7 @@ import { Observable } from 'rxjs';
 })
 export class MobileNavigationComponent implements OnInit {
   showMenu$!: Observable<boolean>;
+  @Input() projects: Project[] | null = [];
 
   constructor(
     private formService: FormService,

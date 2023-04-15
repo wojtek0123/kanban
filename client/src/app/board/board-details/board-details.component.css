@@ -31,7 +31,6 @@
 }
 
 .board-name-wrapper {
-  margin-top: 1rem;
   font-size: 1.75rem;
   display: flex;
   justify-content: space-between;
@@ -120,5 +119,9 @@
 
   .heading-section-menu button {
     font-size: 1rem;
+  }
+
+  .board-name-wrapper {
+    margin-top: 1rem;
   }
 }

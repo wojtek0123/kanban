@@ -22,7 +22,9 @@
     </ng-container>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details></app-board-details>
+    <app-board-details>
+      <app-mobile-navigation [projects]="vm.projects"></app-mobile-navigation>
+    </app-board-details>
     <div
       *ngIf="!vm.projectsError && !vm.projects"
       class="loading-wrapper"

@@ -4,6 +4,7 @@
   background-color: var(--secondary-color);
   color: var(--black-color);
   transition: opacity 0.3s ease-in-out;
+  width: 100%;
 }
 
 .board-logout-button:hover {

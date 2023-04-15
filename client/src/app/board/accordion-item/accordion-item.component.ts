@@ -9,6 +9,7 @@ import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-accordion-item',
@@ -24,7 +25,8 @@ export class AccordionItemComponent implements OnInit {
 
   constructor(
     private supabase: SupabaseService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private navigationService: NavigationService
   ) {}
 
   ngOnInit(): void {
@@ -39,5 +41,9 @@ export class AccordionItemComponent implements OnInit {
 
   toggleShowContent(state: boolean) {
     this.showContent = state;
+  }
+
+  closeMenu() {
+    this.navigationService.onMenu();
   }
 }

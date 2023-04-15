@@ -8,7 +8,8 @@
       [routerLink]="['/', 'project', project.id, 'board', board.id]"
       type="button"
       class="accordion-item"
-      [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }">
+      [ngClass]="{ highlight: (selectedBoardId$ | async) === board.id }"
+      (click)="closeMenu()">
       {{ board.name }}
     </a>
   </li>

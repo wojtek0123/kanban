@@ -14,11 +14,12 @@
   </button>
 </div>
 <nav
+  *ngIf="projects"
   class="navigation-container"
   [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'">
   <app-logout-button></app-logout-button>
   <div class="navigation-wrapper">
-    <app-accordion></app-accordion>
+    <app-accordion [projects]="projects"></app-accordion>
   </div>
   <div class="navigation-button-wrapper">
     <button
