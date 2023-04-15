@@ -21,7 +21,7 @@ export class ContextMenuModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.show$ = this.contextMenuModalService.show;
+    this.show$ = this.contextMenuModalService.show$;
   }
 
   onHide() {

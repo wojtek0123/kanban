@@ -40,8 +40,7 @@
         <app-context-menu
           *ngIf="isOwner$ | async"
           [id]="columnWrapper.column.id"
-          [type]="'column'"
-          [editingColumn]="columnWrapper.column"></app-context-menu>
+          [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
         [isProtected]="true"
@@ -109,8 +108,7 @@
               <app-context-menu
                 [isProtected]="true"
                 [id]="task.id"
-                [type]="'task'"
-                [editingTask]="task"></app-context-menu>
+                [type]="'task'"></app-context-menu>
             </div>
             <div class="card-subtask-wrapper">
               <div class="card-subtask" *ngFor="let subtask of task.subtasks">
@@ -126,8 +124,7 @@
                 <app-context-menu
                   [isProtected]="true"
                   [id]="subtask.id"
-                  [type]="'subtask'"
-                  [editingSubtask]="subtask"></app-context-menu>
+                  [type]="'subtask'"></app-context-menu>
               </div>
               <div class="card-subtask-line"></div>
               <div class="card-buttons">

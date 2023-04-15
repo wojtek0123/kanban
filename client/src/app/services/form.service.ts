@@ -100,12 +100,15 @@ export class FormService {
     this._enableSelectColumn$.next(selectColumn);
   }
 
-  onEdit(type: FormType, id: string) {
+  onEdit(type: FormType, id: string, project?: Project | undefined) {
+    this.onChangeFormVisibility(type);
     this._isEditing$.next(true);
-    this.typeOfForm.next(type);
 
     if (type === 'project') {
-      this.editingObject$ = this._project$;
+      if (project) {
+        this.editingProject = project;
+        return;
+      }
       this._project$
         .pipe(take(1))
         .subscribe(project => (this.editingProject = project));

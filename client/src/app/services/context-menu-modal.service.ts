@@ -4,15 +4,29 @@ import { FormType } from '../models/types';
 
 @Injectable({ providedIn: 'root' })
 export class ContextMenuModalService {
-  show = new BehaviorSubject<boolean>(false);
-  id = '';
-  type!: FormType;
+  private _show$ = new BehaviorSubject<boolean>(false);
+  private _id = '';
+  private _type!: FormType;
 
-  onShow() {
-    this.show.next(true);
+  get id() {
+    return this._id;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  get show$() {
+    return this._show$.asObservable();
+  }
+
+  onShow(type: FormType, id: string) {
+    this._show$.next(true);
+    this._type = type;
+    this._id = id;
   }
 
   onHide() {
-    this.show.next(false);
+    this._show$.next(false);
   }
 }
