@@ -14,14 +14,19 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterMenuComponent implements DoCheck {
+  @Input() id = '';
   @Input() tags: string[] = [];
   @Output() selectedTags = new EventEmitter<string[]>();
   show = false;
   checkedTags: string[] = [''];
+  tmpId = '';
 
   ngDoCheck() {
-    this.checkedTags = [...this.checkedTags, ...this.tags];
-    this.selectedTags.emit(this.checkedTags);
+    if (this.id !== this.tmpId) {
+      this.checkedTags = [...this.checkedTags, ...this.tags];
+      this.selectedTags.emit(this.checkedTags);
+      this.tmpId = this.id;
+    }
   }
 
   onToggleFilter() {
@@ -31,6 +36,8 @@ export class FilterMenuComponent implements DoCheck {
   onFilter(event: Event) {
     const target = event.target as HTMLInputElement;
     if (!this.checkedTags) return;
+
+    if (!event) return;
 
     if (!target.classList.contains('checkbox')) return;
     const isChecked = target.checked;
