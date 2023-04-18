@@ -7,5 +7,4 @@ export interface Board {
   projectId: string;
   createdAt: Date;
   updatedAt: Date;
-  Project: { userId: string };
 }

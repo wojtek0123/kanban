@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { BoardComponent } from './board/board.component';
@@ -11,6 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: ProjectsComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'project/:projectId/board/:boardId',

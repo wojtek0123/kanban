@@ -1,11 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DoCheck,
   Input,
-  OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Board } from 'src/app/models/board.model';
 import { Task } from 'src/app/models/task.model';
 import { SortBy } from 'src/app/models/types';
@@ -20,12 +18,13 @@ export interface TaskTable {
   styleUrls: ['./task-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskTableComponent implements OnInit {
-  @Input() selectedBoard: Observable<Board | undefined> | null = null;
+export class TaskTableComponent implements DoCheck {
+  @Input() board: Board | undefined | null = null;
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
   @Input() sortBy!: SortBy;
-  displayColumns$: Observable<string[]> | undefined = undefined;
+  displayColumns: string[] = [];
+  tableTask: Task[] = [];
   displayedTableColumns = [
     'title',
     'description',
@@ -34,23 +33,22 @@ export class TaskTableComponent implements OnInit {
     'createdAt',
     'updatedAt',
   ];
-  tableTask$: Observable<Task[] | undefined> | undefined = undefined;
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.tableTask$ = this.selectedBoard?.pipe(
-      map(board =>
-        board?.columns.flatMap(column =>
-          column.column.tasks.flatMap(task =>
-            Object.assign({}, { ...task, ['columnName']: column.column.name })
+  ngDoCheck() {
+    this.tableTask =
+      this.board?.columns.flatMap(columnWrapper =>
+        columnWrapper.column.tasks.flatMap(task =>
+          Object.assign(
+            {},
+            { ...task, ['columnName']: columnWrapper.column.name }
           )
         )
-      )
-    );
+      ) ?? [];
 
-    this.displayColumns$ = this.selectedBoard?.pipe(
-      map(board => board?.columns.flatMap(column => column.column.name) ?? [])
-    );
+    this.displayColumns =
+      this.board?.columns.flatMap(columnWrapper => columnWrapper.column.name) ??
+      [];
   }
 }

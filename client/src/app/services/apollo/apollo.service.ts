@@ -40,7 +40,6 @@ import { FormType } from '../../models/types';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Task } from '../../models/task.model';
-import { GET_BOARD } from '../../graphql/queries/getBoard.query';
 
 @Injectable({
   providedIn: 'root',
@@ -73,15 +72,6 @@ export class ApolloService {
           .valueChanges.pipe(map(data => data))
       )
     );
-  }
-
-  getBoard(id: string) {
-    return this.apollo.watchQuery<{
-      board: Board;
-    }>({
-      query: GET_BOARD,
-      variables: { id },
-    }).valueChanges;
   }
 
   getUsers() {
@@ -541,12 +531,6 @@ export class ApolloService {
       refetchQueries: [
         {
           query: GET_PROJECTS,
-        },
-        {
-          query: GET_BOARD,
-          variables: {
-            boardId,
-          },
         },
       ],
     });

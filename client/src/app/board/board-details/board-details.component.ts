@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { SortBy } from '../../models/types';
 import { Board } from '../../models/board.model';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
 
@@ -19,7 +24,8 @@ export class BoardDetailsComponent implements OnInit {
   isOwner$ = new Observable();
   searchTerm = '';
   checkedTags: string[] = [];
-  selectedBoard$: Observable<Board> | null = null;
+  @Input() board: Board | undefined | null = null;
+  @Input() ownerProjectId: string = '';
   usersInTheProject$: Observable<{ user: User }[]> | null = null;
   boardType: BoardTypes = 'kanban';
   sortBy: SortBy = {
@@ -31,21 +37,6 @@ export class BoardDetailsComponent implements OnInit {
 
   ngOnInit() {
     const params$ = this.route.params;
-
-    this.selectedBoard$ = params$.pipe(
-      map(data => data['boardId']),
-      switchMap(boardId => this.apollo.getBoard(boardId)),
-      map(data => data.data.board)
-    );
-
-    this.selectedBoard$
-      .pipe(
-        map(board => board.Project.userId),
-        take(1)
-      )
-      .subscribe(ownerId => this.apollo.setProjectOwnerId(ownerId));
-
-    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
     this.usersInTheProject$ = params$.pipe(
       map(params => params['projectId']),

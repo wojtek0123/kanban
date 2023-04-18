@@ -1,4 +1,4 @@
-<div *ngIf="tableTask$ | async as tasks">
+<div>
   <div class="row">
     <span
       *ngFor="let column of displayedTableColumns; let i = index"
@@ -9,7 +9,7 @@
   <div
     class="row"
     *ngFor="
-      let task of tasks
+      let task of tableTask
         | filterByTitle : searchTerm
         | filterByTags : tags
         | sort : sortBy.direction : sortBy.column

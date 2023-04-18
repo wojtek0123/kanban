@@ -4,7 +4,7 @@
   [cdkDropListData]="board | getColumns"
   (cdkDropListDropped)="dropColumn($event)"
   class="tasks"
-  *ngIf="selectedBoard$ | async as board">
+  *ngIf="board">
   <p class="warning-message" *ngIf="board?.columns?.length === 0">
     No columns to display
   </p>
@@ -39,7 +39,7 @@
         </div>
         <app-context-menu
           *ngIf="isOwner$ | async"
-          [id]="columnWrapper.column.id"
+          [id]="columnWrapper.id"
           [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
@@ -55,7 +55,7 @@
           [cdkDropListData]="columnWrapper.column.tasks"
           [id]="columnWrapper.column.id"
           [cdkDropListConnectedTo]="
-            board?.columns ?? [] | getColumnIds : columnWrapper.column.id
+            board.columns | getColumnIds : columnWrapper.column.id
           "
           (cdkDropListDropped)="dropTask($event)">
           <p

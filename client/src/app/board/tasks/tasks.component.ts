@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { Task } from '../../models/task.model';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
@@ -21,7 +21,7 @@ import { Column } from '../../models/column.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {
-  @Input() selectedBoard$: Observable<Board | undefined> | null = null;
+  @Input() board: Board | undefined | null = null;
   @Input() searchTerm = '';
   @Input() tags: string[] = [];
   @Input() sortBy!: SortBy;
@@ -72,27 +72,14 @@ export class TasksComponent implements OnInit {
     }
     const id = event.item.element.nativeElement.id;
 
-    const currentColumn$ = this.selectedBoard$?.pipe(
-      map(board =>
-        board?.columns
-          .flatMap(column => column.column)
-          .filter(column => column.id === event.container.id)
-          .at(0)
-      )
-    );
+    const currentColumn = this.board?.columns
+      .flatMap(columnWrapper => columnWrapper.column)
+      .filter(column => column.id === event.container.id)
+      .at(0);
 
-    currentColumn$
-      ?.pipe(
-        switchMap(column => this.apollo.changeColumn(column?.id ?? '', id)),
-        catchError(async error => {
-          this.toastService.showToast(
-            'warning',
-            `Couldn't change the column for this task`
-          );
-          throw new Error(error);
-        }),
-        take(1)
-      )
+    this.apollo
+      .changeColumn(currentColumn?.id ?? '', id)
+      .pipe(take(1))
       .subscribe(() =>
         this.toastService.showToast(
           'confirm',
@@ -116,26 +103,22 @@ export class TasksComponent implements OnInit {
     const currColumnId = event.container.data?.at(event.currentIndex)?.id;
     const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
 
-    this.selectedBoard$
-      ?.pipe(
-        map(board => board?.id ?? ''),
-        switchMap(boardId =>
-          this.apollo.changeColumnWrapper(
-            currColumnWrapperId ?? '',
-            prevColumnWrapperId ?? '',
-            currColumnId ?? '',
-            prevColumnId ?? '',
-            boardId
-          )
-        ),
+    this.apollo
+      .changeColumnWrapper(
+        currColumnWrapperId ?? '',
+        prevColumnWrapperId ?? '',
+        currColumnId ?? '',
+        prevColumnId ?? '',
+        this.board?.id ?? ''
+      )
+      .pipe(
         catchError(async error => {
           this.toastService.showToast(
             'warning',
             `Couldn't change the order of the columns`
           );
           throw new Error(error);
-        }),
-        take(1)
+        })
       )
       .subscribe(() =>
         this.toastService.showToast(

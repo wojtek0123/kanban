@@ -1,4 +1,4 @@
-<div class="container" *ngIf="selectedBoard$ | async as board">
+<div class="container" *ngIf="board">
   <ng-content select="app-mobile-navigation"></ng-content>
   <div class="board-name-wrapper">
     <div class="board-name">
@@ -85,13 +85,13 @@
   </div>
 </div>
 <app-tasks
-  [selectedBoard$]="selectedBoard$"
+  [board]="board"
   [searchTerm]="searchTerm"
   [tags]="checkedTags"
   [sortBy]="sortBy"
   *ngIf="boardType === 'kanban'"></app-tasks>
 <app-task-table
-  [selectedBoard]="selectedBoard$"
+  [board]="board"
   [searchTerm]="searchTerm"
   [tags]="checkedTags"
   [sortBy]="sortBy"

@@ -5,7 +5,8 @@
   class="main"
   *ngIf="{
     projects: projects$ | async,
-    projectsError: projectsError$ | async
+    projectsError: projectsError$ | async,
+    selectedBoard: board$ | async
   } as vm">
   <aside class="board-sidebar">
     <h2 class="board-logo">KanBan</h2>
@@ -22,7 +23,7 @@
     </ng-container>
   </aside>
   <div class="board-details-wrapper">
-    <app-board-details>
+    <app-board-details [board]="vm.selectedBoard">
       <app-mobile-navigation [projects]="vm.projects"></app-mobile-navigation>
     </app-board-details>
     <div
