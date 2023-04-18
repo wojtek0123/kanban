@@ -164,6 +164,7 @@ export const typeDefs = gql`
     editSubtask(id: String, name: String, isFinished: Boolean): Subtask
     removeProject(id: String): Project
     removeBoard(id: String): Board
+    removeColumnWrapper(id: String): ColumnWrapper
     removeColumn(id: String): Column
     removeTask(id: String): Task
     removeSubtask(id: String): Subtask
@@ -794,6 +795,13 @@ export const resolvers = {
     },
     removeSubtask: (_parent: any, args: { id: string }, context: Context) => {
       return context.prisma.subtask.delete({ where: { id: args.id } })
+    },
+    removeColumnWrapper: (
+      _parent: unknown,
+      args: { id: string },
+      context: Context,
+    ) => {
+      return context.prisma.columnWrapper.delete({ where: { id: args.id } })
     },
   },
 }

@@ -428,6 +428,14 @@ export const REMOVE_SUBTASK = gql`
   }
 `;
 
+export const REMOVE_COLUMN_WRAPPER = gql`
+  mutation removeColumnWrapper($id: String) {
+    removeColumnWrapper(id: $id) {
+      id
+    }
+  }
+`;
+
 export const UPDATE_USER_NAME = gql`
   mutation updateUserName($id: String, $name: String) {
     updateUserName(id: $id, name: $name) {

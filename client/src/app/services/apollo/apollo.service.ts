@@ -26,6 +26,7 @@ import {
   GET_USERS_FROM_TASK,
   REMOVE_BOARD,
   REMOVE_COLUMN,
+  REMOVE_COLUMN_WRAPPER,
   REMOVE_PROJECT,
   REMOVE_SUBTASK,
   REMOVE_TASK,
@@ -432,23 +433,12 @@ export class ApolloService {
 
   remove(id: string, type: FormType) {
     let mutation: any;
-    switch (type) {
-      case 'project':
-        mutation = REMOVE_PROJECT;
-        break;
-      case 'board':
-        mutation = REMOVE_BOARD;
-        break;
-      case 'column':
-        mutation = REMOVE_COLUMN;
-        break;
-      case 'task':
-        mutation = REMOVE_TASK;
-        break;
-      case 'subtask':
-        mutation = REMOVE_SUBTASK;
-        break;
-    }
+    if (type === 'profile') mutation = REMOVE_PROJECT;
+    if (type === 'board') mutation = REMOVE_BOARD;
+    if (type === 'column') mutation = REMOVE_COLUMN_WRAPPER;
+    if (type === 'task') mutation = REMOVE_TASK;
+    if (type === 'subtask') mutation = REMOVE_SUBTASK;
+
     return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>

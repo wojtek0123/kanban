@@ -40,7 +40,7 @@ model Column {
   tasks           Task[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime?     @updatedAt
-  ColumnWrapper   ColumnWrapper @relation(fields: [columnWrapperId], references: [id])
+  ColumnWrapper   ColumnWrapper @relation(fields: [columnWrapperId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   columnWrapperId String        @unique
 }
 
@@ -49,7 +49,7 @@ model ColumnWrapper {
   column    Column?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Board     Board    @relation(fields: [boardId], references: [id])
+  Board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   String
 }
 
