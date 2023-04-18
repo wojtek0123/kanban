@@ -6,6 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { Tag } from 'src/app/models/tag.models';
 
 @Component({
   selector: 'app-filter-menu',
@@ -15,7 +16,7 @@ import {
 })
 export class FilterMenuComponent implements DoCheck {
   @Input() id = '';
-  @Input() tags: string[] = [];
+  @Input() tags: Tag[] = [];
   @Output() selectedTags = new EventEmitter<string[]>();
   show = false;
   checkedTags: string[] = [''];
@@ -23,13 +24,17 @@ export class FilterMenuComponent implements DoCheck {
 
   ngDoCheck() {
     if (this.id !== this.tmpId) {
-      this.checkedTags = [...this.checkedTags, ...this.tags];
+      this.checkedTags = [
+        ...this.checkedTags,
+        ...this.tags.flatMap(tag => tag.name),
+        '',
+      ];
       this.selectedTags.emit(this.checkedTags);
       this.tmpId = this.id;
     }
   }
 
-  onToggleFilter() {
+  onToggle() {
     this.show = !this.show;
   }
 

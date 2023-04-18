@@ -1,18 +1,24 @@
 <div class="filter-wrapper">
   <button
     type="button"
-    (click)="onToggleFilter()"
+    (click)="onToggle()"
     class="button-global filter-button">
     Filter
   </button>
   <ul class="filter-list" [ngClass]="{ show: show }" (click)="onFilter($event)">
-    <li class="filter-item" *ngFor="let tag of tags; let i = index">
-      <input checked [id]="i" type="checkbox" class="checkbox" [value]="tag" />
-      <label [for]="i">{{ tag }}</label>
-    </li>
-    <li class="filter-item">
-      <input checked id="none" type="checkbox" class="checkbox" value="" />
-      <label for="none">none</label>
+    <li class="filter-item" *ngFor="let tag of tags">
+      <input
+        *ngIf="tag.name !== ''; else none"
+        [checked]="tag.check"
+        [id]="tag.id"
+        type="checkbox"
+        class="checkbox"
+        [value]="tag.name" />
+      <label [for]="tag.id">{{ tag.name }}</label>
+      <ng-template #none>
+        <input id="none" checked type="checkbox" class="checkbox" value="" />
+        <label for="none">none</label>
+      </ng-template>
     </li>
   </ul>
 </div>
