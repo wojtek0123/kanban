@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Router } from '@angular/router';
-import { formStatus } from '../home.component';
+import { formStatus } from '../auth.component';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
@@ -52,7 +52,7 @@ export class LoginComponent {
 
       this.status.next('ok');
       this.supabase.setSession(data.session);
-      this.router.navigate(['']);
+      this.router.navigate(['/projects']);
     } catch (error) {
       this.status.next('error');
 

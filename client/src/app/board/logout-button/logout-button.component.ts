@@ -16,7 +16,7 @@ export class LogoutButtonComponent {
       if (error) {
         console.error(error.message);
       }
-      this.router.navigate(['/home']);
+      this.router.navigate(['/auth']);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message);

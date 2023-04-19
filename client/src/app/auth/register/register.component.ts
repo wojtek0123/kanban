@@ -6,7 +6,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { formStatus } from '../home.component';
+import { formStatus } from '../auth.component';
 import { Router } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError } from 'rxjs';
@@ -120,8 +120,6 @@ export class RegisterComponent {
 
       this.supabase.setSession(data.session);
 
-      console.log(data.user);
-
       this.apollo
         .addUser(nickname, email, data.user?.id ?? '')
         .pipe(
@@ -141,7 +139,7 @@ export class RegisterComponent {
       }
 
       this.status = 'ok';
-      this.router.navigate(['']).then(err => console.log(err));
+      this.router.navigate(['/projects']);
     } catch (error) {
       if (error instanceof Error) {
         this.errorMessage = error.message;

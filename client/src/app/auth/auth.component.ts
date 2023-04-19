@@ -4,11 +4,11 @@ export type formStatus = 'loading' | 'error' | 'ok';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class AuthComponent {
   isRegister = true;
 
   constructor() {}

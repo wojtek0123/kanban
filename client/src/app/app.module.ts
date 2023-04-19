@@ -4,10 +4,10 @@ import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BoardModule } from './board/board.module';
-import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
 import { PageNotFoundModule } from './page-not-found/page-not-found.module';
 import { ProjectsModule } from './projects/projects.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +16,7 @@ import { ProjectsModule } from './projects/projects.module';
     GraphQLModule,
     HttpClientModule,
     BoardModule,
-    HomeModule,
+    AuthModule,
     AppRoutingModule,
     PageNotFoundModule,
     ProjectsModule,

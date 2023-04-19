@@ -8,5 +8,5 @@ export const AuthGuard = async () => {
 
   const { data } = await supabase.getSession();
 
-  return !data.session ? router.navigate(['/home']) : true;
+  return !data.session ? router.navigate(['/auth']) : true;
 };
