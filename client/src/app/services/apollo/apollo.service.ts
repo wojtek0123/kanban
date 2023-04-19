@@ -1,39 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import {
-  ADD_BOARD,
-  ADD_COLUMN,
-  ADD_PROJECT,
-  ADD_SUBTASK,
-  ADD_TASK,
-  ADD_USER,
-  ADD_USER_TO_PROJECT,
-  ADD_USER_TO_TASK,
-  CHANGE_COLUMN,
-  CHANGE_COLUMN_WRAPPER,
-  CHANGE_COMPLETION_STATE,
-  EDIT_BOARD,
-  EDIT_COLUMN,
-  EDIT_PROJECT,
-  EDIT_SUBTASK,
-  EDIT_TASK,
-  GET_FILTERED_USERS,
-  GET_PROJECTS,
-  GET_TASKS_FROM_USER,
-  GET_USERS,
-  GET_USERS_AND_TASKS,
-  GET_USERS_FROM_PROJECT,
-  GET_USERS_FROM_TASK,
-  REMOVE_BOARD,
-  REMOVE_COLUMN,
-  REMOVE_COLUMN_WRAPPER,
-  REMOVE_PROJECT,
-  REMOVE_SUBTASK,
-  REMOVE_TASK,
-  REMOVE_USER_FROM_PROJECT,
-  REMOVE_USER_FROM_TASK,
-  UPDATE_USER_NAME,
-} from '../../graphql/graphql.schema';
 import { SupabaseService } from '../supabase/supabase.service';
 import { BehaviorSubject, combineLatest, map, switchMap, take } from 'rxjs';
 import { Board } from '../../models/board.model';
@@ -41,6 +7,37 @@ import { FormType } from '../../models/types';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Task } from '../../models/task.model';
+import { GET_FILTERED_USERS } from '../../graphql/queries/get-filtered-users.query';
+import { GET_PROJECTS } from '../../graphql/queries/get-projects.query';
+import { GET_USERS } from '../../graphql/queries/get-users.query';
+import { GET_TASKS_FROM_USER } from '../../graphql/queries/get-tasks-from-user.query';
+import { GET_USERS_AND_TASKS } from '../../graphql/queries/get-users-and-tasks.query';
+import { GET_USERS_FROM_TASK } from '../../graphql/queries/get-users-from-task.query';
+import { GET_USERS_FROM_PROJECT } from '../../graphql/queries/get-users-from-project.query';
+import { UPDATE_USER_NAME } from '../../graphql/mutations/update-user-name.mutation';
+import { REMOVE_USER_FROM_TASK } from '../../graphql/mutations/remove-user-from-task.mutation';
+import { REMOVE_USER_FROM_PROJECT } from '../../graphql/mutations/remove-user-from-project.mutation';
+import { REMOVE_TASK } from '../../graphql/mutations/remove-task.mutation';
+import { REMOVE_SUBTASK } from '../../graphql/mutations/remove-subtask.mutation';
+import { REMOVE_PROJECT } from '../../graphql/mutations/remove-project.mutation';
+import { EDIT_TASK } from '../../graphql/mutations/edit-task.mutation';
+import { EDIT_SUBTASK } from '../../graphql/mutations/edit-subtask.mutation';
+import { REMOVE_BOARD } from '../../graphql/mutations/remove-board.mutation';
+import { EDIT_PROJECT } from '../../graphql/mutations/edit-project.mutation';
+import { EDIT_COLUMN } from '../../graphql/mutations/edit-column.mutation';
+import { EDIT_BOARD } from '../../graphql/mutations/edit-board.mutation';
+import { CHANGE_COMPLETION_STATE } from '../../graphql/mutations/change-completion-state.mutation';
+import { CHANGE_COLUMN } from '../../graphql/mutations/change-column.mutation';
+import { ADD_PROJECT } from '../../graphql/mutations/add-project.mutation';
+import { ADD_BOARD } from '../../graphql/mutations/add-board.mutation';
+import { ADD_COLUMN } from '../../graphql/mutations/add-column.mutation';
+import { ADD_TASK } from '../../graphql/mutations/add-task.mutation';
+import { ADD_SUBTASK } from '../../graphql/mutations/add-subtask.mutation';
+import { ADD_USER } from '../../graphql/mutations/add-user.mutation';
+import { ADD_USER_TO_TASK } from '../../graphql/mutations/add-user-to-task.mutation';
+import { ADD_USER_TO_PROJECT } from '../../graphql/mutations/add-user-to-project.mutation';
+import { REMOVE_COLUMN_WRAPPER } from '../../graphql/mutations/remove-column-wrapper.mutation';
+import { CHANGE_COLUMN_WRAPPER } from '../../graphql/mutations/change-column-wrapper.mutation';
 
 @Injectable({
   providedIn: 'root',
