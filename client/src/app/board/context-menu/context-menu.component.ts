@@ -22,6 +22,7 @@ export class ContextMenuComponent implements OnInit {
   @Input() type!: FormType;
   @Input() editingProject?: Project;
   @Input() isProtected = true;
+  @Input() whichSide: 'left' | 'right' = 'left';
   show = false;
   isOwner$ = new Observable<boolean>();
 

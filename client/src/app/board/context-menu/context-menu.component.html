@@ -9,7 +9,7 @@
     class="context-menu-body"
     [ngClass]="{
       show: show,
-      'show-right': show && type === 'board'
+      'show-right': show && whichSide === 'right'
     }"
     *ngIf="show">
     <button type="button" class="context-menu-body-button" (click)="onDelete()">
