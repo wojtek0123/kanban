@@ -232,6 +232,9 @@ export class ApolloService {
           refetchQueries: [
             {
               query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
             },
           ],
         })
@@ -430,7 +433,7 @@ export class ApolloService {
 
   remove(id: string, type: FormType) {
     let mutation: any;
-    if (type === 'profile') mutation = REMOVE_PROJECT;
+    if (type === 'project') mutation = REMOVE_PROJECT;
     if (type === 'board') mutation = REMOVE_BOARD;
     if (type === 'column') mutation = REMOVE_COLUMN_WRAPPER;
     if (type === 'task') mutation = REMOVE_TASK;
