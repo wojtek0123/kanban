@@ -9,7 +9,9 @@
     selectedBoard: board$ | async
   } as vm">
   <aside class="board-sidebar">
-    <h2 class="board-logo">KanBan</h2>
+    <h2 class="logo">
+      <a routerLink="/">KanBan</a>
+    </h2>
     <ng-container *ngIf="!vm.projectsError && vm.projects as projects">
       <div class="board-wrapper">
         <app-accordion [projects]="projects"></app-accordion>

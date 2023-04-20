@@ -1,5 +1,11 @@
-.board-logo {
+.logo {
   font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.logo a {
+  color: var(--font-color);
+  text-decoration: none;
 }
 
 .main {

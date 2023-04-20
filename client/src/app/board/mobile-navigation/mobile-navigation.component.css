@@ -47,6 +47,11 @@
   font-size: 2rem;
 }
 
+.navigation-logo a {
+  color: var(--font-color);
+  text-decoration: none;
+}
+
 .navigation-wrapper {
   display: flex;
   flex-direction: column;

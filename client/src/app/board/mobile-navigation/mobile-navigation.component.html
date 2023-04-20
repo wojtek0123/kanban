@@ -3,7 +3,7 @@
     class="navigation-backdrop"
     [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'"
     (click)="onMenu()"></div>
-  <h2 class="navigation-logo">KanBan</h2>
+  <h2 class="navigation-logo"><a routerLink="/">KanBan</a></h2>
   <button
     aria-label="hamburger menu"
     type="button"
