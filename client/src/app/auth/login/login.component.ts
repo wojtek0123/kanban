@@ -52,7 +52,7 @@ export class LoginComponent {
 
       this.status.next('ok');
       this.supabase.setSession(data.session);
-      this.router.navigate(['/projects']);
+      this.router.navigate(['/']);
     } catch (error) {
       this.status.next('error');
 

@@ -1,0 +1,105 @@
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  z-index: 0;
+}
+
+.projects {
+  width: 100%;
+  list-style-type: none;
+  padding: 1rem;
+}
+
+.table {
+  overflow-x: auto;
+  position: relative;
+}
+
+.table li {
+  min-width: 50rem;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  min-width: 50rem;
+  padding-bottom: 0.75rem;
+}
+
+.row-header {
+  border-bottom: 1px solid var(--font-color);
+}
+
+.column {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.1rem;
+}
+
+.column-0 {
+  min-width: 15rem;
+}
+
+.column-header {
+  font-size: 1.2rem;
+}
+
+.project-name-wrapper {
+  margin: 1rem 0;
+  position: sticky;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.project-name-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.project-name-wrapper h2 {
+  font-size: 2rem;
+  min-width: max-content;
+}
+
+.accordion-item {
+  color: var(--font-color-grey);
+  text-decoration: none;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+}
+
+.mobile-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .column {
+    font-size: 1.3rem;
+  }
+
+  .column-header {
+    font-size: 1.4rem;
+  }
+
+  .mobile-buttons {
+    display: none;
+  }
+}

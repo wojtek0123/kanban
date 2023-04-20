@@ -1,13 +1,53 @@
-<ul *ngIf="{ projects: projects$ | async } as vm">
-  <li *ngFor="let project of vm.projects">
-    <h2>{{ project.name }}</h2>
-    <div *ngFor="let board of project.boards">
-      <a
-        [routerLink]="['/', 'project', project.id, 'board', board.id]"
-        type="button"
-        class="accordion-item">
-        {{ board.name }}
-      </a>
+<app-form></app-form>
+<app-toast></app-toast>
+<main class="main">
+  <app-navigation></app-navigation>
+  <ul class="projects" *ngIf="{ projects: projects$ | async } as vm">
+    <div class="button-container">
+      <app-open-form-button
+        type="project"
+        text="Add project"></app-open-form-button>
+      <div class="mobile-buttons">
+        <app-open-form-button text="Users" type="user"></app-open-form-button>
+        <app-open-form-button
+          text="Tasks"
+          type="see-tasks"></app-open-form-button>
+        <app-open-form-button
+          text="Profile"
+          type="profile"></app-open-form-button>
+      </div>
     </div>
-  </li>
-</ul>
+    <li *ngFor="let project of vm.projects" class="table">
+      <div class="project-name-wrapper">
+        <div class="project-name-container">
+          <h2>{{ project.name }}</h2>
+          <app-open-form-button
+            type="board"
+            text="Add board"
+            size="compact"
+            [parentId]="project.id"></app-open-form-button>
+        </div>
+      </div>
+      <div class="row-header row">
+        <span
+          *ngFor="let column of columns; let i = index"
+          [class]="'column-header column-' + i"
+          >{{ column }}</span
+        >
+      </div>
+      <div *ngFor="let board of project.boards">
+        <a
+          [routerLink]="['/', 'project', project.id, 'board', board.id]"
+          type="button"
+          class="accordion-item row">
+          <span class="column column-0">{{ board.name }}</span>
+          <span class="column column-1">{{ (board | getColumns).length }}</span>
+          <span class="column column-2">{{ (board | getTasks).length }}</span>
+          <span class="column column-3">{{
+            (board | getSubtasks).length
+          }}</span>
+        </a>
+      </div>
+    </li>
+  </ul>
+</main>

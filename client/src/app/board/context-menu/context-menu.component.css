@@ -79,6 +79,16 @@
   color: var(--font-color);
   font-size: 2rem;
 }
+.context-menu-body.show {
+  box-shadow: 0 0 0.5rem var(--black-color);
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: max-content;
+  height: max-content;
+  transform: translateX(-25%);
+}
 
 @media (min-width: 1024px) {
   .context-menu-container {

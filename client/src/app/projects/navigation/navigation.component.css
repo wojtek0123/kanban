@@ -1,0 +1,29 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.desktop-buttons {
+  display: none;
+}
+
+.logo {
+  font-size: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .desktop-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

@@ -10,7 +10,8 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit {
-  projects$: Observable<Project[]> | null = null;
+  projects$ = new Observable<Project[]>();
+  columns = ['Name', 'Columns', 'Tasks', 'Subtasks'];
 
   constructor(private apollo: ApolloService) {}
 

@@ -139,7 +139,7 @@ export class RegisterComponent {
       }
 
       this.status = 'ok';
-      this.router.navigate(['/projects']);
+      this.router.navigate(['/']);
     } catch (error) {
       if (error instanceof Error) {
         this.errorMessage = error.message;
