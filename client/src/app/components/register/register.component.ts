@@ -6,7 +6,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { formStatus } from '../auth.component';
+import { formStatus } from '../../features/auth/auth.component';
 import { Router } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError } from 'rxjs';

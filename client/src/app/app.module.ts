@@ -3,11 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
-import { BoardModule } from './board/board.module';
+import { BoardModule } from './features/board/board.module';
 import { AppRoutingModule } from './app-routing.module';
-import { PageNotFoundModule } from './page-not-found/page-not-found.module';
-import { ProjectsModule } from './projects/projects.module';
-import { AuthModule } from './auth/auth.module';
+import { ProjectsModule } from './features/projects/projects.module';
+import { AuthModule } from './features/auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +17,6 @@ import { AuthModule } from './auth/auth.module';
     BoardModule,
     AuthModule,
     AppRoutingModule,
-    PageNotFoundModule,
     ProjectsModule,
   ],
   providers: [],

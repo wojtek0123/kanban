@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthComponent } from './auth/auth.component';
-import { BoardComponent } from './board/board.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AuthComponent } from './features/auth/auth.component';
+import { BoardComponent } from './features/board/board.component';
 import { AuthGuard } from './guards/auth.guard';
-import { ProjectsComponent } from './projects/projects.component';
+import { ProjectsComponent } from './features/projects/projects.component';
 
 const routes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -22,8 +21,7 @@ const routes: Routes = [
       },
     ],
   },
-
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({

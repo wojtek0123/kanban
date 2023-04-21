@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Router } from '@angular/router';
-import { formStatus } from '../auth.component';
+import { formStatus } from '../../features/auth/auth.component';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
