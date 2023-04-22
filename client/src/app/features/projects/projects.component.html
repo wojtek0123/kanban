@@ -21,6 +21,7 @@
         <div class="project-name-container">
           <h2>{{ project.name }}</h2>
           <app-open-form-button
+            *ngIf="project.userId === (loggedInUserId$ | async)"
             type="board"
             text="Add board"
             size="compact"
