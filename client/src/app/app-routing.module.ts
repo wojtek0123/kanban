@@ -4,12 +4,14 @@ import { AuthComponent } from './features/auth/auth.component';
 import { BoardComponent } from './features/board/board.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ProjectsComponent } from './features/projects/projects.component';
+import { projectsResolver } from './resolvers/projects.resolver';
 
 const routes: Routes = [
   { path: 'auth', component: AuthComponent },
   {
     path: '',
     canActivate: [AuthGuard],
+    resolve: { projects: projectsResolver },
     children: [
       {
         path: '',

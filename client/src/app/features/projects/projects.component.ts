@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Project } from '../../models/project.model';
-import { ApolloService } from '../../services/apollo/apollo.service';
 import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
@@ -13,11 +13,9 @@ export class ProjectsComponent implements OnInit {
   projects$ = new Observable<Project[]>();
   columns = ['Name', 'Columns', 'Tasks', 'Subtasks'];
 
-  constructor(private apollo: ApolloService) {}
+  constructor(private _route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.projects$ = this.apollo
-      .getProjects()
-      .pipe(map(data => data.data.projects));
+    this.projects$ = this._route.data.pipe(map(data => data['projects']));
   }
 }
