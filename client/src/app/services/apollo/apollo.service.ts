@@ -168,7 +168,7 @@ export class ApolloService {
         },
         {
           query: GET_TASKS_FROM_USER,
-          variables: { taskId },
+          variables: { userId },
         },
       ],
     });
