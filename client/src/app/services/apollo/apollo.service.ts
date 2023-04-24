@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { SupabaseService } from '../supabase/supabase.service';
-import { BehaviorSubject, combineLatest, map, switchMap, take } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { Board } from '../../models/board.model';
 import { FormType } from '../../models/types';
 import { Project } from '../../models/project.model';
@@ -168,6 +175,19 @@ export class ApolloService {
   }
 
   removeUserFromProject(projectId: string, userId: string) {
+    this.getTasksFromUser(userId)
+      .pipe(
+        map(data => data.data.getTasksFromUser),
+        take(1)
+      )
+      .subscribe(data => {
+        const taskIds = data.map(data => data.task.id);
+
+        taskIds.forEach(taskId =>
+          this.removeUserFromTask(taskId, userId).pipe(take(1)).subscribe()
+        );
+      });
+
     return this.apollo.mutate<{
       removeUserFromProject: {
         projectId: string;

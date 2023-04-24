@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
-import { map, catchError, switchMap, take } from 'rxjs/operators';
+import { map, catchError, switchMap, take, tap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { User } from 'src/app/models/user.model';
@@ -131,23 +131,21 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
-    this.apollo
-      .getTasksFromUser(userId)
-      .pipe(
-        map(data => data.data.getTasksFromUser),
-        take(1)
+    this.projectId$
+      ?.pipe(
+        switchMap(projectId =>
+          this.apollo.removeUserFromProject(projectId, userId)
+        ),
+        catchError(async error => {
+          this.toastService.showToast('warning', `Couldn't remove a new user`);
+          throw new Error(error);
+        })
       )
-      .subscribe(data => {
-        this.tasksFromUser = data;
-
-        for (let index = 0; index < data.length; index++) {
-          const taskId = data.at(index)?.task.id ?? '';
-
-          this.apollo
-            .removeUserFromTask(taskId, userId)
-            .pipe(take(1))
-            .subscribe();
-        }
+      .subscribe(() => {
+        this.toastService.showToast(
+          'confirm',
+          'Successfully remove a new user'
+        );
       });
   }
 }
