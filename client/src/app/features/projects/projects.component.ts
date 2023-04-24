@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Project } from '../../models/project.model';
 import { map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
+import { ApolloService } from 'src/app/services/apollo/apollo.service';
 
 @Component({
   selector: 'app-projects',
@@ -16,12 +16,14 @@ export class ProjectsComponent implements OnInit {
   loggedInUserId$ = new Observable<string>();
 
   constructor(
-    private _route: ActivatedRoute,
+    private _apollo: ApolloService,
     private _supabase: SupabaseService
   ) {}
 
   ngOnInit() {
-    this.projects$ = this._route.data.pipe(map(data => data['projects']));
+    this.projects$ = this._apollo
+      .getProjects()
+      .pipe(map(data => data.data.projects));
 
     this.loggedInUserId$ = this._supabase.session$.pipe(
       map(session => session?.user.id ?? '')

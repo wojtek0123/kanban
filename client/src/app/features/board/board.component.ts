@@ -25,7 +25,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   board$ = new Observable<Board | undefined>();
 
   constructor(
-    public formService: FormService,
+    private formService: FormService,
     private apollo: ApolloService,
     private route: ActivatedRoute
   ) {}
@@ -37,7 +37,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     const boardId$ = this.route.params.pipe(map(params => params['boardId']));
 
-    this.projects$ = this.route.data.pipe(map(data => data['projects']));
+    this.projects$ = this.apollo
+      .getProjects()
+      .pipe(map(data => data.data.projects));
 
     this.projectsError$ = this.projects$.pipe(
       ignoreElements(),
