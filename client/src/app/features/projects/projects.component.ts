@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Project } from '../../models/project.model';
-import { map } from 'rxjs/operators';
+import { catchError, ignoreElements, map } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { ApolloService } from 'src/app/services/apollo/apollo.service';
 
@@ -12,6 +12,7 @@ import { ApolloService } from 'src/app/services/apollo/apollo.service';
 })
 export class ProjectsComponent implements OnInit {
   projects$ = new Observable<Project[]>();
+  projectsError$ = new Observable<string>();
   columns = ['Name', 'Columns', 'Tasks', 'Subtasks'];
   loggedInUserId$ = new Observable<string>();
 
@@ -24,6 +25,11 @@ export class ProjectsComponent implements OnInit {
     this.projects$ = this._apollo
       .getProjects()
       .pipe(map(data => data.data.projects));
+
+    this.projectsError$ = this.projects$.pipe(
+      ignoreElements(),
+      catchError(error => of(error))
+    );
 
     this.loggedInUserId$ = this._supabase.session$.pipe(
       map(session => session?.user.id ?? '')

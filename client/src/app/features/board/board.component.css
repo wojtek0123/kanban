@@ -37,17 +37,12 @@
   cursor: pointer;
 }
 
-.loading-wrapper {
+.error-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   text-align: center;
   transform: translate(-50%, -50%);
-}
-
-.loading-spinner {
-  width: 5rem;
-  animation: rotate infinite 1s;
 }
 
 .board-details-wrapper {
@@ -98,15 +93,5 @@
 
   .board-logo {
     margin-bottom: 2rem;
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(360deg);
   }
 }

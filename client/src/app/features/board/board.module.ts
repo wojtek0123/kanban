@@ -10,6 +10,7 @@ import { MobileNavigationModule } from '../../components/mobile-navigation/mobil
 import { ToastModule } from '../../components/toast/toast.module';
 import { RouterModule } from '@angular/router';
 import { OpenFormButtonModule } from '../../components/open-form-button/open-form-button.module';
+import { LoadingSpinnerModule } from 'src/app/components/loading-spinner/loading-spinner.module';
 
 @NgModule({
   declarations: [BoardComponent],
@@ -24,6 +25,7 @@ import { OpenFormButtonModule } from '../../components/open-form-button/open-for
     MobileNavigationModule,
     ToastModule,
     OpenFormButtonModule,
+    LoadingSpinnerModule,
   ],
   exports: [BoardComponent],
 })

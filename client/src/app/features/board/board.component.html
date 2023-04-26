@@ -28,14 +28,9 @@
     <app-board-details [board]="vm.selectedBoard">
       <app-mobile-navigation [projects]="vm.projects"></app-mobile-navigation>
     </app-board-details>
-    <div
-      *ngIf="!vm.projectsError && !vm.projects"
-      class="loading-wrapper"
-      #loading>
-      <img src="../../assets/fan-solid.svg" alt="fan" class="loading-spinner" />
-      <p>Loading...</p>
-    </div>
-    <div class="loading-wrapper" *ngIf="vm.projectsError as error">
+    <app-loading-spinner
+      [condition]="!vm.projectsError && !vm.projects"></app-loading-spinner>
+    <div class="error-wrapper" *ngIf="vm.projectsError as error">
       <h2>{{ error }}</h2>
     </div>
   </div>

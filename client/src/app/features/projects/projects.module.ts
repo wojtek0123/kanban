@@ -12,6 +12,7 @@ import { ContextMenuModalModule } from '../../components/context-menu-modal/cont
 import { ContextMenuModule } from '../../components/context-menu/context-menu.module';
 import { LogoutButtonModule } from '../../components/logout-button/logout-button.module';
 import { NavigationModule } from '../../components/navigation/navigation.module';
+import { LoadingSpinnerModule } from 'src/app/components/loading-spinner/loading-spinner.module';
 
 @NgModule({
   declarations: [ProjectsComponent],
@@ -28,6 +29,7 @@ import { NavigationModule } from '../../components/navigation/navigation.module'
     ContextMenuModule,
     LogoutButtonModule,
     NavigationModule,
+    LoadingSpinnerModule,
   ],
   exports: [ProjectsComponent],
 })

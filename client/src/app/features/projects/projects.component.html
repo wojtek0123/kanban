@@ -2,7 +2,12 @@
 <app-toast></app-toast>
 <main class="main">
   <app-navigation></app-navigation>
-  <ul class="projects" *ngIf="{ projects: projects$ | async } as vm">
+  <ul
+    class="projects"
+    *ngIf="{
+      projects: projects$ | async,
+      projectsError: projectsError$ | async
+    } as vm">
     <div class="button-container">
       <app-open-form-button
         type="project"
@@ -15,6 +20,11 @@
           text="Profile"
           type="profile"></app-open-form-button>
       </div>
+    </div>
+    <app-loading-spinner
+      [condition]="!vm.projectsError && !vm.projects"></app-loading-spinner>
+    <div class="error-message" *ngIf="vm.projectsError as error">
+      <h2>{{ error }}</h2>
     </div>
     <li *ngFor="let project of vm.projects" class="table">
       <div class="project-name-wrapper">
@@ -34,6 +44,9 @@
           [class]="'column-header column-' + i"
           >{{ column }}</span
         >
+      </div>
+      <div *ngIf="project.boards.length === 0" class="message-wrapper">
+        <p>No boards to display</p>
       </div>
       <div *ngFor="let board of project.boards">
         <a

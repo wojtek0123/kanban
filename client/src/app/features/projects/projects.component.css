@@ -90,6 +90,18 @@
   gap: 1rem;
 }
 
+.message-wrapper {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--font-color-grey);
+  font-size: 1.2rem;
+}
+
+.error-message {
+  text-align: center;
+  margin-top: 3rem;
+}
+
 @media (min-width: 1024px) {
   .column {
     font-size: 1.3rem;
