@@ -11,7 +11,7 @@
   <section
     [id]="columnWrapper.id"
     class="section"
-    *ngFor="let columnWrapper of board?.columns">
+    *ngFor="let columnWrapper of board?.columns; trackBy: columnWrapperTrackBy">
     <div
       cdkDrag
       [cdkDragDisabled]="(isOwner$ | async) === false"
@@ -39,7 +39,7 @@
         </div>
         <app-context-menu
           *ngIf="isOwner$ | async"
-          [id]="columnWrapper.id"
+          [id]="columnWrapper.column.id"
           [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
@@ -77,7 +77,8 @@
               let task of columnWrapper.column.tasks
                 | filterByTitle : searchTerm
                 | filterByTags : tags
-                | sort : sortBy.direction : sortBy.column
+                | sort : sortBy.direction : sortBy.column;
+              trackBy: taskTrackBy
             ">
             <div
               class="cdk-drag-placeholder task-placeholder"
@@ -89,7 +90,8 @@
                 [value]="column.id"
                 *ngFor="
                   let column of board?.columns ?? []
-                    | getColumnsWithoutOneSpecific : columnWrapper.column.id
+                    | getColumnsWithoutOneSpecific : columnWrapper.column.id;
+                  trackBy: columnTrackBy
                 ">
                 {{ column.name }}
               </option>
@@ -111,7 +113,9 @@
                 [type]="'task'"></app-context-menu>
             </div>
             <div class="card-subtask-wrapper">
-              <div class="card-subtask" *ngFor="let subtask of task.subtasks">
+              <div
+                class="card-subtask"
+                *ngFor="let subtask of task.subtasks; trackBy: subtaskTrackBy">
                 <div>
                   <input
                     aria-label="subtask"

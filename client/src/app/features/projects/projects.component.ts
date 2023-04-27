@@ -4,6 +4,7 @@ import { Project } from '../../models/project.model';
 import { catchError, ignoreElements, map } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { ApolloService } from 'src/app/services/apollo/apollo.service';
+import { Board } from 'src/app/models/board.model';
 
 @Component({
   selector: 'app-projects',
@@ -34,5 +35,13 @@ export class ProjectsComponent implements OnInit {
     this.loggedInUserId$ = this._supabase.session$.pipe(
       map(session => session?.user.id ?? '')
     );
+  }
+
+  projectTrackBy(_index: number, project: Project) {
+    return project.id;
+  }
+
+  boardTrackBy(_index: number, board: Board) {
+    return board.id;
   }
 }

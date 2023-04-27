@@ -10,7 +10,9 @@
   <h3>{{ task.task.title }}</h3>
   <p>{{ task.task.description }}</p>
   <div class="card-subtask-wrapper">
-    <div class="card-subtask" *ngFor="let subtask of task.task.subtasks">
+    <div
+      class="card-subtask"
+      *ngFor="let subtask of task.task.subtasks; trackBy: subtaskTrackBy">
       <div>
         <input
           aria-label="subtask"

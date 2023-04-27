@@ -237,4 +237,12 @@ export class TaskFormComponent implements OnInit {
     }
     this.formService.onChangeFormVisibility();
   }
+
+  columnTrackBy(_index: number, column: Column) {
+    return column.id;
+  }
+
+  controlTrackBy(index: number, _control: AbstractControl<any, any>) {
+    return index;
+  }
 }

@@ -9,4 +9,8 @@ import { Project } from '../../models/project.model';
 })
 export class AccordionComponent {
   @Input() projects: Project[] = [];
+
+  projectTrackBy(_index: number, project: Project) {
+    return project.id;
+  }
 }

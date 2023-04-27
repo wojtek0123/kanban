@@ -34,8 +34,6 @@ export class TaskTableComponent implements DoCheck {
     'updatedAt',
   ];
 
-  constructor() {}
-
   ngDoCheck() {
     this.tableTask =
       this.board?.columns.flatMap(columnWrapper =>
@@ -50,5 +48,17 @@ export class TaskTableComponent implements DoCheck {
     this.displayColumns =
       this.board?.columns.flatMap(columnWrapper => columnWrapper.column.name) ??
       [];
+  }
+
+  taskTrackBy(_index: number, task: Task) {
+    return task.id;
+  }
+
+  tagNameTrackBy(index: number, _tagName: string) {
+    return index;
+  }
+
+  tableColumnTrackBy(index: number, column: string) {
+    return index;
   }
 }

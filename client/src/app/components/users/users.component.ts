@@ -148,4 +148,12 @@ export class UsersComponent implements OnInit {
         );
       });
   }
+
+  filteredUser(_index: number, user: User) {
+    return user.id;
+  }
+
+  projectUserTrackBy(_index: number, data: { user: User }) {
+    return data.user.id;
+  }
 }

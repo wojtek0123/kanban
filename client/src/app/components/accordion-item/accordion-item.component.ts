@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/services/navigation/navigation.service';
+import { Board } from 'src/app/models/board.model';
 
 @Component({
   selector: 'app-accordion-item',
@@ -45,5 +46,9 @@ export class AccordionItemComponent implements OnInit {
 
   closeMenu() {
     this.navigationService.onMenu();
+  }
+
+  boardTrackBy(_index: number, board: Board) {
+    return board.id;
   }
 }

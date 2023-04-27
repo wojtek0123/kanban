@@ -24,7 +24,7 @@
     >
     <div
       class="assign-user-container"
-      *ngFor="let data of assignedUsers$ | async">
+      *ngFor="let data of assignedUsers$ | async; trackBy: assignedUserTrackBy">
       <div class="assign-user-wrapper">
         <span>{{ data.user.email }}</span>
         <span>{{ data.user.name }}</span>
@@ -42,7 +42,7 @@
     <h3>Assign user to this task</h3>
     <div
       class="assign-user-container"
-      *ngFor="let data of projectUsers$ | async">
+      *ngFor="let data of projectUsers$ | async; trackBy: projectUserTrackBy">
       <div class="assign-user-wrapper">
         <span>{{ data.user.email }}</span>
         <span>{{ data.user.name }}</span>

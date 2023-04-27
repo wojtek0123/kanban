@@ -19,7 +19,9 @@
       class="button-global select-input"
       (change)="changeSelectedColumn($event)">
       <option default [value]="undefined">Select column</option>
-      <option [value]="column.id" *ngFor="let column of columns$ | async">
+      <option
+        [value]="column.id"
+        *ngFor="let column of columns$ | async; trackBy: columnTrackBy">
         {{ column.name }}
       </option>
     </select>
@@ -59,7 +61,11 @@
       </div>
       <div
         class="form-tag-wrapper"
-        *ngFor="let _ of addTags.controls; let i = index">
+        *ngFor="
+          let _ of addTags.controls;
+          trackBy: controlTrackBy;
+          let i = index
+        ">
         <ng-container [formGroupName]="i">
           <label class="form-label-global"
             >Tag name
@@ -148,7 +154,11 @@
       </div>
       <div
         class="form-tag-wrapper"
-        *ngFor="let _ of editTags.controls; let i = index">
+        *ngFor="
+          let _ of editTags.controls;
+          trackBy: controlTrackBy;
+          let i = index
+        ">
         <ng-container [formGroupName]="i">
           <label class="form-label-global"
             >Tag name

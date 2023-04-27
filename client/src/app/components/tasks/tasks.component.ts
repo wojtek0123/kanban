@@ -13,6 +13,9 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { SortBy } from '../../models/types';
 import { Column } from '../../models/column.model';
+import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
+import { Tag } from 'src/app/models/tag.models';
+import { Subtask } from 'src/app/models/subtask.model';
 
 @Component({
   selector: 'app-tasks',
@@ -159,4 +162,20 @@ export class TasksComponent implements OnInit {
 
     return `${seconds}s ago`;
   };
+
+  columnWrapperTrackBy(_index: number, columnWrapper: ColumnWrapper) {
+    return columnWrapper.id;
+  }
+
+  columnTrackBy(_index: number, column: Column) {
+    return column.id;
+  }
+
+  taskTrackBy(_index: number, task: Task) {
+    return task.id;
+  }
+
+  subtaskTrackBy(_index: number, subtask: Subtask) {
+    return subtask.id;
+  }
 }

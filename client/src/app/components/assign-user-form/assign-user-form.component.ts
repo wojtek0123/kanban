@@ -89,4 +89,12 @@ export class AssignUserFormComponent implements OnInit {
         )
       );
   }
+
+  assignedUserTrackBy(_index: number, data: { user: User }) {
+    return data.user.id;
+  }
+
+  projectUserTrackBy(_index: number, data: { user: User }) {
+    return data.user.id;
+  }
 }

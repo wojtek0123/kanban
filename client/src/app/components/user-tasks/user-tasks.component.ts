@@ -4,6 +4,7 @@ import { ApolloService } from '../../services/apollo/apollo.service';
 import { User } from '../../models/user.model';
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Task } from '../../models/task.model';
+import { Subtask } from 'src/app/models/subtask.model';
 
 @Component({
   selector: 'app-user-tasks',
@@ -26,5 +27,9 @@ export class UserTasksComponent implements OnInit {
       switchMap(user => this.apollo.getTasksFromUser(user?.id ?? '')),
       map(data => data.data.getTasksFromUser)
     );
+  }
+
+  subtaskTrackBy(_index: number, subtask: Subtask) {
+    return subtask.id;
   }
 }

@@ -59,7 +59,12 @@
       Not found user!
     </p>
 
-    <div class="user" *ngFor="let user of searchedFilteredUsers$ | async">
+    <div
+      class="user"
+      *ngFor="
+        let user of searchedFilteredUsers$ | async;
+        trackBy: filteredUser
+      ">
       <p>{{ user.email }}</p>
 
       <button
@@ -75,7 +80,9 @@
   <div *ngIf="tabName === 'peek'">
     <p *ngIf="(projectUsers$ | async) === null">loading...</p>
 
-    <div class="user" *ngFor="let data of projectUsers$ | async">
+    <div
+      class="user"
+      *ngFor="let data of projectUsers$ | async; trackBy: projectUserTrackBy">
       <p>{{ data.user.email }}</p>
 
       <p *ngIf="data.user.id === (projectId$ | async)">Owner</p>

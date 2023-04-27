@@ -1,7 +1,11 @@
 <div>
   <div class="row">
     <span
-      *ngFor="let column of displayedTableColumns; let i = index"
+      *ngFor="
+        let column of displayedTableColumns;
+        trackBy: tableColumnTrackBy;
+        let i = index
+      "
       class="{{ 'column header column-' + i }}"
       >{{ column }}</span
     >
@@ -12,15 +16,18 @@
       let task of tableTask
         | filterByTitle : searchTerm
         | filterByTags : tags
-        | sort : sortBy.direction : sortBy.column
+        | sort : sortBy.direction : sortBy.column;
+      trackBy: taskTrackBy
     ">
     <span class="column column-0">{{ task.title }}</span>
     <span class="column column-1">{{ task.description }}</span>
     <span class="column column-2">{{ task.columnName }}</span>
     <span class="column column-3"
-      ><span class="tag" *ngFor="let tagName of task.tagNames">{{
-        tagName
-      }}</span>
+      ><span
+        class="tag"
+        *ngFor="let tagName of task.tagNames; trackBy: tagNameTrackBy"
+        >{{ tagName }}</span
+      >
     </span>
     <span class="column column-4">{{ task.createdAt | date }}</span>
     <span class="column column-5">{{ task.updatedAt | date }}</span>
