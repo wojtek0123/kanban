@@ -3,6 +3,7 @@
   <div class="button-container">
     <div class="desktop-buttons">
       <app-open-form-button
+        *ngIf="showTasksButton"
         text="Tasks"
         type="see-tasks"></app-open-form-button>
       <app-open-form-button

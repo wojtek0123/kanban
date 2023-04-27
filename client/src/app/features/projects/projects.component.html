@@ -1,19 +1,22 @@
 <app-form></app-form>
 <app-toast></app-toast>
-<main class="main">
-  <app-navigation></app-navigation>
-  <ul
-    class="projects"
-    *ngIf="{
-      projects: projects$ | async,
-      projectsError: projectsError$ | async
-    } as vm">
+<main
+  class="main"
+  *ngIf="{
+    projects: projects$ | async,
+    projectsError: projectsError$ | async
+  } as vm">
+  <app-navigation
+    [showTasksButton]="!!vm.projects && !vm.projectsError"></app-navigation>
+  <ul class="projects">
     <div class="button-container">
       <app-open-form-button
+        *ngIf="vm.projects && !vm.projectsError"
         type="project"
         text="Add project"></app-open-form-button>
       <div class="mobile-buttons">
         <app-open-form-button
+          *ngIf="vm.projects && !vm.projectsError"
           text="Tasks"
           type="see-tasks"></app-open-form-button>
         <app-open-form-button
