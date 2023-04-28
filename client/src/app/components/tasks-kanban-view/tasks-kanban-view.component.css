@@ -213,7 +213,7 @@
 }
 
 .warning-message {
-  color: var(--error-color);
+  color: var(--font-color-grey);
   text-align: center;
 }
 

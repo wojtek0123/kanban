@@ -8,5 +8,5 @@
 }
 
 .warning-message {
-  color: var(--error-color);
+  color: var(--font-color-grey);
 }

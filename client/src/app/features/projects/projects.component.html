@@ -29,6 +29,9 @@
     <div class="error-message" *ngIf="vm.projectsError as error">
       <h2>{{ error }}</h2>
     </div>
+    <li class="message-wrapper" *ngIf="vm.projects?.length === 0">
+      No projects to display
+    </li>
     <li
       *ngFor="let project of vm.projects; trackBy: projectTrackBy"
       class="table">

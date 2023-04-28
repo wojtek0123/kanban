@@ -282,22 +282,24 @@ export class ApolloService {
   }
 
   addTask(task: Partial<Task>, columnId: string) {
-    return this.apollo.mutate<{ addTask: { id: string } }>({
-      mutation: ADD_TASK,
-      variables: {
-        title: task.title,
-        description: task.description,
-        columnId,
-        tagNames: task.tagNames,
-        tagFontColors: task.tagFontColors,
-        tagBackgroundColors: task.tagBackgroundColors,
-      },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
+    return this.apollo
+      .mutate<{ addTask: { id: string } }>({
+        mutation: ADD_TASK,
+        variables: {
+          title: task.title,
+          description: task.description,
+          columnId,
+          tagNames: task.tagNames,
+          tagFontColors: task.tagFontColors,
+          tagBackgroundColors: task.tagBackgroundColors,
         },
-      ],
-    });
+        refetchQueries: [
+          {
+            query: GET_PROJECTS,
+          },
+        ],
+      })
+      .pipe(take(1));
   }
 
   addSubtask(name: string, isFinished: boolean, taskId: string) {

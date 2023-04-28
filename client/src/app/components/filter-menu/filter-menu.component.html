@@ -20,5 +20,8 @@
         <label for="none">none</label>
       </ng-template>
     </li>
+    <li *ngIf="tags.length === 0" class="filter-item">
+      No tag names to display
+    </li>
   </ul>
 </div>

@@ -29,7 +29,7 @@
 
 .accordion-item-paragraph {
   cursor: default;
-  color: var(--error-color);
+  color: var(--font-color-grey);
 }
 
 .highlight {

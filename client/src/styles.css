@@ -8,16 +8,6 @@
   padding: 0;
 }
 
-body {
-  min-height: 100vh;
-  background-color: var(--background-color);
-  color: var(--font-color);
-  font-family: 'Oswald', sans-serif;
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
-}
-
 :root {
   --black-color: #000;
   --background-color: #101213; /* darker gray */
@@ -31,6 +21,28 @@ body {
   --rounded: 0.5rem;
   --task-width: 30rem;
   --task-width-mobile: 20rem;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  font-family: 'Oswald', sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+button {
+  font-family: 'Oswald', sans-serif;
+}
+
+input {
+  font-family: 'Oswald', sans-serif;
+}
+
+select {
+  font-family: 'Oswald', sans-serif;
 }
 
 .button-global {
