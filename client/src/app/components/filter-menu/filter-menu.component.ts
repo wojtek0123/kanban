@@ -17,13 +17,14 @@ import { Tag } from 'src/app/models/tag.models';
 export class FilterMenuComponent implements DoCheck {
   @Input() id = '';
   @Input() tags: Tag[] = [];
+  @Input() isTaskEditing = false;
   @Output() selectedTags = new EventEmitter<string[]>();
   show = false;
   checkedTags: string[] = [''];
   tmpId = '';
 
   ngDoCheck() {
-    if (this.id !== this.tmpId) {
+    if (this.id !== this.tmpId || this.isTaskEditing) {
       this.checkedTags = [
         ...this.checkedTags,
         ...this.tags.flatMap(tag => tag.name),

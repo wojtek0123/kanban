@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
+import { FormService } from 'src/app/services/form/form.service';
 
 type BoardTypes = 'kanban' | 'table';
 
@@ -33,7 +34,11 @@ export class BoardDetailsComponent implements OnInit {
     direction: 'asc',
   };
 
-  constructor(private route: ActivatedRoute, private apollo: ApolloService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apollo: ApolloService,
+    public formService: FormService
+  ) {}
 
   ngOnInit() {
     const params$ = this.route.params;

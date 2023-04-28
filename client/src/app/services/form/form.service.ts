@@ -95,6 +95,10 @@ export class FormService {
     this._enableSelectColumn$.next(selectColumn);
   }
 
+  onChangeEditingTask() {
+    this._editingTask = undefined;
+  }
+
   onEdit(type: FormType, id: string, project?: Project | undefined) {
     this.onChangeFormVisibility(type);
     this._isEditing$.next(true);

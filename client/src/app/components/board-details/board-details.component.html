@@ -74,6 +74,7 @@
         </option>
       </select>
       <app-filter-menu
+        [isTaskEditing]="!!this.formService.getEditingTask"
         [id]="board.id"
         [tags]="board | getTagsFromTasks"
         (selectedTags)="onSelectedTags($event)"></app-filter-menu>

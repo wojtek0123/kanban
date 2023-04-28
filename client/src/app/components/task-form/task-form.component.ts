@@ -174,12 +174,15 @@ export class TaskFormComponent implements OnInit {
           }),
           take(1)
         )
-        .subscribe(() =>
+        .subscribe(() => {
           this.toastService.showToast(
             'confirm',
             'Successfully updated this task'
-          )
-        );
+          );
+          setTimeout(() => {
+            this.formService.onChangeEditingTask();
+          }, 0);
+        });
     }
 
     if (this.getFormControls.add.valid) {
