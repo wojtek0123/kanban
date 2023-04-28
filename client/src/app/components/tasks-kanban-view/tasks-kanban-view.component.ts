@@ -14,13 +14,12 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { SortBy } from '../../models/types';
 import { Column } from '../../models/column.model';
 import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
-import { Tag } from 'src/app/models/tag.models';
 import { Subtask } from 'src/app/models/subtask.model';
 
 @Component({
   selector: 'app-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.css'],
+  templateUrl: './tasks-kanban-view.component.html',
+  styleUrls: ['./tasks-kanban-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {

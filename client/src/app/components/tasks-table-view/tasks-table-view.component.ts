@@ -14,8 +14,8 @@ export interface TaskTable {
 
 @Component({
   selector: 'app-task-table',
-  templateUrl: './task-table.component.html',
-  styleUrls: ['./task-table.component.css'],
+  templateUrl: './tasks-table-view.component.html',
+  styleUrls: ['./tasks-table-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskTableComponent implements DoCheck {

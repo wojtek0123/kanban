@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { TasksComponent } from './tasks.component';
+import { TasksComponent } from './tasks-kanban-view.component';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ContextMenuModule } from '../context-menu/context-menu.module';
