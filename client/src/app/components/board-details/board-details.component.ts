@@ -40,8 +40,7 @@ export class BoardDetailsComponent implements OnInit {
 
     this.usersInTheProject$ = params$.pipe(
       map(params => params['projectId']),
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(response => response.data.usersFromProject)
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId))
     );
   }
 

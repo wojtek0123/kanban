@@ -23,9 +23,7 @@ export class ProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.projects$ = this._apollo
-      .getProjects()
-      .pipe(map(data => data.data.projects));
+    this.projects$ = this._apollo.getProjects();
 
     this.projectsError$ = this.projects$.pipe(
       ignoreElements(),

@@ -74,7 +74,7 @@ export class ApolloService {
             variables: { userId },
             errorPolicy: 'all',
           })
-          .valueChanges.pipe(map(data => data))
+          .valueChanges.pipe(map(response => response.data.projects))
       )
     );
   }
@@ -82,7 +82,7 @@ export class ApolloService {
   getUsers() {
     return this.apollo
       .watchQuery<{ users: User[] }>({ query: GET_USERS })
-      .valueChanges.pipe(map(data => data));
+      .valueChanges.pipe(map(response => response.data.users));
   }
 
   getFilteredUsers(text: string) {
@@ -93,42 +93,40 @@ export class ApolloService {
           text,
         },
       })
-      .valueChanges.pipe(map(data => data));
+      .valueChanges.pipe(map(response => response.data.filteredUsers));
   }
 
   getUsersFromProject(projectId: string) {
-    return this.apollo.watchQuery<{ usersFromProject: { user: User }[] }>({
-      query: GET_USERS_FROM_PROJECT,
-      variables: {
-        projectId,
-      },
-    }).valueChanges;
+    return this.apollo
+      .watchQuery<{ usersFromProject: { user: User }[] }>({
+        query: GET_USERS_FROM_PROJECT,
+        variables: {
+          projectId,
+        },
+      })
+      .valueChanges.pipe(map(response => response.data.usersFromProject));
   }
 
   getUsersFromTask(taskId: string) {
-    return this.apollo.watchQuery<{ usersFromTask: { user: User }[] }>({
-      query: GET_USERS_FROM_TASK,
-      variables: {
-        taskId,
-      },
-    }).valueChanges;
+    return this.apollo
+      .watchQuery<{ usersFromTask: { user: User }[] }>({
+        query: GET_USERS_FROM_TASK,
+        variables: {
+          taskId,
+        },
+      })
+      .valueChanges.pipe(map(response => response.data.usersFromTask));
   }
 
   getTasksFromUser(userId: string) {
-    return this.apollo.watchQuery<{ getTasksFromUser: { task: Task }[] }>({
-      query: GET_TASKS_FROM_USER,
-      variables: {
-        userId,
-      },
-    }).valueChanges;
-  }
-
-  getUsersAndTasks() {
-    return this.apollo.watchQuery<{
-      getUsersAndTasks: { taskId: string; userId: string }[];
-    }>({
-      query: GET_USERS_AND_TASKS,
-    }).valueChanges;
+    return this.apollo
+      .watchQuery<{ getTasksFromUser: { task: Task }[] }>({
+        query: GET_TASKS_FROM_USER,
+        variables: {
+          userId,
+        },
+      })
+      .valueChanges.pipe(map(response => response.data.getTasksFromUser));
   }
 
   addUserToProject(projectId: string, userId: string) {
@@ -176,10 +174,7 @@ export class ApolloService {
 
   removeUserFromProject(projectId: string, userId: string) {
     this.getTasksFromUser(userId)
-      .pipe(
-        map(data => data.data.getTasksFromUser),
-        take(1)
-      )
+      .pipe(take(1))
       .subscribe(data => {
         const taskIds = data.map(data => data.task.id);
 
@@ -395,37 +390,33 @@ export class ApolloService {
     tagFontColors: string[],
     tagBackgroundColors: string[]
   ) {
-    return this.supabase.session$.pipe(
-      map(session => session?.user.id ?? ''),
-      switchMap(userId =>
-        this.apollo.mutate<{
-          editTask: {
-            id: string;
-            title: string;
-            description: string;
-            tagNames: string[];
-            tagFontColors: string[];
-            tagBackgroundColors: string[];
-          };
-        }>({
-          mutation: EDIT_TASK,
-          variables: {
-            id,
-            title,
-            description,
-            tagNames,
-            tagFontColors,
-            tagBackgroundColors,
+    return this.apollo
+      .mutate<{
+        editTask: {
+          id: string;
+          title: string;
+          description: string;
+          tagNames: string[];
+          tagFontColors: string[];
+          tagBackgroundColors: string[];
+        };
+      }>({
+        mutation: EDIT_TASK,
+        variables: {
+          id,
+          title,
+          description,
+          tagNames,
+          tagFontColors,
+          tagBackgroundColors,
+        },
+        refetchQueries: [
+          {
+            query: GET_PROJECTS,
           },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-            },
-          ],
-        })
-      ),
-      take(1)
-    );
+        ],
+      })
+      .pipe(take(1));
   }
 
   editSubtask(id: string, name: string) {

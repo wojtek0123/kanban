@@ -23,6 +23,6 @@ export class DisplayNumberOfUsersInTaskComponent implements OnInit {
   ngOnInit() {
     this.usersLength$ = this.apollo
       .getUsersFromTask(this.taskId)
-      .pipe(map(data => data.data.usersFromTask.length));
+      .pipe(map(users => users.length));
   }
 }

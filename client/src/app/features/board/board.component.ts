@@ -37,9 +37,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     const boardId$ = this.route.params.pipe(map(params => params['boardId']));
 
-    this.projects$ = this.apollo
-      .getProjects()
-      .pipe(map(data => data.data.projects));
+    this.projects$ = this.apollo.getProjects();
 
     this.projectsError$ = this.projects$.pipe(
       ignoreElements(),

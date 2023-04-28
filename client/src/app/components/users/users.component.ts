@@ -49,8 +49,7 @@ export class UsersComponent implements OnInit {
     this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
     this.projectUsers$ = this.projectId$.pipe(
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(data => data.data.usersFromProject)
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId))
     );
   }
 
@@ -84,8 +83,7 @@ export class UsersComponent implements OnInit {
         } else {
           throw new Error('Something went wrong!');
         }
-      }),
-      map(data => data.data.filteredUsers)
+      })
     );
 
     const searchedUserWithoutOwner$ = combineLatest([

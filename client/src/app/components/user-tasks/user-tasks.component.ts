@@ -24,8 +24,7 @@ export class UserTasksComponent implements OnInit {
     this.loggedInUser$ = this.supabase.session$.pipe(map(data => data?.user));
 
     this.userTasks$ = this.loggedInUser$.pipe(
-      switchMap(user => this.apollo.getTasksFromUser(user?.id ?? '')),
-      map(data => data.data.getTasksFromUser)
+      switchMap(user => this.apollo.getTasksFromUser(user?.id ?? ''))
     );
   }
 

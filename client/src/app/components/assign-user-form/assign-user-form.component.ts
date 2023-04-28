@@ -37,13 +37,11 @@ export class AssignUserFormComponent implements OnInit {
     this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
     this.projectUsers$ = projectId$.pipe(
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId)),
-      map(data => data.data.usersFromProject)
+      switchMap(projectId => this.apollo.getUsersFromProject(projectId))
     );
 
     this.assignedUsers$ = this.taskId$.pipe(
-      switchMap(taskId => this.apollo.getUsersFromTask(taskId)),
-      map(data => data.data.usersFromTask)
+      switchMap(taskId => this.apollo.getUsersFromTask(taskId))
     );
   }
 
