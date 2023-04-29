@@ -23,6 +23,7 @@ export class ContextMenuComponent implements OnInit {
   @Input() editingProject?: Project;
   @Input() isProtected = true;
   @Input() whichSide: 'left' | 'right' = 'left';
+  @Input() deleteId?: string;
   show = false;
   isOwner$ = new Observable<boolean>();
 
@@ -41,6 +42,11 @@ export class ContextMenuComponent implements OnInit {
   }
 
   onDelete() {
+    if (this.deleteId) {
+      this.contextMenuModalService.onShow(this.type, this.deleteId);
+      this.show = false;
+      return;
+    }
     this.contextMenuModalService.onShow(this.type, this.id);
     this.show = false;
   }

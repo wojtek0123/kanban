@@ -40,6 +40,7 @@
         <app-context-menu
           *ngIf="isOwner$ | async"
           [id]="columnWrapper.column.id"
+          [deleteId]="columnWrapper.id"
           [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
