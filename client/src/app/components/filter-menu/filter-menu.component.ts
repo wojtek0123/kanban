@@ -22,9 +22,14 @@ export class FilterMenuComponent implements DoCheck {
   show = false;
   checkedTags: string[] = [''];
   tmpId = '';
+  tmpTags: Tag[] = [];
 
   ngDoCheck() {
-    if (this.id !== this.tmpId || this.isTaskEditing) {
+    if (
+      this.id !== this.tmpId ||
+      this.isTaskEditing ||
+      this.tags.length !== this.tmpTags.length
+    ) {
       this.checkedTags = [
         ...this.checkedTags,
         ...this.tags.flatMap(tag => tag.name),
@@ -32,6 +37,7 @@ export class FilterMenuComponent implements DoCheck {
       ];
       this.selectedTags.emit(this.checkedTags);
       this.tmpId = this.id;
+      this.tmpTags = [...this.tags];
     }
   }
 

@@ -28,6 +28,8 @@
   border-radius: var(--rounded);
   border: none;
   font-size: 1.1rem;
+  width: 15rem;
+  transition: width 0.3s;
 }
 
 .board-name-wrapper {
@@ -123,5 +125,11 @@
 
   .board-name-wrapper {
     margin-top: 1rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .search-input:focus {
+    width: 30rem;
   }
 }
