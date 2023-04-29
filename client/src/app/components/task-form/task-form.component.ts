@@ -142,7 +142,7 @@ export class TaskFormComponent implements OnInit {
     this.selectedColumn = columnId;
   }
 
-  onSubmit() {
+  onEdit() {
     this.submitted = true;
 
     if (this.getFormControls.edit.valid) {
@@ -183,7 +183,13 @@ export class TaskFormComponent implements OnInit {
             this.formService.onChangeEditingTask();
           }, 0);
         });
+
+      this.formService.onChangeFormVisibility();
     }
+  }
+
+  onAdd() {
+    this.submitted = true;
 
     if (this.getFormControls.add.valid) {
       const title = this.form.value.add?.title ?? '';
@@ -229,7 +235,8 @@ export class TaskFormComponent implements OnInit {
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't add a new task`);
             throw new Error(error);
-          })
+          }),
+          take(1)
         )
         .subscribe(() =>
           this.toastService.showToast(
@@ -237,8 +244,9 @@ export class TaskFormComponent implements OnInit {
             'Successfully added a new task'
           )
         );
+
+      this.formService.onChangeFormVisibility();
     }
-    this.formService.onChangeFormVisibility();
   }
 
   columnTrackBy(_index: number, column: Column) {

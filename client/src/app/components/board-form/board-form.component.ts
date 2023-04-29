@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormService } from '../../services/form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError, switchMap, take } from 'rxjs/operators';
+
+import { FormService } from '../../services/form/form.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast/toast.service';
 
@@ -50,7 +51,7 @@ export class BoardFormComponent implements OnInit {
     this.isEditing$ = this.formService.isEditing$;
   }
 
-  onSubmit() {
+  onEdit() {
     this.submitted = true;
 
     if (this.getFormControls.edit.valid) {
@@ -74,7 +75,13 @@ export class BoardFormComponent implements OnInit {
             'Successfully updated this board'
           )
         );
+      this.formService.onChangeFormVisibility();
     }
+  }
+
+  onAdd() {
+    this.submitted = true;
+
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
@@ -93,13 +100,8 @@ export class BoardFormComponent implements OnInit {
             'Successfully added a new board'
           );
         });
-    }
 
-    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
-      return;
+      this.formService.onChangeFormVisibility();
     }
-
-    this.form.reset();
-    this.formService.onChangeFormVisibility();
   }
 }

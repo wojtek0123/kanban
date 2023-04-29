@@ -1,27 +1,9 @@
-<form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div
-    class="form-wrapper-global"
-    *ngIf="(isEditing$ | async) === false"
-    formGroupName="add">
-    <label class="form-label-global" for="column-name">Column Name</label>
-    <input
-      class="form-input-global"
-      type="text"
-      id="column-name"
-      formControlName="name" />
-    <p
-      class="text-danger-global"
-      *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
-      Name is required
-    </p>
-    <label class="form-label-global">Dot color</label>
-    <input type="color" formControlName="dotColor" />
-  </div>
-
-  <div
-    *ngIf="isEditing$ | async"
-    formGroupName="edit"
-    class="form-wrapper-global">
+<form
+  *ngIf="isEditing$ | async; else add"
+  class="form-global"
+  [formGroup]="form"
+  (ngSubmit)="onEdit()">
+  <div formGroupName="edit" class="form-wrapper-global">
     <label class="form-label-global" for="edit-column-name">Column name</label>
     <input
       type="text"
@@ -38,6 +20,30 @@
   </div>
 
   <button type="submit" class="button-global submit-button-global">
-    {{ (isEditing$ | async) ? 'Update' : 'Add ' + 'column' }}
+    Update column
   </button>
 </form>
+
+<ng-template #add>
+  <form class="form-global" [formGroup]="form" (ngSubmit)="onAdd()">
+    <div class="form-wrapper-global" formGroupName="add">
+      <label class="form-label-global" for="column-name">Column Name</label>
+      <input
+        class="form-input-global"
+        type="text"
+        id="column-name"
+        formControlName="name" />
+      <p
+        class="text-danger-global"
+        *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
+        Name is required
+      </p>
+      <label class="form-label-global">Dot color</label>
+      <input type="color" formControlName="dotColor" />
+
+      <button type="submit" class="button-global submit-button-global">
+        Add column
+      </button>
+    </div>
+  </form>
+</ng-template>

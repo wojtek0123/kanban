@@ -1,25 +1,9 @@
-<form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div
-    class="form-wrapper-global"
-    *ngIf="(isEditing$ | async) === false"
-    formGroupName="add">
-    <label class="form-label-global" for="subtask-name">Subtask name</label>
-    <input
-      type="text"
-      class="form-input-global"
-      id="subtask-name"
-      formControlName="name" />
-    <p
-      class="text-danger-global"
-      *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
-      Name is required
-    </p>
-  </div>
-
-  <div
-    class="form-wrapper-global"
-    *ngIf="isEditing$ | async"
-    formGroupName="edit">
+<form
+  *ngIf="isEditing$ | async; else add"
+  class="form-global"
+  [formGroup]="form"
+  (ngSubmit)="onEdit()">
+  <div class="form-wrapper-global" formGroupName="edit">
     <label class="form-label-global" for="edit-subtask-name"
       >Subtask name</label
     >
@@ -36,6 +20,28 @@
   </div>
 
   <button type="submit" class="button-global submit-button-global">
-    {{ (isEditing$ | async) ? 'Update' : 'Add ' + 'subtask' }}
+    Update subtask
   </button>
 </form>
+
+<ng-template #add>
+  <form class="form-global" [formGroup]="form" (ngSubmit)="onAdd()">
+    <div class="form-wrapper-global" formGroupName="add">
+      <label class="form-label-global" for="subtask-name">Subtask name</label>
+      <input
+        type="text"
+        class="form-input-global"
+        id="subtask-name"
+        formControlName="name" />
+      <p
+        class="text-danger-global"
+        *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
+        Name is required
+      </p>
+    </div>
+
+    <button type="submit" class="button-global submit-button-global">
+      Add subtask
+    </button>
+  </form>
+</ng-template>

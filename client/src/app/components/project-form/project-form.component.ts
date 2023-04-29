@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormService } from '../../services/form/form.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable } from 'rxjs';
-import { ToastService } from '../../services/toast/toast.service';
 import { catchError, take } from 'rxjs/operators';
+
+import { FormService } from '../../services/form/form.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-project-form',
@@ -13,7 +14,7 @@ import { catchError, take } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFormComponent implements OnInit {
-  isEditing$!: Observable<boolean>;
+  isEditing$ = new Observable<boolean>();
   submitted = false;
 
   form = this.formBuilder.group({
@@ -44,11 +45,11 @@ export class ProjectFormComponent implements OnInit {
     return this.form.controls;
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.isEditing$ = this.formService.isEditing$;
   }
 
-  onSubmit() {
+  onEdit() {
     this.submitted = true;
 
     if (this.getFormControls.edit.valid) {
@@ -72,7 +73,14 @@ export class ProjectFormComponent implements OnInit {
             'Successfully updated this project'
           )
         );
+
+      this.formService.onChangeFormVisibility();
     }
+  }
+
+  onAdd() {
+    this.submitted = true;
+
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
@@ -94,13 +102,8 @@ export class ProjectFormComponent implements OnInit {
             'Successfully added a new project'
           )
         );
-    }
 
-    if (this.getFormControls.add.invalid && this.getFormControls.edit.invalid) {
-      return;
+      this.formService.onChangeFormVisibility();
     }
-
-    this.form.reset();
-    this.formService.onChangeFormVisibility();
   }
 }

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FormService } from '../../services/form/form.service';
-import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
+
+import { FormService } from '../../services/form/form.service';
+import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
@@ -54,7 +55,7 @@ export class ColumnFormComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit() {
+  onEdit() {
     this.submitted = true;
 
     if (this.getFormControls.edit.valid) {
@@ -79,7 +80,15 @@ export class ColumnFormComponent implements OnInit {
             'Successfully update this column'
           )
         );
-    } else if (this.getFormControls.add.valid) {
+
+      this.formService.onChangeFormVisibility();
+    }
+  }
+
+  onAdd() {
+    this.submitted = true;
+
+    if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
       const dotColor = this.form.value.add?.dotColor ?? '';
 
@@ -100,10 +109,7 @@ export class ColumnFormComponent implements OnInit {
             'Successfully added a new column'
           )
         );
-    } else {
-      return;
+      this.formService.onChangeFormVisibility();
     }
-
-    this.formService.onChangeFormVisibility();
   }
 }

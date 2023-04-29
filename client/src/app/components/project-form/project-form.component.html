@@ -1,25 +1,9 @@
-<form class="form-global" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div
-    class="form-wrapper-global"
-    *ngIf="(isEditing$ | async) === false"
-    formGroupName="add">
-    <label class="form-label-global" for="project-name">Project Name</label>
-    <input
-      class="form-input-global"
-      type="text"
-      id="project-name"
-      formControlName="name" />
-    <p
-      class="text-danger-global"
-      *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
-      Name is required
-    </p>
-  </div>
-
-  <div
-    *ngIf="isEditing$ | async"
-    formGroupName="edit"
-    class="form-wrapper-global">
+<form
+  *ngIf="isEditing$ | async; else add"
+  class="form-global"
+  [formGroup]="form"
+  (ngSubmit)="onEdit()">
+  <div formGroupName="edit" class="form-wrapper-global">
     <label for="edit-project-name">Project name</label>
     <input
       type="text"
@@ -31,9 +15,29 @@
       *ngIf="(getEditControls.name.touched || submitted) && getEditControls.name.errors?.['required']">
       Name is required
     </p>
+    <button type="submit" class="button-global submit-button-global">
+      Update project
+    </button>
   </div>
-
-  <button type="submit" class="button-global submit-button-global">
-    {{ (isEditing$ | async) ? 'Update' : 'Add ' + 'project' }}
-  </button>
 </form>
+
+<ng-template #add>
+  <form class="form-global" [formGroup]="form" (ngSubmit)="onAdd()">
+    <div class="form-wrapper-global" formGroupName="add">
+      <label class="form-label-global" for="project-name">Project Name</label>
+      <input
+        class="form-input-global"
+        type="text"
+        id="project-name"
+        formControlName="name" />
+      <p
+        class="text-danger-global"
+        *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
+        Name is required
+      </p>
+      <button type="submit" class="button-global submit-button-global">
+        Add project
+      </button>
+    </div>
+  </form>
+</ng-template>

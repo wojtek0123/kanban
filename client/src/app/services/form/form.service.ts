@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, map, take } from 'rxjs';
+
 import { Task } from '../../models/task.model';
 import { Column } from '../../models/column.model';
 import { Board } from '../../models/board.model';
 import { Subtask } from '../../models/subtask.model';
 import { Project } from '../../models/project.model';
 import { FormType, TabNameAssign } from '../../models/types';
-
-import { BehaviorSubject, Observable, combineLatest, map, take } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FormService {
@@ -18,10 +18,6 @@ export class FormService {
   );
   private _assignUserTabName$ = new BehaviorSubject<TabNameAssign>('assign');
   private _project$ = new BehaviorSubject<Project | undefined>(undefined);
-  editingObject$ = new Observable<
-    Project | Board | Column | Task | Subtask | undefined
-  >();
-
   private _editingProject?: Project;
   private _editingBoard?: Board;
   private _editingColumn?: Column;
@@ -93,6 +89,7 @@ export class FormService {
     this._isFormOpen$.next(!this._isFormOpen$.value);
     this._typeOfForm$.next(formType);
     this._enableSelectColumn$.next(selectColumn);
+    this._isEditing$.next(false);
   }
 
   onChangeEditingTask() {

@@ -253,32 +253,37 @@ export class ApolloService {
             },
           ],
         })
-      )
+      ),
+      take(1)
     );
   }
 
   addBoard(name: string, projectId: string) {
-    return this.apollo.mutate<{ addBoard: Board }>({
-      mutation: ADD_BOARD,
-      variables: { name, projectId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-        },
-      ],
-    });
+    return this.apollo
+      .mutate<{ addBoard: Board }>({
+        mutation: ADD_BOARD,
+        variables: { name, projectId },
+        refetchQueries: [
+          {
+            query: GET_PROJECTS,
+          },
+        ],
+      })
+      .pipe(take(1));
   }
 
   addColumn(name: string, dotColor: string, boardId: string) {
-    return this.apollo.mutate<{ addColumn: { id: string; name: string } }>({
-      mutation: ADD_COLUMN,
-      variables: { name, boardId, dotColor },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-        },
-      ],
-    });
+    return this.apollo
+      .mutate<{ addColumn: { id: string; name: string } }>({
+        mutation: ADD_COLUMN,
+        variables: { name, boardId, dotColor },
+        refetchQueries: [
+          {
+            query: GET_PROJECTS,
+          },
+        ],
+      })
+      .pipe(take(1));
   }
 
   addTask(task: Partial<Task>, columnId: string) {
@@ -303,22 +308,26 @@ export class ApolloService {
   }
 
   addSubtask(name: string, isFinished: boolean, taskId: string) {
-    return this.apollo.mutate<{ addSubtask: { id: string; name: string } }>({
-      mutation: ADD_SUBTASK,
-      variables: { name, isFinished, taskId },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-        },
-      ],
-    });
+    return this.apollo
+      .mutate<{ addSubtask: { id: string; name: string } }>({
+        mutation: ADD_SUBTASK,
+        variables: { name, isFinished, taskId },
+        refetchQueries: [
+          {
+            query: GET_PROJECTS,
+          },
+        ],
+      })
+      .pipe(take(1));
   }
 
   addUser(name: string, email: string, id: string) {
-    return this.apollo.mutate({
-      mutation: ADD_USER,
-      variables: { name, email, id },
-    });
+    return this.apollo
+      .mutate({
+        mutation: ADD_USER,
+        variables: { name, email, id },
+      })
+      .pipe(take(1));
   }
 
   editProject(id: string, name: string) {
