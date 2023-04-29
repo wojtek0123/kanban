@@ -47,8 +47,9 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - [ ] implement websocket (subscription)
 - [x] add more person to one board
 - [x] add additionall views of tasks (table and kanban)
-- [ ] divide components into smart and dump
-- [ ] write tests
+- [ ] write tests for components
+- [ ] write tests for pipes
+- [ ] write tests for services
 
 ## What I learned:
 - reactive form
