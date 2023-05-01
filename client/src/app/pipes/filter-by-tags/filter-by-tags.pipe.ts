@@ -5,11 +5,11 @@ import { Task } from '../../models/task.model';
   name: 'filterByTags',
 })
 export class FilterByTagsPipe implements PipeTransform {
-  transform(tasks: Task[], tags: string[]): Task[] {
+  transform(tasks: Task[], tags: string[]) {
     return tasks.filter(task =>
       task.tagNames.length === 0
-        ? tags.includes('')
-        : task.tagNames.some(tagName => tags.includes(tagName))
+        ? tags.some(tagName => tagName === '')
+        : task.tagNames.some(tagName => tags.some(tag => tag === tagName))
     );
   }
 }

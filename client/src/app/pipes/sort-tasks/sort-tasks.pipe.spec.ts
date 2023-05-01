@@ -1,16 +1,16 @@
-import { SortPipe } from './sort.pipe';
+import { SortTasksPipe } from './sort-tasks.pipe';
 import { Task } from 'src/app/models/task.model';
 import { tasks } from 'src/app/mock/tasks.mock';
 
-describe('SortPipe', () => {
-  let pipe: SortPipe;
+describe('SortTasksPipe', () => {
+  let pipe: SortTasksPipe;
 
   beforeEach(() => {
-    pipe = new SortPipe();
+    pipe = new SortTasksPipe();
   });
 
   it('create an instance', () => {
-    const pipe = new SortPipe();
+    const pipe = new SortTasksPipe();
     expect(pipe).toBeTruthy();
   });
 

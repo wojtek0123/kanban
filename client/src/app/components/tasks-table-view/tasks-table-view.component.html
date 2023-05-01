@@ -16,7 +16,7 @@
       let task of tableTask
         | filterByTitle : searchTerm
         | filterByTags : tags
-        | sort : sortBy.direction : sortBy.column;
+        | sortTasks : sortBy.direction : sortBy.column;
       trackBy: taskTrackBy
     ">
     <span class="column column-0">{{ task.title }}</span>

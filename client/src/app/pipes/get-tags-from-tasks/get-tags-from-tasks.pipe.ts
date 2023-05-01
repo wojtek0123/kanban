@@ -6,7 +6,7 @@ import { Tag } from 'src/app/models/tag.models';
   name: 'getTagsFromTasks',
 })
 export class GetTagsFromTasksPipe implements PipeTransform {
-  transform(board: Board): Tag[] {
+  transform(board: Board) {
     const uniqueTagNames = new Set([
       ...board.columns.flatMap(col =>
         col.column.tasks.flatMap(task =>
@@ -19,6 +19,6 @@ export class GetTagsFromTasksPipe implements PipeTransform {
       id: index,
       name,
       check: true,
-    }));
+    })) satisfies Tag[];
   }
 }

@@ -4,9 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'showElement',
 })
 export class ShowElementPipe implements PipeTransform {
-  transform(isOwner: boolean | null, isProtected: boolean): boolean {
-    if (!isOwner && isProtected) return false;
-
-    return true;
+  transform(isOwner: boolean | null, isProtected: boolean) {
+    return !isOwner && isProtected ? false : true;
   }
 }

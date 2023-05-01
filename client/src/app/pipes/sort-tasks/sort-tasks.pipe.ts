@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Task } from '../../models/task.model';
 
 @Pipe({
-  name: 'sort',
+  name: 'sortTasks',
 })
-export class SortPipe implements PipeTransform {
+export class SortTasksPipe implements PipeTransform {
   transform(items: Task[], direction: 'asc' | 'des', column: keyof Task) {
     if (items.length === 0) return [];
 

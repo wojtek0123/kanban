@@ -1,7 +1,7 @@
-import { CheckWhetherUserIsIncludedPipe } from './check-whether-user-is-included.pipe';
+import { userIncludedPipe } from './user-included.pipe';
 
-describe('CheckWhetherUserIsIncludedPipe', () => {
-  let pipe: CheckWhetherUserIsIncludedPipe;
+describe('userIncludedPipe', () => {
+  let pipe: userIncludedPipe;
   const users = [
     { user: { id: '1', name: 'john', email: 'john@email.com' } },
     { user: { id: '2', name: 'joe', email: 'joe@email.com' } },
@@ -9,7 +9,7 @@ describe('CheckWhetherUserIsIncludedPipe', () => {
   ];
 
   beforeEach(() => {
-    pipe = new CheckWhetherUserIsIncludedPipe();
+    pipe = new userIncludedPipe();
   });
 
   it('create an instance', () => {

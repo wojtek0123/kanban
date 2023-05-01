@@ -5,7 +5,7 @@ import { Task } from '../../models/task.model';
   name: 'filterByTitle',
 })
 export class FilterByTitlePipe implements PipeTransform {
-  transform(tasks: Task[], searchTerm: string): Task[] {
+  transform(tasks: Task[], searchTerm: string) {
     return tasks.filter(task =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );

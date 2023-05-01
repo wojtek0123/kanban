@@ -50,10 +50,7 @@
       <div class="assign-user-buttons">
         <button
           *ngIf="
-            !(
-              (assignedUsers$ | async) ?? []
-              | checkWhetherUserIsIncluded : data.user.id
-            )
+            !((assignedUsers$ | async) ?? [] | userIncluded : data.user.id)
           "
           type="button"
           class="button-global assign-user-button"
@@ -61,10 +58,7 @@
           <img src="../../../assets/plus-solid.svg" alt="" />
         </button>
         <button
-          *ngIf="
-            (assignedUsers$ | async) ?? []
-              | checkWhetherUserIsIncluded : data.user.id
-          "
+          *ngIf="(assignedUsers$ | async) ?? [] | userIncluded : data.user.id"
           type="button"
           class="button-global assign-user-button"
           (click)="onRemoveUserFromTask(data.user.id)">

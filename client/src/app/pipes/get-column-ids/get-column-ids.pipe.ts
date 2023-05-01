@@ -5,10 +5,10 @@ import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
   name: 'getColumnIds',
 })
 export class GetColumnIdsPipe implements PipeTransform {
-  transform(columnWrappers: ColumnWrapper[], columnId: string): string[] {
+  transform(columnWrappers: ColumnWrapper[], excludedColumnId: string) {
     return columnWrappers
       .flatMap(columnWrapper => columnWrapper.column)
-      .filter(column => column.id !== columnId)
+      .filter(column => column.id !== excludedColumnId)
       .map(column => column.id);
   }
 }
