@@ -6,10 +6,9 @@ import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
 })
 export class GetColumnIdsPipe implements PipeTransform {
   transform(columnWrappers: ColumnWrapper[], columnId: string): string[] {
-    const filteredColumns = columnWrappers
+    return columnWrappers
       .flatMap(columnWrapper => columnWrapper.column)
-      .filter(column => column.id !== columnId);
-
-    return [...filteredColumns.map(column => column.id)];
+      .filter(column => column.id !== columnId)
+      .map(column => column.id);
   }
 }

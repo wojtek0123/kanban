@@ -7,7 +7,7 @@ import { Task } from '../../models/task.model';
 export class FilterByTitlePipe implements PipeTransform {
   transform(tasks: Task[], searchTerm: string): Task[] {
     return tasks.filter(task =>
-      task.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+      task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
 }

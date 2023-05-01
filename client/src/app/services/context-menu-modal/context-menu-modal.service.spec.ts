@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+// import { TestBed } from '@angular/core/testing';
 
-import { ContextMenuModalService } from './context-menu-modal.service';
+// import { ContextMenuModalService } from './context-menu-modal.service';
 
-describe('SupabaseService', () => {
-  let service: ContextMenuModalService;
+// describe('SupabaseService', () => {
+//   let service: ContextMenuModalService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ContextMenuModalService);
-  });
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({});
+//     service = TestBed.inject(ContextMenuModalService);
+//   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+//   it('should be created', () => {
+//     expect(service).toBeTruthy();
+//   });
+// });

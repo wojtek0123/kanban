@@ -1,8 +1,13 @@
 import { GetColumnIdsPipe } from './get-column-ids.pipe';
 
 describe('GetColumnIdsPipe', () => {
+  let pipe: GetColumnIdsPipe;
+
+  beforeEach(() => {
+    pipe = new GetColumnIdsPipe();
+  });
+
   it('create an instance', () => {
-    const pipe = new GetColumnIdsPipe();
     expect(pipe).toBeTruthy();
   });
 });

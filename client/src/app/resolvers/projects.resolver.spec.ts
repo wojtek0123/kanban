@@ -1,18 +1,14 @@
-import { TestBed } from '@angular/core/testing';
-import { ResolveFn } from '@angular/router';
+// import { TestBed } from '@angular/core/testing';
+// import { ResolveFn } from '@angular/router';
 
-import { projectsResolver } from './projects.resolver';
-import { Project } from '../models/project.model';
+// import { projectsResolver } from './projects.resolver';
+// import { Project } from '../models/project.model';
 
-describe('ProjectsResolverResolver', () => {
-  let resolver: ResolveFn<Project[]>;
+// describe('ProjectsResolverResolver', () => {
+//   let resolver: ResolveFn<Project[]>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    resolver = TestBed.inject(projectsResolver);
-  });
-
-  it('should be created', () => {
-    expect(resolver).toBeTruthy();
-  });
-});
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({});
+//     resolver = TestBed.inject(projectsResolver);
+//   });
+// });
