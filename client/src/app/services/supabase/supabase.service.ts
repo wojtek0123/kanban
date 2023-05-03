@@ -27,8 +27,10 @@ export class SupabaseService {
   }
 
   async refreshSession() {
-    const { data } = await this._supabase.auth.getSession();
-    this._session$.next(data.session);
+    const {
+      data: { session },
+    } = await this.getSession();
+    this._session$.next(session);
   }
 
   getSession() {
@@ -46,7 +48,7 @@ export class SupabaseService {
     });
   }
 
-  singUp(email: string, password: string, nick: string) {
+  signUp(email: string, password: string, nick: string) {
     return this._supabase.auth.signUp({
       email,
       password,

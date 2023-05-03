@@ -107,7 +107,7 @@ export class RegisterComponent {
       const password = this.registerForm.controls.password.value ?? '';
       const nickname = this.registerForm.controls.nickname.value ?? '';
 
-      const { error, data } = await this.supabase.singUp(
+      const { error, data } = await this.supabase.signUp(
         email,
         password,
         nickname
