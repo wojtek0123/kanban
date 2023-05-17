@@ -55,7 +55,7 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 - [x] add additionally views of tasks (table and kanban)
 - [ ] write tests for components
 - [x] write tests for pipes
-- [ ] write tests for services
+- [x] write tests for services
 - [ ] write tests for quards
 
 ## What I learned:
