@@ -39,6 +39,8 @@ Kanban is an app to manage tasks in a team. For now owner of project / board can
 
 ![login-page](https://user-images.githubusercontent.com/87533043/226334698-6aaa381b-536e-4555-9a43-84c8e2f895eb.png)
 
+![projects-view](https://github.com/wojtek0123/kanban/assets/87533043/ba2bf5f7-d18b-43d7-b3c5-03d8180d5518)
+
 ![kanban-view](https://user-images.githubusercontent.com/87533043/226334729-4c18a152-15c2-4b69-a1c9-3b36815ea09c.png)
 
 ![table-view](https://user-images.githubusercontent.com/87533043/226334740-a6d06c54-675b-41c0-bea5-3103b82e5dd5.png)
