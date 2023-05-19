@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { SupabaseService } from '../supabase/supabase.service';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, map, switchMap, take } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { FormType } from '../../models/types';
 import { Project } from '../../models/project.model';
@@ -166,7 +159,7 @@ export class ApolloService {
         },
         {
           query: GET_TASKS_FROM_USER,
-          variables: { taskId },
+          variables: { userId },
         },
       ],
     });
