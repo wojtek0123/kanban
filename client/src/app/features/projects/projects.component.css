@@ -4,7 +4,6 @@
   max-width: 1400px;
   margin: 0 auto;
   padding-bottom: 2rem;
-  z-index: 0;
 }
 
 .projects {
@@ -13,27 +12,16 @@
   padding: 1rem;
 }
 
-.table {
-  overflow-x: auto;
-  position: relative;
-}
-
-.table li {
-  min-width: 50rem;
-  width: 100%;
-  overflow-x: auto;
-}
-
 .row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
-  min-width: 50rem;
   padding-bottom: 0.75rem;
 }
 
 .row-header {
   border-bottom: 1px solid var(--font-color);
+  margin-bottom: 0.5rem;
 }
 
 .column {
@@ -44,6 +32,12 @@
 
 .column-0 {
   min-width: 15rem;
+  display: flex;
+  align-items: center;
+}
+
+.column-0 a {
+  color: var(--font-color-grey);
 }
 
 .column-header {
@@ -57,7 +51,12 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  overflow-x: auto;
+}
+
+.column-1,
+.column-2,
+.column-3 {
+  display: none;
 }
 
 .project-name-container {
@@ -92,7 +91,7 @@
 
 .message-wrapper {
   text-align: center;
-  margin-top: 1rem;
+  margin: 1rem 0;
   color: var(--font-color-grey);
   font-size: 1.2rem;
 }
@@ -100,6 +99,24 @@
 .error-message {
   text-align: center;
   margin-top: 3rem;
+}
+
+.project-heading {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .column-1,
+  .column-2,
+  .column-3 {
+    display: block;
+  }
+
+  .row {
+    grid-template-columns: repeat(4, 1fr);
+    min-width: 45rem;
+  }
 }
 
 @media (min-width: 1024px) {

@@ -100,11 +100,11 @@ export class FormService {
     this.onChangeFormVisibility(type);
     this._isEditing$.next(true);
 
+    if (project) {
+      this._project$.next(project);
+    }
+
     if (type === 'project') {
-      if (project) {
-        this._editingProject = project;
-        return;
-      }
       this._project$
         .pipe(take(1))
         .subscribe(project => (this._editingProject = project));

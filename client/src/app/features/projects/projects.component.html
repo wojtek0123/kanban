@@ -1,4 +1,5 @@
 <app-form></app-form>
+<app-context-menu-modal></app-context-menu-modal>
 <app-toast></app-toast>
 <main
   class="main"
@@ -37,7 +38,17 @@
       class="table">
       <div class="project-name-wrapper">
         <div class="project-name-container">
-          <h2>{{ project.name }}</h2>
+          <div class="project-heading">
+            <h2>{{ project.name }}</h2>
+            <app-context-menu
+              *ngIf="project.userId === (loggedInUserId$ | async)"
+              [id]="project.id"
+              [deleteId]="project.id"
+              type="project"
+              [isProtected]="false"
+              [editingProject]="project"
+              whichSide="right"></app-context-menu>
+          </div>
           <app-open-form-button
             *ngIf="project.userId === (loggedInUserId$ | async)"
             type="board"
@@ -57,17 +68,29 @@
         <p>No boards to display</p>
       </div>
       <div *ngFor="let board of project.boards; trackBy: boardTrackBy">
-        <a
-          [routerLink]="['/', 'project', project.id, 'board', board.id]"
-          type="button"
-          class="accordion-item row">
-          <span class="column column-0">{{ board.name }}</span>
-          <span class="column column-1">{{ (board | getColumns).length }}</span>
-          <span class="column column-2">{{ (board | getTasks).length }}</span>
-          <span class="column column-3">{{
-            (board | getSubtasks).length
-          }}</span>
-        </a>
+        <div class="accordion-item">
+          <div class="row">
+            <div class="column column-0">
+              <a [routerLink]="['/', 'project', project.id, 'board', board.id]">
+                {{ board.name }}
+              </a>
+              <app-context-menu
+                *ngIf="project.userId === (loggedInUserId$ | async)"
+                [id]="board.id"
+                whichSide="right"
+                [isProtected]="false"
+                [editingProject]="project"
+                type="board"></app-context-menu>
+            </div>
+            <span class="column column-1">{{
+              (board | getColumns).length
+            }}</span>
+            <span class="column column-2">{{ (board | getTasks).length }}</span>
+            <span class="column column-3">{{
+              (board | getSubtasks).length
+            }}</span>
+          </div>
+        </div>
       </div>
     </li>
   </ul>
