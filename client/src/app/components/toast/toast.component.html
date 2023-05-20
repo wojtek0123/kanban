@@ -5,11 +5,13 @@
     informative: (toast$ | async)?.type === 'confirm'
   }">
   <img
-    [src]="
+    [ngSrc]="
       (toast$ | async)?.type === 'confirm'
         ? '../../../assets/circle-info-solid.svg'
         : '../../../assets/exclamation-circle.svg'
     "
-    alt="exclamation mark" />
+    width="20"
+    height="20"
+    alt="Icon which inform what type this toast notification is. It can be informative or warning message" />
   <p>{{ (toast$ | async)?.message }}</p>
 </div>

@@ -116,7 +116,7 @@
         *ngIf="selectColumn$ | async"
         class="button-global select-input"
         (change)="changeSelectedColumn($event)">
-        <option default [value]="undefined">Select column</option>
+        <option [value]="undefined">Select column</option>
         <option
           [value]="column.id"
           *ngFor="let column of columns$ | async; trackBy: columnTrackBy">

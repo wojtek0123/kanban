@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { LoadingSpinnerComponent } from './loading-spinner.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [LoadingSpinnerComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   exports: [LoadingSpinnerComponent],
 })
 export class LoadingSpinnerModule {}

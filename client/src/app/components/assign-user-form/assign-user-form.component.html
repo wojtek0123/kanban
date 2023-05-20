@@ -34,7 +34,11 @@
         type="button"
         class="button-global assign-user-button"
         (click)="onRemoveUserFromTask(data.user.id)">
-        <img src="../../../assets/minus-solid.svg" alt="" />
+        <img
+          ngSrc="../../../assets/minus-solid.svg"
+          alt=""
+          height="16"
+          width="10" />
       </button>
     </div>
   </div>
@@ -55,14 +59,22 @@
           type="button"
           class="button-global assign-user-button"
           (click)="onAddUserToTask(data.user.id)">
-          <img src="../../../assets/plus-solid.svg" alt="" />
+          <img
+            ngSrc="../../../assets/plus-solid.svg"
+            alt=""
+            height="16"
+            width="10" />
         </button>
         <button
           *ngIf="(assignedUsers$ | async) ?? [] | userIncluded : data.user.id"
           type="button"
           class="button-global assign-user-button"
           (click)="onRemoveUserFromTask(data.user.id)">
-          <img src="../../../assets/minus-solid.svg" alt="" />
+          <img
+            ngSrc="../../../assets/minus-solid.svg"
+            alt=""
+            height="16"
+            width="10" />
         </button>
       </div>
     </div>

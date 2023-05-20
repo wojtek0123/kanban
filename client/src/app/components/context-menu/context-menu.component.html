@@ -14,11 +14,19 @@
     *ngIf="show">
     <button type="button" class="context-menu-body-button" (click)="onDelete()">
       Remove
-      <img src="../../../assets/trash-fill.svg" alt="" />
+      <img
+        ngSrc="../../../assets/trash-fill.svg"
+        alt="Trash"
+        height="16"
+        width="16" />
     </button>
     <button type="button" class="context-menu-body-button" (click)="onEdit()">
       Edit
-      <img src="../../../assets/pencil-square.svg" alt="" />
+      <img
+        ngSrc="../../../assets/pencil-square.svg"
+        alt="Pencil"
+        height="16"
+        width="16" />
     </button>
   </div>
 </div>

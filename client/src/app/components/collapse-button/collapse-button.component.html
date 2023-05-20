@@ -3,8 +3,10 @@
     <img
       [@rotateState]="!showContent ? 'default' : 'rotated'"
       class="collapse-button-image"
-      src="../../../assets/arrow-down-short.svg"
-      alt="" />
+      ngSrc="../../../assets/arrow-down-short.svg"
+      alt=""
+      height="24"
+      width="24" />
     <h3 class="collapse-button-title">{{ project.name }}</h3>
   </button>
   <app-context-menu
