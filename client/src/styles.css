@@ -101,7 +101,7 @@ select {
 }
 
 .text-warning-global {
-  color: var(--error-color);
+  color: var(--font-color-grey);
   margin-top: 1rem;
 }
 

@@ -1,27 +1,43 @@
-<div class="card" *ngFor="let task of userTasks$ | async">
-  <div class="card-tags">
-    <span
-      *ngFor="let tag of task.task.tagNames; let i = index"
-      [style.background-color]="task.task.tagBackgroundColors[i]"
-      [style.color]="task.task.tagFontColors[i]"
-      >{{ tag }}</span
-    >
-  </div>
-  <h3>{{ task.task.title }}</h3>
-  <p>{{ task.task.description }}</p>
-  <div class="card-subtask-wrapper">
-    <div
-      class="card-subtask"
-      *ngFor="let subtask of task.task.subtasks; trackBy: subtaskTrackBy">
-      <div>
-        <input
-          aria-label="subtask"
-          type="checkbox"
-          [id]="subtask.id"
-          [checked]="subtask.isFinished"
-          disabled />
-        <label [for]="subtask.id">{{ subtask.name }}</label>
+<ng-container
+  *ngIf="{
+    userTasks: userTasks$ | async,
+    userTasksError: userTasksError$ | async
+  } as vm">
+  <ng-container *ngIf="vm.userTasks && !vm.userTasksError">
+    <h2 class="header">You are assigned to this tasks</h2>
+    <div class="card" *ngFor="let task of vm.userTasks">
+      <div class="card-tags">
+        <span
+          *ngFor="let tag of task.task.tagNames; let i = index"
+          [style.background-color]="task.task.tagBackgroundColors[i]"
+          [style.color]="task.task.tagFontColors[i]"
+          >{{ tag }}</span
+        >
+      </div>
+      <h3>{{ task.task.title }}</h3>
+      <p>{{ task.task.description }}</p>
+      <div class="card-subtask-wrapper">
+        <div
+          class="card-subtask"
+          *ngFor="let subtask of task.task.subtasks; trackBy: subtaskTrackBy">
+          <div>
+            <input
+              aria-label="subtask"
+              type="checkbox"
+              [id]="subtask.id"
+              [checked]="subtask.isFinished"
+              disabled />
+            <label [for]="subtask.id">{{ subtask.name }}</label>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+    <div
+      class="text-warning-global"
+      *ngIf="!vm.userTasksError && vm.userTasks?.length === 0">
+      You have no assigned tasks
+    </div>
+  </ng-container>
+  <div *ngIf="!vm.userTasks && !vm.userTasksError">Loading...</div>
+  <div *ngIf="vm.userTasksError as error">{{ error }}</div>
+</ng-container>

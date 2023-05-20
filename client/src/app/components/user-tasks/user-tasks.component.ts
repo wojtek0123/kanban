@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable, switchMap } from 'rxjs';
+import {
+  catchError,
+  ignoreElements,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { User } from '../../models/user.model';
 import { SupabaseService } from '../../services/supabase/supabase.service';
@@ -13,6 +20,7 @@ import { Subtask } from 'src/app/models/subtask.model';
 })
 export class UserTasksComponent implements OnInit {
   userTasks$: Observable<{ task: Task }[]> | null = null;
+  userTasksError$ = new Observable<string | null>();
   loggedInUser$: Observable<Partial<User> | undefined> | null = null;
 
   constructor(
@@ -25,6 +33,11 @@ export class UserTasksComponent implements OnInit {
 
     this.userTasks$ = this.loggedInUser$.pipe(
       switchMap(user => this.apollo.getTasksFromUser(user?.id ?? ''))
+    );
+
+    this.userTasksError$ = this.userTasks$.pipe(
+      ignoreElements(),
+      catchError(error => of(error))
     );
   }
 

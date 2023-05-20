@@ -58,3 +58,9 @@
 .card p {
   color: var(--font-color-grey);
 }
+
+.header {
+  color: var(--font-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
