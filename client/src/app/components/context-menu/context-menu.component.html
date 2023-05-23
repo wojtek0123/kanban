@@ -1,9 +1,12 @@
-<div class="context-menu-backdrop" (click)="onToggle()" *ngIf="show"></div>
 <div
   class="context-menu-container"
   *ngIf="isOwner$ | async | showElement : isProtected">
   <button type="button" class="context-menu-button" (click)="onToggle()">
-    <img src="../../../assets/three-dots-vertical.svg" alt="menu" />
+    <img
+      ngSrc="../../../assets/three-dots-vertical.svg"
+      alt="menu"
+      height="20"
+      width="20" />
   </button>
   <div
     class="context-menu-body"

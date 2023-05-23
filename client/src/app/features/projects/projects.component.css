@@ -10,6 +10,7 @@
   width: 100%;
   list-style-type: none;
   padding: 1rem;
+  min-height: 50svh;
 }
 
 .row {

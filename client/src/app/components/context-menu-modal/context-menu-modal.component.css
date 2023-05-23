@@ -21,7 +21,7 @@
   position: fixed;
   inset: 0;
   z-index: 10;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .context-menu-modal-buttons {

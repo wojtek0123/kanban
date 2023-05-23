@@ -51,7 +51,7 @@
         text="Users"
         type="user"></app-open-form-button>
       <select class="button-global button" [(ngModel)]="sortBy">
-        <option default [value]="{ column: 'title', direction: 'asc' }" hidden>
+        <option [value]="{ column: 'title', direction: 'asc' }" hidden>
           Title A-Z
         </option>
         <option [ngValue]="{ column: 'title', direction: 'asc' }">
