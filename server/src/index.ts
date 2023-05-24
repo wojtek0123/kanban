@@ -1,28 +1,30 @@
-import { gql } from 'apollo-server'
-import { Context } from './context'
-
-import { GraphQLScalarType, Kind } from 'graphql'
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { PrismaClient } from '@prisma/client';
+import { GraphQLScalarType, Kind } from 'graphql';
 
 export const dateScalar = new GraphQLScalarType({
   name: 'Date',
   description: 'Date custom scalar type',
   serialize(value: any) {
     // return value.getTime(); // Convert outgoing Date to integer for JSON
-    const date = new Date(value)
-    return date.toISOString()
+    const date = new Date(value);
+    return date.toISOString();
   },
   parseValue(value: any) {
-    return new Date(value) // Convert incoming integer to Date
+    return new Date(value); // Convert incoming integer to Date
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
-      return new Date(parseInt(ast.value, 10)) // Convert hard-coded AST string to integer and then to Date
+      return new Date(parseInt(ast.value, 10)); // Convert hard-coded AST string to integer and then to Date
     }
-    return null // Invalid hard-coded value (not an integer)
+    return null; // Invalid hard-coded value (not an integer)
   },
-})
+});
 
-export const typeDefs = gql`
+const prisma = new PrismaClient();
+
+const typeDefs = `#graphql
   scalar Date
 
   type Subtask {
@@ -171,12 +173,12 @@ export const typeDefs = gql`
     changeCompletionState(id: String, state: Boolean): Subtask
     updateUserName(id: String, name: String): User
   }
-`
+`;
 
-export const resolvers = {
+const resolvers = {
   Query: {
-    board: (_parent: unknown, args: { id: string }, context: Context) => {
-      return context.prisma.board.findUnique({
+    board: (_parent: unknown, args: { id: string }) => {
+      return prisma.board.findUnique({
         where: { id: args.id },
         select: {
           Project: {
@@ -236,10 +238,10 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
-    projects: (_parent: any, args: { userId: string }, context: Context) => {
-      return context.prisma.project.findMany({
+    projects: (_parent: any, args: { userId: string }) => {
+      return prisma.project.findMany({
         where: {
           usersOnProject: {
             some: {
@@ -315,27 +317,19 @@ export const resolvers = {
         orderBy: {
           createdAt: 'asc',
         },
-      })
+      });
     },
-    filteredUsers: (
-      _parent: unknown,
-      args: { text: string },
-      context: Context,
-    ) => {
-      return context.prisma.user.findMany({
+    filteredUsers: (_parent: unknown, args: { text: string }) => {
+      return prisma.user.findMany({
         where: {
           email: {
             contains: args.text,
           },
         },
-      })
+      });
     },
-    usersFromProject: (
-      _parent: unknown,
-      args: { projectId: string },
-      context: Context,
-    ) => {
-      return context.prisma.userOnProject.findMany({
+    usersFromProject: (_parent: unknown, args: { projectId: string }) => {
+      return prisma.userOnProject.findMany({
         where: {
           project: {
             id: args.projectId,
@@ -350,14 +344,10 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
-    usersFromTask: (
-      _parent: unknown,
-      args: { taskId: string },
-      context: Context,
-    ) => {
-      return context.prisma.userOnTask.findMany({
+    usersFromTask: (_parent: unknown, args: { taskId: string }) => {
+      return prisma.userOnTask.findMany({
         where: {
           taskId: args.taskId,
         },
@@ -370,14 +360,10 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
-    getTasksFromUser: (
-      _parent: unknown,
-      args: { userId: string },
-      context: Context,
-    ) => {
-      return context.prisma.userOnTask.findMany({
+    getTasksFromUser: (_parent: unknown, args: { userId: string }) => {
+      return prisma.userOnTask.findMany({
         where: {
           userId: args.userId,
         },
@@ -413,189 +399,168 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
-    getUsersAndTasks: (_parent: unknown, args: null, context: Context) => {
-      return context.prisma.userOnTask.findMany()
+    getUsersAndTasks: (_parent: unknown, args: null) => {
+      return prisma.userOnTask.findMany();
     },
   },
 
   Mutation: {
-    updateUserName: (
-      _parent: unknown,
-      args: { id: string; name: string },
-      context: Context,
-    ) => {
-      return context.prisma.user.update({
+    updateUserName: (_parent: unknown, args: { id: string; name: string }) => {
+      return prisma.user.update({
         where: { id: args.id },
         data: { name: args.name },
-      })
+      });
     },
     changeColumnWrapper: async (
       _parent: unknown,
       args: {
-        currColumnWrapperId: string
-        prevColumnWrapperId: string
-        currColumnId: string
-        prevColumnId: string
-        boardId: string
-      },
-      context: Context,
+        currColumnWrapperId: string;
+        prevColumnWrapperId: string;
+        currColumnId: string;
+        prevColumnId: string;
+        boardId: string;
+      }
     ) => {
-      const response = await context.prisma.columnWrapper.create({
+      const response = await prisma.columnWrapper.create({
         data: {
           boardId: args.boardId,
         },
-      })
+      });
 
-      await context.prisma.column.update({
+      await prisma.column.update({
         where: { id: args.currColumnId },
         data: { columnWrapperId: response.id },
-      })
+      });
 
-      await context.prisma.column.update({
+      await prisma.column.update({
         where: {
           id: args.prevColumnId,
         },
         data: {
           columnWrapperId: args.currColumnWrapperId,
         },
-      })
+      });
 
-      await context.prisma.column.update({
+      await prisma.column.update({
         where: {
           id: args.currColumnId,
         },
         data: {
           columnWrapperId: args.prevColumnWrapperId,
         },
-      })
+      });
 
-      return await context.prisma.columnWrapper.delete({
+      return await prisma.columnWrapper.delete({
         where: { id: response.id },
-      })
+      });
     },
     addUserToTask: (
       _parent: unknown,
-      args: { userId: string; taskId: string },
-      context: Context,
+      args: { userId: string; taskId: string }
     ) => {
-      return context.prisma.userOnTask.create({
+      return prisma.userOnTask.create({
         data: {
           userId: args.userId,
           taskId: args.taskId,
         },
-      })
+      });
     },
     removeUserFromTask: (
       _parent: unknown,
-      args: { userId: string; taskId: string },
-      context: Context,
+      args: { userId: string; taskId: string }
     ) => {
-      return context.prisma.userOnTask.delete({
+      return prisma.userOnTask.delete({
         where: {
           userId_taskId: {
             userId: args.userId,
             taskId: args.taskId,
           },
         },
-      })
+      });
     },
     addUserToProject: async (
       _parent: unknown,
-      args: { projectId: string; userId: string },
-      context: Context,
+      args: { projectId: string; userId: string }
     ) => {
-      return context.prisma.userOnProject.create({
+      return prisma.userOnProject.create({
         data: {
           projectId: args.projectId,
           userId: args.userId,
         },
-      })
+      });
     },
     removeUserFromProject: async (
       _parent: unknown,
-      args: { projectId: string; userId: string },
-      context: Context,
+      args: { projectId: string; userId: string }
     ) => {
-      return context.prisma.userOnProject.delete({
+      return prisma.userOnProject.delete({
         where: {
           userId_projectId: {
             projectId: args.projectId,
             userId: args.userId,
           },
         },
-      })
+      });
     },
     addUser: (
       _parent: any,
-      args: { name: string; email: string; id: string },
-      context: Context,
+      args: { name: string; email: string; id: string }
     ) => {
-      return context.prisma.user.create({
+      return prisma.user.create({
         data: {
           name: args.name,
           email: args.email,
           id: args.id,
         },
-      })
+      });
     },
     changeColumn: (
       _parent: any,
-      args: { columnId: string; taskId: string },
-      context: Context,
+      args: { columnId: string; taskId: string }
     ) => {
-      return context.prisma.task.update({
+      return prisma.task.update({
         where: { id: args.taskId },
         data: {
           columnId: args.columnId,
         },
-      })
+      });
     },
     changeCompletionState: (
       _parent: any,
-      args: { id: string; state: boolean },
-      context: Context,
+      args: { id: string; state: boolean }
     ) => {
-      return context.prisma.subtask.update({
+      return prisma.subtask.update({
         where: { id: args.id },
         data: { isFinished: args.state },
-      })
+      });
     },
-    editProject: (
-      _parent: any,
-      args: { id: string; name: string },
-      context: Context,
-    ) => {
-      return context.prisma.project.update({
+    editProject: (_parent: any, args: { id: string; name: string }) => {
+      return prisma.project.update({
         where: {
           id: args.id,
         },
         data: {
           name: args.name,
         },
-      })
+      });
     },
-    editBoard: (
-      _parent: any,
-      args: { id: string; name: string },
-      context: Context,
-    ) => {
-      return context.prisma.board.update({
+    editBoard: (_parent: any, args: { id: string; name: string }) => {
+      return prisma.board.update({
         where: {
           id: args.id,
         },
         data: {
           name: args.name,
         },
-      })
+      });
     },
     editColumn: (
       _parent: any,
-      args: { id: string; name: string; dotColor: string },
-      context: Context,
+      args: { id: string; name: string; dotColor: string }
     ) => {
-      return context.prisma.column.update({
+      return prisma.column.update({
         where: {
           id: args.id,
         },
@@ -603,21 +568,20 @@ export const resolvers = {
           name: args.name,
           dotColor: args.dotColor,
         },
-      })
+      });
     },
     editTask: (
       _parent: any,
       args: {
-        id: string
-        title: string
-        description: string
-        tagNames: string[]
-        tagFontColors: string[]
-        tagBackgroundColors: string[]
-      },
-      context: Context,
+        id: string;
+        title: string;
+        description: string;
+        tagNames: string[];
+        tagFontColors: string[];
+        tagBackgroundColors: string[];
+      }
     ) => {
-      return context.prisma.task.update({
+      return prisma.task.update({
         where: {
           id: args.id,
         },
@@ -628,28 +592,23 @@ export const resolvers = {
           tagFontColors: args.tagFontColors,
           tagBackgroundColors: args.tagBackgroundColors,
         },
-      })
+      });
     },
     editSubtask: (
       _parent: any,
-      args: { id: string; name: string; isFinished: boolean },
-      context: Context,
+      args: { id: string; name: string; isFinished: boolean }
     ) => {
-      return context.prisma.subtask.update({
+      return prisma.subtask.update({
         where: {
           id: args.id,
         },
         data: {
           name: args.name,
         },
-      })
+      });
     },
-    addProject: (
-      _parent: any,
-      args: { name: string; userId: string },
-      context: Context,
-    ) => {
-      return context.prisma.project.create({
+    addProject: (_parent: any, args: { name: string; userId: string }) => {
+      return prisma.project.create({
         data: {
           name: args.name,
           userId: args.userId,
@@ -659,14 +618,10 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
-    addBoard: (
-      _parent: any,
-      args: { name: string; projectId: string },
-      context: Context,
-    ) => {
-      return context.prisma.board.create({
+    addBoard: (_parent: any, args: { name: string; projectId: string }) => {
+      return prisma.board.create({
         data: {
           name: args.name,
           projectId: args.projectId,
@@ -724,40 +679,38 @@ export const resolvers = {
             },
           },
         },
-      })
+      });
     },
     addColumn: async (
       _parent: any,
-      args: { boardId: string; name: string; dotColor: string },
-      context: Context,
+      args: { boardId: string; name: string; dotColor: string }
     ) => {
-      const response = await context.prisma.columnWrapper.create({
+      const response = await prisma.columnWrapper.create({
         data: {
           boardId: args.boardId,
         },
-      })
+      });
 
-      return context.prisma.column.create({
+      return prisma.column.create({
         data: {
           name: args.name,
           dotColor: args.dotColor,
           columnWrapperId: response.id,
         },
-      })
+      });
     },
     addTask: (
       _parent: any,
       args: {
-        columnId: string
-        title: string
-        description: string
-        tagNames: string[]
-        tagFontColors: string[]
-        tagBackgroundColors: string[]
-      },
-      context: Context,
+        columnId: string;
+        title: string;
+        description: string;
+        tagNames: string[];
+        tagFontColors: string[];
+        tagBackgroundColors: string[];
+      }
     ) => {
-      return context.prisma.task.create({
+      return prisma.task.create({
         data: {
           title: args.title,
           description: args.description,
@@ -766,42 +719,48 @@ export const resolvers = {
           tagBackgroundColors: args.tagBackgroundColors,
           columnId: args.columnId,
         },
-      })
+      });
     },
     addSubtask: (
       _parent: any,
-      args: { name: string; isFinished: boolean; taskId: string },
-      context: Context,
+      args: { name: string; isFinished: boolean; taskId: string }
     ) => {
-      return context.prisma.subtask.create({
+      return prisma.subtask.create({
         data: {
           name: args.name,
           isFinished: args.isFinished,
           taskId: args.taskId,
         },
-      })
+      });
     },
-    removeProject: (_parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.project.delete({ where: { id: args.id } })
+    removeProject: (_parent: any, args: { id: string }) => {
+      return prisma.project.delete({ where: { id: args.id } });
     },
-    removeBoard: (_parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.board.delete({ where: { id: args.id } })
+    removeBoard: (_parent: any, args: { id: string }) => {
+      return prisma.board.delete({ where: { id: args.id } });
     },
-    removeColumn: (_parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.column.delete({ where: { id: args.id } })
+    removeColumn: (_parent: any, args: { id: string }) => {
+      return prisma.column.delete({ where: { id: args.id } });
     },
-    removeTask: (_parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.task.delete({ where: { id: args.id } })
+    removeTask: (_parent: any, args: { id: string }) => {
+      return prisma.task.delete({ where: { id: args.id } });
     },
-    removeSubtask: (_parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.subtask.delete({ where: { id: args.id } })
+    removeSubtask: (_parent: any, args: { id: string }) => {
+      return prisma.subtask.delete({ where: { id: args.id } });
     },
-    removeColumnWrapper: (
-      _parent: unknown,
-      args: { id: string },
-      context: Context,
-    ) => {
-      return context.prisma.columnWrapper.delete({ where: { id: args.id } })
+    removeColumnWrapper: (_parent: unknown, args: { id: string }) => {
+      return prisma.columnWrapper.delete({ where: { id: args.id } });
     },
   },
-}
+};
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+});
+
+console.log(`🚀  Server ready at: ${url}`);
