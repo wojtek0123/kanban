@@ -1,7 +1,7 @@
 {
   "name": "typescript-graphql",
   "scripts": {
-    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server"
+    "start": "ts-node-dev --no-notify --respawn --transpile-only src/server"
   },
   "prettier": {
     "semi": false,
