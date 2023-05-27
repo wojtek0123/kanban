@@ -1,6 +1,16 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
 
-export const ADD_TASK = gql`
+export const ADD_TASK: TypedDocumentNode<
+  { addTask: Partial<Task> },
+  {
+    columnId: string;
+    title: string;
+    description: string;
+    tagNames: string[];
+    tagFontColors: string[];
+    tagBackgroundColors: string[];
+  }
+> = gql`
   mutation AddTask(
     $columnId: String
     $title: String

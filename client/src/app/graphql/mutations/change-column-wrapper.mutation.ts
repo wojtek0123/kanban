@@ -1,6 +1,16 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
+import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
 
-export const CHANGE_COLUMN_WRAPPER = gql`
+export const CHANGE_COLUMN_WRAPPER: TypedDocumentNode<
+  { changeColumnWrapper: Partial<ColumnWrapper> },
+  {
+    currColumnWrapperId: string;
+    prevColumnWrapperId: string;
+    currColumnId: string;
+    prevColumnId: string;
+    boardId: string;
+  }
+> = gql`
   mutation ChangeColumnWrapper(
     $currColumnWrapperId: String
     $prevColumnWrapperId: String

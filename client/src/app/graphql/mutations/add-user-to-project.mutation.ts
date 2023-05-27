@@ -1,6 +1,14 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
 
-export const ADD_USER_TO_PROJECT = gql`
+export const ADD_USER_TO_PROJECT: TypedDocumentNode<
+  {
+    addUserToProject: {
+      user: { email: string; id: string; name: string };
+      project: { id: string; name: string };
+    };
+  },
+  { projectId: string; userId: string }
+> = gql`
   mutation AddUserToProject($projectId: String, $userId: String) {
     addUserToProject(projectId: $projectId, userId: $userId) {
       user {

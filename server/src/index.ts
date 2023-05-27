@@ -93,7 +93,6 @@ const typeDefs = `#graphql
     email: String
     usersOnProject: UserOnProject
     userOnTask: UserOnTask
-    column: Column
     createdAt: Date
     updatedAt: Date
   }
@@ -134,7 +133,7 @@ const typeDefs = `#graphql
       prevColumnId: String
       boardId: String
     ): ColumnWrapper
-    changeColumn(columnId: String, taskId: String): Column
+    changeColumn(columnId: String, taskId: String): Task
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
     removeUserFromProject(projectId: String, userId: String): UserOnProject

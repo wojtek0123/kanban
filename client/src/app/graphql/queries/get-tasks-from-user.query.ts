@@ -1,6 +1,12 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
+import { Task } from 'src/app/models/task.model';
 
-export const GET_TASKS_FROM_USER = gql`
+export const GET_TASKS_FROM_USER: TypedDocumentNode<
+  {
+    getTasksFromUser: { task: Task }[];
+  },
+  { userId: string }
+> = gql`
   query GetTasksFromUser($userId: String) {
     getTasksFromUser(userId: $userId) {
       task {

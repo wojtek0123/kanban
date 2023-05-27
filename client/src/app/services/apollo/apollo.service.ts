@@ -234,7 +234,7 @@ export class ApolloService {
     return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
-        this.apollo.mutate<{ addProject: { id: string; name: string } }>({
+        this.apollo.mutate<{ addProject: Project }>({
           mutation: ADD_PROJECT,
           variables: { name, userId },
           refetchQueries: [
@@ -524,7 +524,7 @@ export class ApolloService {
     prevColumnId: string,
     boardId: string
   ) {
-    return this.apollo.mutate<{ id: string }>({
+    return this.apollo.mutate({
       mutation: CHANGE_COLUMN_WRAPPER,
       variables: {
         currColumnWrapperId,

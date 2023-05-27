@@ -8,6 +8,7 @@ export interface Task {
   tagFontColors: string[];
   tagBackgroundColors: string[];
   columnName?: string;
+  columnId: string;
   subtasks: Subtask[];
   createdAt: Date;
   updatedAt: Date;

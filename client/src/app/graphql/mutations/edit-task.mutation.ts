@@ -1,6 +1,16 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
 
-export const EDIT_TASK = gql`
+export const EDIT_TASK: TypedDocumentNode<
+  { editTask: Partial<Task> },
+  {
+    id: string;
+    title: string;
+    description: string;
+    tagNames: string;
+    tagFontColors: string[];
+    tagBackgroundColors: string[];
+  }
+> = gql`
   mutation editTask(
     $id: String
     $title: String

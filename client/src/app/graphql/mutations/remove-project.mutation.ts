@@ -1,6 +1,9 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
 
-export const REMOVE_PROJECT = gql`
+export const REMOVE_PROJECT: TypedDocumentNode<
+  { removeProject: { id: string } },
+  { id: string }
+> = gql`
   mutation removeProject($id: String) {
     removeProject(id: $id) {
       id

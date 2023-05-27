@@ -1,6 +1,10 @@
-import { gql } from 'apollo-angular';
+import { TypedDocumentNode, gql } from 'apollo-angular';
+import { Project } from 'src/app/models/project.model';
 
-export const GET_PROJECTS = gql`
+export const GET_PROJECTS: TypedDocumentNode<
+  { projects: Project[] },
+  { userId: string }
+> = gql`
   query projects($userId: String) {
     projects(userId: $userId) {
       id
