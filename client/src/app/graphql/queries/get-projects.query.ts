@@ -9,40 +9,37 @@ export const GET_PROJECTS: TypedDocumentNode<
     projects(userId: $userId) {
       id
       name
+      updatedAt
       userId
       createdAt
-      updatedAt
       boards {
+        createdAt
         id
         name
-        createdAt
         updatedAt
         columns {
+          boardId
+          createdAt
+          dotColor
           id
-          columnId
-          column {
-            id
-            name
-            dotColor
-            columnWrapperId
+          name
+          order
+          updatedAt
+          tasks {
             createdAt
+            description
+            id
+            tagBackgroundColors
+            tagFontColors
+            tagNames
+            title
             updatedAt
-            tasks {
-              id
-              title
-              description
-              tagNames
-              tagFontColors
-              tagBackgroundColors
+            subtasks {
               createdAt
+              id
+              isFinished
+              name
               updatedAt
-              subtasks {
-                id
-                isFinished
-                name
-                createdAt
-                updatedAt
-              }
             }
           }
         }

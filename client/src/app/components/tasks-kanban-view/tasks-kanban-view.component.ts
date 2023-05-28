@@ -13,7 +13,6 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { SortBy } from '../../models/types';
 import { Column } from '../../models/column.model';
-import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
 import { Subtask } from 'src/app/models/subtask.model';
 
 @Component({
@@ -75,7 +74,6 @@ export class TasksComponent implements OnInit {
     const id = event.item.element.nativeElement.id;
 
     const currentColumn = this.board?.columns
-      .flatMap(columnWrapper => columnWrapper.column)
       .filter(column => column.id === event.container.id)
       .at(0);
 
@@ -94,24 +92,22 @@ export class TasksComponent implements OnInit {
     if (event.previousIndex === event.currentIndex) {
       return;
     }
-    const currColumnWrapperId = event.container.data?.at(
-      event.currentIndex
-    )?.columnWrapperId;
+    const currOrder = event.container.data?.at(event.currentIndex)?.order;
 
-    const prevColumnWrapperId = event.container.data?.at(
-      event.previousIndex
-    )?.columnWrapperId;
+    const prevOrder = event.container.data?.at(event.previousIndex)?.order;
+
+    if (currOrder === undefined) return;
+    if (prevOrder === undefined) return;
 
     const currColumnId = event.container.data?.at(event.currentIndex)?.id;
     const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
 
     this.apollo
-      .changeColumnWrapper(
-        currColumnWrapperId ?? '',
-        prevColumnWrapperId ?? '',
+      .changeColumnOrder(
+        currOrder,
+        prevOrder,
         currColumnId ?? '',
-        prevColumnId ?? '',
-        this.board?.id ?? ''
+        prevColumnId ?? ''
       )
       .pipe(
         catchError(async error => {
@@ -161,10 +157,6 @@ export class TasksComponent implements OnInit {
 
     return `${seconds}s ago`;
   };
-
-  columnWrapperTrackBy(_index: number, columnWrapper: ColumnWrapper) {
-    return columnWrapper.id;
-  }
 
   columnTrackBy(_index: number, column: Column) {
     return column.id;

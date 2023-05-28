@@ -5,7 +5,8 @@ export interface Column {
   name: string;
   dotColor: string;
   tasks: Task[];
-  columnWrapperId: string;
+  boardId: string;
+  order: number;
   createdAt: Date;
   updatedAt: Date;
 }

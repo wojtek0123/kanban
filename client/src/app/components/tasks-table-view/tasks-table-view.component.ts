@@ -36,18 +36,14 @@ export class TaskTableComponent implements DoCheck {
 
   ngDoCheck() {
     this.tableTask =
-      this.board?.columns.flatMap(columnWrapper =>
-        columnWrapper.column.tasks.flatMap(task =>
-          Object.assign(
-            {},
-            { ...task, ['columnName']: columnWrapper.column.name }
-          )
+      this.board?.columns.flatMap(column =>
+        column.tasks.flatMap(task =>
+          Object.assign({}, { ...task, ['columnName']: column.name })
         )
       ) ?? [];
 
     this.displayColumns =
-      this.board?.columns.flatMap(columnWrapper => columnWrapper.column.name) ??
-      [];
+      this.board?.columns.flatMap(column => column.name) ?? [];
   }
 
   taskTrackBy(_index: number, task: Task) {

@@ -36,8 +36,8 @@ import { ADD_SUBTASK } from '../../graphql/mutations/add-subtask.mutation';
 import { ADD_USER } from '../../graphql/mutations/add-user.mutation';
 import { ADD_USER_TO_TASK } from '../../graphql/mutations/add-user-to-task.mutation';
 import { ADD_USER_TO_PROJECT } from '../../graphql/mutations/add-user-to-project.mutation';
-import { REMOVE_COLUMN_WRAPPER } from '../../graphql/mutations/remove-column-wrapper.mutation';
-import { CHANGE_COLUMN_WRAPPER } from '../../graphql/mutations/change-column-wrapper.mutation';
+import { CHANGE_COLUMN_ORDER } from '../../graphql/mutations/change-column-order.mutation';
+import { REMOVE_COLUMN } from 'src/app/graphql/mutations/remove-column.mutation';
 
 @Injectable({
   providedIn: 'root',
@@ -267,7 +267,7 @@ export class ApolloService {
 
   addColumn(name: string, dotColor: string, boardId: string) {
     return this.apollo
-      .mutate<{ addColumn: { id: string; name: string } }>({
+      .mutate({
         mutation: ADD_COLUMN,
         variables: { name, boardId, dotColor },
         refetchQueries: [
@@ -450,7 +450,7 @@ export class ApolloService {
     let mutation: any;
     if (type === 'project') mutation = REMOVE_PROJECT;
     if (type === 'board') mutation = REMOVE_BOARD;
-    if (type === 'column') mutation = REMOVE_COLUMN_WRAPPER;
+    if (type === 'column') mutation = REMOVE_COLUMN;
     if (type === 'task') mutation = REMOVE_TASK;
     if (type === 'subtask') mutation = REMOVE_SUBTASK;
 
@@ -517,21 +517,19 @@ export class ApolloService {
     );
   }
 
-  changeColumnWrapper(
-    currColumnWrapperId: string,
-    prevColumnWrapperId: string,
+  changeColumnOrder(
+    currOrder: number,
+    prevOrder: number,
     currColumnId: string,
-    prevColumnId: string,
-    boardId: string
+    prevColumnId: string
   ) {
     return this.apollo.mutate({
-      mutation: CHANGE_COLUMN_WRAPPER,
+      mutation: CHANGE_COLUMN_ORDER,
       variables: {
-        currColumnWrapperId,
-        prevColumnWrapperId,
+        currOrder,
+        prevOrder,
         currColumnId,
         prevColumnId,
-        boardId,
       },
       refetchQueries: [
         {

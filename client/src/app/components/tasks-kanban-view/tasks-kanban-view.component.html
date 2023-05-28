@@ -1,7 +1,7 @@
 <div
   cdkDropList
   cdkDropListOrientation="horizontal"
-  [cdkDropListData]="board | getColumns"
+  [cdkDropListData]="board.columns"
   (cdkDropListDropped)="dropColumn($event)"
   class="tasks"
   *ngIf="board">
@@ -9,27 +9,26 @@
     No columns to display
   </p>
   <section
-    [id]="columnWrapper.id"
     class="section"
-    *ngFor="let columnWrapper of board?.columns; trackBy: columnWrapperTrackBy">
-    <div
-      cdkDrag
-      [cdkDragDisabled]="(isOwner$ | async) === false"
-      [id]="columnWrapper.column.id">
+    cdkDrag
+    [cdkDragDisabled]="(isOwner$ | async) === false"
+    [id]="column.id"
+    *ngFor="let column of board.columns">
+    <div>
       <div
         class="cdk-drag-placeholder column-placeholder"
         *cdkDragPlaceholder></div>
       <div class="section-heading">
         <div class="section-title-wrapper">
           <span
-            [style.background-color]="columnWrapper.column.dotColor"
+            [style.background-color]="column.dotColor"
             class="section-title-circle"></span>
           <h2 class="section-title">
-            {{ columnWrapper.column.name }}
+            {{ column.name }}
             <span class="section-title-task-counter"
               >({{
                 (
-                  columnWrapper.column.tasks
+                  column.tasks
                   | filterByTitle : searchTerm
                   | filterByTags : tags
                 ).length
@@ -39,8 +38,7 @@
         </div>
         <app-context-menu
           *ngIf="isOwner$ | async"
-          [id]="columnWrapper.column.id"
-          [deleteId]="columnWrapper.id"
+          [id]="column.id"
           [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
@@ -48,25 +46,20 @@
         text="Add task"
         type="task"
         size="wide"
-        [parentId]="columnWrapper.column.id"></app-open-form-button>
+        [parentId]="column.id"></app-open-form-button>
       <div class="cards">
         <div
           class="card-wrapper"
           cdkDropList
-          [cdkDropListData]="columnWrapper.column.tasks"
-          [id]="columnWrapper.column.id"
-          [cdkDropListConnectedTo]="
-            board.columns | getColumnIds : columnWrapper.column.id
-          "
+          [cdkDropListData]="column.tasks"
+          [id]="column.id"
+          [cdkDropListConnectedTo]="board.columns | getColumnIds : column.id"
           (cdkDropListDropped)="dropTask($event)">
           <p
             class="warning-message card"
             *ngIf="
-              (
-                columnWrapper.column.tasks
-                | filterByTitle : searchTerm
-                | filterByTags : tags
-              ).length === 0
+              (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
+                .length === 0
             ">
             No tasks to display
           </p>
@@ -75,7 +68,7 @@
             [id]="task.id"
             class="card"
             *ngFor="
-              let task of columnWrapper.column.tasks
+              let task of column.tasks
                 | filterByTitle : searchTerm
                 | filterByTags : tags
                 | sortTasks : sortBy.direction : sortBy.column;
@@ -91,7 +84,7 @@
                 [value]="column.id"
                 *ngFor="
                   let column of board?.columns ?? []
-                    | getColumnsWithoutOneSpecific : columnWrapper.column.id;
+                    | getColumnsWithoutOneSpecific : column.id;
                   trackBy: columnTrackBy
                 ">
                 {{ column.name }}
@@ -155,9 +148,7 @@
               </div>
             </div>
           </div>
-          <p
-            class="empty-card"
-            *ngIf="columnWrapper.column.tasks.length === 1"></p>
+          <p class="empty-card" *ngIf="column.tasks.length === 1"></p>
         </div>
       </div>
     </div>

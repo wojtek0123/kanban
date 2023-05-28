@@ -153,11 +153,7 @@ export class FormService {
 
   private getColumns() {
     return this.getBoards().pipe(
-      map(boards =>
-        boards?.flatMap(board =>
-          board.columns.flatMap(columnWrapper => columnWrapper.column)
-        )
-      )
+      map(boards => boards?.flatMap(board => board.columns))
     );
   }
 
@@ -178,9 +174,7 @@ export class FormService {
       map(([parentId, project]) =>
         project?.boards.find(board => board.id === parentId)
       ),
-      map(board =>
-        board?.columns.flatMap(columnWrapper => columnWrapper.column)
-      )
+      map(board => board?.columns ?? [])
     );
   }
 }

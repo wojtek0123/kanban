@@ -6,6 +6,6 @@ import { Board } from 'src/app/models/board.model';
 })
 export class GetTasksPipe implements PipeTransform {
   transform(board: Board) {
-    return board.columns.flatMap(columnWrapper => columnWrapper.column.tasks);
+    return board.columns.flatMap(column => column.tasks);
   }
 }

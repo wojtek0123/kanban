@@ -55,22 +55,16 @@ const typeDefs = `#graphql
     name: String
     dotColor: String
     tasks: [Task]
-    columnWrapperId: String
+    order: Int
     boardId: String
     createdAt: Date
     updatedAt: Date
   }
 
-  type ColumnWrapper {
-    id: String
-    column: Column
-    columnId: String
-  }
-
   type Board {
     id: String
     name: String
-    columns: [ColumnWrapper]
+    columns: [Column]
     projectId: String
     Project: Project
     createdAt: Date
@@ -124,15 +118,14 @@ const typeDefs = `#graphql
     getTasksFromUser(userId: String): [UserOnTask]
     getUsersAndTasks: [UserOnTask]
   }
-
+    
   type Mutation {
-    changeColumnWrapper(
-      currColumnWrapperId: String
-      prevColumnWrapperId: String
+    changeColumnOrder(
+      currOrder: Int
+      prevOrder: Int
       currColumnId: String
       prevColumnId: String
-      boardId: String
-    ): ColumnWrapper
+    ): Column
     changeColumn(columnId: String, taskId: String): Task
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
@@ -165,7 +158,6 @@ const typeDefs = `#graphql
     editSubtask(id: String, name: String, isFinished: Boolean): Subtask
     removeProject(id: String): Project
     removeBoard(id: String): Board
-    removeColumnWrapper(id: String): ColumnWrapper
     removeColumn(id: String): Column
     removeTask(id: String): Task
     removeSubtask(id: String): Subtask
@@ -192,14 +184,72 @@ const resolvers = {
           columns: {
             select: {
               id: true,
+              name: true,
+              dotColor: true,
+              boardId: true,
+              order: true,
               createdAt: true,
               updatedAt: true,
-              column: {
+              tasks: {
+                select: {
+                  id: true,
+                  title: true,
+                  tagNames: true,
+                  tagBackgroundColors: true,
+                  tagFontColors: true,
+                  description: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  subtasks: {
+                    select: {
+                      id: true,
+                      name: true,
+                      isFinished: true,
+                      createdAt: true,
+                      updatedAt: true,
+                    },
+                    orderBy: {
+                      createdAt: 'asc',
+                    },
+                  },
+                },
+                orderBy: {
+                  title: 'asc',
+                },
+              },
+            },
+          },
+        },
+      });
+    },
+    projects: (_parent: any, args: { userId: string }) => {
+      return prisma.project.findMany({
+        where: {
+          usersOnProject: {
+            some: {
+              userId: args.userId,
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          userId: true,
+          createdAt: true,
+          updatedAt: true,
+          boards: {
+            select: {
+              id: true,
+              name: true,
+              createdAt: true,
+              updatedAt: true,
+              columns: {
                 select: {
                   id: true,
                   name: true,
                   dotColor: true,
-                  columnWrapperId: true,
+                  order: true,
+                  boardId: true,
                   createdAt: true,
                   updatedAt: true,
                   tasks: {
@@ -230,81 +280,8 @@ const resolvers = {
                     },
                   },
                 },
-              },
-            },
-            orderBy: {
-              createdAt: 'asc',
-            },
-          },
-        },
-      });
-    },
-    projects: (_parent: any, args: { userId: string }) => {
-      return prisma.project.findMany({
-        where: {
-          usersOnProject: {
-            some: {
-              userId: args.userId,
-            },
-          },
-        },
-        select: {
-          id: true,
-          name: true,
-          userId: true,
-          createdAt: true,
-          updatedAt: true,
-          boards: {
-            select: {
-              id: true,
-              name: true,
-              createdAt: true,
-              updatedAt: true,
-              columns: {
-                select: {
-                  id: true,
-                  createdAt: true,
-                  updatedAt: true,
-                  column: {
-                    select: {
-                      id: true,
-                      name: true,
-                      dotColor: true,
-                      columnWrapperId: true,
-                      createdAt: true,
-                      updatedAt: true,
-                      tasks: {
-                        select: {
-                          id: true,
-                          title: true,
-                          tagNames: true,
-                          tagBackgroundColors: true,
-                          tagFontColors: true,
-                          description: true,
-                          createdAt: true,
-                          updatedAt: true,
-                          subtasks: {
-                            select: {
-                              id: true,
-                              name: true,
-                              isFinished: true,
-                              createdAt: true,
-                              updatedAt: true,
-                            },
-                            orderBy: {
-                              createdAt: 'asc',
-                            },
-                          },
-                        },
-                        orderBy: {
-                          title: 'asc',
-                        },
-                      },
-                    },
-                  },
-                },
                 orderBy: {
-                  createdAt: 'asc',
+                  order: 'asc',
                 },
               },
             },
@@ -412,47 +389,31 @@ const resolvers = {
         data: { name: args.name },
       });
     },
-    changeColumnWrapper: async (
+    changeColumnOrder: async (
       _parent: unknown,
       args: {
-        currColumnWrapperId: string;
-        prevColumnWrapperId: string;
+        currOrder: number;
+        prevOrder: number;
         currColumnId: string;
         prevColumnId: string;
-        boardId: string;
       }
     ) => {
-      const response = await prisma.columnWrapper.create({
-        data: {
-          boardId: args.boardId,
-        },
-      });
-
-      await prisma.column.update({
-        where: { id: args.currColumnId },
-        data: { columnWrapperId: response.id },
-      });
-
       await prisma.column.update({
         where: {
           id: args.prevColumnId,
         },
         data: {
-          columnWrapperId: args.currColumnWrapperId,
+          order: args.currOrder,
         },
       });
 
-      await prisma.column.update({
+      return await prisma.column.update({
         where: {
           id: args.currColumnId,
         },
         data: {
-          columnWrapperId: args.prevColumnWrapperId,
+          order: args.prevOrder,
         },
-      });
-
-      return await prisma.columnWrapper.delete({
-        where: { id: response.id },
       });
     },
     addUserToTask: (
@@ -633,48 +594,39 @@ const resolvers = {
           columns: {
             select: {
               id: true,
+              name: true,
+              boardId: true,
+              dotColor: true,
+              order: true,
               createdAt: true,
               updatedAt: true,
-              column: {
+              tasks: {
                 select: {
                   id: true,
-                  name: true,
-                  dotColor: true,
-                  columnWrapperId: true,
+                  title: true,
+                  tagNames: true,
+                  tagBackgroundColors: true,
+                  tagFontColors: true,
+                  description: true,
                   createdAt: true,
                   updatedAt: true,
-                  tasks: {
+                  subtasks: {
                     select: {
                       id: true,
-                      title: true,
-                      tagNames: true,
-                      tagBackgroundColors: true,
-                      tagFontColors: true,
-                      description: true,
+                      name: true,
+                      isFinished: true,
                       createdAt: true,
                       updatedAt: true,
-                      subtasks: {
-                        select: {
-                          id: true,
-                          name: true,
-                          isFinished: true,
-                          createdAt: true,
-                          updatedAt: true,
-                        },
-                        orderBy: {
-                          createdAt: 'asc',
-                        },
-                      },
                     },
                     orderBy: {
-                      title: 'asc',
+                      createdAt: 'asc',
                     },
                   },
                 },
+                orderBy: {
+                  title: 'asc',
+                },
               },
-            },
-            orderBy: {
-              createdAt: 'asc',
             },
           },
         },
@@ -684,17 +636,25 @@ const resolvers = {
       _parent: any,
       args: { boardId: string; name: string; dotColor: string }
     ) => {
-      const response = await prisma.columnWrapper.create({
-        data: {
-          boardId: args.boardId,
-        },
+      const response = await prisma.column.findMany({
+        where: { boardId: args.boardId },
+        orderBy: { createdAt: 'desc' },
+        take: 1,
       });
+
+      let order = 0;
+      const newColumnMustHaveGreaterOrder = 1;
+
+      if (response.length !== 0) {
+        order = response[0].order + newColumnMustHaveGreaterOrder;
+      }
 
       return prisma.column.create({
         data: {
           name: args.name,
           dotColor: args.dotColor,
-          columnWrapperId: response.id,
+          boardId: args.boardId,
+          order,
         },
       });
     },
@@ -746,9 +706,6 @@ const resolvers = {
     },
     removeSubtask: (_parent: any, args: { id: string }) => {
       return prisma.subtask.delete({ where: { id: args.id } });
-    },
-    removeColumnWrapper: (_parent: unknown, args: { id: string }) => {
-      return prisma.columnWrapper.delete({ where: { id: args.id } });
     },
   },
 };

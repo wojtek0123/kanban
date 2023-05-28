@@ -8,8 +8,8 @@ import { Tag } from 'src/app/models/tag.models';
 export class GetTagsFromTasksPipe implements PipeTransform {
   transform(board: Board) {
     const uniqueTagNames = new Set([
-      ...board.columns.flatMap(col =>
-        col.column.tasks.flatMap(task =>
+      ...board.columns.flatMap(column =>
+        column.tasks.flatMap(task =>
           task.tagNames.length === 0 ? '' : task.tagNames
         )
       ),

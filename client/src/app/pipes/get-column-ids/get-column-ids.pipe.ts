@@ -1,13 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ColumnWrapper } from 'src/app/models/columnWrapper.model';
+import { Column } from 'src/app/models/column.model';
 
 @Pipe({
   name: 'getColumnIds',
 })
 export class GetColumnIdsPipe implements PipeTransform {
-  transform(columnWrappers: ColumnWrapper[], excludedColumnId: string) {
-    return columnWrappers
-      .flatMap(columnWrapper => columnWrapper.column)
+  transform(columns: Column[], excludedColumnId: string) {
+    return columns
       .filter(column => column.id !== excludedColumnId)
       .map(column => column.id);
   }

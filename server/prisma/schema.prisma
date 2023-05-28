@@ -34,33 +34,25 @@ model Task {
 }
 
 model Column {
-  id              String        @id @default(uuid())
-  name            String
-  dotColor        String
-  tasks           Task[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime?     @updatedAt
-  ColumnWrapper   ColumnWrapper @relation(fields: [columnWrapperId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  columnWrapperId String        @unique
-}
-
-model ColumnWrapper {
-  id        String   @id @default(uuid())
-  column    Column?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  id        String    @id @default(uuid())
+  name      String
+  dotColor  String
+  tasks     Task[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  order     Int
+  Board     Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   String
 }
 
 model Board {
-  id        String          @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  columns   ColumnWrapper[]
-  Project   Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  columns   Column[]
+  Project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
-  createdAt DateTime        @default(now())
-  updatedAt DateTime?       @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Project {

@@ -6,6 +6,6 @@ import { Board } from 'src/app/models/board.model';
 })
 export class GetColumnsPipe implements PipeTransform {
   transform(board: Board | null | undefined) {
-    return board?.columns.flatMap(column => column.column) ?? [];
+    return board?.columns.flatMap(column => column) ?? [];
   }
 }
