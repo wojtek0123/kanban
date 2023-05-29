@@ -18,8 +18,8 @@ describe('GetSubtasksPipe', () => {
 
   it('should return 7 subtasks', () => {
     const actualSubtasks = pipe.transform(board);
-    const expectedSubtasks = board.columns.flatMap(colWrapper =>
-      colWrapper.column.tasks.flatMap(task => task.subtasks)
+    const expectedSubtasks = board.columns.flatMap(column =>
+      column.tasks.flatMap(task => task.subtasks)
     );
 
     actualSubtasks.forEach((subtask, index) => {

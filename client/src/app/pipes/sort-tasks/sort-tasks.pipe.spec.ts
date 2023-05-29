@@ -89,12 +89,13 @@ describe('SortTasksPipe', () => {
   });
 
   it('should return sorted array when the length of array is 1', () => {
-    const tasks = [
+    const tasks: Task[] = [
       {
         id: 'task4',
         title: 'Clean apartment',
         description: 'Clean the apartment before guests arrive',
         tagNames: ['cleaning'],
+        columnId: '',
         tagFontColors: ['#ffffff'],
         tagBackgroundColors: ['#f1c40f'],
         subtasks: [],

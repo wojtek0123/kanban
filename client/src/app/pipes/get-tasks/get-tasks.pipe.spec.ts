@@ -19,9 +19,7 @@ describe('GetTasksPipe', () => {
   });
 
   it('should return 4 tasks', () => {
-    const expectedTasks = board.columns.flatMap(
-      columnWrapper => columnWrapper.column.tasks
-    );
+    const expectedTasks = board.columns.flatMap(column => column.tasks);
 
     const actualTasks = pipe.transform(board);
 

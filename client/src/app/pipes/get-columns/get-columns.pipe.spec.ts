@@ -19,9 +19,7 @@ describe('GetColumnsPipe', () => {
 
   it('should return 3 columns', () => {
     const actualColumns = pipe.transform(board);
-    const expectedColumns = board.columns.flatMap(
-      colWrapper => colWrapper.column
-    );
+    const expectedColumns = board.columns;
 
     actualColumns.forEach((column, index) => {
       expect(column).toEqual(expectedColumns[index]);

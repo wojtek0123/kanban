@@ -10,6 +10,7 @@ export const tasks: Task[] = [
     tagFontColors: ['#ffffff', '#ffffff'],
     tagBackgroundColors: ['#2c3e50', '#3498db'],
     columnName: 'To Do',
+    columnId: '',
     subtasks: [
       {
         id: '1',
@@ -38,6 +39,7 @@ export const tasks: Task[] = [
     tagFontColors: ['#ffffff', '#ffffff'],
     tagBackgroundColors: ['#e67e22', '#d35400'],
     columnName: 'In Progress',
+    columnId: '',
     subtasks: [
       {
         id: '3',
@@ -66,6 +68,7 @@ export const tasks: Task[] = [
     tagFontColors: ['#ffffff', '#ffffff'],
     tagBackgroundColors: ['#27ae60', '#2ecc71'],
     columnName: 'In Progress',
+    columnId: '',
     subtasks: [
       {
         id: '5',
@@ -115,6 +118,7 @@ export const tasks: Task[] = [
     tagFontColors: ['#ffffff', '#ffffff'],
     tagBackgroundColors: ['#27ae60', '#2ecc71'],
     columnName: 'In Progress',
+    columnId: '',
     subtasks: [
       {
         id: '10',

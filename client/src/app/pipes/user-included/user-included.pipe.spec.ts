@@ -1,11 +1,36 @@
+import { User } from 'src/app/models/user.model';
 import { userIncludedPipe } from './user-included.pipe';
 
 describe('userIncludedPipe', () => {
   let pipe: userIncludedPipe;
-  const users = [
-    { user: { id: '1', name: 'john', email: 'john@email.com' } },
-    { user: { id: '2', name: 'joe', email: 'joe@email.com' } },
-    { user: { id: '3', name: 'bob', email: 'bob@email.com' } },
+  const users: { user: User }[] = [
+    {
+      user: {
+        id: '1',
+        name: 'john',
+        email: 'john@email.com',
+        createdAt: new Date(''),
+        updateAt: new Date(''),
+      },
+    },
+    {
+      user: {
+        id: '2',
+        name: 'joe',
+        email: 'joe@email.com',
+        createdAt: new Date(''),
+        updateAt: new Date(''),
+      },
+    },
+    {
+      user: {
+        id: '3',
+        name: 'bob',
+        email: 'bob@email.com',
+        createdAt: new Date(''),
+        updateAt: new Date(''),
+      },
+    },
   ];
 
   beforeEach(() => {

@@ -85,7 +85,7 @@ describe('FormService', () => {
   });
 
   it('should edit column', () => {
-    const columns = board.columns.flatMap(colWrapper => colWrapper.column);
+    const columns = board.columns;
 
     spyOn<any>(service, 'getColumns').and.returnValue(of(columns));
     service.onChangeFormVisibility('column');
