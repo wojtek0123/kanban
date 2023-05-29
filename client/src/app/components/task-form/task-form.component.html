@@ -9,7 +9,8 @@
       type="text"
       class="form-input-global"
       id="edit-task-title"
-      formControlName="title" />
+      formControlName="title"
+      appAutoFocus />
     <p
       class="text-danger-global"
       *ngIf="(getEditControls.title.touched || submitted) && getEditControls.title.errors?.['required']">
@@ -106,7 +107,8 @@
         type="text"
         class="form-input-global"
         id="task-name"
-        formControlName="title" />
+        formControlName="title"
+        appAutoFocus />
       <p
         class="text-danger-global"
         *ngIf="(getAddControls.title.touched || submitted) && getAddControls.title.errors?.['required']">

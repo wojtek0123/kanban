@@ -9,7 +9,8 @@
       type="text"
       class="form-input-global"
       id="edit-board-name"
-      formControlName="name" />
+      formControlName="name"
+      appAutoFocus />
     <p
       class="text-danger-global"
       *ngIf="(getEditControls.name.touched || submitted) && getEditControls.name.errors?.['required']">
@@ -30,7 +31,8 @@
         class="form-input-global"
         type="text"
         id="board-name"
-        formControlName="name" />
+        formControlName="name"
+        appAutoFocus />
       <p
         class="text-danger-global"
         *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
