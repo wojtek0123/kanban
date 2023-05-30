@@ -32,36 +32,36 @@
       Description is required
     </p>
     <div formArrayName="tags" class="form-tags-wrapper">
-      <div class="form-tags-buttons">
-        <button
-          type="button"
-          class="button-global form-tags-button"
-          (click)="addTag('edit')">
-          <span>+</span> Add tag
-        </button>
-        <button
-          type="button"
-          class="button-global form-tags-button"
-          (click)="removeTag('edit')">
-          <span>-</span> Remove tag
-        </button>
-      </div>
+      <button
+        type="button"
+        class="button-global form-tags-button"
+        (click)="addTag('edit')">
+        <span>+</span> Add tag
+      </button>
       <div
         class="form-tag-wrapper"
-        *ngFor="
-          let _ of editTags.controls;
-          trackBy: controlTrackBy;
-          let i = index
-        ">
+        *ngFor="let _ of editTags.controls; let i = index">
         <ng-container [formGroupName]="i">
-          <label class="form-label-global"
-            >Tag name
-            <input
-              class="form-input-global form-tag-input"
-              type="text"
-              aria-label="tag"
-              formControlName="name" />
-          </label>
+          <div class="form-label-tag">
+            <label class="form-label-global"
+              >Tag name
+              <input
+                class="form-input-global form-tag-input"
+                type="text"
+                aria-label="tag"
+                formControlName="name" />
+            </label>
+            <button
+              class="form-button-remove-tag button-global"
+              type="button"
+              (click)="removeTagNew('edit', i)">
+              <img
+                ngSrc="../../../assets/minus-solid.svg"
+                alt="minus"
+                height="10"
+                width="10" />
+            </button>
+          </div>
           <div class="form-tag-color-wrapper">
             <label class="form-tag-label">Font</label>
             <input type="color" formControlName="fontColor" name="font" />
@@ -145,36 +145,36 @@
         Description is required
       </p>
       <div formArrayName="tags" class="form-tags-wrapper">
-        <div class="form-tags-buttons">
-          <button
-            type="button"
-            class="button-global form-tags-button"
-            (click)="addTag('add')">
-            <span>+</span> Add tag
-          </button>
-          <button
-            type="button"
-            class="button-global form-tags-button"
-            (click)="removeTag('add')">
-            <span>-</span> Remove tag
-          </button>
-        </div>
+        <button
+          type="button"
+          class="button-global form-tags-button"
+          (click)="addTag('add')">
+          <span>+</span> Add tag
+        </button>
         <div
           class="form-tag-wrapper"
-          *ngFor="
-            let _ of addTags.controls;
-            trackBy: controlTrackBy;
-            let i = index
-          ">
+          *ngFor="let _ of addTags.controls; let i = index">
           <ng-container [formGroupName]="i">
-            <label class="form-label-global"
-              >Tag name
-              <input
-                class="form-input-global form-tag-input"
-                type="text"
-                aria-label="tag"
-                formControlName="name" />
-            </label>
+            <div class="form-label-tag">
+              <label class="form-label-global"
+                >Tag name
+                <input
+                  class="form-input-global form-tag-input"
+                  type="text"
+                  aria-label="tag"
+                  formControlName="name" />
+              </label>
+              <button
+                class="form-button-remove-tag button-global"
+                type="button"
+                (click)="removeTagNew('add', i)">
+                <img
+                  ngSrc="../../../assets/minus-solid.svg"
+                  alt="minus"
+                  height="10"
+                  width="10" />
+              </button>
+            </div>
 
             <div class="form-tag-color-wrapper">
               <label class="form-tag-label">Font</label>

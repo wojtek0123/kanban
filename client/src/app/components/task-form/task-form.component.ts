@@ -75,7 +75,6 @@ export class TaskFormComponent implements OnInit {
 
   maxLength(max: number): ValidatorFn | any {
     return (control: AbstractControl[]) => {
-      if (!(control instanceof FormArray)) return;
       return control.length > max ? { maxLength: true } : null;
     };
   }
@@ -113,33 +112,44 @@ export class TaskFormComponent implements OnInit {
     }
 
     for (let i = 0; i < names.length; i++) {
-      const group = new FormGroup({
-        name: this.formBuilder.control(names[i], [Validators.required]),
-        fontColor: this.formBuilder.control(fontColors[i]),
-        backgroundColor: this.formBuilder.control(backgroundColors[i]),
-      });
-      tags.push(group);
+      const tag = {
+        name: names[i],
+        fontColor: fontColors[i],
+        backgroundColor: backgroundColors[i],
+      } satisfies Tag;
+
+      tags.push(this.createTag(tag));
     }
 
     return tags;
   }
 
   addTag(groupName: string) {
-    const control = new FormGroup({
-      name: this.formBuilder.control('', [Validators.required]),
-      fontColor: this.formBuilder.control('#000000'),
-      backgroundColor: this.formBuilder.control('#e8fe93'),
-    });
-    (<FormArray>this.form.get(groupName)?.get('tags')).push(control);
+    (<FormArray>this.form.get(groupName)?.get('tags')).push(this.createTag());
   }
 
-  removeTag(groupName: string) {
-    (<FormArray>this.form.get(groupName)?.get('tags')).removeAt(-1);
+  createTag(control?: Tag) {
+    return new FormGroup({
+      name: this.formBuilder.control(control?.name ?? '', [
+        Validators.required,
+      ]),
+      fontColor: this.formBuilder.control(control?.fontColor ?? '#000000'),
+      backgroundColor: this.formBuilder.control(
+        control?.backgroundColor ?? '#e8fe93'
+      ),
+    });
+  }
+
+  removeTagNew(groupName: string, index: number) {
+    const tags = <FormArray>this.form.get(groupName)?.get('tags');
+
+    if (index <= tags.length) {
+      tags.removeAt(index);
+    }
   }
 
   changeSelectedColumn(event: Event) {
-    const columnId = (event.target as HTMLSelectElement).value;
-    this.selectedColumn = columnId;
+    this.selectedColumn = (event.target as HTMLSelectElement).value;
   }
 
   onEdit() {
@@ -251,9 +261,5 @@ export class TaskFormComponent implements OnInit {
 
   columnTrackBy(_index: number, column: Column) {
     return column.id;
-  }
-
-  controlTrackBy(index: number, _control: AbstractControl<any, any>) {
-    return index;
   }
 }

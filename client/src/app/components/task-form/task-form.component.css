@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2rem;
 }
 
 .form-tags-button span {
@@ -54,6 +54,31 @@
 
 .select-input {
   margin-top: 1rem;
+}
+
+.form-button-remove-tag {
+  /*background: transparent;*/
+  /*border: none;*/
+  /*cursor: pointer;*/
+  margin: 0;
+  /*position: absolute;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+  /*transform: translateX(100%);*/
+  padding: 0.4rem 1rem;
+}
+
+.form-button-remove-tag img {
+  width: 100%;
+}
+
+.form-label-tag {
+  /*position: relative;*/
+  /*grid-template-columns: 1fr 1rem;*/
+  /*grid-template-rows: repeat(2, 1fr);*/
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
 @media (min-width: 1024px) {
