@@ -23,6 +23,7 @@ export class OpenFormButtonComponent implements OnInit {
   @Input() enableSelectColumnForTask: boolean | undefined = undefined;
   @Input() isProtected = false;
   @Input() assignUserTabName?: TabNameAssign;
+  @Input() redirectToNewBoard?: boolean;
   isOwner$ = new Observable<boolean>();
 
   constructor(
@@ -52,6 +53,14 @@ export class OpenFormButtonComponent implements OnInit {
 
     if (this.type === 'assign-user' && this.assignUserTabName) {
       this.formService.onChangeTabName(this.assignUserTabName);
+    }
+
+    if (this.redirectToNewBoard) {
+      console.log('TRUE');
+      this.formService.onRedirect(true);
+    } else {
+      console.log('FALSE');
+      this.formService.onRedirect(false);
     }
 
     if (!this.parentId) return;

@@ -11,6 +11,7 @@ export const ADD_BOARD: TypedDocumentNode<
       name
       createdAt
       updatedAt
+      projectId
     }
   }
 `;

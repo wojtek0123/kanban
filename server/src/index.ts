@@ -591,6 +591,7 @@ const resolvers = {
           name: true,
           createdAt: true,
           updatedAt: true,
+          projectId: true,
           columns: {
             select: {
               id: true,

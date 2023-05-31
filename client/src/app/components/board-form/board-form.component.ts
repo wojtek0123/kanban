@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { catchError, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 import { FormService } from '../../services/form/form.service';
 import { ApolloService } from '../../services/apollo/apollo.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { ToastService } from '../../services/toast/toast.service';
+import { Router } from '@angular/router';
+import { NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-board-form',
@@ -32,7 +34,9 @@ export class BoardFormComponent implements OnInit {
     private formService: FormService,
     private formBuilder: FormBuilder,
     private apollo: ApolloService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router,
+    private navigationService: NavigationService
   ) {}
 
   get getAddControls() {
@@ -85,12 +89,31 @@ export class BoardFormComponent implements OnInit {
     if (this.getFormControls.add.valid) {
       const name = this.form.value.add?.name ?? '';
 
-      this.formService.parentId$
+      const response$ = this.formService.parentId$.pipe(
+        switchMap(parentId => this.apollo.addBoard(name, parentId)),
+        catchError(async error => {
+          this.toastService.showToast('warning', `Couldn't add a new board`);
+          throw new Error(error);
+        }),
+        take(1),
+        map(response => response.data)
+      );
+
+      const redirect$ = this.formService.redirectToBoard$;
+
+      combineLatest([response$, redirect$])
         .pipe(
-          switchMap(parentId => this.apollo.addBoard(name, parentId)),
-          catchError(async error => {
-            this.toastService.showToast('warning', `Couldn't add a new board`);
-            throw new Error(error);
+          map(([data, redirect]) => {
+            if (redirect) {
+              console.log(redirect);
+              this.router.navigate([
+                '/',
+                'project',
+                data?.addBoard.projectId,
+                'board',
+                data?.addBoard.id,
+              ]);
+            }
           }),
           take(1)
         )
@@ -101,6 +124,9 @@ export class BoardFormComponent implements OnInit {
           );
         });
 
+      this.navigationService.showMenu$.pipe(take(1)).subscribe(state => {
+        if (state) this.navigationService.onMenu();
+      });
       this.formService.onChangeFormVisibility();
     }
   }

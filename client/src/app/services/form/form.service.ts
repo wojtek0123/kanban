@@ -24,9 +24,14 @@ export class FormService {
   private _editingTask?: Task;
   private _editingSubtask?: Subtask;
   private _typeOfForm$ = new BehaviorSubject<FormType | undefined>(undefined);
+  private _redirectToBoard$ = new BehaviorSubject<boolean>(true);
 
   get parentId$() {
     return this._parentId$.asObservable();
+  }
+
+  get redirectToBoard$() {
+    return this._redirectToBoard$.asObservable();
   }
 
   get assignUserTabName$() {
@@ -71,6 +76,10 @@ export class FormService {
 
   get selectColumn$() {
     return this._enableSelectColumn$.asObservable();
+  }
+
+  onRedirect(state: boolean) {
+    this._redirectToBoard$.next(state);
   }
 
   onChangeProject(project: Project | undefined) {
