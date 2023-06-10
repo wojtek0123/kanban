@@ -4,10 +4,10 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { FormType, TabNameAssign } from '../../models/types';
-import { ApolloService } from '../../services/apollo/apollo.service';
 import { FormService } from '../../services/form/form.service';
+import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 
 @Component({
   selector: 'app-open-form-button',
@@ -24,15 +24,18 @@ export class OpenFormButtonComponent implements OnInit {
   @Input() isProtected = false;
   @Input() assignUserTabName?: TabNameAssign;
   @Input() redirectToNewBoard?: boolean;
-  isOwner$ = new Observable<boolean>();
+  @Input() projectOwnerId? = '';
+  userId$ = new Observable<string | undefined>();
 
   constructor(
     private formService: FormService,
-    private apollo: ApolloService
+    private supabase: SupabaseService
   ) {}
 
   ngOnInit() {
-    this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
+    this.userId$ = this.supabase.session$.pipe(
+      map(session => session?.user.id)
+    );
   }
 
   onForm() {
@@ -56,10 +59,8 @@ export class OpenFormButtonComponent implements OnInit {
     }
 
     if (this.redirectToNewBoard) {
-      console.log('TRUE');
       this.formService.onRedirect(true);
     } else {
-      console.log('FALSE');
       this.formService.onRedirect(false);
     }
 
