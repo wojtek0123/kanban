@@ -4,10 +4,11 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 import { FormType, TabNameAssign } from '../../models/types';
 import { FormService } from '../../services/form/form.service';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
+import { ApolloService } from 'src/app/services/apollo/apollo.service';
 
 @Component({
   selector: 'app-open-form-button',
@@ -24,17 +25,35 @@ export class OpenFormButtonComponent implements OnInit {
   @Input() isProtected = false;
   @Input() assignUserTabName?: TabNameAssign;
   @Input() redirectToNewBoard?: boolean;
-  @Input() projectOwnerId? = '';
+  @Input() projectOwnerId?: string;
   userId$ = new Observable<string | undefined>();
+  isOwner$ = new Observable<boolean>();
 
   constructor(
     private formService: FormService,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private apollo: ApolloService
   ) {}
 
   ngOnInit() {
     this.userId$ = this.supabase.session$.pipe(
       map(session => session?.user.id)
+    );
+
+    const isLoggedInUserAOwnerOfTheProject$ =
+      this.apollo.isLoggedInUserAOwnerOfTheProject$;
+
+    this.isOwner$ = combineLatest([
+      this.userId$,
+      isLoggedInUserAOwnerOfTheProject$,
+    ]).pipe(
+      map(([userId, isLoggedInUserAOwnerOfTheProject]) => {
+        if (this.projectOwnerId) {
+          return userId === this.projectOwnerId;
+        } else {
+          return isLoggedInUserAOwnerOfTheProject;
+        }
+      })
     );
   }
 
