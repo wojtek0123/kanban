@@ -10,7 +10,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  width: var(--task-width-mobile);
+  max-width: var(--task-width-mobile);
   align-items: center;
   width: 100%;
 }
@@ -229,12 +229,6 @@
   font-size: 0.85rem;
 }
 
-.card-stats button {
-  color: var(--font-color-grey);
-  font-size: 0.85rem;
-  font-family: 'Oswald', sans-serif;
-}
-
 @media (min-width: 768px) {
   .card-arrow-move {
     display: flex;
@@ -270,11 +264,11 @@
   }
 
   .section {
-    width: var(--task-width);
+    max-width: var(--task-width);
   }
 
   .column-placeholder {
-    min-width: var(--task-width);
+    max-width: var(--task-width);
   }
 
   .task-placeholder {
