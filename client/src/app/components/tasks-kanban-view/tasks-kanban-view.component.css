@@ -212,7 +212,7 @@
 
 .column-placeholder {
   height: 35rem;
-  min-width: var(--task-width-mobile);
+  max-width: var(--task-width-mobile);
   width: 100%;
 }
 
@@ -268,7 +268,7 @@
   }
 
   .column-placeholder {
-    max-width: var(--task-width);
+    min-width: var(--task-width);
   }
 
   .task-placeholder {
