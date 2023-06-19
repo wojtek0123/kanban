@@ -28,7 +28,7 @@ export class BoardDetailsComponent implements OnInit {
   @Input() board: Board | undefined | null = null;
   @Input() ownerProjectId: string = '';
   usersInTheProject$: Observable<{ user: User }[]> | null = null;
-  boardType: BoardTypes = 'kanban';
+  boardType: BoardTypes = 'table';
   sortBy: SortBy = {
     column: 'title',
     direction: 'asc',
@@ -47,6 +47,10 @@ export class BoardDetailsComponent implements OnInit {
       map(params => params['projectId']),
       switchMap(projectId => this.apollo.getUsersFromProject(projectId))
     );
+
+    if (window.innerWidth > 1024) {
+      this.boardType = 'kanban';
+    }
   }
 
   onSelectedTags(checkedTags: string[]) {
