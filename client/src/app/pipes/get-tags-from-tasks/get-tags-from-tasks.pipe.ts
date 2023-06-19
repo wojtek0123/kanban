@@ -7,18 +7,14 @@ import { Tag } from 'src/app/models/tag.models';
 })
 export class GetTagsFromTasksPipe implements PipeTransform {
   transform(board: Board) {
-    const uniqueTagNames = new Set([
-      ...board.columns.flatMap(column =>
-        column.tasks.flatMap(task =>
-          task.tagNames.length === 0 ? '' : task.tagNames
-        )
-      ),
-    ]);
-
-    return Array.from(uniqueTagNames).map((name, index) => ({
-      id: index,
-      name,
-      check: true,
-    })) satisfies Tag[];
+    return [
+      ...new Set([
+        ...board.columns.flatMap(column =>
+          column.tasks.flatMap(task =>
+            task.tagNames.length === 0 ? '' : task.tagNames
+          )
+        ),
+      ]),
+    ];
   }
 }
