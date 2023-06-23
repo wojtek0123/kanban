@@ -4,44 +4,4 @@
   <p class="text">
     {{ user.user_metadata['nick'] }}
   </p>
-
-  <button class="button-global button" type="button" (click)="onShowNameForm()">
-    Change nickname
-  </button>
-
-  <form
-    class="profile-form form-global"
-    (ngSubmit)="onUpdateName()"
-    [ngClass]="{ show: changeName }"
-    [formGroup]="profile">
-    <label class="form-label-global" for="name">Name </label>
-    <input
-      class="form-input-global"
-      type="text"
-      id="name"
-      [ngClass]="{
-        error: formControls.name.invalid && formControls.name.touched
-      }"
-      formControlName="name"
-      required />
-    <p
-      class="form-invalid-message"
-      *ngIf="nameLength === 0 && formControls.name.touched">
-      Nickname is required.
-    </p>
-    <p
-      class="form-invalid-message"
-      *ngIf="
-        formControls.name.invalid &&
-        nameLength !== 0 &&
-        formControls.name.touched
-      ">
-      Nickname has max 25 characters.
-    </p>
-    <button
-      class="button-global submit-button-global profile-submit"
-      type="submit">
-      Change
-    </button>
-  </form>
 </div>
