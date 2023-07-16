@@ -19,11 +19,11 @@
       <input
         type="checkbox"
         class="select-all"
-        [checked]="isAllTagsSelected"
+        [checked]="checkedTags.length === tags.length"
         id="select-all" />
       <label for="select-all">Select all</label>
     </li>
-    <li *ngIf="tagNames.length === 0" class="filter-item">
+    <li *ngIf="tags.length === 0" class="filter-item">
       No tag names to display
     </li>
   </ul>
