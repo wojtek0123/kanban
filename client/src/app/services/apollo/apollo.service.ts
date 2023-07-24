@@ -523,20 +523,28 @@ export class ApolloService {
     currColumnId: string,
     prevColumnId: string
   ) {
-    return this.apollo.mutate({
-      mutation: CHANGE_COLUMN_ORDER,
-      variables: {
-        currOrder,
-        prevOrder,
-        currColumnId,
-        prevColumnId,
-      },
-      refetchQueries: [
-        {
-          query: GET_PROJECTS,
-        },
-      ],
-    });
+    return this.supabase.session$.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo.mutate({
+          mutation: CHANGE_COLUMN_ORDER,
+          variables: {
+            currOrder,
+            prevOrder,
+            currColumnId,
+            prevColumnId,
+          },
+          refetchQueries: [
+            {
+              query: GET_PROJECTS,
+              variables: {
+                userId,
+              },
+            },
+          ],
+        })
+      )
+    );
   }
 
   updateUserName(id: string, name: string) {
