@@ -1,0 +1,82 @@
+query GetProjectAndBoardNames($userId: ID!) {
+  getProjectAndBoardNames(userId: $userId) {
+    id
+    name
+    boards {
+      id
+      name
+    }
+  }
+}
+
+query GetProjects($userId: ID!) {
+  getProjects(userId: $userId) {
+    id
+    name
+    updatedAt
+    userId
+    createdAt
+    boards {
+      createdAt
+      id
+      name
+      updatedAt
+      numberOfColumns
+      numberOfTasks
+      numberOfSubtasks
+      columns {
+        boardId
+        createdAt
+        dotColor
+        id
+        name
+        order
+        updatedAt
+        tasks {
+          createdAt
+          description
+          id
+          tagBackgroundColors
+          tagFontColors
+          tagNames
+          title
+          updatedAt
+          subtasks {
+            createdAt
+            id
+            isFinished
+            name
+            updatedAt
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation AddProject($name: String!, $userId: ID!) {
+  addProject(name: $name, userId: $userId) {
+    id
+    name
+    userId
+    createdAt
+    updatedAt
+    boards {
+      id
+      name
+    }
+  }
+}
+
+mutation EditProject($id: ID!, $name: String!) {
+  editProject(id: $id, name: $name) {
+    id
+    name
+  }
+}
+
+mutation RemoveProject($id: ID!) {
+  removeProject(id: $id) {
+    id
+  }
+}

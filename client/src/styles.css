@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 *,
 *::after,
@@ -24,17 +25,18 @@
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100svh;
   background-color: var(--background-color);
   color: var(--font-color);
   font-family: 'Oswald', sans-serif;
   overflow-x: hidden;
   width: 100%;
-  position: relative;
+  /*position: relative;*/
 }
 
 button {
   font-family: 'Oswald', sans-serif;
+  cursor: pointer;
 }
 
 input {
@@ -107,8 +109,8 @@ select {
 
 @media (min-width: 1024px) {
   body {
-    height: 100vh;
-    width: 100vw;
+    /*height: 100vh;*/
+    /*width: 100vw;*/
   }
 
   .form-global {

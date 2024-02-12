@@ -1,0 +1,102 @@
+query GetFilteredUsers($text: String!) {
+  getFilteredUsers(text: $text) {
+    id
+    name
+    email
+    createdAt
+    updatedAt
+  }
+}
+
+query GetUsersAndTasks {
+  getUsersAndTasks {
+    taskId
+    userId
+  }
+}
+
+query GetUsersFromTask($taskId: ID!) {
+  getUsersFromTask(taskId: $taskId) {
+    user {
+      name
+      email
+      id
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query GetUsersFromProject($projectId: ID!) {
+  getUsersFromProject(projectId: $projectId) {
+    user {
+      email
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+mutation AddUserToProject($projectId: ID!, $userId: ID!) {
+  addUserToProject(projectId: $projectId, userId: $userId) {
+    user {
+      email
+      id
+      name
+    }
+    project {
+      id
+      name
+    }
+  }
+}
+
+mutation AddUserToTask($userId: ID!, $taskId: ID!) {
+  addUserToTask(userId: $userId, taskId: $taskId) {
+    createdAt
+    userId
+    taskId
+    updatedAt
+  }
+}
+
+mutation addUser($name: String!, $email: String!, $id: ID!) {
+  addUser(name: $name, email: $email, id: $id) {
+    id
+    name
+    email
+  }
+}
+
+mutation addUser($name: String!, $email: String!, $id: ID!) {
+  addUser(name: $name, email: $email, id: $id) {
+    id
+    name
+    email
+  }
+}
+
+mutation RemoveUserFromProject($projectId: ID!, $userId: ID!) {
+  removeUserFromProject(projectId: $projectId, userId: $userId) {
+    project {
+      id
+      name
+    }
+  }
+}
+
+mutation RemoveUserFromTask($taskId: ID!, $userId: ID!) {
+  removeUserFromTask(taskId: $taskId, userId: $userId) {
+    taskId
+    userId
+  }
+}
+
+mutation UpdateUserName($id: ID!, $name: String!) {
+  updateUserName(id: $id, name: $name) {
+    id
+    name
+  }
+}

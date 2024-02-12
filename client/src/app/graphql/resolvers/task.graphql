@@ -1,0 +1,89 @@
+query GetTasksFromUser($userId: ID!) {
+  getTasksFromUser(userId: $userId) {
+    task {
+      id
+      title
+      description
+      tagNames
+      tagFontColors
+      tagBackgroundColors
+      createdAt
+      updatedAt
+      subtasks {
+        id
+        isFinished
+        name
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+
+mutation AddTask(
+  $columnId: ID!
+  $title: String!
+  $description: String!
+  $tagNames: [String!]!
+  $tagFontColors: [String!]!
+  $tagBackgroundColors: [String!]!
+) {
+  addTask(
+    columnId: $columnId
+    title: $title
+    description: $description
+    tagNames: $tagNames
+    tagFontColors: $tagFontColors
+    tagBackgroundColors: $tagBackgroundColors
+  ) {
+    id
+  }
+}
+
+mutation RemoveTask($id: ID!) {
+  removeTask(id: $id) {
+    id
+  }
+}
+
+mutation EditTask(
+  $id: ID!
+  $title: String!
+  $description: String!
+  $tagNames: [String!]!
+  $tagFontColors: [String!]!
+  $tagBackgroundColors: [String!]!
+) {
+  editTask(
+    id: $id
+    title: $title
+    description: $description
+    tagNames: $tagNames
+    tagFontColors: $tagFontColors
+    tagBackgroundColors: $tagBackgroundColors
+  ) {
+    id
+    title
+    description
+    tagNames
+    tagFontColors
+    tagBackgroundColors
+  }
+}
+
+mutation ChangeColumn($columnId: ID!, $taskId: ID!) {
+  changeColumn(columnId: $columnId, taskId: $taskId) {
+    id
+    title
+    description
+    tagNames
+    tagFontColors
+    columnId
+    tagBackgroundColors
+    subtasks {
+      id
+      isFinished
+      name
+    }
+  }
+}

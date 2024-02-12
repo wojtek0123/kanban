@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  position: relative;
+}
+
+.button {
+  color: var(--font-color);
+  border: none;
+  padding: 0.25rem;
+  border-radius: var(--rounded);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  position: relative;
+}

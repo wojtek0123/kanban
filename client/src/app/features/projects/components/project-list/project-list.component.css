@@ -1,0 +1,75 @@
+.project-name-wrapper {
+  margin: 1rem 0;
+  position: sticky;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.project-name-wrapper h2 {
+  font-size: 2rem;
+  min-width: max-content;
+}
+
+.message-wrapper {
+  text-align: center;
+  margin: 1rem 0;
+  color: var(--font-color-grey);
+  font-size: 1.2rem;
+}
+
+.error-message {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.table-container {
+  padding: 1rem;
+}
+
+.mat-mdc-table {
+  background-color: var(--background-color) !important;
+  overflow-x: auto;
+}
+
+.mat-mdc-header-cell {
+  color: var(--font-color) !important;
+  font-size: 1.2rem;
+  min-width: 10rem;
+}
+
+.mat-mdc-cell {
+  color: var(--font-color-grey) !important;
+  font-size: 1.1rem;
+  min-width: 10rem;
+}
+
+.mat-mdc-cell a {
+  text-decoration: underline;
+  color: inherit;
+  font-weight: bold;
+}
+
+.mat-mdc-header-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--font-color-grey);
+}
+
+.mat-mdc-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mdc-data-table__cell {
+  padding-left: 0;
+}
+
+.mdc-data-table__header-cell {
+  padding-left: 0;
+}

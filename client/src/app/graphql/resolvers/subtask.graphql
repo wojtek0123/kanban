@@ -1,0 +1,31 @@
+mutation RemoveSubtask($id: ID!) {
+  removeSubtask(id: $id) {
+    id
+  }
+}
+
+mutation EditSubtask($id: ID!, $name: String!, $isFinished: Boolean!) {
+  editSubtask(id: $id, name: $name, isFinished: $isFinished) {
+    id
+    name
+    isFinished
+    createdAt
+    updatedAt
+  }
+}
+
+mutation AddSubtask($name: String!, $isFinished: Boolean!, $taskId: ID!) {
+  addSubtask(name: $name, isFinished: $isFinished, taskId: $taskId) {
+    id
+    name
+    isFinished
+  }
+}
+
+mutation ChangeCompletionState($id: ID!, $state: Boolean!) {
+  changeCompletionState(id: $id, state: $state) {
+    id
+    name
+    isFinished
+  }
+}

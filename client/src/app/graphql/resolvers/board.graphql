@@ -1,0 +1,69 @@
+query GetBoard($getBoardId: ID!) {
+  getBoard(id: $getBoardId) {
+    name
+    updatedAt
+    projectId
+    id
+    createdAt
+    numberOfColumns
+    numberOfTasks
+    numberOfSubtasks
+    columns {
+      createdAt
+      dotColor
+      id
+      name
+      order
+      updatedAt
+      tasks {
+        createdAt
+        description
+        id
+        tagBackgroundColors
+        tagFontColors
+        tagNames
+        title
+        updatedAt
+        userOnTask {
+          user {
+            email
+            id
+            name
+          }
+        }
+        subtasks {
+          id
+          createdAt
+          isFinished
+          updatedAt
+          name
+        }
+      }
+    }
+    Project {
+      userId
+    }
+  }
+}
+mutation AddBoard($name: String!, $projectId: ID!) {
+  addBoard(name: $name, projectId: $projectId) {
+    id
+    name
+    createdAt
+    updatedAt
+    projectId
+  }
+}
+
+mutation EditBoard($id: ID!, $name: String!) {
+  editBoard(id: $id, name: $name) {
+    id
+    name
+  }
+}
+
+mutation RemoveBoard($id: ID!) {
+  removeBoard(id: $id) {
+    id
+  }
+}

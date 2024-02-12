@@ -1,0 +1,34 @@
+mutation EditColumn($id: ID!, $name: String!, $dotColor: String!) {
+  editColumn(id: $id, name: $name, dotColor: $dotColor) {
+    id
+    name
+  }
+}
+
+mutation RemoveColumn($id: ID!) {
+  removeColumn(id: $id) {
+    id
+  }
+}
+
+mutation AddColumn($boardId: ID!, $name: String!, $dotColor: String!) {
+  addColumn(boardId: $boardId, name: $name, dotColor: $dotColor) {
+    id
+  }
+}
+
+mutation ChangeColumnOrder(
+  $currOrder: Int!
+  $prevOrder: Int!
+  $currColumnId: ID!
+  $prevColumnId: ID!
+) {
+  changeColumnOrder(
+    currOrder: $currOrder
+    prevOrder: $prevOrder
+    currColumnId: $currColumnId
+    prevColumnId: $prevColumnId
+  ) {
+    id
+  }
+}

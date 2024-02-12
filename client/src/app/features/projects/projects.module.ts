@@ -13,6 +13,7 @@ import { ContextMenuModule } from '../../components/context-menu/context-menu.mo
 import { LogoutButtonModule } from '../../components/logout-button/logout-button.module';
 import { NavigationModule } from '../../components/navigation/navigation.module';
 import { LoadingSpinnerModule } from 'src/app/components/loading-spinner/loading-spinner.module';
+import { ProjectListComponent } from './components/project-list/project-list.component';
 
 @NgModule({
   declarations: [ProjectsComponent],
@@ -30,6 +31,7 @@ import { LoadingSpinnerModule } from 'src/app/components/loading-spinner/loading
     LogoutButtonModule,
     NavigationModule,
     LoadingSpinnerModule,
+    ProjectListComponent,
   ],
   exports: [ProjectsComponent],
 })
