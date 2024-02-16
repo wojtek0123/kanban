@@ -1,6 +1,5 @@
-<app-form></app-form>
-<app-context-menu-modal></app-context-menu-modal>
-<app-toast></app-toast>
+<!-- <app-form></app-form> -->
+<!-- <app-toast></app-toast> -->
 <main
   class="main"
   *ngIf="{
@@ -9,5 +8,8 @@
   } as vm">
   <app-navigation
     [showTasksButton]="!!vm.projects && !vm.projectsError"></app-navigation>
-  <app-project-list [projects]="vm.projects ?? []"></app-project-list>
+  <app-project-table
+    *ngIf="!vm.projectsError"
+    [projects]="vm.projects ?? []"></app-project-table>
+  <span *ngIf="vm.projectsError">{{ vm.projectsError }}</span>
 </main>

@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 *,
 *::after,
@@ -31,7 +31,6 @@ body {
   font-family: 'Oswald', sans-serif;
   overflow-x: hidden;
   width: 100%;
-  /*position: relative;*/
 }
 
 button {
@@ -107,12 +106,15 @@ select {
   margin-top: 1rem;
 }
 
-@media (min-width: 1024px) {
-  body {
-    /*height: 100vh;*/
-    /*width: 100vw;*/
-  }
+.mat-mdc-header-cell {
+  font-family: 'Oswald', sans-serif;
+}
 
+.mat-mdc-cell {
+  font-family: 'Oswald', sans-serif;
+}
+
+@media (min-width: 1024px) {
   .form-global {
     position: relative;
     max-width: 500px;
