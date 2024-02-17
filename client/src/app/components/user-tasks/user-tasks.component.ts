@@ -12,11 +12,14 @@ import { User } from '../../models/user.model';
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Task } from '../../models/task.model';
 import { Subtask } from 'src/app/models/subtask.model';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-tasks',
   templateUrl: './user-tasks.component.html',
   styleUrls: ['./user-tasks.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, AsyncPipe],
 })
 export class UserTasksComponent implements OnInit {
   userTasks$: Observable<{ task: Task }[]> | null = null;

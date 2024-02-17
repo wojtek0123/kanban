@@ -7,6 +7,10 @@ import {
 import { Board } from 'src/app/models/board.model';
 import { Task } from 'src/app/models/task.model';
 import { SortBy } from 'src/app/models/types';
+import { FilterByTitlePipe } from '../../pipes/filter-by-title/filter-by-title.pipe';
+import { FilterByTagsPipe } from '../../pipes/filter-by-tags/filter-by-tags.pipe';
+import { SortTasksPipe } from '../../pipes/sort-tasks/sort-tasks.pipe';
+import { NgFor, DatePipe } from '@angular/common';
 
 export interface TaskTable {
   [key: string]: string;
@@ -17,6 +21,14 @@ export interface TaskTable {
   templateUrl: './tasks-table-view.component.html',
   styleUrls: ['./tasks-table-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgFor,
+    DatePipe,
+    SortTasksPipe,
+    FilterByTagsPipe,
+    FilterByTitlePipe,
+  ],
 })
 export class TaskTableComponent implements DoCheck {
   @Input() board: Board | undefined | null = null;

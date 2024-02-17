@@ -7,12 +7,29 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { TabNameAssign } from 'src/app/models/types';
 import { ActivatedRoute } from '@angular/router';
 import { FormService } from 'src/app/services/form/form.service';
+import { userIncludedPipe } from '../../pipes/user-included/user-included.pipe';
+import {
+  NgIf,
+  NgClass,
+  NgFor,
+  NgOptimizedImage,
+  AsyncPipe,
+} from '@angular/common';
 
 @Component({
   selector: 'app-assign-user-form',
   templateUrl: './assign-user-form.component.html',
   styleUrls: ['./assign-user-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    NgFor,
+    NgOptimizedImage,
+    AsyncPipe,
+    userIncludedPipe,
+  ],
 })
 export class AssignUserFormComponent implements OnInit {
   taskId$ = new Observable<string>();

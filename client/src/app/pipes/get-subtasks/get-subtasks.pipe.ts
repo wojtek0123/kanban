@@ -3,6 +3,7 @@ import { Board } from 'src/app/models/board.model';
 
 @Pipe({
   name: 'getSubtasks',
+  standalone: true,
 })
 export class GetSubtasksPipe implements PipeTransform {
   transform(board: Board) {

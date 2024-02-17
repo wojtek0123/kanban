@@ -3,6 +3,7 @@ import { Column } from 'src/app/models/column.model';
 
 @Pipe({
   name: 'getColumnIds',
+  standalone: true,
 })
 export class GetColumnIdsPipe implements PipeTransform {
   transform(columns: Column[], excludedColumnId: string) {

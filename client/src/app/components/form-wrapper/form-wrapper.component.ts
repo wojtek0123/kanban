@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form/form.service';
 import { Observable } from 'rxjs';
+import { NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-form-wrapper',
   templateUrl: './form-wrapper.component.html',
   styleUrls: ['./form-wrapper.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgClass, AsyncPipe],
 })
 export class FormWrapperComponent implements OnInit {
   show$!: Observable<boolean>;

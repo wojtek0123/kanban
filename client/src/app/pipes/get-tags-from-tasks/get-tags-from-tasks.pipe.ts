@@ -4,6 +4,7 @@ import { Tag } from 'src/app/models/tag.models';
 
 @Pipe({
   name: 'getTagsFromTasks',
+  standalone: true,
 })
 export class GetTagsFromTasksPipe implements PipeTransform {
   transform(board: Board) {

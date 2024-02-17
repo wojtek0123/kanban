@@ -6,6 +6,7 @@ import { SupabaseService } from 'src/app/services/supabase/supabase.service';
   selector: 'app-logout-button',
   templateUrl: './logout-button.component.html',
   styleUrls: ['./logout-button.component.css'],
+  standalone: true,
 })
 export class LogoutButtonComponent {
   constructor(private supabase: SupabaseService, private router: Router) {}

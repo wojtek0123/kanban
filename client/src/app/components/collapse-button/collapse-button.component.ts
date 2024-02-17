@@ -16,6 +16,8 @@ import {
 import { Project } from '../../models/project.model';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { Observable, map } from 'rxjs';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { NgOptimizedImage, NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-collapse-button',
@@ -29,6 +31,8 @@ import { Observable, map } from 'rxjs';
     ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgOptimizedImage, NgIf, ContextMenuComponent, AsyncPipe],
 })
 export class CollapseButtonComponent implements OnInit {
   @Input() project!: Project;

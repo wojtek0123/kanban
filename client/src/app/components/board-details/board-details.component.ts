@@ -12,6 +12,15 @@ import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { FormService } from 'src/app/services/form/form.service';
+import { GetTagsFromTasksPipe } from '../../pipes/get-tags-from-tasks/get-tags-from-tasks.pipe';
+import { TaskTableComponent } from '../tasks-table-view/tasks-table-view.component';
+import { TasksComponent } from '../tasks-kanban-view/tasks-kanban-view.component';
+import { FilterMenuComponent } from '../filter-menu/filter-menu.component';
+import { FormsModule } from '@angular/forms';
+import { LogoutButtonComponent } from '../logout-button/logout-button.component';
+import { OpenFormButtonComponent } from '../open-form-button/open-form-button.component';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 type BoardTypes = 'kanban' | 'table';
 
@@ -20,6 +29,19 @@ type BoardTypes = 'kanban' | 'table';
   templateUrl: './board-details.component.html',
   styleUrls: ['./board-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    ContextMenuComponent,
+    OpenFormButtonComponent,
+    LogoutButtonComponent,
+    FormsModule,
+    FilterMenuComponent,
+    TasksComponent,
+    TaskTableComponent,
+    AsyncPipe,
+    GetTagsFromTasksPipe,
+  ],
 })
 export class BoardDetailsComponent implements OnInit {
   isOwner$ = new Observable();

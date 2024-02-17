@@ -9,14 +9,37 @@ import { Observable, Subject, combineLatest, of } from 'rxjs';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError, ignoreElements, map, takeUntil } from 'rxjs/operators';
 import { Project } from '../../models/project.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Board } from '../../models/board.model';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
+import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
+import { BoardDetailsComponent } from '../../components/board-details/board-details.component';
+import { OpenFormButtonComponent } from '../../components/open-form-button/open-form-button.component';
+import { AccordionComponent } from '../../components/accordion/accordion.component';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { ContextMenuModalComponent } from '../../components/context-menu-modal/context-menu-modal.component';
+import { FormComponent } from '../../components/form/form.component';
+import { ToastComponent } from '../../components/toast/toast.component';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ToastComponent,
+    FormComponent,
+    ContextMenuModalComponent,
+    NgIf,
+    RouterLink,
+    AccordionComponent,
+    OpenFormButtonComponent,
+    BoardDetailsComponent,
+    MobileNavigationComponent,
+    LoadingSpinnerComponent,
+    AsyncPipe,
+  ],
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

@@ -8,12 +8,15 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Tag } from 'src/app/models/tag.models';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-filter-menu',
   templateUrl: './filter-menu.component.html',
   styleUrls: ['./filter-menu.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgClass, NgFor, NgIf],
 })
 export class FilterMenuComponent implements OnChanges {
   @Input() tags: Tag[] = [];

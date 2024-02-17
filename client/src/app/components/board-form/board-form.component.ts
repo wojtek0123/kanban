@@ -1,5 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 import { FormService } from '../../services/form/form.service';
@@ -8,12 +13,22 @@ import { Observable, combineLatest } from 'rxjs';
 import { ToastService } from '../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/services/navigation/navigation.service';
+import { AutoFocusDirective } from '../../directives/auto-focus.directive';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-board-form',
   templateUrl: './board-form.component.html',
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    AutoFocusDirective,
+    AsyncPipe,
+  ],
 })
 export class BoardFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

@@ -5,17 +5,22 @@ import {
   FormBuilder,
   ValidationErrors,
   Validators,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { formStatus } from '../../features/auth/auth.component';
 import { Router } from '@angular/router';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError } from 'rxjs';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf],
 })
 export class RegisterComponent {
   showToast = false;

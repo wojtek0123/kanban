@@ -10,16 +10,47 @@ import { Task } from '../../models/task.model';
 import { catchError, take } from 'rxjs/operators';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  CdkDropList,
+  CdkDrag,
+  CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
 import { SortBy } from '../../models/types';
 import { Column } from '../../models/column.model';
 import { Subtask } from 'src/app/models/subtask.model';
+import { GetColumnIdsPipe } from '../../pipes/get-column-ids/get-column-ids.pipe';
+import { GetColumnsWithoutOneSpecificPipe } from '../../pipes/get-columns-without-one-specific/get-columns-without-one-specific.pipe';
+import { FilterByTitlePipe } from '../../pipes/filter-by-title/filter-by-title.pipe';
+import { FilterByTagsPipe } from '../../pipes/filter-by-tags/filter-by-tags.pipe';
+import { SortTasksPipe } from '../../pipes/sort-tasks/sort-tasks.pipe';
+import { DisplayNumberOfUsersInTaskComponent } from '../display-number-of-users-in-task/display-number-of-users-in-task.component';
+import { OpenFormButtonComponent } from '../open-form-button/open-form-button.component';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks-kanban-view.component.html',
   styleUrls: ['./tasks-kanban-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    CdkDropList,
+    NgFor,
+    CdkDrag,
+    CdkDragPlaceholder,
+    ContextMenuComponent,
+    OpenFormButtonComponent,
+    DisplayNumberOfUsersInTaskComponent,
+    AsyncPipe,
+    SortTasksPipe,
+    FilterByTagsPipe,
+    FilterByTitlePipe,
+    GetColumnsWithoutOneSpecificPipe,
+    GetColumnIdsPipe,
+  ],
 })
 export class TasksComponent implements OnInit {
   @Input() board: Board | undefined | null = null;

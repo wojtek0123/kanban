@@ -8,15 +8,28 @@ import { Project } from '../../models/project.model';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NavigationService } from 'src/app/services/navigation/navigation.service';
 import { Board } from 'src/app/models/board.model';
+import { OpenFormButtonComponent } from '../open-form-button/open-form-button.component';
+import { NgClass, NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { CollapseButtonComponent } from '../collapse-button/collapse-button.component';
 
 @Component({
   selector: 'app-accordion-item',
   templateUrl: './accordion-item.component.html',
   styleUrls: ['./accordion-item.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CollapseButtonComponent,
+    NgClass,
+    NgFor,
+    RouterLink,
+    NgIf,
+    OpenFormButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class AccordionItemComponent implements OnInit {
   @Input() project!: Project;

@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Project } from '../../../../models/project.model';
-import { LoadingSpinnerModule } from '../../../../components/loading-spinner/loading-spinner.module';
-import { OpenFormButtonModule } from '../../../../components/open-form-button/open-form-button.module';
-import { ContextMenuModule } from '../../../../components/context-menu/context-menu.module';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { GetTasksModule } from '../../../../pipes/get-tasks/get-tasks.module';
-import { GetSubtasksModule } from '../../../../pipes/get-subtasks/get-subtasks.module';
-import { ActionsComponent } from '../../../../shared/actions/actions.component';
+import { GetTasksPipe } from '../../../../pipes/get-tasks/get-tasks.pipe';
+import { GetSubtasksPipe } from '../../../../pipes/get-subtasks/get-subtasks.pipe';
+import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
@@ -16,16 +14,14 @@ import { MatTableModule } from '@angular/material/table';
   styleUrls: ['./project-table.component.css'],
   standalone: true,
   imports: [
-    LoadingSpinnerModule,
-    OpenFormButtonModule,
-    ContextMenuModule,
     NgIf,
     NgFor,
     RouterLink,
-    GetTasksModule,
-    GetSubtasksModule,
     ActionsComponent,
     MatTableModule,
+    LoadingSpinnerComponent,
+    GetTasksPipe,
+    GetSubtasksPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

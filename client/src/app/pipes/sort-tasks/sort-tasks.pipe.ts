@@ -3,6 +3,7 @@ import { Task } from '../../models/task.model';
 
 @Pipe({
   name: 'sortTasks',
+  standalone: true,
 })
 export class SortTasksPipe implements PipeTransform {
   transform(items: Task[], direction: 'asc' | 'des', column: keyof Task) {

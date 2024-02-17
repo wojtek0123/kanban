@@ -6,12 +6,15 @@ import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { User } from '@supabase/supabase-js';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, AsyncPipe],
 })
 export class ProfileComponent implements OnInit {
   changeName = false;

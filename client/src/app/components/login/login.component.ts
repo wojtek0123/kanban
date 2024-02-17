@@ -1,15 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { Router } from '@angular/router';
 import { formStatus } from '../../features/auth/auth.component';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { NgClass, NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, AsyncPipe],
 })
 export class LoginComponent {
   isSubmitted = false;

@@ -9,12 +9,16 @@ import { FormType, TabNameAssign } from '../../models/types';
 import { FormService } from '../../services/form/form.service';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { ApolloService } from 'src/app/services/apollo/apollo.service';
+import { ShowElementPipe } from '../../pipes/show-element/show-element.pipe';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-open-form-button',
   templateUrl: './open-form-button.component.html',
   styleUrls: ['./open-form-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, NgClass, AsyncPipe, ShowElementPipe],
 })
 export class OpenFormButtonComponent implements OnInit {
   @Input() parentId: string | undefined = undefined;

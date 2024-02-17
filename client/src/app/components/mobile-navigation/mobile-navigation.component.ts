@@ -16,6 +16,10 @@ import {
 import { NavigationService } from '../../services/navigation/navigation.service';
 import { Observable } from 'rxjs';
 import { Project } from 'src/app/models/project.model';
+import { AccordionComponent } from '../accordion/accordion.component';
+import { LogoutButtonComponent } from '../logout-button/logout-button.component';
+import { NgClass, NgIf, AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -39,6 +43,15 @@ import { Project } from 'src/app/models/project.model';
     ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    RouterLink,
+    NgClass,
+    NgIf,
+    LogoutButtonComponent,
+    AccordionComponent,
+    AsyncPipe,
+  ],
 })
 export class MobileNavigationComponent implements OnInit {
   showMenu$!: Observable<boolean>;

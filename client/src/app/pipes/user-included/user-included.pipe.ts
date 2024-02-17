@@ -3,6 +3,7 @@ import { User } from 'src/app/models/user.model';
 
 @Pipe({
   name: 'userIncluded',
+  standalone: true,
 })
 export class userIncludedPipe implements PipeTransform {
   transform(users: { user: User }[], userId: string) {

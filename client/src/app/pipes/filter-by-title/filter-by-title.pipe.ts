@@ -3,6 +3,7 @@ import { Task } from '../../models/task.model';
 
 @Pipe({
   name: 'filterByTitle',
+  standalone: true,
 })
 export class FilterByTitlePipe implements PipeTransform {
   transform(tasks: Task[], searchTerm: string) {

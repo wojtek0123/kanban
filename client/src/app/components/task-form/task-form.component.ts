@@ -8,11 +8,15 @@ import {
   FormGroup,
   ValidatorFn,
   Validators,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { ToastService } from '../../services/toast/toast.service';
 import { Column } from '../../models/column.model';
+import { AutoFocusDirective } from '../../directives/auto-focus.directive';
+import { NgIf, NgFor, NgOptimizedImage, AsyncPipe } from '@angular/common';
 
 type Tag = {
   name: string;
@@ -25,6 +29,16 @@ type Tag = {
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    AutoFocusDirective,
+    NgFor,
+    NgOptimizedImage,
+    AsyncPipe,
+  ],
 })
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;

@@ -3,6 +3,7 @@ import { Board } from 'src/app/models/board.model';
 
 @Pipe({
   name: 'getColumns',
+  standalone: true,
 })
 export class GetColumnsPipe implements PipeTransform {
   transform(board: Board | null | undefined) {

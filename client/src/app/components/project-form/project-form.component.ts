@@ -1,17 +1,32 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 
 import { FormService } from '../../services/form/form.service';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
+import { AutoFocusDirective } from '../../directives/auto-focus.directive';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    AutoFocusDirective,
+    AsyncPipe,
+  ],
 })
 export class ProjectFormComponent implements OnInit {
   isEditing$ = new Observable<boolean>();

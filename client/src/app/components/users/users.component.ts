@@ -2,12 +2,24 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map, catchError, switchMap, take, tap } from 'rxjs/operators';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { User } from 'src/app/models/user.model';
 import { ToastService } from '../../services/toast/toast.service';
 import { Task } from 'src/app/models/task.model';
 import { ActivatedRoute } from '@angular/router';
+import {
+  NgIf,
+  NgClass,
+  NgFor,
+  NgOptimizedImage,
+  AsyncPipe,
+} from '@angular/common';
 
 type Tabs = 'add' | 'peek';
 
@@ -16,6 +28,16 @@ type Tabs = 'add' | 'peek';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    NgOptimizedImage,
+    AsyncPipe,
+  ],
 })
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;

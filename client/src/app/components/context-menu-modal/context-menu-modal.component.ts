@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { catchError } from 'rxjs/operators';
 import { ToastService } from '../../services/toast/toast.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-context-menu-modal',
   templateUrl: './context-menu-modal.component.html',
   styleUrls: ['./context-menu-modal.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, AsyncPipe],
 })
 export class ContextMenuModalComponent implements OnInit {
   show$ = new Observable<boolean>();
