@@ -1,0 +1,23 @@
+.heading {
+  margin-bottom: 2rem;
+}
+
+.heading h2 {
+  font-size: 2rem;
+}
+
+.home-change {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.home-change-button {
+  padding: 0.25rem 0.5rem;
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+
+.header-heading {
+  display: none;
+}

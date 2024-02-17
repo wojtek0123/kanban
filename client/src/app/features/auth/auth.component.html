@@ -4,24 +4,7 @@
   </div>
   <div class="container">
     <div class="home">
-      <div *ngIf="isRegister" class="home-heading">
-        <h2>Welcome back!</h2>
-        <p>Sign in to your account</p>
-      </div>
-      <div *ngIf="!isRegister" class="home-heading">
-        <h2>Get started!</h2>
-        <p>Create a new account</p>
-      </div>
-
-      <app-login *ngIf="isRegister"></app-login>
-      <app-register *ngIf="!isRegister"></app-register>
-
-      <div class="home-change">
-        <p>{{ isRegister ? "Don't have account?" : 'Have an account?' }}</p>
-        <button class="home-change-button" type="button" (click)="toggle()">
-          {{ isRegister ? 'Sign Up' : 'Sign In' }}
-        </button>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </header>

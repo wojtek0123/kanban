@@ -73,3 +73,22 @@
 .mdc-data-table__header-cell {
   padding-left: 0;
 }
+
+.no-data {
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.no-data-button {
+  border: none;
+  background-color: var(--lighter-background-color);
+  color: var(--font-color);
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--rounded);
+}

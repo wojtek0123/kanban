@@ -1,9 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RegisterComponent } from '../../components/register/register.component';
-import { LoginComponent } from '../../components/login/login.component';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 import { NgIf } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
 
-export type formStatus = 'loading' | 'error' | 'ok';
+export type FormStatus = 'idle' | 'loading' | 'error' | 'ok';
 
 @Component({
   selector: 'app-home',
@@ -11,14 +17,12 @@ export type formStatus = 'loading' | 'error' | 'ok';
   styleUrls: ['./auth.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, LoginComponent, RegisterComponent],
+  imports: [NgIf, LoginComponent, RegisterComponent, RouterOutlet],
 })
-export class AuthComponent {
-  isRegister = true;
+export class AuthComponent implements OnInit {
+  private router = inject(Router);
 
-  constructor() {}
-
-  toggle() {
-    this.isRegister = !this.isRegister;
+  async ngOnInit() {
+    await this.router.navigate(['/auth/sign-in']);
   }
 }

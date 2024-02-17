@@ -7,6 +7,7 @@ import { GetTasksPipe } from '../../../../pipes/get-tasks/get-tasks.pipe';
 import { GetSubtasksPipe } from '../../../../pipes/get-subtasks/get-subtasks.pipe';
 import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-project-table',
@@ -22,6 +23,7 @@ import { MatTableModule } from '@angular/material/table';
     LoadingSpinnerComponent,
     GetTasksPipe,
     GetSubtasksPipe,
+    MatIcon,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

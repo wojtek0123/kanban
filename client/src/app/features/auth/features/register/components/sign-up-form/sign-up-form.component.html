@@ -1,0 +1,91 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label class="form-label" for="email">Email</label>
+  <input
+    class="form-input"
+    type="email"
+    id="email"
+    name="email"
+    [ngClass]="{
+      error:
+        form.controls.email.invalid &&
+        (form.controls.email.touched || isSubmitted)
+    }"
+    placeholder="email@xyz.abc"
+    formControlName="email" />
+  @if (form.controls.email.getError('email') && (form.controls.email.touched ||
+  isSubmitted)) {
+  <span class="form-invalid-message">Email is invalid</span>
+  } @if (form.controls.email.getError('required') &&
+  (form.controls.email.touched || isSubmitted)) {
+  <span class="form-invalid-message">Email is required</span>
+  }
+  <label class="form-label" for="nick">Nick</label>
+  <input
+    class="form-input"
+    type="text"
+    id="nick"
+    formControlName="nickname"
+    [ngClass]="{
+      error:
+        form.controls.nickname.invalid &&
+        (form.controls.nickname.touched || isSubmitted)
+    }"
+    placeholder="john"
+    required />
+  @if (form.controls.nickname.getError('required') &&
+  (form.controls.nickname.touched || isSubmitted)) {
+  <span class="form-invalid-message">Nickname is required</span>
+  } @if (form.controls.nickname.getError('maxLength') &&
+  (form.controls.nickname.touched || isSubmitted)) {
+  <span class="form-invalid-message">Nickname has max 25 characters</span>
+  }
+  <label class="form-label" for="password">Password</label>
+  <input
+    class="form-input"
+    type="password"
+    placeholder="•••••••••"
+    id="password"
+    formControlName="password"
+    [ngClass]="{
+      error:
+        form.controls.password.invalid &&
+        (form.controls.password.touched || isSubmitted)
+    }" />
+  @if (form.controls.password.getError('minlength') &&
+  (form.controls.password.touched || isSubmitted)) {
+  <span class="form-invalid-message">
+    Password should have at least 8 characters
+  </span>
+  } @if (form.controls.password.getError('required') &&
+  (form.controls.password.touched || isSubmitted)) {
+  <span class="form-invalid-message">Password is required</span>
+  }
+
+  <label class="form-label" for="confirm-password">Confirm password</label>
+  <input
+    class="form-input"
+    type="password"
+    placeholder="•••••••••"
+    id="confirm-password"
+    formControlName="confirmPassword"
+    [ngClass]="{
+      error:
+        form.controls.confirmPassword.invalid &&
+        (form.controls.confirmPassword.touched || isSubmitted)
+    }" />
+  @if (form.controls.confirmPassword.getError('required') &&
+  (form.controls.confirmPassword.touched || isSubmitted)) {
+  <span class="form-invalid-message">Confirm password is required</span>
+  } @if (form.controls.confirmPassword.getError('passwordMismatch') &&
+  (form.controls.confirmPassword.touched || isSubmitted)) {
+  <span class="form-invalid-message">Passwords do not match</span>
+  }
+
+  <button type="submit" class="button-global form-button">
+    @if (status === 'loading') {
+    <span>Loading...</span>
+    } @else {
+    <span>Sign up</span>
+    }
+  </button>
+</form>

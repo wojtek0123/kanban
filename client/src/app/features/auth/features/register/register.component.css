@@ -1,0 +1,19 @@
+.heading {
+  margin-bottom: 2rem;
+}
+
+.heading h2 {
+  font-size: 2rem;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.change-button {
+  padding: 0.25rem 0.5rem;
+  color: var(--secondary-color);
+  font-weight: 700;
+}

@@ -41,7 +41,7 @@ export class SupabaseService {
     return this._session$.asObservable();
   }
 
-  signIn(email: string, password: string) {
+  signIn({ email, password }: { email: string; password: string }) {
     return this._supabase.auth.signInWithPassword({
       email,
       password,
