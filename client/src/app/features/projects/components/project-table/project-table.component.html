@@ -8,7 +8,9 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element">
-        <a [routerLink]="['/', 'project', project.id, 'board', element.id]">
+        <a
+          [routerLink]="['/project/board', element.id]"
+          [queryParams]="{ projectId: project.id }">
           {{ element.name }}
         </a>
       </td>

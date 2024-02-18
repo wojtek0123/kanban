@@ -19,7 +19,7 @@ import { Project } from 'src/app/models/project.model';
 import { LogoutButtonComponent } from '../logout-button/logout-button.component';
 import { NgClass, NgIf, AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ProjectListComponent } from '../../features/board/components/project-list/project-list.component';
+import { ProjectListComponent } from '../../features/project/components/project-list/project-list.component';
 
 @Component({
   selector: 'app-mobile-navigation',

@@ -5,9 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormService } from '../../services/form/form.service';
-import { Observable, Subject, combineLatest, of } from 'rxjs';
+import { Observable, Subject, combineLatest, of, switchMap } from 'rxjs';
 import { ApolloService } from '../../services/apollo/apollo.service';
-import { catchError, ignoreElements, map, takeUntil } from 'rxjs/operators';
 import { Project } from '../../models/project.model';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { Board } from '../../models/board.model';
@@ -21,11 +20,13 @@ import { ContextMenuModalComponent } from '../../components/context-menu-modal/c
 import { FormComponent } from '../../components/form/form.component';
 import { ToastComponent } from '../../components/toast/toast.component';
 import { AsideComponent } from './components/aside/aside.component';
+import { map } from 'rxjs/operators';
+import { BoardComponent } from './components/board/board.component';
 
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.component.html',
-  styleUrls: ['./board.component.css'],
+  selector: 'app-project',
+  templateUrl: './project.component.html',
+  styleUrls: ['./project.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -42,9 +43,10 @@ import { AsideComponent } from './components/aside/aside.component';
     AsyncPipe,
     AsideComponent,
     RouterOutlet,
+    BoardComponent,
   ],
 })
-export class BoardComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit {
   private destroy$ = new Subject<void>();
   projects$: Observable<Project[]> | null = null;
   projectsError$: Observable<string> | null = null;
@@ -57,43 +59,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const projectId$ = this.route.params.pipe(
-      map(params => params['projectId'])
-    );
-
-    const boardId$ = this.route.params.pipe(map(params => params['boardId']));
-
-    this.projects$ = this.apollo.getProjects();
-
-    this.projectsError$ = this.projects$.pipe(
-      ignoreElements(),
-      catchError(error => of(error))
-    );
-
-    this.board$ = combineLatest([this.projects$, boardId$]).pipe(
-      map(([projects, boardId]) =>
-        projects.flatMap(project =>
-          project.boards.filter(board => board.id === boardId)
-        )
-      ),
-      map(boards => boards.filter(board => board).at(0))
-    );
-
-    combineLatest([this.projects$, projectId$])
-      .pipe(
-        map(([projects, projectId]) =>
-          projects.find(project => project.id === projectId)
-        ),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(project => {
-        this.formService.onChangeProject(project);
-        this.apollo.setProjectOwnerId(project?.userId ?? '');
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    console.log(this.route.params);
   }
 }

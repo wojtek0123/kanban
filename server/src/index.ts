@@ -110,7 +110,7 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    project(userId: String, projectId: String): Project
+    project(userId: String, projectId: String, boardId: String): Project
     projects(userId: String): [Project]
     board(id: String): Board
     filteredUsers(text: String): [User]
@@ -187,7 +187,11 @@ const resolvers = {
     },
     project: (
       _: unknown,
-      { userId, projectId }: { userId: string; projectId: string },
+      {
+        userId,
+        projectId,
+        boardId,
+      }: { userId: string; projectId: string; boardId: string },
     ) => {
       return prisma.project.findUnique({
         where: { id: projectId, userId },
@@ -198,6 +202,7 @@ const resolvers = {
             },
           },
           boards: {
+            where: { id: boardId },
             include: {
               columns: {
                 include: {

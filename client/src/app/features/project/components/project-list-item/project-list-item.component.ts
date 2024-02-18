@@ -16,7 +16,8 @@ import { CollapseButtonComponent } from '../collapse-button/collapse-button.comp
       @for (board of project().boards; track board.id) {
       <li class="item">
         <a
-          [routerLink]="['/project', project().id, 'board', board.id]"
+          [routerLink]="['/project/board', board.id]"
+          [queryParams]="{ projectId: project().id }"
           routerLinkActive="highlight"
           class="accordion-item"
           >{{ board.name }}</a
