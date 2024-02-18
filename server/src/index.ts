@@ -1,11 +1,11 @@
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { PrismaClient } from '@prisma/client';
-import { GraphQLScalarType, Kind } from 'graphql';
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { PrismaClient } from "@prisma/client";
+import { GraphQLScalarType, Kind } from "graphql";
 
 export const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
+  name: "Date",
+  description: "Date custom scalar type",
   serialize(value: any) {
     // return value.getTime(); // Convert outgoing Date to integer for JSON
     const date = new Date(value);
@@ -110,6 +110,7 @@ const typeDefs = `#graphql
   }
 
   type Query {
+    project(userId: String, projectId: String): Project
     projects(userId: String): [Project]
     board(id: String): Board
     filteredUsers(text: String): [User]
@@ -117,6 +118,7 @@ const typeDefs = `#graphql
     usersFromTask(taskId: String): [UserOnTask]
     getTasksFromUser(userId: String): [UserOnTask]
     getUsersAndTasks: [UserOnTask]
+    projectAndBoardNames(userId: String): [Project]
   }
     
   type Mutation {
@@ -168,6 +170,50 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
+    projectAndBoardNames: (_: unknown, { userId }: { userId: string }) => {
+      return prisma.project.findMany({
+        where: { userId },
+        select: {
+          id: true,
+          name: true,
+          boards: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+    },
+    project: (
+      _: unknown,
+      { userId, projectId }: { userId: string; projectId: string },
+    ) => {
+      return prisma.project.findUnique({
+        where: { id: projectId, userId },
+        include: {
+          usersOnProject: {
+            include: {
+              user: true,
+            },
+          },
+          boards: {
+            include: {
+              columns: {
+                include: {
+                  tasks: {
+                    include: {
+                      subtasks: true,
+                      userOnTask: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    },
     board: (_parent: unknown, args: { id: string }) => {
       return prisma.board.findUnique({
         where: { id: args.id },
@@ -209,12 +255,12 @@ const resolvers = {
                       updatedAt: true,
                     },
                     orderBy: {
-                      createdAt: 'asc',
+                      createdAt: "asc",
                     },
                   },
                 },
                 orderBy: {
-                  title: 'asc',
+                  title: "asc",
                 },
               },
             },
@@ -271,27 +317,27 @@ const resolvers = {
                           updatedAt: true,
                         },
                         orderBy: {
-                          createdAt: 'asc',
+                          createdAt: "asc",
                         },
                       },
                     },
                     orderBy: {
-                      title: 'asc',
+                      title: "asc",
                     },
                   },
                 },
                 orderBy: {
-                  order: 'asc',
+                  order: "asc",
                 },
               },
             },
             orderBy: {
-              createdAt: 'asc',
+              createdAt: "asc",
             },
           },
         },
         orderBy: {
-          createdAt: 'asc',
+          createdAt: "asc",
         },
       });
     },
@@ -369,7 +415,7 @@ const resolvers = {
                   updatedAt: true,
                 },
                 orderBy: {
-                  createdAt: 'asc',
+                  createdAt: "asc",
                 },
               },
             },
@@ -396,7 +442,7 @@ const resolvers = {
         prevOrder: number;
         currColumnId: string;
         prevColumnId: string;
-      }
+      },
     ) => {
       await prisma.column.update({
         where: {
@@ -418,7 +464,7 @@ const resolvers = {
     },
     addUserToTask: (
       _parent: unknown,
-      args: { userId: string; taskId: string }
+      args: { userId: string; taskId: string },
     ) => {
       return prisma.userOnTask.create({
         data: {
@@ -429,7 +475,7 @@ const resolvers = {
     },
     removeUserFromTask: (
       _parent: unknown,
-      args: { userId: string; taskId: string }
+      args: { userId: string; taskId: string },
     ) => {
       return prisma.userOnTask.delete({
         where: {
@@ -442,7 +488,7 @@ const resolvers = {
     },
     addUserToProject: async (
       _parent: unknown,
-      args: { projectId: string; userId: string }
+      args: { projectId: string; userId: string },
     ) => {
       return prisma.userOnProject.create({
         data: {
@@ -453,7 +499,7 @@ const resolvers = {
     },
     removeUserFromProject: async (
       _parent: unknown,
-      args: { projectId: string; userId: string }
+      args: { projectId: string; userId: string },
     ) => {
       return prisma.userOnProject.delete({
         where: {
@@ -466,7 +512,7 @@ const resolvers = {
     },
     addUser: (
       _parent: any,
-      args: { name: string; email: string; id: string }
+      args: { name: string; email: string; id: string },
     ) => {
       return prisma.user.create({
         data: {
@@ -478,7 +524,7 @@ const resolvers = {
     },
     changeColumn: (
       _parent: any,
-      args: { columnId: string; taskId: string }
+      args: { columnId: string; taskId: string },
     ) => {
       return prisma.task.update({
         where: { id: args.taskId },
@@ -489,7 +535,7 @@ const resolvers = {
     },
     changeCompletionState: (
       _parent: any,
-      args: { id: string; state: boolean }
+      args: { id: string; state: boolean },
     ) => {
       return prisma.subtask.update({
         where: { id: args.id },
@@ -518,7 +564,7 @@ const resolvers = {
     },
     editColumn: (
       _parent: any,
-      args: { id: string; name: string; dotColor: string }
+      args: { id: string; name: string; dotColor: string },
     ) => {
       return prisma.column.update({
         where: {
@@ -539,7 +585,7 @@ const resolvers = {
         tagNames: string[];
         tagFontColors: string[];
         tagBackgroundColors: string[];
-      }
+      },
     ) => {
       return prisma.task.update({
         where: {
@@ -556,7 +602,7 @@ const resolvers = {
     },
     editSubtask: (
       _parent: any,
-      args: { id: string; name: string; isFinished: boolean }
+      args: { id: string; name: string; isFinished: boolean },
     ) => {
       return prisma.subtask.update({
         where: {
@@ -620,12 +666,12 @@ const resolvers = {
                       updatedAt: true,
                     },
                     orderBy: {
-                      createdAt: 'asc',
+                      createdAt: "asc",
                     },
                   },
                 },
                 orderBy: {
-                  title: 'asc',
+                  title: "asc",
                 },
               },
             },
@@ -635,11 +681,11 @@ const resolvers = {
     },
     addColumn: async (
       _parent: any,
-      args: { boardId: string; name: string; dotColor: string }
+      args: { boardId: string; name: string; dotColor: string },
     ) => {
       const response = await prisma.column.findMany({
         where: { boardId: args.boardId },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         take: 1,
       });
 
@@ -668,7 +714,7 @@ const resolvers = {
         tagNames: string[];
         tagFontColors: string[];
         tagBackgroundColors: string[];
-      }
+      },
     ) => {
       return prisma.task.create({
         data: {
@@ -683,7 +729,7 @@ const resolvers = {
     },
     addSubtask: (
       _parent: any,
-      args: { name: string; isFinished: boolean; taskId: string }
+      args: { name: string; isFinished: boolean; taskId: string },
     ) => {
       return prisma.subtask.create({
         data: {

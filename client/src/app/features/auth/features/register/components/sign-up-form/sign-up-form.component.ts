@@ -7,10 +7,10 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { FormStatus } from '../../../../auth.component';
 import { SupabaseService } from '../../../../../../services/supabase/supabase.service';
 import { Router } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
+import { FormStatus } from '../../../../../../shared/models/form-status.type';
 
 @Component({
   selector: 'app-sign-up-form',

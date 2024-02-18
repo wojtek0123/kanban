@@ -4,12 +4,10 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './features/register/register.component';
+import { LoginComponent } from './features/login/login.component';
 import { NgIf } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-
-export type FormStatus = 'idle' | 'loading' | 'error' | 'ok';
 
 @Component({
   selector: 'app-home',

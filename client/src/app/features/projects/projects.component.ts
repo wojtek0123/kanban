@@ -8,13 +8,20 @@ import { Board } from 'src/app/models/board.model';
 import { ProjectTableComponent } from './components/project-table/project-table.component';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { NavigationComponent } from '../../components/navigation/navigation.component';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css'],
   standalone: true,
-  imports: [NavigationComponent, ProjectTableComponent, NgIf, AsyncPipe],
+  imports: [
+    NavigationComponent,
+    ProjectTableComponent,
+    NgIf,
+    AsyncPipe,
+    LoadingSpinnerComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {

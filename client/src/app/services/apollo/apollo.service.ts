@@ -38,6 +38,7 @@ import { ADD_USER_TO_TASK } from '../../graphql/mutations/add-user-to-task.mutat
 import { ADD_USER_TO_PROJECT } from '../../graphql/mutations/add-user-to-project.mutation';
 import { CHANGE_COLUMN_ORDER } from '../../graphql/mutations/change-column-order.mutation';
 import { REMOVE_COLUMN } from 'src/app/graphql/mutations/remove-column.mutation';
+import { GET_PROJECT_AND_BOARD_NAMES } from '../../graphql/queries/project-and-board-names.query';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +56,21 @@ export class ApolloService {
 
   setProjectOwnerId(id: string) {
     this._projectOwnerId.next(id);
+  }
+
+  getProjectAndBoardNames() {
+    return this.supabase.session$.pipe(
+      map(session => session?.user.id ?? ''),
+      switchMap(userId =>
+        this.apollo
+          .watchQuery({
+            query: GET_PROJECT_AND_BOARD_NAMES,
+            variables: { userId },
+            errorPolicy: 'all',
+          })
+          .valueChanges.pipe(map(response => response.data.projects))
+      )
+    );
   }
 
   getProjects() {

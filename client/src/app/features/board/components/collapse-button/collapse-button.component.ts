@@ -9,15 +9,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
   OnInit,
   Output,
 } from '@angular/core';
-import { Project } from '../../models/project.model';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { Observable, map } from 'rxjs';
-import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { ContextMenuComponent } from '../../../../components/context-menu/context-menu.component';
 import { NgOptimizedImage, NgIf, AsyncPipe } from '@angular/common';
+import { ProjectAndBoardNames } from '../../../../graphql/queries/project-and-board-names.query';
+import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
 
 @Component({
   selector: 'app-collapse-button',
@@ -32,10 +34,16 @@ import { NgOptimizedImage, NgIf, AsyncPipe } from '@angular/common';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgOptimizedImage, NgIf, ContextMenuComponent, AsyncPipe],
+  imports: [
+    NgOptimizedImage,
+    NgIf,
+    ContextMenuComponent,
+    AsyncPipe,
+    ActionsComponent,
+  ],
 })
 export class CollapseButtonComponent implements OnInit {
-  @Input() project!: Project;
+  project = input.required<ProjectAndBoardNames>();
   @Output() toggleMenu = new EventEmitter<boolean>();
   @Input() showContent!: boolean;
   loggedInUserId$: Observable<string> | null = null;

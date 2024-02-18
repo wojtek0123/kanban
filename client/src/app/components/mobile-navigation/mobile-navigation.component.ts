@@ -16,10 +16,10 @@ import {
 import { NavigationService } from '../../services/navigation/navigation.service';
 import { Observable } from 'rxjs';
 import { Project } from 'src/app/models/project.model';
-import { AccordionComponent } from '../accordion/accordion.component';
 import { LogoutButtonComponent } from '../logout-button/logout-button.component';
 import { NgClass, NgIf, AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ProjectListComponent } from '../../features/board/components/project-list/project-list.component';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -49,8 +49,8 @@ import { RouterLink } from '@angular/router';
     NgClass,
     NgIf,
     LogoutButtonComponent,
-    AccordionComponent,
     AsyncPipe,
+    ProjectListComponent,
   ],
 })
 export class MobileNavigationComponent implements OnInit {

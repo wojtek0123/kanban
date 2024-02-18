@@ -7,8 +7,8 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../../../../services/supabase/supabase.service';
 import { Router } from '@angular/router';
-import { FormStatus } from '../../../../auth.component';
 import { NgClass } from '@angular/common';
+import { FormStatus } from '../../../../../../shared/models/form-status.type';
 
 @Component({
   selector: 'app-sign-in-form',
