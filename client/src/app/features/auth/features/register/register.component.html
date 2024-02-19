@@ -1,19 +1,21 @@
-<div class="heading">
-  <h2>Get started!</h2>
-  <p>Create a new account</p>
-</div>
+<app-auth-wrapper>
+  <div class="heading">
+    <h2>Get started!</h2>
+    <p>Create a new account</p>
+  </div>
 
-<app-sign-up-form></app-sign-up-form>
-<!--<div class="toast" [ngClass]="{ show: showToast }">-->
-<!--  <span class="toast-message" *ngIf="status === 'ok'">-->
-<!--    Check your mailbox. We send you a email to verify!-->
-<!--  </span>-->
-<!--  <span class="toast-message" *ngIf="status === 'error'">-->
-<!--    {{ errorMessage }}-->
-<!--  </span>-->
-<!--  <button class="toast-button" type="button" (click)="closeToast()">X</button>-->
-<!--</div>-->
-<div class="change">
-  <span>Have an account?</span>
-  <a class="change-button" [routerLink]="['../sign-in']">Sign in</a>
-</div>
+  <app-sign-up-form></app-sign-up-form>
+  <!--<div class="toast" [ngClass]="{ show: showToast }">-->
+  <!--  <span class="toast-message" *ngIf="status === 'ok'">-->
+  <!--    Check your mailbox. We send you a email to verify!-->
+  <!--  </span>-->
+  <!--  <span class="toast-message" *ngIf="status === 'error'">-->
+  <!--    {{ errorMessage }}-->
+  <!--  </span>-->
+  <!--  <button class="toast-button" type="button" (click)="closeToast()">X</button>-->
+  <!--</div>-->
+  <div class="change">
+    <span>Have an account?</span>
+    <a class="change-button" [routerLink]="['../sign-in']">Sign in</a>
+  </div>
+</app-auth-wrapper>

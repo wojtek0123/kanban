@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
 import { SignUpFormComponent } from './components/sign-up-form/sign-up-form.component';
+import { AuthWrapperComponent } from '../../components/auth-wrapper.component';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,7 @@ import { SignUpFormComponent } from './components/sign-up-form/sign-up-form.comp
     NgIf,
     RouterLink,
     SignUpFormComponent,
+    AuthWrapperComponent,
   ],
 })
 export class RegisterComponent {}

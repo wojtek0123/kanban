@@ -3,6 +3,16 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then(f => f.authRoutes),
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'projects',
+  },
+  {
     path: 'projects',
     canActivate: [AuthGuard],
     loadChildren: () =>
@@ -14,10 +24,5 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/project/project.routes').then(f => f.projectRoutes),
   },
-  {
-    path: 'auth',
-    loadChildren: () =>
-      import('./features/auth/auth.routes').then(f => f.authRoutes),
-  },
-  { path: '**', redirectTo: '/projects' },
+  { path: '**', redirectTo: 'projects' },
 ];

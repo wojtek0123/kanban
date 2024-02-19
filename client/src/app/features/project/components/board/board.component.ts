@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskTableComponent } from '../../../../components/tasks-table-view/tasks-table-view.component';
 import { TasksComponent } from '../../../../components/tasks-kanban-view/tasks-kanban-view.component';
 import { SortBy } from '../../../../models/types';
+import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
 
 type BoardTypes = 'kanban' | 'table';
 
@@ -37,6 +38,7 @@ type BoardTypes = 'kanban' | 'table';
     TaskTableComponent,
     TasksComponent,
     FormsModule,
+    ActionsComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

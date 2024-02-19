@@ -1,18 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form/form.service';
-import { Observable, Subject, combineLatest, of, switchMap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { Project } from '../../models/project.model';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { Board } from '../../models/board.model';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { MobileNavigationComponent } from '../../components/mobile-navigation/mobile-navigation.component';
-import { BoardDetailsComponent } from '../../components/board-details/board-details.component';
 import { OpenFormButtonComponent } from '../../components/open-form-button/open-form-button.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
 import { NgIf, AsyncPipe } from '@angular/common';
@@ -20,7 +14,6 @@ import { ContextMenuModalComponent } from '../../components/context-menu-modal/c
 import { FormComponent } from '../../components/form/form.component';
 import { ToastComponent } from '../../components/toast/toast.component';
 import { AsideComponent } from './components/aside/aside.component';
-import { map } from 'rxjs/operators';
 import { BoardComponent } from './components/board/board.component';
 
 @Component({
@@ -37,7 +30,6 @@ import { BoardComponent } from './components/board/board.component';
     RouterLink,
     ProjectListComponent,
     OpenFormButtonComponent,
-    BoardDetailsComponent,
     MobileNavigationComponent,
     LoadingSpinnerComponent,
     AsyncPipe,

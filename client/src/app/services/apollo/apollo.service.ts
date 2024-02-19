@@ -82,7 +82,6 @@ export class ApolloService {
           .watchQuery<{ projects: Project[] }>({
             query: GET_PROJECTS,
             variables: { userId },
-            errorPolicy: 'all',
           })
           .valueChanges.pipe(map(response => response.data.projects))
       )
@@ -97,7 +96,6 @@ export class ApolloService {
           .watchQuery({
             query: GET_PROJECT,
             variables: { userId, projectId, boardId },
-            errorPolicy: 'all',
           })
           .valueChanges.pipe(map(response => response.data.project))
       )
