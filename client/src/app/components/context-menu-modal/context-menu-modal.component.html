@@ -1,24 +1,8 @@
-<div
-  class="context-menu-modal-backdrop"
-  *ngIf="show$ | async"
-  (click)="onHide()"
-  tabindex="0"
-  role="button"
-  aria-pressed="false"></div>
+<div class="context-menu-modal-backdrop" *ngIf="show$ | async" tabindex="0" role="button" aria-pressed="false"></div>
 <div class="context-menu-modal" *ngIf="show$ | async">
   <p>Are you sure?</p>
   <div class="context-menu-modal-buttons">
-    <button
-      type="button"
-      class="button-global context-menu-modal-button"
-      (click)="onHide()">
-      No
-    </button>
-    <button
-      type="button"
-      class="button-global context-menu-modal-button"
-      (click)="onDelete()">
-      Yes
-    </button>
+    <button type="button" class="button-global context-menu-modal-button" (click)="onHide()">No</button>
+    <button type="button" class="button-global context-menu-modal-button" (click)="onDelete()">Yes</button>
   </div>
 </div>

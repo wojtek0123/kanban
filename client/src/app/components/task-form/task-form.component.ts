@@ -1,22 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormService } from '../../services/form/form.service';
 import { ApolloService } from '../../services/apollo/apollo.service';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { ToastService } from '../../services/toast/toast.service';
 import { Column } from '../../models/column.model';
 import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 import { NgIf, NgFor, NgOptimizedImage, AsyncPipe } from '@angular/common';
+import { Task } from '../../models/task.model';
 
 type Tag = {
   name: string;
@@ -30,15 +22,7 @@ type Tag = {
   styleUrls: ['./task-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    NgIf,
-    FormsModule,
-    ReactiveFormsModule,
-    AutoFocusDirective,
-    NgFor,
-    NgOptimizedImage,
-    AsyncPipe,
-  ],
+  imports: [NgIf, FormsModule, ReactiveFormsModule, AutoFocusDirective, NgFor, NgOptimizedImage, AsyncPipe],
 })
 export class TaskFormComponent implements OnInit {
   isEditing$!: Observable<boolean>;
@@ -59,18 +43,13 @@ export class TaskFormComponent implements OnInit {
             backgroundColor: this.formBuilder.control('#e8fe93'),
           }),
         ],
-        [this.maxLength(3)]
+        [Validators.maxLength(3)]
       ),
     }),
     edit: this.formBuilder.group({
       title: [this.formService.getEditingTask?.title, [Validators.required]],
-      description: [
-        this.formService.getEditingTask?.description,
-        [Validators.required],
-      ],
-      tags: this.formBuilder.array(this.fillEditTags() ?? [], [
-        this.maxLength(3),
-      ]),
+      description: [this.formService.getEditingTask?.description, [Validators.required]],
+      tags: this.formBuilder.array(this.fillEditTags() ?? [], [Validators.maxLength(3)]),
     }),
   });
 
@@ -87,12 +66,6 @@ export class TaskFormComponent implements OnInit {
     this.columns$ = this.formService.getColumnsFormBoard();
   }
 
-  maxLength(max: number): ValidatorFn | any {
-    return (control: AbstractControl[]) => {
-      return control.length > max ? { maxLength: true } : null;
-    };
-  }
-
   get getAddControls() {
     return this.form.controls.add.controls;
   }
@@ -106,11 +79,11 @@ export class TaskFormComponent implements OnInit {
   }
 
   get addTags() {
-    return this.form.get('add')?.get('tags') as FormArray;
+    return this.form.get('add')?.get('tags');
   }
 
   get editTags() {
-    return this.form.get('edit')?.get('tags') as FormArray;
+    return this.form.get('edit')?.get('tags');
   }
 
   fillEditTags() {
@@ -118,8 +91,7 @@ export class TaskFormComponent implements OnInit {
 
     const names = this.formService.getEditingTask?.tagNames;
     const fontColors = this.formService.getEditingTask?.tagFontColors;
-    const backgroundColors =
-      this.formService.getEditingTask?.tagBackgroundColors;
+    const backgroundColors = this.formService.getEditingTask?.tagBackgroundColors;
 
     if (!names || !fontColors || !backgroundColors) {
       return;
@@ -144,13 +116,9 @@ export class TaskFormComponent implements OnInit {
 
   createTag(control?: Tag) {
     return new FormGroup({
-      name: this.formBuilder.control(control?.name ?? '', [
-        Validators.required,
-      ]),
+      name: this.formBuilder.control(control?.name ?? '', [Validators.required]),
       fontColor: this.formBuilder.control(control?.fontColor ?? '#000000'),
-      backgroundColor: this.formBuilder.control(
-        control?.backgroundColor ?? '#e8fe93'
-      ),
+      backgroundColor: this.formBuilder.control(control?.backgroundColor ?? '#e8fe93'),
     });
   }
 
@@ -174,23 +142,13 @@ export class TaskFormComponent implements OnInit {
       const title = this.form.value.edit?.title ?? '';
       const description = this.form.value.edit?.description ?? '';
 
-      const tagNames = this.editTags.value.map((tag: Tag) => tag.name);
-      const tagFontColors = this.editTags.value.map(
-        (tag: Tag) => tag.fontColor
-      );
-      const tagBackgroundColors = this.editTags.value.map(
-        (tag: Tag) => tag.backgroundColor
-      );
+      const tags = this.form.value.edit?.tags;
+      const tagNames = tags?.map(tag => tag.name ?? '') ?? [];
+      const tagFontColors = tags?.map(tag => tag.fontColor ?? '') ?? [];
+      const tagBackgroundColors = tags?.map(tag => tag.backgroundColor ?? '') ?? [];
 
       this.apollo
-        .editTask(
-          id,
-          title,
-          description,
-          tagNames,
-          tagFontColors,
-          tagBackgroundColors
-        )
+        .editTask(id, title, description, tagNames, tagFontColors, tagBackgroundColors)
         .pipe(
           catchError(async error => {
             this.toastService.showToast('warning', `Couldn't update this task`);
@@ -199,10 +157,7 @@ export class TaskFormComponent implements OnInit {
           take(1)
         )
         .subscribe(() => {
-          this.toastService.showToast(
-            'confirm',
-            'Successfully updated this task'
-          );
+          this.toastService.showToast('confirm', 'Successfully updated this task');
           setTimeout(() => {
             this.formService.onChangeEditingTask();
           }, 0);
@@ -219,13 +174,13 @@ export class TaskFormComponent implements OnInit {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
-      const tagNames = this.addTags.value.map((tag: Tag) => tag.name);
-      const tagFontColors = this.addTags.value.map((tag: Tag) => tag.fontColor);
-      const tagBackgroundColors = this.addTags.value.map(
-        (tag: Tag) => tag.backgroundColor
-      );
+      const tags = this.form.value.edit?.tags;
+      const tagNames = tags?.map(tag => tag.name ?? '') ?? [];
+      const tagFontColors = tags?.map(tag => tag.fontColor ?? '') ?? [];
+      const tagBackgroundColors = tags?.map(tag => tag.backgroundColor ?? '') ?? [];
 
-      const task = {
+      // TODO: add task interface
+      const task: Partial<Task> = {
         title,
         description,
         tagNames,
@@ -243,12 +198,7 @@ export class TaskFormComponent implements OnInit {
             }),
             take(1)
           )
-          .subscribe(() =>
-            this.toastService.showToast(
-              'confirm',
-              'Successfully added a new task'
-            )
-          );
+          .subscribe(() => this.toastService.showToast('confirm', 'Successfully added a new task'));
         this.formService.onChangeFormVisibility();
         return;
       }
@@ -262,12 +212,7 @@ export class TaskFormComponent implements OnInit {
           }),
           take(1)
         )
-        .subscribe(() =>
-          this.toastService.showToast(
-            'confirm',
-            'Successfully added a new task'
-          )
-        );
+        .subscribe(() => this.toastService.showToast('confirm', 'Successfully added a new task'));
 
       this.formService.onChangeFormVisibility();
     }

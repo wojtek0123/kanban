@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ToastService } from '../../../services/toast/toast.service';
 import { NgClass, NgOptimizedImage, AsyncPipe } from '@angular/common';
 

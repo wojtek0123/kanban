@@ -1,16 +1,15 @@
 <!-- <app-form></app-form> -->
 <!-- <app-toast></app-toast> -->
-@if ({projects: projects$ | async, projectsError: projectsError$ | async}; as
-vm) {
+@if ({projects: projects$ | async, projectsError: projectsError$ | async}; as vm) {
 <main class="main">
-  <app-navigation
-    [showTasksButton]="!!vm.projects && !vm.projectsError"></app-navigation>
+  <app-navigation [showTasksButton]="!!vm.projects && !vm.projectsError"></app-navigation>
   @if (!vm.projects && !vm.projectsError) {
-  <app-loading-spinner></app-loading-spinner>
+  <app-loading-spinner [condition]="true"></app-loading-spinner>
   } @if (vm.projectsError) {
   <span>{{ vm.projectsError }}</span>
   } @if (vm.projects && !vm.projectsError) {
   <app-project-table [projects]="vm.projects"></app-project-table>
   }
+  <app-loading-spinner [condition]="true"></app-loading-spinner>
 </main>
 }

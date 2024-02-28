@@ -1,5 +1,4 @@
 import { gql, TypedDocumentNode } from 'apollo-angular';
-import { Project } from '../../models/project.model';
 
 export interface ProjectAndBoardNames {
   id: string;

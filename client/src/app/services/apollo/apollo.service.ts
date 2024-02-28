@@ -173,7 +173,7 @@ export class ApolloService {
   }
 
   addUserToTask(taskId: string, userId: string) {
-    return this.apollo.mutate<{}>({
+    return this.apollo.mutate({
       mutation: ADD_USER_TO_TASK,
       variables: {
         taskId,
@@ -201,9 +201,7 @@ export class ApolloService {
       .subscribe(data => {
         const taskIds = data.map(data => data.task.id);
 
-        taskIds.forEach(taskId =>
-          this.removeUserFromTask(taskId, userId).pipe(take(1)).subscribe()
-        );
+        taskIds.forEach(taskId => this.removeUserFromTask(taskId, userId).pipe(take(1)).subscribe());
       });
 
     return this.apollo.mutate<{
@@ -547,12 +545,7 @@ export class ApolloService {
     );
   }
 
-  changeColumnOrder(
-    currOrder: number,
-    prevOrder: number,
-    currColumnId: string,
-    prevColumnId: string
-  ) {
+  changeColumnOrder(currOrder: number, prevOrder: number, currColumnId: string, prevColumnId: string) {
     return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>

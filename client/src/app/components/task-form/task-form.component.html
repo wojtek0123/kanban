@@ -1,24 +1,13 @@
-<form
-  *ngIf="isEditing$ | async; else add"
-  class="form-global form"
-  [formGroup]="form"
-  (ngSubmit)="onEdit()">
+<form *ngIf="isEditing$ | async; else add" class="form-global form" [formGroup]="form" (ngSubmit)="onEdit()">
   <div formGroupName="edit" class="form-wrapper-global">
     <label class="form-label-global" for="edit-task-title">Task name</label>
-    <input
-      type="text"
-      class="form-input-global"
-      id="edit-task-title"
-      formControlName="title"
-      appAutoFocus />
+    <input type="text" class="form-input-global" id="edit-task-title" formControlName="title" appAutoFocus />
     <p
       class="text-danger-global"
       *ngIf="(getEditControls.title.touched || submitted) && getEditControls.title.errors?.['required']">
       Name is required
     </p>
-    <label class="form-label-global" for="edit-task-description"
-      >Short description</label
-    >
+    <label class="form-label-global" for="edit-task-description">Short description</label>
     <textarea
       class="task-description form-input-global"
       id="edit-task-description"
@@ -32,45 +21,26 @@
       Description is required
     </p>
     <div formArrayName="tags" class="form-tags-wrapper">
-      <button
-        type="button"
-        class="button-global form-tags-button"
-        (click)="addTag('edit')">
+      <button type="button" class="button-global form-tags-button" (click)="addTag('edit')">
         <span>+</span> Add tag
       </button>
-      <div
-        class="form-tag-wrapper"
-        *ngFor="let _ of editTags.controls; let i = index">
+      <div class="form-tag-wrapper" *ngFor="let _ of form.value.edit?.tags; let i = index">
         <ng-container [formGroupName]="i">
           <div class="form-label-tag">
             <label class="form-label-global"
               >Tag name
-              <input
-                class="form-input-global form-tag-input"
-                type="text"
-                aria-label="tag"
-                formControlName="name" />
+              <input class="form-input-global form-tag-input" type="text" aria-label="tag" formControlName="name" />
             </label>
-            <button
-              class="form-button-remove-tag button-global"
-              type="button"
-              (click)="removeTagNew('edit', i)">
-              <img
-                ngSrc="../../../assets/minus-solid.svg"
-                alt="minus"
-                height="10"
-                width="10" />
+            <button class="form-button-remove-tag button-global" type="button" (click)="removeTagNew('edit', i)">
+              <img ngSrc="../../../assets/minus-solid.svg" alt="minus" height="10" width="10" />
             </button>
           </div>
           <div class="form-tag-color-wrapper">
-            <label class="form-tag-label">Font</label>
-            <input type="color" formControlName="fontColor" name="font" />
+            <label for="font-color" class="form-tag-label">Font</label>
+            <input type="color" id="for-color" formControlName="fontColor" name="font" />
 
-            <label class="form-tag-label">Background</label>
-            <input
-              type="color"
-              formControlName="backgroundColor"
-              name="background" />
+            <label for="background-color" class="form-tag-label">Background</label>
+            <input type="color" id="background-color" formControlName="backgroundColor" name="background" />
           </div>
 
           <p
@@ -85,54 +55,35 @@
       </div>
       <p
         class="text-danger-global"
-        *ngIf="
-          getEditControls.tags.length > 3 &&
-          (getEditControls.tags.touched || submitted)
-        ">
+        *ngIf="getEditControls.tags.length > 3 && (getEditControls.tags.touched || submitted)">
         Max 3 tags
       </p>
     </div>
   </div>
 
-  <button type="submit" class="button-global submit-button-global">
-    Update task
-  </button>
+  <button type="submit" class="button-global submit-button-global">Update task</button>
 </form>
 
 <ng-template #add>
   <form class="form-global form" [formGroup]="form" (ngSubmit)="onAdd()">
     <div class="form-wrapper-global" formGroupName="add">
       <label class="form-label-global" for="task-name">Task name</label>
-      <input
-        type="text"
-        class="form-input-global"
-        id="task-name"
-        formControlName="title"
-        appAutoFocus />
+      <input type="text" class="form-input-global" id="task-name" formControlName="title" appAutoFocus />
       <p
         class="text-danger-global"
         *ngIf="(getAddControls.title.touched || submitted) && getAddControls.title.errors?.['required']">
         Name is required
       </p>
-      <select
-        *ngIf="selectColumn$ | async"
-        class="button-global select-input"
-        (change)="changeSelectedColumn($event)">
+      <select *ngIf="selectColumn$ | async" class="button-global select-input" (change)="changeSelectedColumn($event)">
         <option [value]="undefined">Select column</option>
-        <option
-          [value]="column.id"
-          *ngFor="let column of columns$ | async; trackBy: columnTrackBy">
+        <option [value]="column.id" *ngFor="let column of columns$ | async; trackBy: columnTrackBy">
           {{ column.name }}
         </option>
       </select>
-      <p
-        class="text-danger-global"
-        *ngIf="submitted && !selectedColumn && (selectColumn$ | async)">
+      <p class="text-danger-global" *ngIf="submitted && !selectedColumn && (selectColumn$ | async)">
         Column is required
       </p>
-      <label class="form-label-global" for="task-description"
-        >Short description</label
-      >
+      <label class="form-label-global" for="task-description">Short description</label>
       <textarea
         class="task-description form-input-global"
         id="task-description"
@@ -145,46 +96,27 @@
         Description is required
       </p>
       <div formArrayName="tags" class="form-tags-wrapper">
-        <button
-          type="button"
-          class="button-global form-tags-button"
-          (click)="addTag('add')">
+        <button type="button" class="button-global form-tags-button" (click)="addTag('add')">
           <span>+</span> Add tag
         </button>
-        <div
-          class="form-tag-wrapper"
-          *ngFor="let _ of addTags.controls; let i = index">
+        <div class="form-tag-wrapper" *ngFor="let _ of form.value?.add?.tags; let i = index">
           <ng-container [formGroupName]="i">
             <div class="form-label-tag">
               <label class="form-label-global"
                 >Tag name
-                <input
-                  class="form-input-global form-tag-input"
-                  type="text"
-                  aria-label="tag"
-                  formControlName="name" />
+                <input class="form-input-global form-tag-input" type="text" aria-label="tag" formControlName="name" />
               </label>
-              <button
-                class="form-button-remove-tag button-global"
-                type="button"
-                (click)="removeTagNew('add', i)">
-                <img
-                  ngSrc="../../../assets/minus-solid.svg"
-                  alt="minus"
-                  height="10"
-                  width="10" />
+              <button class="form-button-remove-tag button-global" type="button" (click)="removeTagNew('add', i)">
+                <img ngSrc="../../../assets/minus-solid.svg" alt="minus" height="10" width="10" />
               </button>
             </div>
 
             <div class="form-tag-color-wrapper">
-              <label class="form-tag-label">Font</label>
-              <input type="color" formControlName="fontColor" name="font" />
+              <label for="add-font-color" class="form-tag-label">Font</label>
+              <input type="color" id="add-font-color" formControlName="fontColor" name="font" />
 
-              <label class="form-tag-label">Background</label>
-              <input
-                type="color"
-                formControlName="backgroundColor"
-                name="background" />
+              <label for="add-background-color" class="form-tag-label">Background</label>
+              <input type="color" id="add-background-color" formControlName="backgroundColor" name="background" />
             </div>
             <p
               *ngIf="
@@ -198,17 +130,12 @@
         </div>
         <p
           class="text-danger-global"
-          *ngIf="
-            getAddControls.tags.length > 3 &&
-            (getAddControls.tags.touched || submitted)
-          ">
+          *ngIf="getAddControls.tags.length > 3 && (getAddControls.tags.touched || submitted)">
           Max 3 tags
         </p>
       </div>
     </div>
 
-    <button type="submit" class="button-global submit-button-global">
-      Add task
-    </button>
+    <button type="submit" class="button-global submit-button-global">Add task</button>
   </form>
 </ng-template>

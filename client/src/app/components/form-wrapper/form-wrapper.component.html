@@ -1,9 +1,3 @@
-<div
-  class="backdrop"
-  [ngClass]="{ 'show-form': (show$ | async) }"
-  (click)="close($event)"
-  tabindex="0"
-  role="button"
-  aria-pressed="false">
+<div class="backdrop" [ngClass]="{ 'show-form': (show$ | async) }" tabindex="0" role="button" aria-pressed="false">
   <ng-content></ng-content>
 </div>

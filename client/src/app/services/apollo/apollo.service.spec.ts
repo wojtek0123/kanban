@@ -7,12 +7,11 @@ import { Project } from 'src/app/models/project.model';
 
 describe('ProjectItemsService', () => {
   let service: ApolloService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let supabaseServiceSpy: jasmine.SpyObj<SupabaseService>;
 
   beforeEach(() => {
-    const supabaseServiceSpyObj = jasmine.createSpyObj('SupabaseService', [
-      'getSession$',
-    ]);
+    const supabaseServiceSpyObj = jasmine.createSpyObj('SupabaseService', ['getSession$']);
     TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
       providers: [
@@ -23,9 +22,7 @@ describe('ProjectItemsService', () => {
       ],
     });
     service = TestBed.inject(ApolloService);
-    supabaseServiceSpy = TestBed.inject(
-      SupabaseService
-    ) as jasmine.SpyObj<SupabaseService>;
+    supabaseServiceSpy = TestBed.inject(SupabaseService) as jasmine.SpyObj<SupabaseService>;
   });
 
   it('should be created', () => {

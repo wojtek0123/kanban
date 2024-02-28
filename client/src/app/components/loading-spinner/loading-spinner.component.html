@@ -1,12 +1,6 @@
 <div *ngIf="condition" class="loading-wrapper">
-  <img
-    ngSrc="../../../assets/fan-solid.svg"
-    width="80"
-    height="80"
-    alt="fan"
-    priority
-    class="loading-spinner" />
-  <p>The first load may take up to 2 min</p>
-  <p>Render hosting needs to activate</p>
-  <p>Loading...</p>
+  <div class="spinner">
+    <mat-progress-spinner></mat-progress-spinner>
+    <span>Loading...</span>
+  </div>
 </div>

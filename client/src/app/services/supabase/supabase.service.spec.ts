@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SupabaseService } from './supabase.service';
 import { take } from 'rxjs';
 import { dummySession, dummyAuthResponse } from 'src/app/mock/session.mock';
@@ -21,9 +22,7 @@ describe('SupabaseService', () => {
   });
 
   it('should refresh session correctly', async () => {
-    spyOn<any>(service, 'getSession').and.returnValue(
-      Promise.resolve({ data: { session: dummySession } })
-    );
+    spyOn<any>(service, 'getSession').and.returnValue(Promise.resolve({ data: { session: dummySession } }));
     await service.refreshSession();
 
     service.session$.pipe(take(1)).subscribe(session => {
@@ -32,9 +31,7 @@ describe('SupabaseService', () => {
   });
 
   it('should return the correct session', async () => {
-    spyOn<any>(service, 'getSession').and.returnValue(
-      Promise.resolve({ data: { session: dummySession } })
-    );
+    spyOn<any>(service, 'getSession').and.returnValue(Promise.resolve({ data: { session: dummySession } }));
     const session = await service.getSession();
     expect(session.data.session).toEqual(dummySession);
   });
@@ -43,10 +40,8 @@ describe('SupabaseService', () => {
     const email = 'test@example.com';
     const password = 'testpassword';
 
-    spyOn<SupabaseService, any>(service, 'signIn').and.returnValue(
-      Promise.resolve({ data: dummyAuthResponse })
-    );
-    const authResponse = await service.signIn(email, password);
+    spyOn<SupabaseService, any>(service, 'signIn').and.returnValue(Promise.resolve({ data: dummyAuthResponse }));
+    const authResponse = await service.signIn({ email, password });
     expect(authResponse.data).toEqual(dummyAuthResponse);
   });
 
@@ -55,9 +50,7 @@ describe('SupabaseService', () => {
     const password = 'testpassword';
     const nick = 'Test Nickname';
 
-    spyOn<any>(service, 'signUp').and.returnValue(
-      Promise.resolve({ data: dummyAuthResponse })
-    );
+    spyOn<any>(service, 'signUp').and.returnValue(Promise.resolve({ data: dummyAuthResponse }));
     const authResponse = await service.signUp(email, password, nick);
     expect(authResponse.data).toEqual(dummyAuthResponse);
   });

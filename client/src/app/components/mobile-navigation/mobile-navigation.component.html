@@ -1,8 +1,5 @@
 <div class="navigation-bar">
-  <div
-    class="navigation-backdrop"
-    [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'"
-    (click)="onMenu()"></div>
+  <div class="navigation-backdrop" [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'"></div>
   <h2 class="navigation-logo"><a routerLink="/">KanBan</a></h2>
   <button
     aria-label="hamburger menu"
@@ -13,20 +10,12 @@
     <span class="hamburger-bar"></span>
   </button>
 </div>
-<nav
-  *ngIf="projects"
-  class="navigation-container"
-  [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'">
+<nav *ngIf="projects" class="navigation-container" [@smoothSlide]="(showMenu$ | async) === false ? 'initial' : 'final'">
   <app-logout-button></app-logout-button>
   <div class="navigation-wrapper">
     <app-project-list></app-project-list>
   </div>
   <div class="navigation-button-wrapper">
-    <button
-      type="button"
-      class="button-global navigation-button"
-      (click)="onForm('project')">
-      Add project
-    </button>
+    <button type="button" class="button-global navigation-button" (click)="onForm('project')">Add project</button>
   </div>
 </nav>

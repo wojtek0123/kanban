@@ -5,7 +5,6 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { Tag } from 'src/app/models/tag.models';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -24,7 +23,7 @@ export class FilterMenuComponent implements OnChanges {
   show = false;
   checkedTags: string[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.checkedTags = [...this.tags.map(tag => tag.name)];
     this.selectedTags.emit([...this.checkedTags]);
   }

@@ -1,51 +1,33 @@
-<form
-  *ngIf="isEditing$ | async; else add"
-  class="form-global"
-  [formGroup]="form"
-  (ngSubmit)="onEdit()">
+<form *ngIf="isEditing$ | async; else add" class="form-global" [formGroup]="form" (ngSubmit)="onEdit()">
   <div formGroupName="edit" class="form-wrapper-global">
     <label class="form-label-global" for="edit-column-name">Column name</label>
-    <input
-      type="text"
-      class="form-input-global"
-      id="edit-column-name"
-      formControlName="name"
-      appAutoFocus />
+    <input type="text" class="form-input-global" id="edit-column-name" formControlName="name" appAutoFocus />
     <p
       class="text-danger-global"
       *ngIf="(getEditControls.name.touched || submitted) && getEditControls.name.errors?.['required']">
       Name is required
     </p>
-    <label class="form-label-global">Dot color</label>
-    <input type="color" formControlName="dotColor" />
+    <label for="dot-color" class="form-label-global">Dot color</label>
+    <input type="color" formControlName="dotColor" id="dot-color" />
   </div>
 
-  <button type="submit" class="button-global submit-button-global">
-    Update column
-  </button>
+  <button type="submit" class="button-global submit-button-global">Update column</button>
 </form>
 
 <ng-template #add>
   <form class="form-global" [formGroup]="form" (ngSubmit)="onAdd()">
     <div class="form-wrapper-global" formGroupName="add">
       <label class="form-label-global" for="column-name">Column Name</label>
-      <input
-        class="form-input-global"
-        type="text"
-        id="column-name"
-        formControlName="name"
-        appAutoFocus />
+      <input class="form-input-global" type="text" id="column-name" formControlName="name" appAutoFocus />
       <p
         class="text-danger-global"
         *ngIf="(getAddControls.name.touched || submitted) && getAddControls.name.errors?.['required']">
         Name is required
       </p>
-      <label class="form-label-global">Dot color</label>
-      <input type="color" formControlName="dotColor" />
+      <label for="add-dot-color" class="form-label-global">Dot color</label>
+      <input type="color" formControlName="dotColor" id="add-dot-color" />
 
-      <button type="submit" class="button-global submit-button-global">
-        Add column
-      </button>
+      <button type="submit" class="button-global submit-button-global">Add column</button>
     </div>
   </form>
 </ng-template>

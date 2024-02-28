@@ -1,7 +1,5 @@
 import { Project } from 'src/app/models/project.model';
 import { FormService } from './form.service';
-import { Observable, of } from 'rxjs';
-import { Board } from 'src/app/models/board.model';
 import { board } from 'src/app/mock/board.mock';
 import { tasks } from 'src/app/mock/tasks.mock';
 

@@ -1,4 +1,3 @@
-import { Board } from 'src/app/models/board.model';
 import { GetTasksPipe } from './get-tasks.pipe';
 import { board } from 'src/app/mock/board.mock';
 import { boardWithoutTasks } from 'src/app/mock/board.mock';
