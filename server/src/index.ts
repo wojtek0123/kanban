@@ -193,7 +193,7 @@ const resolvers = {
         boardId,
       }: { userId: string; projectId: string; boardId: string },
     ) => {
-      return prisma.project.findUnique({
+      return prisma.project.findFirst({
         where: { id: projectId, userId },
         include: {
           usersOnProject: {
