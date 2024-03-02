@@ -55,7 +55,8 @@ const typeDefs = `#graphql
     columnId: String
     createdAt: Date
     updatedAt: Date
-    userOnTask: [UserOnTask]
+    userId: String
+    user: User
   }
 
   type Column {
@@ -94,7 +95,7 @@ const typeDefs = `#graphql
     name: String
     email: String
     usersOnProject: UserOnProject
-    userOnTask: UserOnTask
+    tasks: [Task]
     createdAt: Date
     updatedAt: Date
   }
@@ -108,24 +109,12 @@ const typeDefs = `#graphql
     updatedAt: Date
   }
 
-  type UserOnTask {
-    user: User
-    task: Task
-    userId: String
-    taskId: String
-    createdAt: Date
-    updatedAt: Date
-  }
-
   type Query {
     project(userId: String, projectId: String, boardId: String): Project
     projects(userId: String): [Project]
-    board(id: String): Board
+    board(id: String, userId: String): Board
     filteredUsers(text: String): [User]
     usersFromProject(projectId: String): [UserOnProject]
-    usersFromTask(taskId: String): [UserOnTask]
-    getTasksFromUser(userId: String): [UserOnTask]
-    getUsersAndTasks: [UserOnTask]
   }
     
   type Mutation {
@@ -139,8 +128,6 @@ const typeDefs = `#graphql
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
     removeUserFromProject(projectId: String, userId: String): UserOnProject
-    removeUserFromTask(taskId: String, userId: String): UserOnTask
-    addUserToTask(userId: String, taskId: String): UserOnTask
     addProject(name: String, userId: String): Project
     addBoard(name: String, projectId: String): Board
     addColumn(boardId: String, name: String, dotColor: String): Column
@@ -196,7 +183,6 @@ const resolvers = {
                     include: {
                       subtasks: true,
                       tags: true,
-                      userOnTask: true,
                     },
                   },
                 },
@@ -224,7 +210,6 @@ const resolvers = {
                 include: {
                   tags: true,
                   subtasks: true,
-                  userOnTask: true,
                 },
               },
             },
@@ -250,7 +235,6 @@ const resolvers = {
                     include: {
                       tags: true,
                       subtasks: true,
-                      userOnTask: true,
                     },
                   },
                 },
@@ -287,64 +271,7 @@ const resolvers = {
         },
       });
     },
-    usersFromTask: (_parent: unknown, args: { taskId: string }) => {
-      return prisma.userOnTask.findMany({
-        where: {
-          taskId: args.taskId,
-        },
-        select: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              name: true,
-            },
-          },
-        },
-      });
-    },
-    getTasksFromUser: (_parent: unknown, args: { userId: string }) => {
-      return prisma.userOnTask.findMany({
-        where: {
-          userId: args.userId,
-        },
-        select: {
-          task: {
-            select: {
-              id: true,
-              title: true,
-              tags: true,
-              description: true,
-              createdAt: true,
-              columnId: true,
-              column: {
-                select: {
-                  name: true,
-                },
-              },
-              updatedAt: true,
-              subtasks: {
-                select: {
-                  id: true,
-                  name: true,
-                  isFinished: true,
-                  createdAt: true,
-                  updatedAt: true,
-                },
-                orderBy: {
-                  createdAt: "asc",
-                },
-              },
-            },
-          },
-        },
-      });
-    },
-    getUsersAndTasks: (_parent: unknown, args: null) => {
-      return prisma.userOnTask.findMany();
-    },
   },
-
   Mutation: {
     updateUserName: (_parent: unknown, args: { id: string; name: string }) => {
       return prisma.user.update({
@@ -376,30 +303,6 @@ const resolvers = {
         },
         data: {
           order: args.prevOrder,
-        },
-      });
-    },
-    addUserToTask: (
-      _parent: unknown,
-      args: { userId: string; taskId: string },
-    ) => {
-      return prisma.userOnTask.create({
-        data: {
-          userId: args.userId,
-          taskId: args.taskId,
-        },
-      });
-    },
-    removeUserFromTask: (
-      _parent: unknown,
-      args: { userId: string; taskId: string },
-    ) => {
-      return prisma.userOnTask.delete({
-        where: {
-          userId_taskId: {
-            userId: args.userId,
-            taskId: args.taskId,
-          },
         },
       });
     },
