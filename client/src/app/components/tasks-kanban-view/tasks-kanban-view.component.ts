@@ -1,21 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Board } from '../../models/board.model';
 import { Task } from '../../models/task.model';
 import { catchError, take } from 'rxjs/operators';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { ToastService } from '../../services/toast/toast.service';
-import {
-  CdkDragDrop,
-  CdkDropList,
-  CdkDrag,
-  CdkDragPlaceholder,
-} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 import { SortBy } from '../../models/types';
 import { Column } from '../../models/column.model';
 import { Subtask } from 'src/app/models/subtask.model';
@@ -28,6 +18,7 @@ import { DisplayNumberOfUsersInTaskComponent } from '../display-number-of-users-
 import { OpenFormButtonComponent } from '../open-form-button/open-form-button.component';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { Tag } from 'src/app/models/tag.interface';
 
 @Component({
   selector: 'app-tasks',
@@ -55,15 +46,12 @@ import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 export class TasksComponent implements OnInit {
   @Input() board: Board | undefined | null = null;
   @Input() searchTerm = '';
-  @Input() tags: string[] = [];
+  @Input() tags: Tag[] = [];
   @Input() sortBy!: SortBy;
   allTags = new Observable<string[]>();
   isOwner$ = new Observable<boolean>();
 
-  constructor(
-    private apollo: ApolloService,
-    private toastService: ToastService
-  ) {}
+  constructor(private apollo: ApolloService, private toastService: ToastService) {}
 
   ngOnInit() {
     this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
@@ -83,19 +71,11 @@ export class TasksComponent implements OnInit {
       .changeColumn(columnId, taskId)
       .pipe(
         catchError(async error => {
-          this.toastService.showToast(
-            'warning',
-            `Couldn't change the column for this task`
-          );
+          this.toastService.showToast('warning', `Couldn't change the column for this task`);
           throw new Error(error);
         })
       )
-      .subscribe(() =>
-        this.toastService.showToast(
-          'confirm',
-          'Successfully changed the column for this task'
-        )
-      );
+      .subscribe(() => this.toastService.showToast('confirm', 'Successfully changed the column for this task'));
   }
 
   dropTask(event: CdkDragDrop<Task[]>) {
@@ -104,19 +84,12 @@ export class TasksComponent implements OnInit {
     }
     const id = event.item.element.nativeElement.id;
 
-    const currentColumn = this.board?.columns
-      .filter(column => column.id === event.container.id)
-      .at(0);
+    const currentColumn = this.board?.columns.filter(column => column.id === event.container.id).at(0);
 
     this.apollo
       .changeColumn(currentColumn?.id ?? '', id)
       .pipe(take(1))
-      .subscribe(() =>
-        this.toastService.showToast(
-          'confirm',
-          'Successfully changed the column for this task'
-        )
-      );
+      .subscribe(() => this.toastService.showToast('confirm', 'Successfully changed the column for this task'));
   }
 
   dropColumn(event: CdkDragDrop<Column[]>) {
@@ -134,44 +107,27 @@ export class TasksComponent implements OnInit {
     const prevColumnId = event.container.data?.at(event.previousIndex)?.id;
 
     this.apollo
-      .changeColumnOrder(
-        currOrder,
-        prevOrder,
-        currColumnId ?? '',
-        prevColumnId ?? ''
-      )
+      .changeColumnOrder(currOrder, prevOrder, currColumnId ?? '', prevColumnId ?? '')
       .pipe(
         catchError(async error => {
-          this.toastService.showToast(
-            'warning',
-            `Couldn't change the order of the columns`
-          );
+          this.toastService.showToast('warning', `Couldn't change the order of the columns`);
           throw new Error(error);
         })
       )
-      .subscribe(() =>
-        this.toastService.showToast(
-          'confirm',
-          'Successfully changed the order of the columns'
-        )
-      );
+      .subscribe(() => this.toastService.showToast('confirm', 'Successfully changed the order of the columns'));
   }
 
   onUpdateCompletionStateOfSubtask(event: Event) {
     const target = event.target as HTMLInputElement;
     const id = target.id;
 
-    this.apollo
-      .updateCompletionStateOfSubtask(id ?? '', target.checked)
-      .subscribe();
+    this.apollo.updateCompletionStateOfSubtask(id ?? '', target.checked).subscribe();
   }
 
   showTimeDifference = (date: Date) => {
     const currentTime = new Date().getTime();
 
-    const seconds =
-      Math.floor(currentTime / 1000) -
-      Math.floor(new Date(date).getTime() / 1000);
+    const seconds = Math.floor(currentTime / 1000) - Math.floor(new Date(date).getTime() / 1000);
     const minutes = Math.floor((seconds % 3600) / 60);
     const hours = Math.floor(seconds / 3600);
     const days = Math.floor(hours / 24);

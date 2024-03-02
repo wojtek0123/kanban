@@ -2,13 +2,7 @@
   <div class="forms">
     <div class="form-wrapper">
       <div class="close-button">
-        <button
-          type="button"
-          class="button-global"
-          (click)="onClose()"
-          title="Close">
-          X
-        </button>
+        <button type="button" class="button-global" (click)="onClose()" title="Close">X</button>
       </div>
 
       <div *ngIf="typeOfForm$ | async as typeOfForm">
@@ -18,8 +12,6 @@
         <app-task-form *ngIf="typeOfForm === 'task'"></app-task-form>
         <app-subtask-form *ngIf="typeOfForm === 'subtask'"></app-subtask-form>
         <app-users *ngIf="typeOfForm === 'user'"></app-users>
-        <app-assign-user-form
-          *ngIf="typeOfForm === 'assign-user'"></app-assign-user-form>
         <app-profile *ngIf="typeOfForm === 'profile'"></app-profile>
         <app-user-tasks *ngIf="typeOfForm === 'see-tasks'"></app-user-tasks>
       </div>

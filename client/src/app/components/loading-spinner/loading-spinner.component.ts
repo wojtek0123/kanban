@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-loading-spinner',
-  templateUrl: './loading-spinner.component.html',
-  styleUrls: ['./loading-spinner.component.css'],
+  template: `
+    <div class="flex flex-col items-center gap-8 mt-8">
+      <mat-spinner></mat-spinner>
+    </div>
+  `,
   standalone: true,
-  imports: [NgIf, MatProgressSpinner],
+  imports: [NgIf, MatProgressSpinnerModule],
 })
-export class LoadingSpinnerComponent {
-  @Input() condition: boolean = false;
-}
+export class LoadingSpinnerComponent {}

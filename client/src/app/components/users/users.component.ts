@@ -1,25 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { Observable, combineLatest } from 'rxjs';
-import { map, catchError, switchMap, take, tap } from 'rxjs/operators';
-import {
-  FormBuilder,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { map, catchError, switchMap, take } from 'rxjs/operators';
+import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { User } from 'src/app/models/user.model';
 import { ToastService } from '../../services/toast/toast.service';
 import { Task } from 'src/app/models/task.model';
 import { ActivatedRoute } from '@angular/router';
-import {
-  NgIf,
-  NgClass,
-  NgFor,
-  NgOptimizedImage,
-  AsyncPipe,
-} from '@angular/common';
+import { NgIf, NgClass, NgFor, NgOptimizedImage, AsyncPipe } from '@angular/common';
 
 type Tabs = 'add' | 'peek';
 
@@ -29,15 +18,7 @@ type Tabs = 'add' | 'peek';
   styleUrls: ['./users.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    NgIf,
-    NgClass,
-    FormsModule,
-    ReactiveFormsModule,
-    NgFor,
-    NgOptimizedImage,
-    AsyncPipe,
-  ],
+  imports: [NgIf, NgClass, FormsModule, ReactiveFormsModule, NgFor, NgOptimizedImage, AsyncPipe],
 })
 export class UsersComponent implements OnInit {
   searchedFilteredUsers$: Observable<User[]> | null = null;
@@ -64,15 +45,11 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
     this.projectId$ = this.route.params.pipe(map(param => param['projectId']));
 
-    this.userId$ = this.supabase.session$.pipe(
-      map(session => session?.user.id ?? '')
-    );
+    this.userId$ = this.supabase.session$.pipe(map(session => session?.user.id ?? ''));
 
     this.isOwner$ = this.apollo.isLoggedInUserAOwnerOfTheProject$;
 
-    this.projectUsers$ = this.projectId$.pipe(
-      switchMap(projectId => this.apollo.getUsersFromProject(projectId))
-    );
+    this.projectUsers$ = this.projectId$.pipe(switchMap(projectId => this.apollo.getUsersFromProject(projectId)));
   }
 
   changeTab(tabName: Tabs) {
@@ -108,23 +85,13 @@ export class UsersComponent implements OnInit {
       })
     );
 
-    const searchedUserWithoutOwner$ = combineLatest([
-      searchedUsers$,
-      this.userId$,
-    ]).pipe(
+    const searchedUserWithoutOwner$ = combineLatest([searchedUsers$, this.userId$]).pipe(
       map(([searchedUsers, id]) => searchedUsers.filter(user => user.id !== id))
     );
 
-    this.searchedFilteredUsers$ = combineLatest([
-      searchedUserWithoutOwner$,
-      this.projectUsers$ ?? [],
-    ]).pipe(
+    this.searchedFilteredUsers$ = combineLatest([searchedUserWithoutOwner$, this.projectUsers$ ?? []]).pipe(
       map(([searchedUsers, projectUsers]) =>
-        searchedUsers.filter(searchedUser =>
-          projectUsers.every(
-            projectUser => searchedUser.id !== projectUser.user.id
-          )
-        )
+        searchedUsers.filter(searchedUser => projectUsers.every(projectUser => searchedUser.id !== projectUser.user.id))
       )
     );
   }
@@ -151,22 +118,7 @@ export class UsersComponent implements OnInit {
   }
 
   onRemoveUser(userId: string) {
-    this.projectId$
-      ?.pipe(
-        switchMap(projectId =>
-          this.apollo.removeUserFromProject(projectId, userId)
-        ),
-        catchError(async error => {
-          this.toastService.showToast('warning', `Couldn't remove a new user`);
-          throw new Error(error);
-        })
-      )
-      .subscribe(() => {
-        this.toastService.showToast(
-          'confirm',
-          'Successfully remove a new user'
-        );
-      });
+    console.log(userId);
   }
 
   filteredUser(_index: number, user: User) {

@@ -1,15 +1,17 @@
 import { Subtask } from './subtask.model';
+import { Tag } from './tag.interface';
+import { User } from './user.model';
 
 export interface Task {
   id: string;
   title: string;
   description: string;
-  tagNames: string[];
-  tagFontColors: string[];
-  tagBackgroundColors: string[];
   columnName?: string;
   columnId: string;
   subtasks: Subtask[];
+  tags: Tag[];
   createdAt: Date;
   updatedAt: Date;
+  userId?: string;
+  user?: User;
 }

@@ -118,6 +118,18 @@ select {
   font-family: 'Oswald', sans-serif;
 }
 
+.mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #fff !important;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+  background-color: var(--lighter-background-color) !important;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
+  color: var(--font-color) !important;
+}
+
 @media (min-width: 1024px) {
   .form-global {
     position: relative;

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { ProjectAndBoardNames } from '../../../../graphql/queries/project-and-board-names.query';
+import { ProjectAndBoardNames } from '../../../../graphql/queries/get-project-and-board-names.query';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
@@ -30,13 +30,7 @@ import { CollapseButtonComponent } from '../collapse-button/collapse-button.comp
   `,
   styleUrl: './project-list-item.component.css',
   standalone: true,
-  imports: [
-    NgClass,
-    RouterLink,
-    RouterLinkActive,
-    ActionsComponent,
-    CollapseButtonComponent,
-  ],
+  imports: [NgClass, RouterLink, RouterLinkActive, ActionsComponent, CollapseButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListItemComponent {

@@ -35,21 +35,10 @@ export class TaskFormComponent implements OnInit {
     add: this.formBuilder.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      tags: this.formBuilder.array(
-        [
-          this.formBuilder.group({
-            name: this.formBuilder.control('', [Validators.required]),
-            fontColor: this.formBuilder.control('#000000'),
-            backgroundColor: this.formBuilder.control('#e8fe93'),
-          }),
-        ],
-        [Validators.maxLength(3)]
-      ),
     }),
     edit: this.formBuilder.group({
       title: [this.formService.getEditingTask?.title, [Validators.required]],
       description: [this.formService.getEditingTask?.description, [Validators.required]],
-      tags: this.formBuilder.array(this.fillEditTags() ?? [], [Validators.maxLength(3)]),
     }),
   });
 
@@ -87,27 +76,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   fillEditTags() {
-    const tags = [];
-
-    const names = this.formService.getEditingTask?.tagNames;
-    const fontColors = this.formService.getEditingTask?.tagFontColors;
-    const backgroundColors = this.formService.getEditingTask?.tagBackgroundColors;
-
-    if (!names || !fontColors || !backgroundColors) {
-      return;
-    }
-
-    for (let i = 0; i < names.length; i++) {
-      const tag = {
-        name: names[i],
-        fontColor: fontColors[i],
-        backgroundColor: backgroundColors[i],
-      } satisfies Tag;
-
-      tags.push(this.createTag(tag));
-    }
-
-    return tags;
+    return [];
   }
 
   addTag(groupName: string) {
@@ -138,31 +107,6 @@ export class TaskFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.getFormControls.edit.valid) {
-      const id = this.formService.getEditingTask?.id ?? '';
-      const title = this.form.value.edit?.title ?? '';
-      const description = this.form.value.edit?.description ?? '';
-
-      const tags = this.form.value.edit?.tags;
-      const tagNames = tags?.map(tag => tag.name ?? '') ?? [];
-      const tagFontColors = tags?.map(tag => tag.fontColor ?? '') ?? [];
-      const tagBackgroundColors = tags?.map(tag => tag.backgroundColor ?? '') ?? [];
-
-      this.apollo
-        .editTask(id, title, description, tagNames, tagFontColors, tagBackgroundColors)
-        .pipe(
-          catchError(async error => {
-            this.toastService.showToast('warning', `Couldn't update this task`);
-            throw new Error(error);
-          }),
-          take(1)
-        )
-        .subscribe(() => {
-          this.toastService.showToast('confirm', 'Successfully updated this task');
-          setTimeout(() => {
-            this.formService.onChangeEditingTask();
-          }, 0);
-        });
-
       this.formService.onChangeFormVisibility();
     }
   }
@@ -174,18 +118,10 @@ export class TaskFormComponent implements OnInit {
       const title = this.form.value.add?.title ?? '';
       const description = this.form.value.add?.description ?? '';
 
-      const tags = this.form.value.edit?.tags;
-      const tagNames = tags?.map(tag => tag.name ?? '') ?? [];
-      const tagFontColors = tags?.map(tag => tag.fontColor ?? '') ?? [];
-      const tagBackgroundColors = tags?.map(tag => tag.backgroundColor ?? '') ?? [];
-
       // TODO: add task interface
       const task: Partial<Task> = {
         title,
         description,
-        tagNames,
-        tagFontColors,
-        tagBackgroundColors,
       };
 
       if (this.selectedColumn) {

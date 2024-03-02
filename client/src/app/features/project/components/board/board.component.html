@@ -1,100 +1,68 @@
-<ng-container *ngIf="board$ | async as board">
-  <div class="container">
-    <ng-content select="app-mobile-navigation"></ng-content>
-    <div class="board-name-wrapper">
-      <div class="board-name">
-        <h2>
-          {{ board.name }}
-        </h2>
+@if ({ board: board$ | async, boardError: boardError$ | async, tags: tags$ | async}; as vm) { @if(!vm.board &&
+!vm.boardError) {
+<app-loading-spinner></app-loading-spinner>
+} @if (!vm.board && vm.boardError) {
+<span class="block text-center">{{ vm.boardError }}</span>
+} @if (vm.board && !vm.boardError) {
+<div class="mx-auto sticky top-0 left-0 pr-4 mt-4 overflow-x-auto">
+  <ng-content select="app-mobile-navigation"></ng-content>
+  <div class="flex items-center justify-between">
+    <div class="board-name">
+      <h2 class="text-3xl">
+        {{ vm.board.name }}
+      </h2>
 
-        <app-actions></app-actions>
-      </div>
-
-      <div class="button-container">
-        <app-open-form-button text="Users" type="user"></app-open-form-button>
-        <app-open-form-button
-          text="Tasks"
-          type="see-tasks"></app-open-form-button>
-        <app-open-form-button
-          text="Profile"
-          type="profile"></app-open-form-button>
-        <app-logout-button></app-logout-button>
-      </div>
+      <app-actions></app-actions>
     </div>
-    <div class="buttons">
-      <div class="add-button-container">
-        <!--      <app-open-form-button-->
-        <!--        [isProtected]="true"-->
-        <!--        type="column"-->
-        <!--        text="Add column"-->
-        <!--        [parentId]="board.id"></app-open-form-button>-->
 
-        <!--      <app-open-form-button-->
-        <!--        [isProtected]="true"-->
-        <!--        *ngIf="boardType === 'table'"-->
-        <!--        [parentId]="board.id"-->
-        <!--        type="task"-->
-        <!--        text="Add task"-->
-        <!--        [enableSelectColumnForTask]="true"></app-open-form-button>-->
-      </div>
-
-      <!--    <div *ngIf="isOwner$ | async"></div>-->
-      <div class="extended-buttons">
-        <select class="button-global button" [(ngModel)]="boardType">
-          <option value="kanban">Kanban</option>
-          <option value="table">Table</option>
-        </select>
-        <app-open-form-button
-          class="add-people-button-mobile"
-          text="Users"
-          type="user"></app-open-form-button>
-        <select class="button-global button" [(ngModel)]="sortBy">
-          <option [value]="{ column: 'title', direction: 'asc' }" hidden>
-            Title A-Z
-          </option>
-          <option [ngValue]="{ column: 'title', direction: 'asc' }">
-            Title A-Z
-          </option>
-          <option [ngValue]="{ column: 'title', direction: 'des' }">
-            Title Z-A
-          </option>
-          <option [ngValue]="{ column: 'updatedAt', direction: 'asc' }">
-            UpdatedAt asc
-          </option>
-          <option [ngValue]="{ column: 'updatedAt', direction: 'des' }">
-            UpdatedAt des
-          </option>
-          <option [ngValue]="{ column: 'createdAt', direction: 'asc' }">
-            CreatedAt asc
-          </option>
-          <option [ngValue]="{ column: 'createdAt', direction: 'des' }">
-            CreatedAt des
-          </option>
-        </select>
-        <app-filter-menu
-          [tags]="board | getTagsFromTasks"
-          (selectedTags)="onSelectedTags($event)"></app-filter-menu>
-        <input
-          type="text"
-          aria-label="search task by title"
-          placeholder="Search by title"
-          class="search-input"
-          name="searchTerm"
-          autocomplete="off"
-          [(ngModel)]="searchTerm" />
-      </div>
+    <div class="flex items-center gap-2">
+      <app-open-form-button text="Users" type="user"></app-open-form-button>
+      <app-open-form-button text="Tasks" type="see-tasks"></app-open-form-button>
+      <app-open-form-button text="Profile" type="profile"></app-open-form-button>
+      <app-logout-button></app-logout-button>
     </div>
   </div>
-  <app-tasks
-    [board]="board"
-    [searchTerm]="searchTerm"
-    [tags]="checkedTags"
-    [sortBy]="sortBy"
-    *ngIf="boardType === 'kanban'"></app-tasks>
-  <app-task-table
-    [board]="board"
-    [searchTerm]="searchTerm"
-    [tags]="checkedTags"
-    [sortBy]="sortBy"
-    *ngIf="boardType === 'table'"></app-task-table>
-</ng-container>
+  <div
+    class="flex items-center flex-col-reverse md:grid md:grid-cols-2 md:flex-row md:justify-between w-full py-4 gap-2">
+    <app-filter-menu [tags]="vm.tags ?? []" (changeSelectionEvent)="changeSelection($event)"></app-filter-menu>
+    <div class="flex items-center w-full gap-2 md:justify-end">
+      <select class="button-global button" [(ngModel)]="boardType">
+        <option value="kanban">Kanban</option>
+        <option value="table">Table</option>
+      </select>
+      <app-open-form-button class="add-people-button-mobile" text="Users" type="user"></app-open-form-button>
+      <select class="button-global button" [(ngModel)]="sortBy">
+        <option [value]="{ column: 'title', direction: 'asc' }" hidden>Title A-Z</option>
+        <option [ngValue]="{ column: 'title', direction: 'asc' }">Title A-Z</option>
+        <option [ngValue]="{ column: 'title', direction: 'des' }">Title Z-A</option>
+        <option [ngValue]="{ column: 'updatedAt', direction: 'asc' }">UpdatedAt asc</option>
+        <option [ngValue]="{ column: 'updatedAt', direction: 'des' }">UpdatedAt des</option>
+        <option [ngValue]="{ column: 'createdAt', direction: 'asc' }">CreatedAt asc</option>
+        <option [ngValue]="{ column: 'createdAt', direction: 'des' }">CreatedAt des</option>
+      </select>
+      <input
+        type="text"
+        aria-label="search task by title"
+        placeholder="Search by title"
+        class="search-input"
+        name="searchTerm"
+        autocomplete="off"
+        [(ngModel)]="searchTerm" />
+    </div>
+  </div>
+</div>
+@defer (when boardType === 'kanban') {
+<app-tasks
+  [board]="vm.board"
+  [searchTerm]="searchTerm"
+  [tags]="checkedTags()"
+  [sortBy]="sortBy"
+  *ngIf="boardType === 'kanban'"></app-tasks>
+} @defer (when boardType === 'table') {
+<app-task-table
+  [board]="vm.board"
+  [searchTerm]="searchTerm"
+  [tags]="checkedTags()"
+  [sortBy]="sortBy"
+  *ngIf="boardType === 'table'"></app-task-table>
+} } }

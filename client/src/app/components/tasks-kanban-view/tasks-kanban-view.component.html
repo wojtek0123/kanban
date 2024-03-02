@@ -5,9 +5,7 @@
   (cdkDropListDropped)="dropColumn($event)"
   class="tasks"
   *ngIf="board">
-  <p class="warning-message" *ngIf="board?.columns?.length === 0">
-    No columns to display
-  </p>
+  <p class="warning-message" *ngIf="board?.columns?.length === 0">No columns to display</p>
   <section
     class="section"
     cdkDrag
@@ -15,31 +13,15 @@
     [id]="column.id"
     *ngFor="let column of board.columns">
     <div>
-      <div
-        class="cdk-drag-placeholder column-placeholder"
-        *cdkDragPlaceholder></div>
+      <div class="cdk-drag-placeholder column-placeholder" *cdkDragPlaceholder></div>
       <div class="section-heading">
         <div class="section-title-wrapper">
-          <span
-            [style.background-color]="column.dotColor"
-            class="section-title-circle"></span>
+          <span [style.background-color]="column.dotColor" class="section-title-circle"></span>
           <h2 class="section-title">
             {{ column.name }}
-            <span class="section-title-task-counter"
-              >({{
-                (
-                  column.tasks
-                  | filterByTitle : searchTerm
-                  | filterByTags : tags
-                ).length
-              }})</span
-            >
           </h2>
         </div>
-        <app-context-menu
-          *ngIf="isOwner$ | async"
-          [id]="column.id"
-          [type]="'column'"></app-context-menu>
+        <app-context-menu *ngIf="isOwner$ | async" [id]="column.id" [type]="'column'"></app-context-menu>
       </div>
       <app-open-form-button
         [isProtected]="true"
@@ -55,61 +37,33 @@
           [id]="column.id"
           [cdkDropListConnectedTo]="board.columns | getColumnIds : column.id"
           (cdkDropListDropped)="dropTask($event)">
-          <p
-            class="warning-message card"
-            *ngIf="
-              (column.tasks | filterByTitle : searchTerm | filterByTags : tags)
-                .length === 0
-            ">
-            No tasks to display
-          </p>
-          <div
-            cdkDrag
-            [id]="task.id"
-            class="card"
-            *ngFor="
-              let task of column.tasks
-                | filterByTitle : searchTerm
-                | filterByTags : tags
-                | sortTasks : sortBy.direction : sortBy.column;
-              trackBy: taskTrackBy
-            ">
-            <div
-              class="cdk-drag-placeholder task-placeholder"
-              *cdkDragPlaceholder></div>
+          <p class="warning-message card">No tasks to display</p>
+          <div cdkDrag [id]="task.id" class="card" *ngFor="let task of column.tasks; trackBy: taskTrackBy">
+            <div class="cdk-drag-placeholder task-placeholder" *cdkDragPlaceholder></div>
 
             <select class="card-select" (change)="changeColumn($event)">
               <option [value]="undefined">Choose column</option>
               <option
                 [value]="column.id"
                 *ngFor="
-                  let column of board?.columns ?? []
-                    | getColumnsWithoutOneSpecific : column.id;
+                  let column of board?.columns ?? [] | getColumnsWithoutOneSpecific : column.id;
                   trackBy: columnTrackBy
                 ">
                 {{ column.name }}
               </option>
             </select>
-            <div class="card-tags">
-              <span
-                *ngFor="let tag of task.tagNames; let i = index"
-                [style.background-color]="task.tagBackgroundColors[i]"
-                [style.color]="task.tagFontColors[i]"
-                >{{ tag }}</span
-              >
+            <div class="flex flex-wrap gap-2">
+              @for (tag of task.tags; track tag.id) {
+              <span class="rounded-lg px-2 py-1" [style.background-color]="tag" [style.color]="tag">{{ tag }}</span>
+              }
             </div>
             <h3>{{ task.title }}</h3>
             <p>{{ task.description }}</p>
             <div class="card-context-menu">
-              <app-context-menu
-                [isProtected]="true"
-                [id]="task.id"
-                [type]="'task'"></app-context-menu>
+              <app-context-menu [isProtected]="true" [id]="task.id" [type]="'task'"></app-context-menu>
             </div>
             <div class="card-subtask-wrapper">
-              <div
-                class="card-subtask"
-                *ngFor="let subtask of task.subtasks; trackBy: subtaskTrackBy">
+              <div class="card-subtask" *ngFor="let subtask of task.subtasks; trackBy: subtaskTrackBy">
                 <div>
                   <input
                     aria-label="subtask"
@@ -119,10 +73,7 @@
                     (change)="onUpdateCompletionStateOfSubtask($event)" />
                   <label [for]="subtask.id">{{ subtask.name }}</label>
                 </div>
-                <app-context-menu
-                  [isProtected]="true"
-                  [id]="subtask.id"
-                  [type]="'subtask'"></app-context-menu>
+                <app-context-menu [isProtected]="true" [id]="subtask.id" [type]="'subtask'"></app-context-menu>
               </div>
               <div class="card-subtask-line"></div>
               <div class="card-buttons">
@@ -139,12 +90,8 @@
                   [parentId]="task.id"></app-open-form-button>
               </div>
               <div class="card-stats">
-                <app-display-number-of-users-in-task
-                  [taskId]="task.id"></app-display-number-of-users-in-task>
-                <span
-                  >{{ showTimeDifference(task.updatedAt) }} |
-                  {{ showTimeDifference(task.createdAt) }}</span
-                >
+                <app-display-number-of-users-in-task [taskId]="task.id"></app-display-number-of-users-in-task>
+                <span>{{ showTimeDifference(task.updatedAt) }} | {{ showTimeDifference(task.createdAt) }}</span>
               </div>
             </div>
           </div>

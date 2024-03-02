@@ -1,16 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatestWith, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, ignoreElements, map, switchMap } from 'rxjs/operators';
 import { ApolloService } from '../../../../services/apollo/apollo.service';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ContextMenuComponent } from '../../../../components/context-menu/context-menu.component';
 import { FilterMenuComponent } from '../../../../components/filter-menu/filter-menu.component';
-import { GetTagsFromTasksPipe } from '../../../../pipes/get-tags-from-tasks/get-tags-from-tasks.pipe';
 import { LogoutButtonComponent } from '../../../../components/logout-button/logout-button.component';
 import { OpenFormButtonComponent } from '../../../../components/open-form-button/open-form-button.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +12,9 @@ import { TaskTableComponent } from '../../../../components/tasks-table-view/task
 import { TasksComponent } from '../../../../components/tasks-kanban-view/tasks-kanban-view.component';
 import { SortBy } from '../../../../models/types';
 import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
+import { of } from 'rxjs';
+import { LoadingSpinnerComponent } from 'src/app/components/loading-spinner/loading-spinner.component';
+import { Tag } from 'src/app/models/tag.interface';
 
 type BoardTypes = 'kanban' | 'table';
 
@@ -30,7 +27,6 @@ type BoardTypes = 'kanban' | 'table';
     AsyncPipe,
     ContextMenuComponent,
     FilterMenuComponent,
-    GetTagsFromTasksPipe,
     LogoutButtonComponent,
     NgIf,
     OpenFormButtonComponent,
@@ -39,36 +35,34 @@ type BoardTypes = 'kanban' | 'table';
     TasksComponent,
     FormsModule,
     ActionsComponent,
+    LoadingSpinnerComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent {
   private route = inject(ActivatedRoute);
   private apollo = inject(ApolloService);
 
-  board$ = this.route.queryParams.pipe(
-    map(queryParams => queryParams['projectId']),
-    combineLatestWith(this.route.params),
-    switchMap(([projectId, params]) =>
-      this.apollo.getProject(projectId, params['id'])
-    ),
-    map(project => project.boards[0]),
-    tap(data => console.log(data))
+  board$ = this.route.params.pipe(
+    map(params => params['id']),
+    switchMap(boardId => this.apollo.getBoard(boardId))
   );
+  boardError$ = this.board$.pipe(
+    ignoreElements(),
+    catchError(err => of(err))
+  );
+
+  tags$ = this.board$.pipe(map(board => board.columns.flatMap(column => column.tasks.flatMap(task => task.tags))));
 
   sortBy: SortBy = {
     column: 'title',
     direction: 'asc',
   };
-  boardType: BoardTypes = 'table';
-  checkedTags: string[] = [];
+  boardType: BoardTypes = 'kanban';
+  checkedTags = signal<Tag[]>([]);
   searchTerm = '';
 
-  ngOnInit() {
-    console.log('here');
-  }
-
-  onSelectedTags(checkedTags: string[]) {
-    this.checkedTags = checkedTags;
+  changeSelection(tags: Tag[]) {
+    this.checkedTags.set(tags);
   }
 }

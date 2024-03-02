@@ -4,7 +4,6 @@ import { FormType } from '../../models/types';
 import { Observable } from 'rxjs';
 import { UserTasksComponent } from '../user-tasks/user-tasks.component';
 import { ProfileComponent } from '../profile/profile.component';
-import { AssignUserFormComponent } from '../assign-user-form/assign-user-form.component';
 import { UsersComponent } from '../users/users.component';
 import { SubtaskFormComponent } from '../subtask-form/subtask-form.component';
 import { TaskFormComponent } from '../task-form/task-form.component';
@@ -29,7 +28,6 @@ import { FormWrapperComponent } from '../form-wrapper/form-wrapper.component';
     TaskFormComponent,
     SubtaskFormComponent,
     UsersComponent,
-    AssignUserFormComponent,
     ProfileComponent,
     UserTasksComponent,
     AsyncPipe,

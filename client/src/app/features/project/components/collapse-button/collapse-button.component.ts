@@ -1,24 +1,10 @@
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { Observable, map } from 'rxjs';
 import { ContextMenuComponent } from '../../../../components/context-menu/context-menu.component';
 import { NgOptimizedImage, NgIf, AsyncPipe } from '@angular/common';
-import { ProjectAndBoardNames } from '../../../../graphql/queries/project-and-board-names.query';
+import { ProjectAndBoardNames } from '../../../../graphql/queries/get-project-and-board-names.query';
 import { ActionsComponent } from '../../../../shared/components/actions/actions.component';
 
 @Component({
@@ -34,13 +20,7 @@ import { ActionsComponent } from '../../../../shared/components/actions/actions.
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    NgOptimizedImage,
-    NgIf,
-    ContextMenuComponent,
-    AsyncPipe,
-    ActionsComponent,
-  ],
+  imports: [NgOptimizedImage, NgIf, ContextMenuComponent, AsyncPipe, ActionsComponent],
 })
 export class CollapseButtonComponent implements OnInit {
   project = input.required<ProjectAndBoardNames>();
@@ -51,9 +31,7 @@ export class CollapseButtonComponent implements OnInit {
   constructor(private supabase: SupabaseService) {}
 
   ngOnInit(): void {
-    this.loggedInUserId$ = this.supabase.session$.pipe(
-      map(session => session?.user.id ?? '')
-    );
+    this.loggedInUserId$ = this.supabase.session$.pipe(map(session => session?.user.id ?? ''));
   }
 
   toggleShowContent() {

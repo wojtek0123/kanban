@@ -1,13 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-} from '@angular/core';
-import { Tag } from 'src/app/models/tag.models';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, effect, input } from '@angular/core';
+import { MatChipListbox, MatChipOption, MatChipSelectionChange } from '@angular/material/chips';
+import { Tag } from 'src/app/models/tag.interface';
 
 @Component({
   selector: 'app-filter-menu',
@@ -15,55 +8,34 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
   styleUrls: ['./filter-menu.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgClass, NgFor, NgIf],
+  imports: [MatChipListbox, MatChipOption],
 })
-export class FilterMenuComponent implements OnChanges {
-  @Input() tags: Tag[] = [];
-  @Output() selectedTags = new EventEmitter<string[]>();
-  show = false;
-  checkedTags: string[] = [];
+export class FilterMenuComponent implements OnInit {
+  tags = input.required({
+    transform: (data: Tag[]) => {
+      return new Set(data);
+    },
+  });
+  @Output() changeSelectionEvent = new EventEmitter<Tag[]>();
 
-  ngOnChanges(): void {
-    this.checkedTags = [...this.tags.map(tag => tag.name)];
-    this.selectedTags.emit([...this.checkedTags]);
+  filteredTags?: Set<Tag>;
+
+  constructor() {
+    effect(() => {
+      this.filteredTags = new Set([...this.tags()]);
+    });
   }
 
-  onToggle() {
-    this.show = !this.show;
+  ngOnInit(): void {
+    this.changeSelectionEvent.emit([...this.tags()]);
   }
 
-  onFilter(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const isChecked = target.checked;
-
-    if (target.classList.contains('select-all')) {
-      if (isChecked) {
-        for (const tag of this.tags) {
-          tag.check = true;
-        }
-        this.checkedTags = this.tags.map(tag => tag.name);
-        this.selectedTags.emit(this.checkedTags);
-      } else {
-        for (const tag of this.tags) {
-          tag.check = false;
-        }
-        this.checkedTags = [];
-        this.selectedTags.emit(this.checkedTags);
-      }
+  selectionChange(selection: MatChipSelectionChange) {
+    if (selection.selected) {
+      this.filteredTags?.add(selection.source.value);
+    } else {
+      this.filteredTags?.delete(selection.source.value);
     }
-
-    if (!target.classList.contains('checkbox')) return;
-
-    if (isChecked && !this.checkedTags.includes(target.value)) {
-      this.tags[+target.id].check = true;
-      this.checkedTags = [...this.checkedTags, target.value];
-    }
-
-    if (!isChecked && this.checkedTags.includes(target.value)) {
-      this.tags[+target.id].check = false;
-      this.checkedTags = this.checkedTags.filter(tag => tag !== target.value);
-    }
-
-    this.selectedTags.emit(this.checkedTags);
+    this.changeSelectionEvent.emit([...(this.filteredTags ?? [])]);
   }
 }

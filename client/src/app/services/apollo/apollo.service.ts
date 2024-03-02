@@ -10,13 +10,8 @@ import { Task } from '../../models/task.model';
 import { GET_FILTERED_USERS } from '../../graphql/queries/get-filtered-users.query';
 import { GET_PROJECTS } from '../../graphql/queries/get-projects.query';
 import { GET_USERS } from '../../graphql/queries/get-users.query';
-import { GET_TASKS_FROM_USER } from '../../graphql/queries/get-tasks-from-user.query';
-import { GET_USERS_AND_TASKS } from '../../graphql/queries/get-users-and-tasks.query';
-import { GET_USERS_FROM_TASK } from '../../graphql/queries/get-users-from-task.query';
 import { GET_USERS_FROM_PROJECT } from '../../graphql/queries/get-users-from-project.query';
 import { UPDATE_USER_NAME } from '../../graphql/mutations/update-user-name.mutation';
-import { REMOVE_USER_FROM_TASK } from '../../graphql/mutations/remove-user-from-task.mutation';
-import { REMOVE_USER_FROM_PROJECT } from '../../graphql/mutations/remove-user-from-project.mutation';
 import { REMOVE_TASK } from '../../graphql/mutations/remove-task.mutation';
 import { REMOVE_SUBTASK } from '../../graphql/mutations/remove-subtask.mutation';
 import { REMOVE_PROJECT } from '../../graphql/mutations/remove-project.mutation';
@@ -34,12 +29,11 @@ import { ADD_COLUMN } from '../../graphql/mutations/add-column.mutation';
 import { ADD_TASK } from '../../graphql/mutations/add-task.mutation';
 import { ADD_SUBTASK } from '../../graphql/mutations/add-subtask.mutation';
 import { ADD_USER } from '../../graphql/mutations/add-user.mutation';
-import { ADD_USER_TO_TASK } from '../../graphql/mutations/add-user-to-task.mutation';
 import { ADD_USER_TO_PROJECT } from '../../graphql/mutations/add-user-to-project.mutation';
 import { CHANGE_COLUMN_ORDER } from '../../graphql/mutations/change-column-order.mutation';
 import { REMOVE_COLUMN } from 'src/app/graphql/mutations/remove-column.mutation';
-import { GET_PROJECT_AND_BOARD_NAMES } from '../../graphql/queries/project-and-board-names.query';
-import { GET_PROJECT } from '../../graphql/queries/get-project.query';
+import { GET_PROJECT_AND_BOARD_NAMES } from '../../graphql/queries/get-project-and-board-names.query';
+import { GET_BOARD } from '../../graphql/queries/get-board.query';
 
 @Injectable({
   providedIn: 'root',
@@ -88,16 +82,16 @@ export class ApolloService {
     );
   }
 
-  getProject(projectId: string, boardId: string) {
+  getBoard(id: string) {
     return this.supabase.session$.pipe(
       map(session => session?.user.id ?? ''),
       switchMap(userId =>
         this.apollo
           .watchQuery({
-            query: GET_PROJECT,
-            variables: { userId, projectId, boardId },
+            query: GET_BOARD,
+            variables: { userId, boardId: id },
           })
-          .valueChanges.pipe(map(response => response.data.project))
+          .valueChanges.pipe(map(response => response.data.board))
       )
     );
   }
@@ -130,28 +124,6 @@ export class ApolloService {
       .valueChanges.pipe(map(response => response.data.usersFromProject));
   }
 
-  getUsersFromTask(taskId: string) {
-    return this.apollo
-      .watchQuery<{ usersFromTask: { user: User }[] }>({
-        query: GET_USERS_FROM_TASK,
-        variables: {
-          taskId,
-        },
-      })
-      .valueChanges.pipe(map(response => response.data.usersFromTask));
-  }
-
-  getTasksFromUser(userId: string) {
-    return this.apollo
-      .watchQuery<{ getTasksFromUser: { task: Task }[] }>({
-        query: GET_TASKS_FROM_USER,
-        variables: {
-          userId,
-        },
-      })
-      .valueChanges.pipe(map(response => response.data.getTasksFromUser));
-  }
-
   addUserToProject(projectId: string, userId: string) {
     return this.apollo.mutate<{
       addUserToProject: Project;
@@ -166,92 +138,6 @@ export class ApolloService {
           query: GET_USERS_FROM_PROJECT,
           variables: {
             projectId,
-          },
-        },
-      ],
-    });
-  }
-
-  addUserToTask(taskId: string, userId: string) {
-    return this.apollo.mutate({
-      mutation: ADD_USER_TO_TASK,
-      variables: {
-        taskId,
-        userId,
-      },
-      refetchQueries: [
-        {
-          query: GET_USERS_AND_TASKS,
-        },
-        {
-          query: GET_USERS_FROM_TASK,
-          variables: { taskId },
-        },
-        {
-          query: GET_TASKS_FROM_USER,
-          variables: { userId },
-        },
-      ],
-    });
-  }
-
-  removeUserFromProject(projectId: string, userId: string) {
-    this.getTasksFromUser(userId)
-      .pipe(take(1))
-      .subscribe(data => {
-        const taskIds = data.map(data => data.task.id);
-
-        taskIds.forEach(taskId => this.removeUserFromTask(taskId, userId).pipe(take(1)).subscribe());
-      });
-
-    return this.apollo.mutate<{
-      removeUserFromProject: {
-        projectId: string;
-        userId: string;
-      };
-    }>({
-      mutation: REMOVE_USER_FROM_PROJECT,
-      variables: {
-        projectId,
-        userId,
-      },
-      refetchQueries: [
-        {
-          query: GET_USERS_FROM_PROJECT,
-          variables: {
-            projectId: projectId,
-          },
-        },
-      ],
-    });
-  }
-
-  removeUserFromTask(taskId: string, userId: string) {
-    return this.apollo.mutate<{
-      removeUserFromTask: {
-        taskId: string;
-        userId: string;
-      };
-    }>({
-      mutation: REMOVE_USER_FROM_TASK,
-      variables: {
-        taskId,
-        userId,
-      },
-      refetchQueries: [
-        {
-          query: GET_USERS_AND_TASKS,
-        },
-        {
-          query: GET_USERS_FROM_TASK,
-          variables: {
-            taskId,
-          },
-        },
-        {
-          query: GET_TASKS_FROM_USER,
-          variables: {
-            userId,
           },
         },
       ],
@@ -315,9 +201,6 @@ export class ApolloService {
           title: task.title,
           description: task.description,
           columnId,
-          tagNames: task.tagNames,
-          tagFontColors: task.tagFontColors,
-          tagBackgroundColors: task.tagBackgroundColors,
         },
         refetchQueries: [
           {

@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ApolloService } from '../../services/apollo/apollo.service';
 import { AsyncPipe } from '@angular/common';
 import { OpenFormButtonComponent } from '../open-form-button/open-form-button.component';
@@ -18,15 +12,9 @@ import { OpenFormButtonComponent } from '../open-form-button/open-form-button.co
   standalone: true,
   imports: [OpenFormButtonComponent, AsyncPipe],
 })
-export class DisplayNumberOfUsersInTaskComponent implements OnInit {
+export class DisplayNumberOfUsersInTaskComponent {
   @Input() taskId: string = '';
   usersLength$ = new Observable<number>();
 
   constructor(private apollo: ApolloService) {}
-
-  ngOnInit() {
-    this.usersLength$ = this.apollo
-      .getUsersFromTask(this.taskId)
-      .pipe(map(users => users.length));
-  }
 }
