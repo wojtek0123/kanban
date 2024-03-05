@@ -1,5 +1,5 @@
 <mat-chip-listbox multiple>
   @for (tag of tags(); track tag) {
-  <mat-chip-option selected (selectionChange)="selectionChange($event)">{{ tag }}</mat-chip-option>
+  <mat-chip-option selected (selectionChange)="selectionChange($event)">{{ tag.name }}</mat-chip-option>
   }
 </mat-chip-listbox>

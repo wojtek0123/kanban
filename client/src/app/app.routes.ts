@@ -4,8 +4,7 @@ import { AuthGuard } from './guards/auth.guard';
 export const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./features/auth/auth.routes').then(f => f.authRoutes),
+    loadChildren: () => import('./features/auth/auth.routes').then(f => f.authRoutes),
   },
   {
     path: '',
@@ -15,14 +14,12 @@ export const routes: Routes = [
   {
     path: 'projects',
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./features/projects/projects.routes').then(m => m.routes),
+    loadChildren: () => import('./features/projects/projects.routes').then(m => m.routes),
   },
   {
-    path: 'project',
+    path: 'board',
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./features/project/project.routes').then(f => f.projectRoutes),
+    loadChildren: () => import('./features/board/board.routes').then(r => r.boardRoutes),
   },
   { path: '**', redirectTo: 'projects' },
 ];

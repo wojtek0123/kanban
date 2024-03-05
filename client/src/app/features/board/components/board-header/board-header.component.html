@@ -1,17 +1,17 @@
-@if ({ board: board$ | async, boardError: boardError$ | async, tags: tags$ | async}; as vm) { @if(!vm.board &&
-!vm.boardError) {
+@if ({board: boardNameAndTags$ | async, boardNameAndTagsError: boardNameAndTagsError$ | async}; as vm) { @if (!vm.board
+&& !vm.boardNameAndTagsError) {
 <app-loading-spinner></app-loading-spinner>
-} @if (!vm.board && vm.boardError) {
-<span class="block text-center">{{ vm.boardError }}</span>
-} @if (vm.board && !vm.boardError) {
+} @else if (!vm.board && vm.boardNameAndTagsError) {
+<div class="text-center mt-6">
+  <span>{{ vm.boardNameAndTagsError }}</span>
+</div>
+} @else if (vm.board && !vm.boardNameAndTagsError) {
 <div class="mx-auto sticky top-0 left-0 pr-4 mt-4 overflow-x-auto">
-  <ng-content select="app-mobile-navigation"></ng-content>
   <div class="flex items-center justify-between">
-    <div class="board-name">
+    <div class="flex items-center gap-4">
       <h2 class="text-3xl">
         {{ vm.board.name }}
       </h2>
-
       <app-actions></app-actions>
     </div>
 
@@ -24,14 +24,17 @@
   </div>
   <div
     class="flex items-center flex-col-reverse md:grid md:grid-cols-2 md:flex-row md:justify-between w-full py-4 gap-2">
-    <app-filter-menu [tags]="vm.tags ?? []" (changeSelectionEvent)="changeSelection($event)"></app-filter-menu>
+    <app-filter-menu [tags]="(tags$ | async) ?? []" (changeSelectionEvent)="changeSelection($event)"></app-filter-menu>
     <div class="flex items-center w-full gap-2 md:justify-end">
-      <select class="button-global button" [(ngModel)]="boardType">
-        <option value="kanban">Kanban</option>
-        <option value="table">Table</option>
-      </select>
-      <app-open-form-button class="add-people-button-mobile" text="Users" type="user"></app-open-form-button>
-      <select class="button-global button" [(ngModel)]="sortBy">
+      <mat-button-toggle-group #group class="border-none">
+        <mat-button-toggle [checked]="true" class="!bg-dark-gray" matTooltip="Change to kanban view">
+          <mat-icon>view_kanban</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle class="!bg-dark-gray" matTooltip="Change to table view">
+          <mat-icon>table_view</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <!-- <select class="button-global button" [(ngModel)]="sortBy">
         <option [value]="{ column: 'title', direction: 'asc' }" hidden>Title A-Z</option>
         <option [ngValue]="{ column: 'title', direction: 'asc' }">Title A-Z</option>
         <option [ngValue]="{ column: 'title', direction: 'des' }">Title Z-A</option>
@@ -39,7 +42,7 @@
         <option [ngValue]="{ column: 'updatedAt', direction: 'des' }">UpdatedAt des</option>
         <option [ngValue]="{ column: 'createdAt', direction: 'asc' }">CreatedAt asc</option>
         <option [ngValue]="{ column: 'createdAt', direction: 'des' }">CreatedAt des</option>
-      </select>
+      </select>  -->
       <input
         type="text"
         aria-label="search task by title"
@@ -51,18 +54,4 @@
     </div>
   </div>
 </div>
-@defer (when boardType === 'kanban') {
-<app-tasks
-  [board]="vm.board"
-  [searchTerm]="searchTerm"
-  [tags]="checkedTags()"
-  [sortBy]="sortBy"
-  *ngIf="boardType === 'kanban'"></app-tasks>
-} @defer (when boardType === 'table') {
-<app-task-table
-  [board]="vm.board"
-  [searchTerm]="searchTerm"
-  [tags]="checkedTags()"
-  [sortBy]="sortBy"
-  *ngIf="boardType === 'table'"></app-task-table>
-} } }
+} }

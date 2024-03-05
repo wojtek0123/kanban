@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, effect, input } from '@angular/core';
 import { MatChipListbox, MatChipOption, MatChipSelectionChange } from '@angular/material/chips';
-import { Tag } from 'src/app/models/tag.interface';
+import { TagBase } from 'src/app/graphql/queries/get-board-name-and-tags.query';
 
 @Component({
   selector: 'app-filter-menu',
@@ -12,13 +12,13 @@ import { Tag } from 'src/app/models/tag.interface';
 })
 export class FilterMenuComponent implements OnInit {
   tags = input.required({
-    transform: (data: Tag[]) => {
+    transform: (data: TagBase[]) => {
       return new Set(data);
     },
   });
-  @Output() changeSelectionEvent = new EventEmitter<Tag[]>();
+  @Output() changeSelectionEvent = new EventEmitter<TagBase[]>();
 
-  filteredTags?: Set<Tag>;
+  filteredTags?: Set<TagBase>;
 
   constructor() {
     effect(() => {

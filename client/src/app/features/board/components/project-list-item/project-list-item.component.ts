@@ -15,13 +15,7 @@ import { CollapseButtonComponent } from '../collapse-button/collapse-button.comp
     <ul class="accordion-list" [ngClass]="{ show: showContent }">
       @for (board of project().boards; track board.id) {
       <li class="item">
-        <a
-          [routerLink]="['/project/board', board.id]"
-          [queryParams]="{ projectId: project().id }"
-          routerLinkActive="highlight"
-          class="accordion-item"
-          >{{ board.name }}</a
-        >
+        <a [routerLink]="['/board', board.id]" routerLinkActive="highlight" class="accordion-item">{{ board.name }}</a>
       </li>
       } @empty {
       <span class="accordion-item accordion-item-paragraph"> No boards </span>

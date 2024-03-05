@@ -130,6 +130,18 @@ select {
   color: var(--font-color) !important;
 }
 
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  background-color: theme('colors.light-gray') !important;
+}
+
+.mat-icon {
+  color: theme('colors.white') !important;
+}
+
+.mat-button-toggle-group-appearance-standard {
+  border: none !important;
+}
+
 @media (min-width: 1024px) {
   .form-global {
     position: relative;
