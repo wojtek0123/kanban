@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import './assets/material.css';
 
 @tailwind base;
 @tailwind components;
@@ -44,6 +45,7 @@ button {
 
 input {
   font-family: 'Oswald', sans-serif;
+  color: theme('colors.black');
 }
 
 select {
@@ -108,38 +110,6 @@ select {
 .text-warning-global {
   color: var(--font-color-grey);
   margin-top: 1rem;
-}
-
-.mat-mdc-header-cell {
-  font-family: 'Oswald', sans-serif;
-}
-
-.mat-mdc-cell {
-  font-family: 'Oswald', sans-serif;
-}
-
-.mdc-circular-progress__indeterminate-circle-graphic {
-  stroke: #fff !important;
-}
-
-.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
-  background-color: var(--lighter-background-color) !important;
-}
-
-.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
-  color: var(--font-color) !important;
-}
-
-.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
-  background-color: theme('colors.light-gray') !important;
-}
-
-.mat-icon {
-  color: theme('colors.white') !important;
-}
-
-.mat-button-toggle-group-appearance-standard {
-  border: none !important;
 }
 
 @media (min-width: 1024px) {

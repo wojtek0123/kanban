@@ -1,0 +1,65 @@
+.mat-primary {
+  --mdc-checkbox-selected-focus-icon-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-focus-state-layer-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-hover-icon-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-icon-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-pressed-icon-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-hover-state-layer-color: theme('colors.primary') !important;
+  --mdc-checkbox-selected-pressed-state-layer-color: theme('colors.primary') !important;
+}
+
+.mat-mdc-header-cell {
+  font-family: 'Oswald', sans-serif;
+}
+
+.mat-mdc-cell {
+  font-family: 'Oswald', sans-serif;
+}
+
+.mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #fff !important;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+  background-color: var(--lighter-background-color) !important;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
+  color: var(--font-color) !important;
+}
+
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  background-color: theme('colors.black') !important;
+}
+
+.mat-icon {
+  color: theme('colors.white') !important;
+}
+
+.mat-button-toggle-group-appearance-standard {
+  border: none !important;
+}
+
+.mdc-form-field {
+  color: theme('colors.white') !important;
+}
+
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate='true'])
+  ~ .mdc-checkbox__background {
+  border-color: theme('colors.white') !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+  border-color: theme('colors.primary') !important;
+  background-color: theme('colors.primary') !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
+  color: theme('colors.black') !important;
+}
+
+.mat-mdc-checkbox-ripple,
+.mdc-checkbox__ripple {
+  border-radius: 0.75rem !important;
+}
