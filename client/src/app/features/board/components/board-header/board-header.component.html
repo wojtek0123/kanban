@@ -6,7 +6,7 @@
   <span>{{ vm.boardNameAndTagsError }}</span>
 </div>
 } @else if (vm.board && !vm.boardNameAndTagsError) {
-<div class="mx-auto sticky top-0 left-0 pr-4 mt-4 overflow-x-auto">
+<div class="mx-auto sticky top-0 left-0 pr-4 pt-4 overflow-x-auto">
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-4">
       <h2 class="text-3xl">
@@ -26,7 +26,7 @@
     class="flex items-center flex-col-reverse md:grid md:grid-cols-2 md:flex-row md:justify-between w-full py-4 gap-2">
     <app-filter-menu [tags]="(tags$ | async) ?? []" (changeSelectionEvent)="changeSelection($event)"></app-filter-menu>
     <div class="flex items-center w-full gap-2 md:justify-end">
-      <mat-button-toggle-group #group class="border-none">
+      <mat-button-toggle-group #group class="border-none !rounded-2xl">
         <mat-button-toggle [checked]="true" class="!bg-dark-gray" matTooltip="Change to kanban view">
           <mat-icon>view_kanban</mat-icon>
         </mat-button-toggle>
@@ -47,7 +47,7 @@
         type="text"
         aria-label="search task by title"
         placeholder="Search by title"
-        class="search-input"
+        class="rounded-lg text-lg px-2 h-12 w-40 focus:w-96 transition-[width]"
         name="searchTerm"
         autocomplete="off"
         [(ngModel)]="searchTerm" />

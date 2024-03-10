@@ -6,11 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { graphqlUrl } from './graphql.config';
-import {
-  ApolloClientOptions,
-  ApolloLink,
-  InMemoryCache,
-} from '@apollo/client/core';
+import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, RippleGlobalOptions } from '@angular/material/core';
+
+const globalRippleConfig: RippleGlobalOptions = {
+  disabled: true,
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,10 @@ export const appConfig: ApplicationConfig = {
         cache: new InMemoryCache(),
       }),
       deps: [HttpLink],
+    },
+    {
+      provide: MAT_RIPPLE_GLOBAL_OPTIONS,
+      useValue: globalRippleConfig,
     },
     Apollo,
   ],

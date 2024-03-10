@@ -1,0 +1,63 @@
+@if ({columns: columns$ | async, boardContentError: columnsError$ | async, columnIds: columnIds$ | async}; as vm) { @if
+(!vm.columns && !vm.boardContentError) {
+<app-loading-spinner></app-loading-spinner>
+} @else if (!vm.columns && vm.boardContentError) {
+<div>
+  <span>{{ vm.boardContentError }}</span>
+</div>
+} @else if (vm.columns && !vm.boardContentError) {
+<div cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dragAndDropColumns($event)" class="flex">
+  @for (column of vm.columns; track column.id) {
+  <div class="flex flex-col min-w-96 w-full max-w-[32rem] min-h-max mr-5">
+    <button class="flex items-center justify-center bg-dark-gray py-2 rounded-2xl active:bg-dark-gray/80">
+      <mat-icon>add</mat-icon>
+      <span>Add task</span>
+    </button>
+    <div cdkDrag class="flex flex-col mt-5">
+      <div class="flex items-center justify-end">
+        <div class="flex items-center gap-4 mx-auto">
+          <div [style.backgroundColor]="column.dotColor" class="rounded-full w-4 h-4"></div>
+          <h2 class="text-2xl">
+            {{ column.name }}
+          </h2>
+        </div>
+        <mat-icon class="">drag_handle</mat-icon>
+      </div>
+      <div
+        cdkDropList
+        [id]="column.id"
+        [cdkDropListData]="(tasks$ | async) ?? []"
+        [cdkDropListConnectedTo]="(columnIds$ | async | getColumns : column.id) ?? []"
+        (cdkDropListDropped)="dragAndDropTasks($event)">
+        @for (task of column.tasks; track task.id) {
+        <div cdkDrag [id]="task.id" class="bg-dark-gray rounded-2xl p-4 my-5">
+          <div class="flex items-center justify-center">
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            @for (tag of task.tags; track tag.id) {
+            <span
+              [style.backgroundColor]="tag.backgroundColor"
+              [style.color]="tag.fontColor"
+              class="px-2 py-1 rounded-lg"
+              >{{ tag.name }}</span
+            >
+            }
+          </div>
+          <h3 class="my-5 text-2xl">{{ task.title }}</h3>
+          <div class="">
+            {{ task.description }}
+          </div>
+          <div class="flex flex-col flex-wrap">
+            @for (subtask of task.subtasks; track subtask.id) {
+            <mat-checkbox [checked]="subtask.isFinished" color="primary">{{ subtask.name }}</mat-checkbox>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
+} }

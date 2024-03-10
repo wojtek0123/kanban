@@ -22,7 +22,10 @@ export class BoardService {
 
   getBoardContent$(boardId: string) {
     return this.userId$.pipe(
-      switchMap(userId => this.apollo.query({ query: GET_BOARD_CONTENT, variables: { userId: userId ?? '', boardId } }))
+      switchMap(userId =>
+        this.apollo.query({ query: GET_BOARD_CONTENT, variables: { userId: userId ?? '', boardId } })
+      ),
+      map(res => res.data.board)
     );
   }
 }
