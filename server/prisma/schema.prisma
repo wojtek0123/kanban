@@ -35,6 +35,7 @@ model Task {
   description         String
   columnId            String
   column              Column       @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  order               Int
   tags Tag[]
   subtasks            Subtask[]
   createdAt           DateTime     @default(now())

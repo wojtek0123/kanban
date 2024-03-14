@@ -21,6 +21,7 @@ export const GET_BOARD_CONTENT: TypedDocumentNode<{ board: BoardContent }, { use
           id
           title
           updatedAt
+          columnId
           tags {
             name
             id

@@ -8,6 +8,7 @@ export interface Task {
   description: string;
   columnName?: string;
   columnId: string;
+  order: number;
   subtasks: Subtask[];
   tags: Tag[];
   createdAt: Date;

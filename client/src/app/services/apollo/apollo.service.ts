@@ -30,7 +30,6 @@ import { ADD_TASK } from '../../graphql/mutations/add-task.mutation';
 import { ADD_SUBTASK } from '../../graphql/mutations/add-subtask.mutation';
 import { ADD_USER } from '../../graphql/mutations/add-user.mutation';
 import { ADD_USER_TO_PROJECT } from '../../graphql/mutations/add-user-to-project.mutation';
-import { CHANGE_COLUMN_ORDER } from '../../graphql/mutations/change-column-order.mutation';
 import { REMOVE_COLUMN } from 'src/app/graphql/mutations/remove-column.mutation';
 import { GET_PROJECT_AND_BOARD_NAMES } from '../../graphql/queries/get-project-and-board-names.query';
 import { GET_BOARD } from '../../graphql/queries/get-board.query';
@@ -425,31 +424,6 @@ export class ApolloService {
         })
       ),
       take(1)
-    );
-  }
-
-  changeColumnOrder(currOrder: number, prevOrder: number, currColumnId: string, prevColumnId: string) {
-    return this.supabase.session$.pipe(
-      map(session => session?.user.id ?? ''),
-      switchMap(userId =>
-        this.apollo.mutate({
-          mutation: CHANGE_COLUMN_ORDER,
-          variables: {
-            currOrder,
-            prevOrder,
-            currColumnId,
-            prevColumnId,
-          },
-          refetchQueries: [
-            {
-              query: GET_PROJECTS,
-              variables: {
-                userId,
-              },
-            },
-          ],
-        })
-      )
     );
   }
 

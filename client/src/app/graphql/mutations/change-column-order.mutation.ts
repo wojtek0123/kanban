@@ -2,27 +2,47 @@ import { TypedDocumentNode, gql } from 'apollo-angular';
 import { Column } from 'src/app/models/column.model';
 
 export const CHANGE_COLUMN_ORDER: TypedDocumentNode<
-  { changeColumnOrder: Partial<Column> },
+  { changeColumnOrder: Column[] },
   {
-    currOrder: number;
-    prevOrder: number;
-    currColumnId: string;
-    prevColumnId: string;
+    columnIds: string[];
+    orders: number[];
   }
 > = gql`
-  mutation ChangeColumnOrder(
-    $currOrder: Int
-    $prevOrder: Int
-    $currColumnId: String
-    $prevColumnId: String
-  ) {
-    changeColumnOrder(
-      currOrder: $currOrder
-      prevOrder: $prevOrder
-      currColumnId: $currColumnId
-      prevColumnId: $prevColumnId
-    ) {
+  mutation ChangeColumnOrder($columnIds: [String], $orders: [Int]) {
+    changeColumnOrder(columnIds: $columnIds, orders: $orders) {
+      createdAt
+      dotColor
       id
+      name
+      order
+      updatedAt
+      tasks {
+        createdAt
+        description
+        id
+        title
+        updatedAt
+        columnId
+        tags {
+          name
+          id
+          fontColor
+          createdAt
+          backgroundColor
+          updatedAt
+        }
+        subtasks {
+          id
+          name
+          isFinished
+          createdAt
+          updatedAt
+        }
+        user {
+          name
+          id
+        }
+      }
     }
   }
 `;

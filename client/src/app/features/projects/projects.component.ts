@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Project } from '../../models/project.model';
-import { catchError, ignoreElements, map } from 'rxjs/operators';
+import { catchError, ignoreElements, map, tap } from 'rxjs/operators';
 import { SupabaseService } from 'src/app/services/supabase/supabase.service';
 import { ApolloService } from 'src/app/services/apollo/apollo.service';
 import { Board } from 'src/app/models/board.model';
@@ -15,37 +15,22 @@ import { LoadingSpinnerComponent } from '../../components/loading-spinner/loadin
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css'],
   standalone: true,
-  imports: [
-    NavigationComponent,
-    ProjectTableComponent,
-    NgIf,
-    AsyncPipe,
-    LoadingSpinnerComponent,
-  ],
+  imports: [NavigationComponent, ProjectTableComponent, NgIf, AsyncPipe, LoadingSpinnerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
-  projects$ = new Observable<Project[]>();
-  projectsError$ = new Observable<string>();
+  projects$ = this._apollo.getProjects().pipe(tap(console.log));
+  projectsError$ = this.projects$.pipe(
+    ignoreElements(),
+    catchError(error => of(error))
+  );
   columns = ['Name', 'Columns', 'Tasks', 'Subtasks'];
   loggedInUserId$ = new Observable<string>();
 
-  constructor(
-    private _apollo: ApolloService,
-    private _supabase: SupabaseService
-  ) {}
+  constructor(private _apollo: ApolloService, private _supabase: SupabaseService) {}
 
   ngOnInit() {
-    this.projects$ = this._apollo.getProjects();
-
-    this.projectsError$ = this.projects$.pipe(
-      ignoreElements(),
-      catchError(error => of(error))
-    );
-
-    this.loggedInUserId$ = this._supabase.session$.pipe(
-      map(session => session?.user.id ?? '')
-    );
+    this.loggedInUserId$ = this._supabase.session$.pipe(map(session => session?.user.id ?? ''));
   }
 
   projectTrackBy(_index: number, project: Project) {

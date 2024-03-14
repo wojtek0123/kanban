@@ -6,7 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { LoadingSpinnerComponent } from 'src/app/components/loading-spinner/loading-spinner.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, transferArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import { GetColumnsPipe } from 'src/app/pipes/get-columns/get-columns.pipe';
 import { Column } from 'src/app/models/column.model';
 import { sortColumnsByOrder } from 'src/app/pipes/sort-columns-by-order/sort-columns-by-order.pipe';
@@ -64,7 +64,7 @@ export class BoardContentComponent {
   columns$ = this.route.params.pipe(
     map(params => params['id']),
     switchMap(boardId => this.boardService.getBoardContent$(boardId)),
-    map(board => [...board.columns].sort((a, b) => a.order - b.order))
+    map(res => [...res.data.board.columns].sort((a, b) => a.order - b.order))
   );
 
   columnsError$ = this.columns$.pipe(
@@ -79,45 +79,54 @@ export class BoardContentComponent {
   async dragAndDropColumns({ previousIndex, currentIndex }: CdkDragDrop<Column[]>) {
     if (previousIndex === currentIndex) return;
     const columns = await firstValueFrom(this.columns$);
-    const orderedColumns = new Map<number, Column | undefined>();
 
-    columns.forEach((column, index) => orderedColumns.set(index, column));
+    moveItemInArray(columns, previousIndex, currentIndex);
 
-    const [prevItem, currItem] = [orderedColumns.get(previousIndex), orderedColumns.get(currentIndex)];
-    if (Math.abs(currentIndex - previousIndex) === 1) {
-      orderedColumns.set(previousIndex, currItem);
-    }
-    if (currentIndex > previousIndex) {
-      for (let i = previousIndex; i < currentIndex; i++) {
-        const y = orderedColumns.get(i + 1);
-        orderedColumns.set(i, y);
-      }
-    }
-    orderedColumns.set(currentIndex, prevItem);
-    const x = Array.from(orderedColumns?.values()).map((column, index) => ({ ...column, order: index }));
-    console.log(x);
-
+    const updatedColumns = this.updateOrder(columns);
+    console.log(updatedColumns);
     // todo: api call to update columns order
+    this.boardService.changeColumnOrder$(updatedColumns).subscribe(() => {
+      // todo: update columns
+    });
   }
 
-  dragAndDropTasks(event: CdkDragDrop<Task[]>) {
-    //if (event.previousContainer === event.container) return;
-    console.log(event);
-
-    console.log(event.previousIndex, event.currentIndex);
-    // const id = event.item.element.nativeElement.id;
-
-    //const currentColumn = this.board?.columns.filter(column => column.id === event.container.id).at(0);
-    //
-    const currContainerId = event.container.id;
-    const prevContainerId = event.previousContainer.id;
+  dragAndDropTasks({ previousIndex, currentIndex, container, previousContainer }: CdkDragDrop<Task[]>) {
+    const currContainerId = container.id;
+    const prevContainerId = previousContainer.id;
 
     if (currContainerId === prevContainerId) {
-      // todo: update task order
-      console.log('Update task order');
+      let tasks = container.data.filter(task => task.columnId === container.id);
+      moveItemInArray(tasks, previousIndex, currentIndex);
+
+      tasks = this.updateOrder(tasks);
+      console.log(tasks);
+      // todo: api call to update columns order
     } else {
-      // todo: update task order and column id
-      console.log('Update task order and column id');
+      const tasksData: TasksData = {
+        previousTasks: [],
+        currentTasks: [],
+      };
+      container.data.forEach(task => {
+        if (task.columnId === currContainerId) tasksData.currentTasks = [...tasksData.currentTasks, task];
+        if (task.columnId === prevContainerId) tasksData.previousTasks = [...tasksData.previousTasks, task];
+      });
+
+      transferArrayItem(tasksData.previousTasks, tasksData.currentTasks, previousIndex, currentIndex);
+
+      tasksData.currentTasks = this.updateOrder(tasksData.currentTasks);
+      tasksData.previousTasks = this.updateOrder(tasksData.previousTasks);
+      console.log(tasksData);
+      // todo: api call to update columns order
+      //
     }
   }
+
+  private updateOrder<T>(items: T[]) {
+    return items.map((item, index) => ({ ...item, order: index }));
+  }
+}
+
+interface TasksData {
+  previousTasks: Task[];
+  currentTasks: Task[];
 }

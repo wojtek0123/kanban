@@ -50,6 +50,7 @@ const typeDefs = `#graphql
     id: String
     title: String
     description: String
+    order: Int
     tags: [Tag]
     subtasks: [Subtask]
     columnId: String
@@ -118,12 +119,7 @@ const typeDefs = `#graphql
   }
     
   type Mutation {
-    changeColumnOrder(
-      currOrder: Int
-      prevOrder: Int
-      currColumnId: String
-      prevColumnId: String
-    ): Column
+    changeColumnOrder(columnIds: [String], orders: [Int]): [Column]
     changeColumn(columnId: String, taskId: String): Task
     addUser(name: String, email: String, id: String): User
     addUserToProject(projectId: String, userId: String): UserOnProject
@@ -205,8 +201,14 @@ const resolvers = {
             },
           },
           columns: {
+            orderBy: {
+              order: "asc",
+            },
             include: {
               tasks: {
+                orderBy: {
+                  order: "asc",
+                },
                 include: {
                   tags: true,
                   subtasks: true,
@@ -281,30 +283,25 @@ const resolvers = {
     },
     changeColumnOrder: async (
       _parent: unknown,
-      args: {
-        currOrder: number;
-        prevOrder: number;
-        currColumnId: string;
-        prevColumnId: string;
+      {
+        columnIds,
+        orders,
+      }: {
+        columnIds: string[];
+        orders: number[];
       },
     ) => {
-      await prisma.column.update({
-        where: {
-          id: args.prevColumnId,
-        },
-        data: {
-          order: args.currOrder,
-        },
-      });
+      if (!columnIds) throw new Error("Ni ma kolumn");
 
-      return await prisma.column.update({
-        where: {
-          id: args.currColumnId,
-        },
-        data: {
-          order: args.prevOrder,
-        },
-      });
+      const columns = columnIds.map(
+        async (columnId, index) =>
+          await prisma.column.update({
+            where: { id: columnId },
+            data: { order: orders[index] },
+          }),
+      );
+
+      return await Promise.all(columns);
     },
     addUserToProject: async (
       _parent: unknown,
@@ -504,29 +501,21 @@ const resolvers = {
       _parent: any,
       args: { boardId: string; name: string; dotColor: string },
     ) => {
-      const response = await prisma.column.findMany({
-        where: { boardId: args.boardId },
-        orderBy: { createdAt: "desc" },
-        take: 1,
+      const board = await prisma.board.findUnique({
+        where: { id: args.boardId },
+        select: { columns: true },
       });
-
-      let order = 0;
-      const newColumnMustHaveGreaterOrder = 1;
-
-      if (response.length !== 0) {
-        order = response[0].order + newColumnMustHaveGreaterOrder;
-      }
 
       return prisma.column.create({
         data: {
           name: args.name,
           dotColor: args.dotColor,
           boardId: args.boardId,
-          order,
+          order: board.columns.length,
         },
       });
     },
-    addTask: (
+    addTask: async (
       _parent: any,
       args: {
         columnId: string;
@@ -534,11 +523,16 @@ const resolvers = {
         description: string;
       },
     ) => {
+      const column = await prisma.column.findUnique({
+        where: { id: args.columnId },
+        select: { tasks: true },
+      });
       return prisma.task.create({
         data: {
           title: args.title,
           description: args.description,
           columnId: args.columnId,
+          order: column.tasks.length,
         },
       });
     },
