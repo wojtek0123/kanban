@@ -64,7 +64,7 @@ export class BoardContentComponent {
   columns$ = this.route.params.pipe(
     map(params => params['id']),
     switchMap(boardId => this.boardService.getBoardContent$(boardId)),
-    map(res => [...res.data.board.columns].sort((a, b) => a.order - b.order))
+    map(res => [...res.data.board.columns])
   );
 
   columnsError$ = this.columns$.pipe(
@@ -83,24 +83,34 @@ export class BoardContentComponent {
     moveItemInArray(columns, previousIndex, currentIndex);
 
     const updatedColumns = this.updateOrder(columns);
-    console.log(updatedColumns);
-    // todo: api call to update columns order
+
     this.boardService.changeColumnOrder$(updatedColumns).subscribe(() => {
-      // todo: update columns
+      this.columns$ = of(columns);
     });
   }
 
-  dragAndDropTasks({ previousIndex, currentIndex, container, previousContainer }: CdkDragDrop<Task[]>) {
+  async dragAndDropTasks({ previousIndex, currentIndex, container, previousContainer }: CdkDragDrop<Task[]>) {
     const currContainerId = container.id;
     const prevContainerId = previousContainer.id;
+    const columns = await firstValueFrom(this.columns$);
 
     if (currContainerId === prevContainerId) {
-      let tasks = container.data.filter(task => task.columnId === container.id);
+      const tasks = container.data.filter(task => task.columnId === container.id);
       moveItemInArray(tasks, previousIndex, currentIndex);
 
-      tasks = this.updateOrder(tasks);
+      // tasks = this.updateOrder(tasks);
       console.log(tasks);
-      // todo: api call to update columns order
+      const column = columns.find(c => c.id === currContainerId);
+
+      if (!column) return;
+
+      const updatedColumn = {
+        ...column,
+        tasks: tasks,
+      };
+
+      // todo: api call to update tasks order
+      this.columns$ = of(columns.map(c => (c.id === currContainerId ? updatedColumn : c)));
     } else {
       const tasksData: TasksData = {
         previousTasks: [],
@@ -113,11 +123,28 @@ export class BoardContentComponent {
 
       transferArrayItem(tasksData.previousTasks, tasksData.currentTasks, previousIndex, currentIndex);
 
-      tasksData.currentTasks = this.updateOrder(tasksData.currentTasks);
-      tasksData.previousTasks = this.updateOrder(tasksData.previousTasks);
-      console.log(tasksData);
-      // todo: api call to update columns order
-      //
+      const currColumn = columns.find(c => c.id === currContainerId);
+
+      const prevColumn = columns.find(c => c.id === prevContainerId);
+
+      if (!currColumn || !prevColumn) return;
+
+      const updatedCurrColumn = {
+        ...currColumn,
+        tasks: tasksData.currentTasks,
+      };
+
+      const updatedPrevColumn = {
+        ...prevColumn,
+        tasks: tasksData.previousTasks,
+      };
+
+      this.columns$ = of(
+        columns.map(c =>
+          c.id === currContainerId ? updatedCurrColumn : c.id === prevContainerId ? updatedPrevColumn : c
+        )
+      );
+      // todo: api call to update tasks order
     }
   }
 

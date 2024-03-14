@@ -24,7 +24,14 @@ export class BoardService {
 
   getBoardContent$(boardId: string) {
     return this.userId$.pipe(
-      switchMap(userId => this.apollo.query({ query: GET_BOARD_CONTENT, variables: { userId: userId ?? '', boardId } }))
+      switchMap(
+        userId =>
+          this.apollo.watchQuery({
+            query: GET_BOARD_CONTENT,
+            variables: { userId: userId ?? '', boardId },
+            pollInterval: 100,
+          }).valueChanges
+      )
     );
   }
 
@@ -35,6 +42,31 @@ export class BoardService {
       .mutate({
         mutation: CHANGE_COLUMN_ORDER,
         variables: { columnIds: ids, orders },
+        // optimisticResponse: {
+        //   changeColumnOrder: [...columns],
+        // },
+        // update: store => {
+        //   const data = store.readQuery({
+        //     query: GET_BOARD_CONTENT,
+        //     variables: {
+        //       userId: 'b2f22729-9d0c-434e-891a-6a0bd778b539',
+        //       boardId: '2bfc59da-ff9c-4c18-9a1e-5c8582e4b5d2',
+        //     },
+        //   });
+        //   console.log(data);
+        //   if (!data) return;
+        //
+        //   store.writeQuery({
+        //     query: GET_BOARD_CONTENT,
+        //     data: {
+        //       ...data,
+        //       board: {
+        //         ...data.board,
+        //         columns,
+        //       },
+        //     },
+        //   });
+        // },
       })
       .pipe(map(res => res.data?.changeColumnOrder));
   }
